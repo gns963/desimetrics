@@ -27,6 +27,7 @@ const LOCALE_CODES = ['hi', 'ta', 'te', 'mr', 'bn', 'kn', 'gu']
  */
 const TRANSLATED_ROUTES: { pattern: RegExp; locales: string[] }[] = [
   { pattern: /^\/electricity\/[^/]+$/, locales: ['hi'] },
+  { pattern: /^\/water\/[^/]+$/, locales: ['hi'] },
 ]
 
 /** Strips a leading locale segment (if any) to get the canonical,

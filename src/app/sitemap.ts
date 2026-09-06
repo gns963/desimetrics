@@ -110,9 +110,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const liveBoardSlugs = waterBoardsJson.boards
     .filter((b) => b.hasTariffFile)
     .map((b) => b.slug)
-  const waterStates = Array.from(new Set([...waterStateSlugs, ...liveBoardSlugs])).map((slug) =>
-    entry(`/water/${slug}`, 0.7),
-  )
+  const allWaterSlugs = Array.from(new Set([...waterStateSlugs, ...liveBoardSlugs]))
+  const waterStates = allWaterSlugs.map((slug) => entry(`/water/${slug}`, 0.7))
+  const waterStatesHi = allWaterSlugs.map((slug) => entry(`/hi/water/${slug}`, 0.6))
 
   const gasCompanies = allGasCompanySlugs.map((slug) => entry(`/gas/${slug}`, 0.7))
 
@@ -139,6 +139,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...solarStates,
     ...acBrands,
     ...waterStates,
+    ...waterStatesHi,
     ...gasCompanies,
     ...authors,
     ...legal,
