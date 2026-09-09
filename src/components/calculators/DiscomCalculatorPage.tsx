@@ -4,6 +4,7 @@ import BillComponentAudit from '@/components/calculators/BillComponentAudit'
 import Calculator from '@/components/calculators/ElectricityCalculator'
 import BudgetToUnitsCalculator from '@/components/calculators/BudgetToUnitsCalculator'
 import DiscomComparisonTable from '@/components/calculators/DiscomComparisonTable'
+import PopularBillCalculations from '@/components/calculators/PopularBillCalculations'
 import TariffSidebar from '@/components/calculators/TariffSidebar'
 import WorkedExampleTotal from '@/components/calculators/WorkedExampleTotal'
 import SolarCrossSell from '@/components/SolarCrossSell'
@@ -155,6 +156,9 @@ export default function DiscomCalculatorPage({
     { id: 'billing-cycle', label: t.toc.billingCycle },
     { id: 'tariff-table', label: t.toc.tariffTable(tariff.state) },
     { id: 'worked-examples', label: t.toc.workedExamples },
+    ...(locale === 'en'
+      ? [{ id: 'popular-calculations', label: 'Popular Bill Calculations' }]
+      : []),
     ...(content.billTraps ? [{ id: 'bill-traps', label: t.toc.billTraps }] : []),
     { id: 'how-calculated', label: t.toc.howCalculated },
     { id: 'bill-audit', label: t.toc.billAudit },
@@ -590,6 +594,13 @@ export default function DiscomCalculatorPage({
               {t.sourceOrder}
             </a>
           </p>
+          {locale === 'en' && (
+            <p className="mt-2 text-sm">
+              <Link href={`${path}/tariffs`} className="text-brass underline">
+                View Commercial, Industrial &amp; Agriculture tariffs for {tariff.state} →
+              </Link>
+            </p>
+          )}
         </section>
 
         {/* Two worked examples */}
@@ -639,6 +650,26 @@ export default function DiscomCalculatorPage({
             </div>
           </div>
         </section>
+
+        {/* Popular pre-computed bill calculations — English only for now,
+            see PopularBillCalculations.tsx. Targets long-tail "electricity
+            bill for X units in Y" searches; pure computeBill() output, no
+            per-DISCOM hand-authoring required. */}
+        {locale === 'en' && (
+          <section aria-labelledby="popular-calculations" className="mb-10 scroll-mt-20">
+            <h2
+              id="popular-calculations"
+              className="mb-1 font-display text-2xl font-bold text-ink-navy"
+            >
+              Popular {tariff.state} Electricity Bill Calculations
+            </h2>
+            <p className="mb-4 text-ash/70">
+              Explore estimated electricity bills for commonly used consumption levels using{' '}
+              {tariff.discomCode} tariff slabs for Domestic connections in {tariff.state}.
+            </p>
+            <PopularBillCalculations tariff={tariff} />
+          </section>
+        )}
 
         {/* Common bill traps — only where authored. Caution-amber signals a
             warning worth knowing about, without the alarm of red. */}
