@@ -3,6 +3,7 @@ import Link from 'next/link'
 import PageHero from '@/components/PageHero'
 import { AC_BRANDS } from '@/data/ac-brands'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/ac/brands'
@@ -11,8 +12,11 @@ export const metadata: Metadata = {
   title: 'AC Bill Calculator by Brand — All Major AC Brands (India)',
   description:
     'Estimate your AC running cost for every major brand sold in India — Daikin, LG, Samsung, Voltas, Blue Star, Carrier and more — using the same real BEE ISEER-based method.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/ac/brands'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const breadcrumb = breadcrumbLd([

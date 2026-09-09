@@ -4,6 +4,7 @@ import CrossHubLinks from '@/components/CrossHubLinks'
 import LeadGenForm from '@/components/LeadGenForm'
 import SplitHero from '@/components/SplitHero'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -98,8 +99,11 @@ export const metadata: Metadata = {
   title: 'Rooftop Solar Calculators & PM Surya Ghar Subsidy (India)',
   description:
     'Free rooftop solar tools for India: ROI & payback calculator using your real DISCOM tariff, and a PM Surya Ghar subsidy checker. Get matched with verified installers.',
-  alternates: { canonical: `${SITE}/solar` },
-  openGraph: { url: `${SITE}/solar`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}/solar`,
+    languages: getAlternateLanguages('/solar'),
+  },
+  openGraph: { url: `${SITE}/solar`, type: 'website', locale: 'en_IN' },
 }
 
 export default function SolarHubPage() {

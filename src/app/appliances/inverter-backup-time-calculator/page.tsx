@@ -4,6 +4,7 @@ import InverterBackupCalculator from '@/components/calculators/InverterBackupCal
 import PageHero from '@/components/PageHero'
 import { estimateBackupTime } from '@/lib/calc/inverter'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/inverter-backup-time-calculator'
@@ -14,8 +15,11 @@ export const metadata: Metadata = {
   title: 'Inverter Battery Backup Time Calculator 2026 — How Long It Lasts',
   description:
     'Calculate how long your inverter battery will actually last for a given load, with both a safe (50% depth of discharge) and full-capacity estimate.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/inverter-backup-time-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

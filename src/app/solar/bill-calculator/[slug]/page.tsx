@@ -4,6 +4,7 @@ import SolarStatePage from '@/components/calculators/SolarStatePage'
 import { allDiscomCodeSlugs, getCalculatorPageByDiscomSlug } from '@/data/calculator-pages'
 import { getTariff } from '@/lib/calc/electricity'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -26,8 +27,11 @@ export async function generateMetadata({
   return {
     title: `${tariff.state} Solar Bill Calculator 2026 — Rooftop Payback & Subsidy`,
     description: `Estimate your rooftop solar payback and savings in ${tariff.state}, using ${config.discomCode}'s real tariff and the PM Surya Ghar subsidy.`,
-    alternates: { canonical: `${SITE}${path}` },
-    openGraph: { url: `${SITE}${path}`, type: 'website' },
+    alternates: {
+      canonical: `${SITE}${path}`,
+      languages: getAlternateLanguages(path),
+    },
+    openGraph: { url: `${SITE}${path}`, type: 'website', locale: 'en_IN' },
   }
 }
 

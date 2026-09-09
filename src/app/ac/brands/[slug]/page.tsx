@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import AcBrandPage from '@/components/calculators/AcBrandPage'
 import { allAcBrandSlugs, getAcBrand } from '@/data/ac-brands'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -24,8 +25,11 @@ export async function generateMetadata({
   return {
     title: `${brand.name} AC Bill Calculator 2026 — Running Cost (India)`,
     description: `Calculate your ${brand.name} air conditioner's electricity cost by tonnage, star rating and daily hours, priced at your DISCOM's real tariff.`,
-    alternates: { canonical: `${SITE}${path}` },
-    openGraph: { url: `${SITE}${path}`, type: 'website' },
+    alternates: {
+      canonical: `${SITE}${path}`,
+      languages: getAlternateLanguages(path),
+    },
+    openGraph: { url: `${SITE}${path}`, type: 'website', locale: 'en_IN' },
   }
 }
 

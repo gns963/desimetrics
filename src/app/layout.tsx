@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
+import { headers } from 'next/headers'
 import Script from 'next/script'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
@@ -21,11 +22,21 @@ export const metadata: Metadata = {
   verification: {
     google: 'rCdt_dPCPqF1v-gfj0ypSOBnjTvoxDu7k8OmzebVnYg',
   },
+  // Sitewide default — overridden per locale by each locale's own layout.tsx
+  // (see src/app/hi/layout.tsx etc.) via Next's metadata inheritance.
+  openGraph: { locale: 'en_IN', siteName: 'DesiMetrics' },
+  twitter: { card: 'summary_large_image' },
 }
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+export default async function RootLayout({ children }: LayoutProps<'/'>) {
+  // The `lang` attribute can only be set on this root <html> tag — a nested
+  // per-locale layout can't redeclare it — so middleware forwards the
+  // locale as a request header for this Server Component to read. See
+  // src/middleware.ts and SEO audit 2026-09-07.
+  const locale = (await headers()).get('x-locale') ?? 'en'
+
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+    <html lang={locale} className={`${poppins.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-gazette-cream text-ash">
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}

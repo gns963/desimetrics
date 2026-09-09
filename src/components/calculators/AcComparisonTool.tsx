@@ -24,12 +24,20 @@ const STAR_OPTIONS = [
 
 function AcSideConfig({
   label,
+  tonnageLegend,
+  tonOptions,
+  starLegend,
+  starOptions,
   tonnage,
   setTonnage,
   starRating,
   setStarRating,
 }: {
   label: string
+  tonnageLegend: string
+  tonOptions: { value: string; label: string; icon: string }[]
+  starLegend: string
+  starOptions: { value: string; label: string; icon: string }[]
   tonnage: string
   setTonnage: (v: string) => void
   starRating: string
@@ -41,10 +49,10 @@ function AcSideConfig({
         {label}
       </p>
       <div className="grid gap-4">
-        <OptionCardGroup legend="Tonnage" options={TON_OPTIONS} value={tonnage} onChange={setTonnage} />
+        <OptionCardGroup legend={tonnageLegend} options={tonOptions} value={tonnage} onChange={setTonnage} />
         <OptionCardGroup
-          legend="Star rating"
-          options={STAR_OPTIONS}
+          legend={starLegend}
+          options={starOptions}
           value={starRating}
           onChange={setStarRating}
           columns={3}
@@ -54,7 +62,54 @@ function AcSideConfig({
   )
 }
 
-export default function AcComparisonTool({ discoms }: { discoms: AcCompareDiscom[] }) {
+export interface AcComparisonToolTexts {
+  title: string
+  subtitle: string
+  discomLabel: string
+  hoursLabel: string
+  hoursUnit: string
+  tonnageLegend: string
+  tonOptions: { value: string; label: string; icon: string }[]
+  starLegend: string
+  starOptions: { value: string; label: string; icon: string }[]
+  optionALabel: string
+  optionBLabel: string
+  ctaLabel: string
+  disclaimer: string
+  /** Use {label} placeholder for "1T 5★" style tag. */
+  perYearSuffix: string
+  /** Use {amount} placeholder. */
+  bSavesTemplate: string
+  /** Use {amount} placeholder. */
+  aSavesTemplate: string
+}
+
+const defaultTexts: AcComparisonToolTexts = {
+  title: 'AC Comparison Tool',
+  subtitle: 'Compare any two AC configurations side by side',
+  discomLabel: 'DISCOM / state',
+  hoursLabel: 'Daily usage (both units)',
+  hoursUnit: 'hrs/day',
+  tonnageLegend: 'Tonnage',
+  tonOptions: TON_OPTIONS,
+  starLegend: 'Star rating',
+  starOptions: STAR_OPTIONS,
+  optionALabel: 'Option A',
+  optionBLabel: 'Option B',
+  ctaLabel: 'Compare These Two ACs',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  perYearSuffix: '/yr',
+  bSavesTemplate: 'Option B saves {amount}/year',
+  aSavesTemplate: 'Option A saves {amount}/year',
+}
+
+export default function AcComparisonTool({
+  discoms,
+  texts = defaultTexts,
+}: {
+  discoms: AcCompareDiscom[]
+  texts?: AcComparisonToolTexts
+}) {
   const [discomCode, setDiscomCode] = useState(discoms[0]?.code ?? '')
   const [hours, setHours] = useState(8)
   const [tonnageA, setTonnageA] = useState('1')
@@ -97,8 +152,8 @@ export default function AcComparisonTool({ discoms }: { discoms: AcCompareDiscom
     <CalculatorCard>
       <CalculatorHeader
         icon="⚖️"
-        title="AC Comparison Tool"
-        subtitle="Compare any two AC configurations side by side"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -107,7 +162,7 @@ export default function AcComparisonTool({ discoms }: { discoms: AcCompareDiscom
             htmlFor="cmp-tool-discom"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            DISCOM / state
+            {texts.discomLabel}
           </label>
           <select
             id="cmp-tool-discom"
@@ -125,24 +180,32 @@ export default function AcComparisonTool({ discoms }: { discoms: AcCompareDiscom
 
         <SliderField
           id="cmp-tool-hours"
-          label="Daily usage (both units)"
+          label={texts.hoursLabel}
           value={hours}
           onChange={setHours}
           min={1}
           max={24}
-          unit="hrs/day"
+          unit={texts.hoursUnit}
         />
 
         <div className="grid gap-4 sm:grid-cols-2">
           <AcSideConfig
-            label="Option A"
+            label={texts.optionALabel}
+            tonnageLegend={texts.tonnageLegend}
+            tonOptions={texts.tonOptions}
+            starLegend={texts.starLegend}
+            starOptions={texts.starOptions}
             tonnage={tonnageA}
             setTonnage={setTonnageA}
             starRating={starA}
             setStarRating={setStarA}
           />
           <AcSideConfig
-            label="Option B"
+            label={texts.optionBLabel}
+            tonnageLegend={texts.tonnageLegend}
+            tonOptions={texts.tonOptions}
+            starLegend={texts.starLegend}
+            starOptions={texts.starOptions}
             tonnage={tonnageB}
             setTonnage={setTonnageB}
             starRating={starB}
@@ -150,7 +213,7 @@ export default function AcComparisonTool({ discoms }: { discoms: AcCompareDiscom
           />
         </div>
 
-        <CalculatorCta label="Compare These Two ACs" tone="brass" />
+        <CalculatorCta label={texts.ctaLabel} tone="brass" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-ac/15 bg-hub-ac/5 p-5">
@@ -164,26 +227,26 @@ export default function AcComparisonTool({ discoms }: { discoms: AcCompareDiscom
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-ash/60">
-                  Option A · {tonnageA}T {starA}★
+                  {texts.optionALabel} · {tonnageA}T {starA}★
                 </p>
                 <p className="font-display text-2xl font-bold tabular-nums text-hub-ac">
-                  {formatINR(resultA.annualCost)}/yr
+                  {formatINR(resultA.annualCost)}{texts.perYearSuffix}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-ash/60">
-                  Option B · {tonnageB}T {starB}★
+                  {texts.optionBLabel} · {tonnageB}T {starB}★
                 </p>
                 <p className="font-display text-2xl font-bold tabular-nums text-hub-ac">
-                  {formatINR(resultB.annualCost)}/yr
+                  {formatINR(resultB.annualCost)}{texts.perYearSuffix}
                 </p>
               </div>
             </div>
             {diff != null && diff !== 0 && (
               <p className="rounded-lg bg-spark-teal/10 px-3 py-2 text-sm font-semibold text-spark-teal">
                 {diff > 0
-                  ? `Option B saves ${formatINR(Math.abs(diff))}/year`
-                  : `Option A saves ${formatINR(Math.abs(diff))}/year`}
+                  ? texts.bSavesTemplate.replace('{amount}', formatINR(Math.abs(diff)))
+                  : texts.aSavesTemplate.replace('{amount}', formatINR(Math.abs(diff)))}
               </p>
             )}
           </div>

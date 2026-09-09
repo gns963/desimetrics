@@ -4,7 +4,43 @@ import { useMemo, useState } from 'react'
 import { calculateAcPowerConsumption } from '@/lib/calc/ac'
 import { CalculatorCard, CalculatorCta, CalculatorHeader, SliderField } from './CalculatorShell'
 
-export default function AcPowerConsumptionCalculator() {
+export interface AcPowerConsumptionCalculatorTexts {
+  title: string
+  subtitle: string
+  currentLabel: string
+  currentUnit: string
+  currentHint: string
+  hoursLabel: string
+  hoursUnit: string
+  ctaLabel: string
+  disclaimer: string
+  powerDrawLabel: string
+  perDayLabel: string
+  perMonthLabel: string
+  perYearLabel: string
+}
+
+const defaultTexts: AcPowerConsumptionCalculatorTexts = {
+  title: 'AC Power Consumption Calculator',
+  subtitle: "From your AC's rated current (nameplate)",
+  currentLabel: 'Rated current',
+  currentUnit: 'A',
+  currentHint: "Check the nameplate on the AC's outdoor unit — usually labelled 'Rated Current' in Amps.",
+  hoursLabel: 'Daily usage',
+  hoursUnit: 'hrs/day',
+  ctaLabel: 'Calculate Power Consumption',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  powerDrawLabel: 'Power draw',
+  perDayLabel: 'Units/day',
+  perMonthLabel: 'Units/month',
+  perYearLabel: 'Units/year',
+}
+
+export default function AcPowerConsumptionCalculator({
+  texts = defaultTexts,
+}: {
+  texts?: AcPowerConsumptionCalculatorTexts
+} = {}) {
   const [current, setCurrent] = useState(6)
   const [hours, setHours] = useState(8)
 
@@ -26,34 +62,34 @@ export default function AcPowerConsumptionCalculator() {
     <CalculatorCard>
       <CalculatorHeader
         icon="🔢"
-        title="AC Power Consumption Calculator"
-        subtitle="From your AC's rated current (nameplate)"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
         <SliderField
           id="ac-power-current"
-          label="Rated current"
+          label={texts.currentLabel}
           value={current}
           onChange={setCurrent}
           min={1}
           max={20}
           step={0.5}
-          unit="A"
-          hint="Check the nameplate on the AC's outdoor unit — usually labelled 'Rated Current' in Amps."
+          unit={texts.currentUnit}
+          hint={texts.currentHint}
         />
 
         <SliderField
           id="ac-power-hours"
-          label="Daily usage"
+          label={texts.hoursLabel}
           value={hours}
           onChange={setHours}
           min={1}
           max={24}
-          unit="hrs/day"
+          unit={texts.hoursUnit}
         />
 
-        <CalculatorCta label="Calculate Power Consumption" tone="brass" />
+        <CalculatorCta label={texts.ctaLabel} tone="brass" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-ac/15 bg-hub-ac/5 p-5">
@@ -66,18 +102,18 @@ export default function AcPowerConsumptionCalculator() {
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Power draw
+                {texts.powerDrawLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-hub-ac">
                 {result.inputKw} kW
               </p>
             </div>
             <dl className="grid grid-cols-3 gap-x-4 gap-y-2 text-sm">
-              <dt className="text-ash/60">Units/day</dt>
+              <dt className="text-ash/60">{texts.perDayLabel}</dt>
               <dd className="text-right tabular-nums">{result.dailyUnits}</dd>
-              <dt className="text-ash/60">Units/month</dt>
+              <dt className="text-ash/60">{texts.perMonthLabel}</dt>
               <dd className="text-right tabular-nums">{result.monthlyUnits}</dd>
-              <dt className="text-ash/60">Units/year</dt>
+              <dt className="text-ash/60">{texts.perYearLabel}</dt>
               <dd className="text-right tabular-nums">{result.annualUnits}</dd>
             </dl>
             <p className="text-xs text-ash/50">

@@ -5,6 +5,7 @@ import {
   allCalculatorSlugs,
   getCalculatorPage,
 } from '@/data/calculator-pages'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -23,14 +24,20 @@ export async function generateMetadata({
   const config = getCalculatorPage(slug)
   if (!config) return {}
   const path = `/electricity/${slug}`
+  // Most DISCOMs here have no languages alternate: their Hindi version is
+  // chrome-translated only and noindexed until genuinely translated — see
+  // hi/electricity/[slug]. A DISCOM with a real translations entry (see
+  // DiscomPageConfig.translations) is in the i18n-alternates manifest and
+  // gets a real hreflang set here via getAlternateLanguages.
+  const hasTranslation = Boolean(config.translations)
   return {
     title: config.metaTitle,
     description: config.metaDescription,
     alternates: {
       canonical: `${SITE}${path}`,
-      languages: { 'en-IN': `${SITE}${path}`, 'hi-IN': `${SITE}/hi${path}` },
+      ...(hasTranslation ? { languages: getAlternateLanguages(path) } : {}),
     },
-    openGraph: { url: `${SITE}${path}`, type: 'website' },
+    openGraph: { url: `${SITE}${path}`, type: 'website', locale: 'en_IN' },
   }
 }
 

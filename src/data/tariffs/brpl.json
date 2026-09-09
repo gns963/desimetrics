@@ -32,6 +32,39 @@
         "basis": "perLoad",
         "perKW": 100
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 8.5 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 250
+      },
+      "sourceNote": "SOURCED (secondary-primary hybrid) — DERC 'Electricity Tariff Schedule for BRPL, BYPL, TPDDL & NDMC' (base schedule, category 2.2 'Non-Domestic Above 3kVA'), https://www.derc.gov.in/sites/default/files/Tariff%20Schedule%202020-21.pdf. Delhi's slab/base-rate structure has not changed materially since; only the annual Power Purchase Adjustment Charge (PPAC, ~25-40% surcharge on energy charge) is revised each year and is NOT modelled here, so real commercial bills run meaningfully higher than this base rate."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.75 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 250
+      },
+      "sourceNote": "SOURCED (secondary-primary hybrid) — DERC 'Electricity Tariff Schedule for BRPL, BYPL, TPDDL & NDMC' (base schedule, category 3 'Industrial'), https://www.derc.gov.in/sites/default/files/Tariff%20Schedule%202020-21.pdf. PPAC surcharge not modelled — see commercial category note."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 1.5 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 125
+      },
+      "sourceNote": "SOURCED (secondary-primary hybrid) — DERC 'Electricity Tariff Schedule for BRPL, BYPL, TPDDL & NDMC' (base schedule, category 4 'Agriculture'), https://www.derc.gov.in/sites/default/files/Tariff%20Schedule%202020-21.pdf. PPAC surcharge not modelled — see commercial category note. Agricultural connections are rare within BRPL's largely urban Delhi licence area."
     }
   ],
   "fuelCostAdjustment": 0,

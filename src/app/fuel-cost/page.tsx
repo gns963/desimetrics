@@ -4,6 +4,7 @@ import CrossHubLinks from '@/components/CrossHubLinks'
 import { FuelGaugeIcon } from '@/components/HubMotifIcon'
 import PageHero from '@/components/PageHero'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -11,8 +12,11 @@ export const metadata: Metadata = {
   title: 'Fuel Cost Calculators — Vehicle, LPG & Generator (India)',
   description:
     'Free fuel cost calculators for India: petrol/diesel cost per km, LPG cylinder usage and generator running cost — all from real prices and real equipment figures.',
-  alternates: { canonical: `${SITE}/fuel-cost` },
-  openGraph: { url: `${SITE}/fuel-cost`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}/fuel-cost`,
+    languages: getAlternateLanguages('/fuel-cost'),
+  },
+  openGraph: { url: `${SITE}/fuel-cost`, type: 'website', locale: 'en_IN' },
 }
 
 const cards = [

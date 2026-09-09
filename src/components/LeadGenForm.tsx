@@ -2,6 +2,44 @@
 
 import { useState } from 'react'
 
+export interface LeadGenFormTexts {
+  pincodeLabel: string
+  pincodeError: string
+  billLabel: string
+  billError: string
+  roofLabel: string
+  roofError: string
+  roofSelect: string
+  roofConcrete: string
+  roofTin: string
+  roofOther: string
+  phoneLabel: string
+  phoneError: string
+  submitLabel: string
+  disclaimer: string
+  successTitle: string
+  successBody: string
+}
+
+const defaultTexts: LeadGenFormTexts = {
+  pincodeLabel: 'PIN code',
+  pincodeError: 'Enter a valid 6-digit PIN code.',
+  billLabel: 'Monthly electricity bill (₹)',
+  billError: 'Enter your monthly bill amount in ₹.',
+  roofLabel: 'Roof type',
+  roofError: 'Select your roof type.',
+  roofSelect: 'Select…',
+  roofConcrete: 'Concrete (RCC)',
+  roofTin: 'Tin / metal sheet',
+  roofOther: 'Other',
+  phoneLabel: 'Mobile number',
+  phoneError: 'Enter a valid 10-digit mobile number.',
+  submitLabel: 'Get my free quotes →',
+  disclaimer: 'No spam. We share your details only with installers you’re matched to.',
+  successTitle: 'Thanks — we’ll connect you with 3 verified installers.',
+  successBody: 'Keep an eye on your phone; quotes typically arrive within 2 working days.',
+}
+
 export interface LeadGenFormProps {
   /** Tags the submission so we know which page it came from. */
   source?: string
@@ -9,6 +47,7 @@ export interface LeadGenFormProps {
   subheading?: string
   /** 'glass' sits the form on a dark gradient (e.g. the homepage hero-style band); 'light' is the default paper card used everywhere else. */
   tone?: 'light' | 'glass'
+  texts?: LeadGenFormTexts
 }
 
 type RoofType = 'concrete' | 'tin' | 'other' | ''
@@ -21,6 +60,7 @@ export default function LeadGenForm({
   heading = 'Get 3 free installer quotes',
   subheading = 'Tell us a bit about your home and we’ll connect you with verified rooftop solar installers in your area.',
   tone = 'light',
+  texts = defaultTexts,
 }: LeadGenFormProps) {
   const [pincode, setPincode] = useState('')
   const [bill, setBill] = useState('')
@@ -32,13 +72,13 @@ export default function LeadGenForm({
   function validate(): Record<string, string> {
     const e: Record<string, string> = {}
     if (!PINCODE_RE.test(pincode.trim()))
-      e.pincode = 'Enter a valid 6-digit PIN code.'
+      e.pincode = texts.pincodeError
     const billNum = Number(bill)
     if (!bill.trim() || !Number.isFinite(billNum) || billNum <= 0)
-      e.bill = 'Enter your monthly bill amount in ₹.'
-    if (!roofType) e.roofType = 'Select your roof type.'
+      e.bill = texts.billError
+    if (!roofType) e.roofType = texts.roofError
     if (!PHONE_RE.test(phone.trim()))
-      e.phone = 'Enter a valid 10-digit mobile number.'
+      e.phone = texts.phoneError
     return e
   }
 
@@ -76,11 +116,10 @@ export default function LeadGenForm({
       >
         <p className="text-3xl">✅</p>
         <p className="mt-2 text-lg font-semibold text-spark-teal">
-          Thanks — we’ll connect you with 3 verified installers.
+          {texts.successTitle}
         </p>
         <p className={`mt-1 text-sm ${glass ? 'text-white/70' : 'text-ash/70'}`}>
-          Keep an eye on your phone; quotes typically arrive within 2 working
-          days.
+          {texts.successBody}
         </p>
       </div>
     )
@@ -119,7 +158,7 @@ export default function LeadGenForm({
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="lg-pincode" className={labelCls}>
-            PIN code
+            {texts.pincodeLabel}
           </label>
           <input
             id="lg-pincode"
@@ -138,7 +177,7 @@ export default function LeadGenForm({
 
         <div>
           <label htmlFor="lg-bill" className={labelCls}>
-            Monthly electricity bill (₹)
+            {texts.billLabel}
           </label>
           <input
             id="lg-bill"
@@ -154,7 +193,7 @@ export default function LeadGenForm({
 
         <div>
           <label htmlFor="lg-roof" className={labelCls}>
-            Roof type
+            {texts.roofLabel}
           </label>
           <select
             id="lg-roof"
@@ -164,16 +203,16 @@ export default function LeadGenForm({
             className={`${inputCls} ${errors.roofType ? errBorder : okBorder}`}
           >
             <option value="" className={glass ? 'text-ash' : ''}>
-              Select…
+              {texts.roofSelect}
             </option>
             <option value="concrete" className={glass ? 'text-ash' : ''}>
-              Concrete (RCC)
+              {texts.roofConcrete}
             </option>
             <option value="tin" className={glass ? 'text-ash' : ''}>
-              Tin / metal sheet
+              {texts.roofTin}
             </option>
             <option value="other" className={glass ? 'text-ash' : ''}>
-              Other
+              {texts.roofOther}
             </option>
           </select>
           {errors.roofType && (
@@ -183,7 +222,7 @@ export default function LeadGenForm({
 
         <div>
           <label htmlFor="lg-phone" className={labelCls}>
-            Mobile number
+            {texts.phoneLabel}
           </label>
           <input
             id="lg-phone"
@@ -205,10 +244,10 @@ export default function LeadGenForm({
           glass ? 'rounded-full bg-brass' : 'rounded-lg bg-brass'
         }`}
       >
-        Get my free quotes →
+        {texts.submitLabel}
       </button>
       <p className={`mt-2 text-xs ${glass ? 'text-white/50' : 'text-ash/50'}`}>
-        No spam. We share your details only with installers you’re matched to.
+        {texts.disclaimer}
       </p>
     </form>
   )

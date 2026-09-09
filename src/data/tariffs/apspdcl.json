@@ -42,6 +42,43 @@
         "basis": "perLoad",
         "perKW": 10
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 50, "ratePerUnit": 5.40 },
+        { "minUnits": 51, "maxUnits": 100, "ratePerUnit": 7.65 },
+        { "minUnits": 101, "maxUnits": 300, "ratePerUnit": 9.05 },
+        { "minUnits": 301, "maxUnits": 500, "ratePerUnit": 9.60 },
+        { "minUnits": 501, "maxUnits": null, "ratePerUnit": 10.15 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 75
+      },
+      "sourceNote": "SOURCED (secondary) — APERC FY2026-27 LT tariff schedule (unchanged from FY2025-26), per apelectricitybillcalculator.in and thediscombill.com/tariffs/andhra-pradesh/apepdcl/; APERC applies the same statewide LT tariff to APSPDCL, APEPDCL and APCPDCL alike. Category LT-II-A(i) Shops/Offices. Separate flat-rate LT-II sub-categories exist for advertising hoardings and function halls (Rs.12.25/unit, no telescoping) not modelled here. AP levies a flat Rs.1.00/unit electricity duty on commercial/industrial consumption which this schema cannot represent (it only supports percentage-of-energy-charge duty) — not modelled; this file's top-level electricityDutyPercent (0) does not capture it. Pending primary APERC order cross-check."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.70 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 75
+      },
+      "sourceNote": "SOURCED (secondary) — APERC FY2026-27 LT tariff schedule, per thediscombill.com/tariffs/andhra-pradesh/apepdcl/ and eb.billcalculator.in/1-unit-electricity-price-apepdcl/ (cross-checked, consistent rate). Category LT-III(A) Industry (General), flat rate (not slabbed). Same Rs.1.00/unit flat electricity duty caveat as commercial applies and is not modelled. Pending primary APERC order cross-check."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 0 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "SOURCED (secondary) — APERC LT-V Agricultural category, per thediscombill.com/tariffs/andhra-pradesh/apepdcl/: free supply under the AP Government's agriculture subsidy scheme, covering the great majority (~12+ lakh) of registered agricultural consumers statewide. Pending primary APERC order cross-check."
     }
   ],
   "fuelCostAdjustment": 0,

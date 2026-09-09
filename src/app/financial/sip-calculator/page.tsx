@@ -5,6 +5,7 @@ import SipCalculator from '@/components/calculators/SipCalculator'
 import { calculateSip } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/financial/sip-calculator'
@@ -15,8 +16,11 @@ export const metadata: Metadata = {
   title: 'SIP Calculator 2026 — Mutual Fund SIP Returns & Maturity Value',
   description:
     'Free SIP calculator for India. Estimate the maturity value and gains of a monthly mutual fund SIP from your investment, expected return and duration, with a growth chart.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/financial/sip-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const faqs = [

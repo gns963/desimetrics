@@ -9,6 +9,7 @@ import { marginalRatePerUnit } from '@/lib/calc/ac'
 import { getTariff } from '@/lib/calc/electricity'
 import { formatINR, formatIsoDate } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/household-bill-builder'
@@ -56,8 +57,11 @@ export const metadata: Metadata = {
   title: 'Appliance Electricity Cost Calculator — Household Bill Builder (India)',
   description:
     'See what each appliance costs you, and your combined household bill, priced through your real DISCOM\'s progressive slab tariff — with a live alert when adding a device pushes you into a costlier slab.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/household-bill-builder'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

@@ -33,6 +33,35 @@
         "singlePhase": 50,
         "threePhase": 200
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 50, "ratePerUnit": 4.1 },
+        { "minUnits": 51, "maxUnits": 100, "ratePerUnit": 5.1 },
+        { "minUnits": 101, "maxUnits": 200, "ratePerUnit": 6.1 },
+        { "minUnits": 201, "maxUnits": 400, "ratePerUnit": 7.1 },
+        { "minUnits": 401, "maxUnits": null, "ratePerUnit": 7.4 }
+      ],
+      "fixedCharge": {
+        "basis": "perPhase",
+        "singlePhase": 200,
+        "threePhase": 500
+      },
+      "sourceNote": "PRIMARY — Sikkim State Electricity Regulatory Commission (SSERC), Tariff Order for FY 2025-26, Table 9.2 'Tariff approved by the Commission for F.Y. 2025-26' (Commercial category): slabs 0-50/51-100/101-200/201-400/401+ units at 410/510/610/710/740 paise per unit; monthly minimum charge applies for sanctioned load below 25 KVA (1 Phase Rs 200, 3 Phase Rs 500 — used here). For sanctioned load 25 KVA and above, a per-KVA demand charge applies instead (Rural Rs 60/KVA/month, Urban Rs 100/KVA/month) — not modelled. https://selfservice.powersikkim.in/assets/home/Tariff-Schedule-FY-2025-26.pdf"
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 500, "ratePerUnit": 4.6 },
+        { "minUnits": 501, "maxUnits": 1000, "ratePerUnit": 5.4 },
+        { "minUnits": 1001, "maxUnits": null, "ratePerUnit": 6.8 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 500
+      },
+      "sourceNote": "PRIMARY — SSERC Tariff Order for FY 2025-26, Table 9.2 (Industrial — LT Rural category): slabs up to 500 / 501-1000 / 1001+ units at 460/540/680 paise per unit; monthly minimum charge Rs 500/month for contract load 45 kW and below (used here) — for contract load above 45 kW, a demand charge of Rs 120/KVA/month applies instead (not modelled). LT Urban is a separate sub-category with higher rates (630/720/815 paise) and different fixed charges — not used here. https://selfservice.powersikkim.in/assets/home/Tariff-Schedule-FY-2025-26.pdf"
     }
   ],
   "fuelCostAdjustment": 0,

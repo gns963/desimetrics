@@ -27,6 +27,40 @@
         "basis": "flat",
         "flat": 120
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 500, "ratePerUnit": 6.89 },
+        { "minUnits": 501, "maxUnits": null, "ratePerUnit": 7.75 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 70
+      },
+      "sourceNote": "PRIMARY — PSPCL Non-Residential Supply (NRS), 'Upto 7 kW' load slab, FY2025-26 Schedule of Tariff (Annexure-A, Table 6.2 of PSERC Tariff Order dated 28.03.2025), via PSPCL Commercial Circular No. 06/2025 (docs.pspcl.in). Larger NRS loads have different rates/charges not modelled here: 'Above 7kW & upto 20kW' has the same energy rates but fixed charge ₹110/kW; 'Above 20kW/kVA up to 100kVA' is flat ₹6.75/kVAh with fixed ₹130/kVA; 'Above 100kVA' is flat ₹6.96/kVAh with fixed ₹140/kVA."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.82 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 110
+      },
+      "sourceNote": "PRIMARY — PSPCL LT Industrial 'Small Power' category (load up to 20 kVA), FY2025-26 Schedule of Tariff: flat ₹5.82/kVAh (not slabbed), fixed charge ₹110/kVA/month (note: rate is per kVA of demand, not per kW, though modelled here via the perLoad/perKW field). Source: Annexure-A, Table 6.2 of PSERC Tariff Order dated 28.03.2025, via PSPCL Commercial Circular No. 06/2025 (docs.pspcl.in). 'Medium Supply' (20-100kVA: ₹6.25/kVAh, fixed ₹145/kVA) and 'Large Supply' (>100kVA: ₹6.60-6.82/kVAh) categories not modelled."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.7 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "PRIMARY — PSPCL Agricultural Pumpset (AP) tariff, FY2025-26: ₹6.70/kWh metered, with no separate fixed/demand charge (AP is explicitly excluded from PSPCL's Two-Part Tariff fixed-charge structure per General Conditions of Tariff). An alternative flat unmetered rate of ₹492/BHP/month is also permitted for AP connections but not modelled here. Source: Annexure-A, Table 6.2 of PSERC Tariff Order dated 28.03.2025, via PSPCL Commercial Circular No. 06/2025 (docs.pspcl.in)."
     }
   ],
   "fuelCostAdjustment": 0,

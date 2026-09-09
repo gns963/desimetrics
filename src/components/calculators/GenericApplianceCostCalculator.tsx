@@ -10,7 +10,48 @@ export interface DiscomOption {
   state: string
 }
 
-export default function GenericApplianceCostCalculator({ discoms }: { discoms: DiscomOption[] }) {
+export interface GenericApplianceCostCalculatorTexts {
+  title: string
+  subtitle: string
+  discomLabel: string
+  wattageLabel: string
+  wattageUnit: string
+  wattageHint: string
+  hoursLabel: string
+  hoursUnit: string
+  ctaLabel: string
+  disclaimer: string
+  monthlyCostLabel: string
+  /** Use {annual} and {units} placeholders. */
+  yearlyTemplate: string
+  perDayLabel: string
+  billedAtLabel: string
+}
+
+const defaultTexts: GenericApplianceCostCalculatorTexts = {
+  title: 'Appliance Electricity Cost Calculator',
+  subtitle: 'Any appliance, from its wattage and daily hours',
+  discomLabel: 'DISCOM / state',
+  wattageLabel: 'Appliance wattage',
+  wattageUnit: 'W',
+  wattageHint: 'Check the rating plate or box — most appliances print rated wattage.',
+  hoursLabel: 'Daily usage',
+  hoursUnit: 'hrs/day',
+  ctaLabel: 'Calculate Running Cost',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  monthlyCostLabel: 'Estimated monthly cost',
+  yearlyTemplate: '≈ {annual}/year · {units} units/month',
+  perDayLabel: 'Units/day',
+  billedAtLabel: 'Billed at (top slab)',
+}
+
+export default function GenericApplianceCostCalculator({
+  discoms,
+  texts = defaultTexts,
+}: {
+  discoms: DiscomOption[]
+  texts?: GenericApplianceCostCalculatorTexts
+}) {
   const [discomCode, setDiscomCode] = useState(discoms[0]?.code ?? '')
   const [wattage, setWattage] = useState(100)
   const [hours, setHours] = useState(4)
@@ -36,8 +77,8 @@ export default function GenericApplianceCostCalculator({ discoms }: { discoms: D
     <CalculatorCard>
       <CalculatorHeader
         icon="🔋"
-        title="Appliance Electricity Cost Calculator"
-        subtitle="Any appliance, from its wattage and daily hours"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -46,7 +87,7 @@ export default function GenericApplianceCostCalculator({ discoms }: { discoms: D
             htmlFor="app-discom"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            DISCOM / state
+            {texts.discomLabel}
           </label>
           <select
             id="app-discom"
@@ -64,28 +105,28 @@ export default function GenericApplianceCostCalculator({ discoms }: { discoms: D
 
         <SliderField
           id="app-watts"
-          label="Appliance wattage"
+          label={texts.wattageLabel}
           value={wattage}
           onChange={setWattage}
           min={5}
           max={3000}
           step={5}
-          unit="W"
-          hint="Check the rating plate or box — most appliances print rated wattage."
+          unit={texts.wattageUnit}
+          hint={texts.wattageHint}
         />
 
         <SliderField
           id="app-hours"
-          label="Daily usage"
+          label={texts.hoursLabel}
           value={hours}
           onChange={setHours}
           min={0.25}
           max={24}
           step={0.25}
-          unit="hrs/day"
+          unit={texts.hoursUnit}
         />
 
-        <CalculatorCta label="Calculate Running Cost" tone="brass" />
+        <CalculatorCta label={texts.ctaLabel} tone="brass" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-electricity/15 bg-hub-electricity/5 p-5">
@@ -98,20 +139,22 @@ export default function GenericApplianceCostCalculator({ discoms }: { discoms: D
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Estimated monthly cost
+                {texts.monthlyCostLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-hub-electricity">
                 {formatINR(result.monthlyCost)}
               </p>
               <p className="text-sm text-ash/60">
-                ≈ {formatINR(result.annualCost)}/year · {result.monthlyUnits} units/month
+                {texts.yearlyTemplate
+                  .replace('{annual}', formatINR(result.annualCost))
+                  .replace('{units}', String(result.monthlyUnits))}
               </p>
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-              <dt className="text-ash/60">Units/day</dt>
+              <dt className="text-ash/60">{texts.perDayLabel}</dt>
               <dd className="text-right tabular-nums">{result.dailyUnits}</dd>
               <dt className="text-ash/60">
-                Billed at (top slab)
+                {texts.billedAtLabel}
               </dt>
               <dd className="text-right tabular-nums">
                 {formatINR(result.effectiveRatePerUnit)}/unit

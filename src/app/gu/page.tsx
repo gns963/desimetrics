@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: guTexts.metaTitle,
   description: guTexts.metaDescription,
   alternates: { canonical: `${SITE}/gu`, languages: homeHreflangAlternates() },
-  openGraph: { url: `${SITE}/gu`, type: 'website' },
+  openGraph: { url: `${SITE}/gu`, type: 'website', locale: 'gu_IN' },
 }
 
 export default function HomeGu() {

@@ -14,6 +14,7 @@ import discomsJson from '@/data/discoms.json'
 import { calculateAcCost } from '@/lib/calc/ac'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/ac/bill-calculator'
@@ -41,8 +42,11 @@ export const metadata: Metadata = {
   title: 'AC Running Cost Calculator 2026 — Monthly & Yearly Electricity Cost',
   description:
     'Calculate your air conditioner’s electricity cost by tonnage, star rating, daily hours and DISCOM. Uses ISEER efficiency and your state’s top-slab tariff for a realistic estimate.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/ac/bill-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

@@ -5,6 +5,7 @@ import TaxRegimeCalculator from '@/components/calculators/TaxRegimeCalculator'
 import { compareRegimes } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/financial/new-vs-old-tax-regime-calculator'
@@ -15,8 +16,11 @@ export const metadata: Metadata = {
   title: 'New vs Old Tax Regime Calculator FY 2026-27 (AY 2027-28)',
   description:
     'Compare income tax under the new and old regimes for FY 2026-27. Includes updated slabs, ₹75,000/₹50,000 standard deduction, 87A rebate and 4% cess. See which saves you more.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/financial/new-vs-old-tax-regime-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const faqs = [

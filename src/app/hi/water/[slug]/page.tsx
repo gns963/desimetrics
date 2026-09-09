@@ -47,11 +47,9 @@ export async function generateMetadata({
       // leaving metadata empty.
       title: `${board.name} Water Bill Calculator 2026 — Real Tariff | DesiMetrics`,
       description: `Estimate your ${board.name} water bill using their real, dated domestic tariff — not a guessed rate.`,
-      alternates: {
-        canonical: `${SITE}/hi${path}`,
-        languages: { 'en-IN': `${SITE}${path}`, 'hi-IN': `${SITE}/hi${path}` },
-      },
-      openGraph: { url: `${SITE}/hi${path}`, type: 'website' },
+      alternates: { canonical: `${SITE}/hi${path}` },
+      openGraph: { url: `${SITE}/hi${path}`, type: 'website', locale: 'hi_IN' },
+      robots: { index: false, follow: true },
     }
   }
   const entry = getState(slug)
@@ -59,11 +57,9 @@ export async function generateMetadata({
   return {
     title: `${entry.state} Water Bill Calculator 2026 | DesiMetrics`,
     description: `Estimate your water bill in ${entry.state} from your own consumption and board's rate.`,
-    alternates: {
-      canonical: `${SITE}/hi${path}`,
-      languages: { 'en-IN': `${SITE}${path}`, 'hi-IN': `${SITE}/hi${path}` },
-    },
-    openGraph: { url: `${SITE}/hi${path}`, type: 'website' },
+    alternates: { canonical: `${SITE}/hi${path}` },
+    openGraph: { url: `${SITE}/hi${path}`, type: 'website', locale: 'hi_IN' },
+    robots: { index: false, follow: true },
   }
 }
 
@@ -83,9 +79,13 @@ export default async function WaterStateRouteHi({
   if (!entry) notFound()
 
   const breadcrumb = breadcrumbLd([
-    { name: 'Home', path: '' },
-    { name: 'Water', path: '/water' },
-    { name: entry.state, path: `/water/${slug}` },
+    { name: 'होम', path: '/hi' },
+    { name: 'पानी', path: '/hi/water' },
+    // entry.state is the raw English state name (consistent with how
+    // WaterStatePage itself renders it, e.g. in t.h1(state)) — left as-is,
+    // only the "Home"/"Water" nav chrome and the item URLs are fixed here.
+    // See SEO audit 2026-09-07.
+    { name: entry.state, path: `/hi/water/${slug}` },
   ])
 
   return (

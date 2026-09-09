@@ -5,6 +5,7 @@ import { CALCULATOR_PAGES } from '@/data/calculator-pages'
 import { marginalRatePerUnit } from '@/lib/calc/ac'
 import { getTariff } from '@/lib/calc/electricity'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/electricity/unit-price'
@@ -23,8 +24,11 @@ export const metadata: Metadata = {
   title: '1 Unit Electricity Price by State (India) 2026 | DesiMetrics',
   description:
     'What 1 unit of electricity costs in every Indian state and union territory — real, source-cited DISCOM tariffs, including fuel cost adjustment and duty.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/electricity/unit-price'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const breadcrumb = breadcrumbLd([

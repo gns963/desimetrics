@@ -16,6 +16,28 @@
         "basis": "flat",
         "flat": 150
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.44 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 525
+      },
+      "sourceNote": "SOURCED (secondary) — MSEDCL LT-II(A) Commercial (connected load up to 20kW), per thediscombill.com/tariffs/maharashtra/msedcl/: Rs.6.44/unit flat + Rs.525/month fixed charge; electricity duty 16% (matches this file's top-level rate, so no override needed). Higher connected-load bands are NOT modelled: LT-II(B) 20-50kW is Rs.10.07/unit + Rs.525/kVA demand charge, and LT-II(C) above 50kW is Rs.12.16/unit with the same demand charge — using this file for a large commercial connection will significantly understate the bill. Wheeling charge and FAC also not modelled. Pending primary MERC order cross-check."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.86 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 390
+      },
+      "sourceNote": "SOURCED (secondary) — MSEDCL LT-III Industrial, connected load above 20kW, per general web search synthesis of MERC FY2025-26 tariff commentary: Rs.7.86/unit + Rs.390/kVA demand charge. Industrial electricity duty is NOT modelled here — secondary sources gave conflicting figures (7.5% vs 9.3%), so this file's top-level 16% (a domestic-derived figure) will likely be inaccurate for this category; treat industrial bill estimates as low-confidence. Rates for industrial connections below 20kW were not found. Pending primary MERC order cross-check."
     }
   ],
   "fuelCostAdjustment": 0,

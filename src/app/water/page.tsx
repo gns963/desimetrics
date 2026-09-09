@@ -8,6 +8,7 @@ import { CALCULATOR_PAGES } from '@/data/calculator-pages'
 import { getTariff } from '@/lib/calc/electricity'
 import { slugify } from '@/lib/format'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -20,8 +21,11 @@ export const metadata: Metadata = {
   title: 'Water Bill Calculator (India) 2026 | DesiMetrics',
   description:
     'Estimate your municipal water bill from your own consumption and board\'s rate — honest calculator, no guessed tariffs, for every Indian state.',
-  alternates: { canonical: `${SITE}/water` },
-  openGraph: { url: `${SITE}/water`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}/water`,
+    languages: getAlternateLanguages('/water'),
+  },
+  openGraph: { url: `${SITE}/water`, type: 'website', locale: 'en_IN' },
 }
 
 const breadcrumb = breadcrumbLd([

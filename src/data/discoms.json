@@ -224,7 +224,10 @@
         {
           "code": "MSEDCL",
           "name": "Maharashtra State Electricity Distribution Co. Ltd",
-          "hasTariffFile": true
+          "hasTariffFile": true,
+          "colloquialNames": [
+            { "lang": "mr", "native": "महावितरण", "transliterated": "Mahavitaran" }
+          ]
         },
         {
           "code": "ADANI-MUM",

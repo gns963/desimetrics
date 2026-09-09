@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: hiTexts.metaTitle,
   description: hiTexts.metaDescription,
   alternates: { canonical: `${SITE}/hi`, languages: homeHreflangAlternates() },
-  openGraph: { url: `${SITE}/hi`, type: 'website' },
+  openGraph: { url: `${SITE}/hi`, type: 'website', locale: 'hi_IN' },
 }
 
 export default function HomeHi() {

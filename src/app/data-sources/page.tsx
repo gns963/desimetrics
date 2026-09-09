@@ -2,12 +2,16 @@ import type { Metadata } from 'next'
 import LegalPageShell from '@/components/LegalPageShell'
 import { tariffRegistry } from '@/lib/calc/electricity'
 import { formatIsoDate } from '@/lib/format'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Data Sources — Official Tariff Orders Behind Every Calculator',
   description:
     'The official SERC tariff order and last-verified date behind every DISCOM DesiMetrics covers, plus the source for solar subsidy and income-tax data.',
-  alternates: { canonical: 'https://desimetrics.com/data-sources' },
+  alternates: {
+    canonical: 'https://desimetrics.com/data-sources',
+    languages: getAlternateLanguages('/data-sources'),
+  },
 }
 
 const tariffs = Object.values(tariffRegistry).sort((a, b) =>

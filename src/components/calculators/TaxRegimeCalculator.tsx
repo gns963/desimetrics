@@ -5,7 +5,48 @@ import { compareRegimes } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { CalculatorCard, CalculatorCta, CalculatorHeader } from './CalculatorShell'
 
-export default function TaxRegimeCalculator() {
+export interface TaxRegimeCalculatorTexts {
+  title: string
+  subtitle: string
+  incomeLabel: string
+  deductionsLabel: string
+  deductionsHint: string
+  ctaLabel: string
+  disclaimer: string
+  eitherMessage: string
+  /** Use {regime} and {amount} placeholders. */
+  savesMessageTemplate: string
+  newRegimeLabel: string
+  oldRegimeLabel: string
+  taxableIncomeLabel: string
+  rebateLabel: string
+  totalTaxLabel: string
+  footnote: string
+}
+
+const defaultTexts: TaxRegimeCalculatorTexts = {
+  title: 'New vs Old Tax Regime',
+  subtitle: 'Compare your income tax for FY 2026-27',
+  incomeLabel: 'Gross annual income (₹)',
+  deductionsLabel: 'Old-regime deductions (80C, 80D, HRA…)',
+  deductionsHint: 'Only the old regime allows most deductions. Standard deduction is applied automatically for both.',
+  ctaLabel: 'Compare Tax Regimes',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  eitherMessage: 'Both regimes cost the same for you.',
+  savesMessageTemplate: 'The {regime} regime saves you {amount}.',
+  newRegimeLabel: 'New',
+  oldRegimeLabel: 'Old',
+  taxableIncomeLabel: 'Taxable income',
+  rebateLabel: 'Rebate 87A',
+  totalTaxLabel: 'Total tax',
+  footnote: 'FY 2026-27 (AY 2027-28), incl. 4% cess. Surcharge (income > ₹50L) and marginal relief not included.',
+}
+
+export default function TaxRegimeCalculator({
+  texts = defaultTexts,
+}: {
+  texts?: TaxRegimeCalculatorTexts
+} = {}) {
   const [income, setIncome] = useState(1500000)
   const [deductions, setDeductions] = useState(150000)
 
@@ -21,8 +62,8 @@ export default function TaxRegimeCalculator() {
     <CalculatorCard>
       <CalculatorHeader
         icon="🏦"
-        title="New vs Old Tax Regime"
-        subtitle="Compare your income tax for FY 2026-27"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -31,7 +72,7 @@ export default function TaxRegimeCalculator() {
             htmlFor="tax-income"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            Gross annual income (₹)
+            {texts.incomeLabel}
           </label>
           <input
             id="tax-income"
@@ -47,7 +88,7 @@ export default function TaxRegimeCalculator() {
             htmlFor="tax-deductions"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            Old-regime deductions (80C, 80D, HRA…)
+            {texts.deductionsLabel}
           </label>
           <input
             id="tax-deductions"
@@ -58,12 +99,11 @@ export default function TaxRegimeCalculator() {
             className={fieldCls}
           />
           <p className="mt-1 text-xs text-ash/50">
-            Only the old regime allows most deductions. Standard deduction is
-            applied automatically for both.
+            {texts.deductionsHint}
           </p>
         </div>
 
-        <CalculatorCta label="Compare Tax Regimes" tone="financial" />
+        <CalculatorCta label={texts.ctaLabel} tone="financial" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hairline bg-paper p-5">
@@ -76,22 +116,24 @@ export default function TaxRegimeCalculator() {
             }`}
           >
             {result.recommended === 'either'
-              ? 'Both regimes cost the same for you.'
-              : `The ${result.recommended} regime saves you ${formatINR(result.saving)}.`}
+              ? texts.eitherMessage
+              : texts.savesMessageTemplate
+                  .replace('{regime}', result.recommended === 'new' ? texts.newRegimeLabel : texts.oldRegimeLabel)
+                  .replace('{amount}', formatINR(result.saving))}
           </div>
 
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-ash/60">
                 <th className="py-1 font-medium"></th>
-                <th className="py-1 text-right font-medium">New</th>
-                <th className="py-1 text-right font-medium">Old</th>
+                <th className="py-1 text-right font-medium">{texts.newRegimeLabel}</th>
+                <th className="py-1 text-right font-medium">{texts.oldRegimeLabel}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-hairline">
               <tr>
                 <td className="py-1.5 text-ash/70">
-                  Taxable income
+                  {texts.taxableIncomeLabel}
                 </td>
                 <td className="py-1.5 text-right tabular-nums">
                   {formatINR(result.newRegime.taxableIncome)}
@@ -102,7 +144,7 @@ export default function TaxRegimeCalculator() {
               </tr>
               <tr>
                 <td className="py-1.5 text-ash/70">
-                  Rebate 87A
+                  {texts.rebateLabel}
                 </td>
                 <td className="py-1.5 text-right tabular-nums">
                   {formatINR(result.newRegime.rebate87A)}
@@ -112,7 +154,7 @@ export default function TaxRegimeCalculator() {
                 </td>
               </tr>
               <tr className="text-base font-bold text-ink-navy">
-                <td className="py-2">Total tax</td>
+                <td className="py-2">{texts.totalTaxLabel}</td>
                 <td className="py-2 text-right tabular-nums">
                   {formatINR(result.newRegime.totalTax)}
                 </td>
@@ -123,8 +165,7 @@ export default function TaxRegimeCalculator() {
             </tbody>
           </table>
           <p className="text-xs text-ash/40">
-            FY 2026-27 (AY 2027-28), incl. 4% cess. Surcharge (income &gt; ₹50L)
-            and marginal relief not included.
+            {texts.footnote}
           </p>
         </div>
       </div>

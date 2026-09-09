@@ -3,6 +3,7 @@ import Link from 'next/link'
 import CrossHubLinks from '@/components/CrossHubLinks'
 import PageHero from '@/components/PageHero'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -10,8 +11,11 @@ export const metadata: Metadata = {
   title: 'Home Appliance Electricity Cost & Sizing Calculators (India)',
   description:
     'Free calculators for everyday home appliances: ceiling fan and fridge running cost, inverter/UPS sizing, battery backup time, room cooling time and water tank fill time.',
-  alternates: { canonical: `${SITE}/appliances` },
-  openGraph: { url: `${SITE}/appliances`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}/appliances`,
+    languages: getAlternateLanguages('/appliances'),
+  },
+  openGraph: { url: `${SITE}/appliances`, type: 'website', locale: 'en_IN' },
 }
 
 const cards = [

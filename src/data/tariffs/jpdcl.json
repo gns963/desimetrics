@@ -27,6 +27,61 @@
         "basis": "perLoad",
         "perKW": 10
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": 200,
+          "ratePerUnit": 3.55
+        },
+        {
+          "minUnits": 201,
+          "maxUnits": 500,
+          "ratePerUnit": 5.4
+        },
+        {
+          "minUnits": 501,
+          "maxUnits": null,
+          "ratePerUnit": 5.85
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 60
+      },
+      "sourceNote": "JERC JKL — JPDCL & KPDCL ARR and Tariff Order for FY 2025-26, Schedule 2 (Non-Domestic/Commercial Supply), metered single-phase tariff (PRIMARY, https://www.jpdcl.co.in/downloads/tariff/JPDCL_KPDCL_Tariff_Order_2025_26.pdf). Three-phase connections (load >5kW) are instead billed flat at Rs.5.85/kVAh with a fixed charge of Rs.130/kVA/month — this file uses the single-phase slab structure and fixed charge as the representative figure."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 4.2
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 60
+      },
+      "sourceNote": "JERC JKL — JPDCL & KPDCL ARR and Tariff Order for FY 2025-26, Schedule 8 (LT Industrial Supply, LTIS-I) (PRIMARY, https://www.jpdcl.co.in/downloads/tariff/JPDCL_KPDCL_Tariff_Order_2025_26.pdf). Flat kVAh energy charge of Rs.4.20/unit regardless of consumption, with demand charge Rs.60/kVA/month; a 5% rebate applies for HT-metered connections below 100kW sanctioned load (not modelled here)."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 0.9
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 26.81
+      },
+      "sourceNote": "JERC JKL — JPDCL & KPDCL ARR and Tariff Order for FY 2025-26, Schedule 4 (Agricultural Supply), metered tariff, 0-10 HP tier (PRIMARY, https://www.jpdcl.co.in/downloads/tariff/JPDCL_KPDCL_Tariff_Order_2025_26.pdf). The real tariff is tiered by sanctioned HP, not by consumption: 0-10 HP = Rs.0.90/kWh (fixed Rs.20/HP/month), 11-20 HP = Rs.1.15/kWh (fixed Rs.25/HP/month), above 20 HP = Rs.6.00/kWh (fixed Rs.45/HP/month). This file uses the smallest/most common tier; the fixed charge (quoted as Rs./HP/month) is converted to Rs./kW using 1 HP = 0.746 kW."
     }
   ],
   "fuelCostAdjustment": 0,

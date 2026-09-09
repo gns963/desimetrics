@@ -27,6 +27,61 @@
         "basis": "flat",
         "flat": 20
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": 200,
+          "ratePerUnit": 3.57
+        },
+        {
+          "minUnits": 201,
+          "maxUnits": 500,
+          "ratePerUnit": 5.3
+        },
+        {
+          "minUnits": 501,
+          "maxUnits": null,
+          "ratePerUnit": 5.83
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 63
+      },
+      "sourceNote": "LPDD tariff petition to JERC JKL for FY 2025-26 (Annual Performance Review/ARR & Tariff Determination filed 19-12-2024), \"Proposed\" tariff column, Non-Domestic/Commercial Metered, single-phase (PRIMARY government filing, https://cdnbbsr.s3waas.gov.in/s395192c98732387165bf8e396c0f2dad2/uploads/2025/04/202504182075644073.pdf). This is the petitioner's proposed tariff, not confirmed as JERC's final approved order — no separately extractable final order text was found (LPDD's own tariff PDF at lpdd.ladakh.gov.in is a scanned image with no machine-readable text). Three-phase connections are billed flat at Rs.6.00/kVAh with fixed charge Rs.154/kVA/month, not modelled here."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 4.13
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 68.9
+      },
+      "sourceNote": "LPDD tariff petition to JERC JKL for FY 2025-26, \"Proposed\" tariff column, LT Industrial Supply, LTIS-I (connected load <50kW) (PRIMARY government filing, https://cdnbbsr.s3waas.gov.in/s395192c98732387165bf8e396c0f2dad2/uploads/2025/04/202504182075644073.pdf). Proposed, not confirmed final. Rates quoted per kVAh, represented here as Rs./kWh. Connections >=50kW pay the same energy charge with a fixed charge of Rs.69.55/kVA/month instead."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 1
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 53.62
+      },
+      "sourceNote": "LPDD tariff petition to JERC JKL for FY 2025-26, \"Proposed\" tariff column, Agriculture Metered, 0-10 HP tier (PRIMARY government filing, https://cdnbbsr.s3waas.gov.in/s395192c98732387165bf8e396c0f2dad2/uploads/2025/04/202504182075644073.pdf). Proposed, not confirmed final. Energy charge is tiered by sanctioned HP: 0-10 HP = Rs.1.00/kWh, 11-20 HP = Rs.1.50/kWh, above 20 HP = Rs.5.50/kWh; fixed charge is a flat Rs.40/HP/month across all tiers, converted here to Rs./kW using 1 HP = 0.746 kW."
     }
   ],
   "fuelCostAdjustment": 0,

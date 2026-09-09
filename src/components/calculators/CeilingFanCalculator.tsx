@@ -23,14 +23,61 @@ const FAN_TYPES: { value: string; label: string; icon: string; watts: number }[]
   { value: 'custom', label: 'Custom', icon: '⚙️', watts: 0 },
 ]
 
-export default function CeilingFanCalculator({ discoms }: { discoms: DiscomOption[] }) {
+export interface CeilingFanCalculatorTexts {
+  title: string
+  subtitle: string
+  discomLabel: string
+  fanTypeLegend: string
+  fanTypes: { value: string; label: string; icon: string; watts: number }[]
+  customWattageLabel: string
+  customWattageUnit: string
+  customWattageHint: string
+  hoursLabel: string
+  hoursUnit: string
+  ctaLabel: string
+  disclaimer: string
+  monthlyCostLabel: string
+  /** Use {annual} and {units} placeholders. */
+  yearlyTemplate: string
+  wattageLabel: string
+  perDayLabel: string
+  billedAtLabel: string
+}
+
+const defaultTexts: CeilingFanCalculatorTexts = {
+  title: 'Ceiling Fan Cost Calculator',
+  subtitle: "Estimate your ceiling fan's electricity cost",
+  discomLabel: 'DISCOM / state',
+  fanTypeLegend: 'Fan type',
+  fanTypes: FAN_TYPES,
+  customWattageLabel: 'Fan wattage',
+  customWattageUnit: 'W',
+  customWattageHint: "Check the wattage printed on the fan's box or motor label.",
+  hoursLabel: 'Daily usage',
+  hoursUnit: 'hrs/day',
+  ctaLabel: 'Calculate Fan Cost',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  monthlyCostLabel: 'Estimated monthly cost',
+  yearlyTemplate: '≈ {annual}/year · {units} units/month',
+  wattageLabel: 'Wattage',
+  perDayLabel: 'Units per day',
+  billedAtLabel: 'Billed at (top slab)',
+}
+
+export default function CeilingFanCalculator({
+  discoms,
+  texts = defaultTexts,
+}: {
+  discoms: DiscomOption[]
+  texts?: CeilingFanCalculatorTexts
+}) {
   const [discomCode, setDiscomCode] = useState(discoms[0]?.code ?? '')
   const [fanType, setFanType] = useState('standard')
   const [customWatts, setCustomWatts] = useState(75)
   const [hours, setHours] = useState(10)
 
   const wattage =
-    fanType === 'custom' ? customWatts : (FAN_TYPES.find((f) => f.value === fanType)?.watts ?? 75)
+    fanType === 'custom' ? customWatts : (texts.fanTypes.find((f) => f.value === fanType)?.watts ?? 75)
 
   const { result, error } = useMemo(() => {
     try {
@@ -53,8 +100,8 @@ export default function CeilingFanCalculator({ discoms }: { discoms: DiscomOptio
     <CalculatorCard>
       <CalculatorHeader
         icon="🌀"
-        title="Ceiling Fan Cost Calculator"
-        subtitle="Estimate your ceiling fan's electricity cost"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -63,7 +110,7 @@ export default function CeilingFanCalculator({ discoms }: { discoms: DiscomOptio
             htmlFor="fan-discom"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            DISCOM / state
+            {texts.discomLabel}
           </label>
           <select
             id="fan-discom"
@@ -79,32 +126,32 @@ export default function CeilingFanCalculator({ discoms }: { discoms: DiscomOptio
           </select>
         </div>
 
-        <OptionCardGroup legend="Fan type" options={FAN_TYPES} value={fanType} onChange={setFanType} />
+        <OptionCardGroup legend={texts.fanTypeLegend} options={texts.fanTypes} value={fanType} onChange={setFanType} />
 
         {fanType === 'custom' && (
           <SliderField
             id="fan-watts"
-            label="Fan wattage"
+            label={texts.customWattageLabel}
             value={customWatts}
             onChange={setCustomWatts}
             min={10}
             max={100}
-            unit="W"
-            hint="Check the wattage printed on the fan's box or motor label."
+            unit={texts.customWattageUnit}
+            hint={texts.customWattageHint}
           />
         )}
 
         <SliderField
           id="fan-hours"
-          label="Daily usage"
+          label={texts.hoursLabel}
           value={hours}
           onChange={setHours}
           min={1}
           max={24}
-          unit="hrs/day"
+          unit={texts.hoursUnit}
         />
 
-        <CalculatorCta label="Calculate Fan Cost" tone="appliance" />
+        <CalculatorCta label={texts.ctaLabel} tone="appliance" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-appliance/15 bg-hub-appliance/5 p-5">
@@ -117,22 +164,24 @@ export default function CeilingFanCalculator({ discoms }: { discoms: DiscomOptio
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Estimated monthly cost
+                {texts.monthlyCostLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-hub-appliance">
                 {formatINR(result.monthlyCost)}
               </p>
               <p className="text-sm text-ash/60">
-                ≈ {formatINR(result.annualCost)}/year · {result.monthlyUnits} units/month
+                {texts.yearlyTemplate
+                  .replace('{annual}', formatINR(result.annualCost))
+                  .replace('{units}', String(result.monthlyUnits))}
               </p>
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-              <dt className="text-ash/60">Wattage</dt>
+              <dt className="text-ash/60">{texts.wattageLabel}</dt>
               <dd className="text-right tabular-nums">{wattage} W</dd>
-              <dt className="text-ash/60">Units per day</dt>
+              <dt className="text-ash/60">{texts.perDayLabel}</dt>
               <dd className="text-right tabular-nums">{result.dailyUnits}</dd>
               <dt className="text-ash/60">
-                Billed at (top slab)
+                {texts.billedAtLabel}
               </dt>
               <dd className="text-right tabular-nums">
                 {formatINR(result.effectiveRatePerUnit)}/unit

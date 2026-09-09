@@ -19,6 +19,44 @@
         "singlePhase": 80,
         "threePhase": 220
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 6.05 },
+        { "minUnits": 101, "maxUnits": 200, "ratePerUnit": 6.80 },
+        { "minUnits": 201, "maxUnits": 300, "ratePerUnit": 7.50 },
+        { "minUnits": 301, "maxUnits": 500, "ratePerUnit": 8.15 },
+        { "minUnits": 501, "maxUnits": null, "ratePerUnit": 9.40 }
+      ],
+      "fixedCharge": {
+        "basis": "perPhase",
+        "singlePhase": 95,
+        "threePhase": 190
+      },
+      "sourceNote": "PRIMARY — KSERC Order No. 427/D(T)/2023/KSERC dated 05.12.2024 (Kerala Gazette Extraordinary Vol.XIII No.3939, 09.12.2024), rates column 'w.e.f 01.04.2025 to 31.03.2027'. Category LT-VII Commercial (A) — shops, hotels, lodges, cold storages etc. IMPORTANT: KSEB bills this NON-TELESCOPIC (the entire month's consumption is charged at the single rate for the slab it falls in, not incrementally block-by-block) — same limitation already flagged for this file's residential LT-I telescopic-only modelling above 250 units. Using these slab boundaries telescopically will understate bills for consumption above 100 units/month. Monthly billing cycle also mismatches this file's declared bimonthly cycle (rates shown are per KSEB's native monthly basis, not doubled)."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.90 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 140
+      },
+      "sourceNote": "PRIMARY — KSERC Order No. 427/D(T)/2023/KSERC dated 05.12.2024, same source as commercial, rates w.e.f 01.04.2025. Category LT-IV(A) Industry, connected-load-below-10kW tier (Rs.140/month flat + Rs.5.90/unit). For connected load 10-20kW the rate is Rs.5.95/unit with Rs.95/kW/month fixed charge, and above 20kW it is Rs.6.00/unit with Rs.215/kVA/month — neither higher tier is modelled here. A 20% surcharge applies if capacitors are not installed (not modelled)."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 2.40 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 20
+      },
+      "sourceNote": "PRIMARY — KSERC Order No. 427/D(T)/2023/KSERC dated 05.12.2024, same source as commercial, rates w.e.f 01.04.2025. Category LT-V(A) Agriculture (pumping/lift irrigation for food crops, cash crops etc), Rs.20/kW/month fixed + Rs.2.40/unit. A separate LT-V(B) category (livestock, poultry, aquaculture, dairy) is billed higher at Rs.3.40/unit + Rs.30/kW/month — not modelled here."
     }
   ],
   "fuelCostAdjustment": 0,

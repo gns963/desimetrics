@@ -32,6 +32,41 @@
         "basis": "flat",
         "flat": 25
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 5.9 },
+        { "minUnits": 101, "maxUnits": 300, "ratePerUnit": 7.0 },
+        { "minUnits": 301, "maxUnits": null, "ratePerUnit": 7.6 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 30
+      },
+      "sourceNote": "PRIMARY — OERC state-wide DISCOM Retail Supply Tariff Notification for FY2025-26 (applies uniformly to all four Odisha DISCOMs including TPCODL), Category 2 'General Purpose < 110 kVA': 0-100 units @ Rs 5.90/unit, 101-300 @ Rs 7.00/unit, >300 @ Rs 7.60/unit; fixed charge Rs 30/kW/month (uniform for first and additional kW). Extracted from TPSODL's published copy of the identical statewide notification: https://www.tpsouthernodisha.com/Editor_UploadedDocuments/Content/TPSODL_Tariff_Notification_2025-26.pdf (cross-referenced against OERC's own notification page at orierc.org and secondary aggregator thediscombill.com, which independently reported the same Rs 30/kW fixed charge for this category)."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.2 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 80
+      },
+      "sourceNote": "PRIMARY — OERC state-wide DISCOM Retail Supply Tariff Notification for FY2025-26 (applies uniformly to all Odisha DISCOMs), Category 7 'L.T. Industrial (S) Supply <22 kVA': flat Rs 6.20/unit (not slabbed); fixed charge Rs 80/kW/month for the first kW, Rs 35/kW/month for each additional kW (this entry uses the first-kW rate as representative). Category 8 'L.T. Industrial (M) Supply >=22kVA <110kVA' (same energy rate, fixed Rs 100/first kW + Rs 80/additional kW) not modelled. Source: https://www.tpsouthernodisha.com/Editor_UploadedDocuments/Content/TPSODL_Tariff_Notification_2025-26.pdf (identical statewide schedule also applicable to TPCODL)."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 1.5 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 20
+      },
+      "sourceNote": "PRIMARY — OERC state-wide DISCOM Retail Supply Tariff Notification for FY2025-26 (applies uniformly to all Odisha DISCOMs), Category 3 'Irrigation Pumping and Agriculture' (LT): flat Rs 1.50/unit (not slabbed); fixed charge Rs 20/kW/month for the first kW, Rs 10/kW/month for each additional kW (this entry uses the first-kW rate as representative). Category 4 'Allied Agricultural Activities' (Rs 1.60/unit, fixed Rs 20/Rs 10) not modelled. Source: https://www.tpsouthernodisha.com/Editor_UploadedDocuments/Content/TPSODL_Tariff_Notification_2025-26.pdf (identical statewide schedule also applicable to TPCODL)."
     }
   ],
   "fuelCostAdjustment": 0,

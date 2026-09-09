@@ -5,6 +5,7 @@ import AcCircuitSafetyTable from '@/components/ac/AcCircuitSafetyTable'
 import PageHero from '@/components/PageHero'
 import { recommendAcCircuit } from '@/lib/calc/ac'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/ac/circuit-safety-calculator'
@@ -15,8 +16,11 @@ export const metadata: Metadata = {
   title: 'AC Circuit Safety Calculator 2026 — MCB & Wire Gauge Sizing (India)',
   description:
     'General planning guidance for the MCB rating and copper wire gauge for an AC circuit, from its rated current. Not a substitute for a licensed electrician.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/ac/circuit-safety-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

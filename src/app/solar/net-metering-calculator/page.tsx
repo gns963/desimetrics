@@ -5,6 +5,7 @@ import PageHero from '@/components/PageHero'
 import { estimateNetMeteringEarnings } from '@/lib/calc/solar'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/solar/net-metering-calculator'
@@ -19,8 +20,11 @@ export const metadata: Metadata = {
   title: 'Net Metering Earnings Calculator 2026 — Solar Export Credit (India)',
   description:
     'Calculate what your exported solar units are worth under net metering, from your monthly generation, consumption and your DISCOM\'s export credit rate.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/solar/net-metering-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

@@ -10,12 +10,63 @@ export interface SolarDiscomOption {
   state: string
 }
 
+export interface SolarRoiCalculatorTexts {
+  title: string
+  subtitle: string
+  discomLabel: string
+  unitsLabel: string
+  unitsUnit: string
+  kwLabel: string
+  kwUnit: string
+  kwHint: string
+  ctaLabel: string
+  disclaimer: string
+  paybackLabel: string
+  paybackUnit: string
+  /** Use {amount} placeholder. */
+  thenSavesTemplate: string
+  recoveredLabel: string
+  systemCostLabel: string
+  subsidyLabel: string
+  netCostLabel: string
+  annualGenLabel: string
+  annualGenUnit: string
+  monthlySavingsLabel: string
+  lifetimeSavingsLabel: string
+}
+
+const defaultTexts: SolarRoiCalculatorTexts = {
+  title: 'Solar ROI Calculator',
+  subtitle: 'Payback period and savings from a rooftop system',
+  discomLabel: 'Your DISCOM / state',
+  unitsLabel: 'Average monthly consumption',
+  unitsUnit: 'units',
+  kwLabel: 'System size',
+  kwUnit: 'kW',
+  kwHint: 'Tip: ~1 kW per 100–150 monthly units is a common starting point.',
+  ctaLabel: 'Calculate Solar Savings',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  paybackLabel: 'Payback period',
+  paybackUnit: 'yrs',
+  thenSavesTemplate: 'then ~{amount} saved',
+  recoveredLabel: 'System cost recovered, year 1',
+  systemCostLabel: 'System cost',
+  subsidyLabel: 'PM Surya Ghar subsidy',
+  netCostLabel: 'Net cost',
+  annualGenLabel: 'Annual generation',
+  annualGenUnit: 'units',
+  monthlySavingsLabel: 'Monthly savings',
+  lifetimeSavingsLabel: '25-year net savings',
+}
+
 export default function SolarRoiCalculator({
   discoms,
   defaultDiscomCode,
+  texts = defaultTexts,
 }: {
   discoms: SolarDiscomOption[]
   defaultDiscomCode?: string
+  texts?: SolarRoiCalculatorTexts
 }) {
   const [discomCode, setDiscomCode] = useState(defaultDiscomCode ?? discoms[0]?.code ?? '')
   const [units, setUnits] = useState(300)
@@ -43,8 +94,8 @@ export default function SolarRoiCalculator({
     <CalculatorCard>
       <CalculatorHeader
         icon="☀️"
-        title="Solar ROI Calculator"
-        subtitle="Payback period and savings from a rooftop system"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -53,7 +104,7 @@ export default function SolarRoiCalculator({
             htmlFor="solar-discom"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            Your DISCOM / state
+            {texts.discomLabel}
           </label>
           <select
             id="solar-discom"
@@ -71,28 +122,28 @@ export default function SolarRoiCalculator({
 
         <SliderField
           id="solar-units"
-          label="Average monthly consumption"
+          label={texts.unitsLabel}
           value={units}
           onChange={setUnits}
           min={0}
           max={1500}
           step={10}
-          unit="units"
+          unit={texts.unitsUnit}
         />
 
         <SliderField
           id="solar-kw"
-          label="System size"
+          label={texts.kwLabel}
           value={kw}
           onChange={setKw}
           min={0.5}
           max={10}
           step={0.5}
-          unit="kW"
-          hint="Tip: ~1 kW per 100–150 monthly units is a common starting point."
+          unit={texts.kwUnit}
+          hint={texts.kwHint}
         />
 
-        <CalculatorCta label="Calculate Solar Savings" />
+        <CalculatorCta label={texts.ctaLabel} disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl bg-gradient-to-br from-hub-solar/15 via-hub-solar/5 to-transparent p-5">
@@ -105,26 +156,25 @@ export default function SolarRoiCalculator({
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Payback period
+                {texts.paybackLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-spark-teal">
                 {result.paybackYears != null
-                  ? `${result.paybackYears} yrs`
+                  ? `${result.paybackYears} ${texts.paybackUnit}`
                   : '—'}
               </p>
               <p className="text-sm text-ash/60">
-                then ~
-                <span className="font-medium text-spark-teal">
-                  {formatINR(result.annualSavings)}/year
-                </span>{' '}
-                saved
+                {texts.thenSavesTemplate.replace(
+                  '{amount}',
+                  `${formatINR(result.annualSavings)}/year`,
+                )}
               </p>
             </div>
 
             {result.netCost > 0 && (
               <div>
                 <div className="flex items-baseline justify-between text-xs text-ash/60">
-                  <span>System cost recovered, year 1</span>
+                  <span>{texts.recoveredLabel}</span>
                   <span className="font-semibold tabular-nums text-hub-solar">
                     {Math.min(100, Math.round((result.annualSavings / result.netCost) * 100))}%
                   </span>
@@ -142,35 +192,35 @@ export default function SolarRoiCalculator({
 
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <dt className="text-ash/60">
-                System cost
+                {texts.systemCostLabel}
               </dt>
               <dd className="text-right tabular-nums">
                 {formatINR(result.systemCost)}
               </dd>
-              <dt className="text-spark-teal">PM Surya Ghar subsidy</dt>
+              <dt className="text-spark-teal">{texts.subsidyLabel}</dt>
               <dd className="text-right tabular-nums text-spark-teal">
                 −{formatINR(result.subsidy)}
               </dd>
               <dt className="font-medium text-ash">
-                Net cost
+                {texts.netCostLabel}
               </dt>
               <dd className="text-right font-medium tabular-nums">
                 {formatINR(result.netCost)}
               </dd>
               <dt className="text-ash/60">
-                Annual generation
+                {texts.annualGenLabel}
               </dt>
               <dd className="text-right tabular-nums">
-                {Math.round(result.annualGeneration)} units
+                {Math.round(result.annualGeneration)} {texts.annualGenUnit}
               </dd>
               <dt className="text-ash/60">
-                Monthly savings
+                {texts.monthlySavingsLabel}
               </dt>
               <dd className="text-right tabular-nums">
                 {formatINR(result.monthlySavings)}
               </dd>
               <dt className="text-ash/60">
-                25-year net savings
+                {texts.lifetimeSavingsLabel}
               </dt>
               <dd className="text-right tabular-nums">
                 {formatINR(result.lifetimeSavings)}

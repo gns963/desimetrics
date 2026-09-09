@@ -32,6 +32,61 @@
         "basis": "perLoad",
         "perKW": 20
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 7.1
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 302
+      },
+      "sourceNote": "MPERC ARR & Retail Supply Tariff Order for FY 2025-26 (MP Madhya Kshetra Vidyut Vitaran Co.), Schedule LV-2.2 (Non-Domestic: shops, offices, hotels etc.), mandatory demand-based tariff for connected load >10kW, urban area (PRIMARY, https://portal.mpcz.in/upload_files/pdf/mperc_regulation/tariff_details/LT_tarrif/Tariff_LT_Year_25_26.pdf). Rural fixed charge is Rs.220/kW instead. Consumers with connected load <=10kW may instead opt for a sanctioned-load-based tariff: Rs.6.50/unit (fixed Rs.88/kW urban) if monthly consumption <=50 units, or Rs.8.00/unit (fixed Rs.144/kW urban) if consumption >50 units — that structure is a consumption-threshold block tariff (all units billed at one rate once the 50-unit threshold is crossed), which this schema's progressive-slab model cannot represent exactly, so the demand-based flat tariff is used instead as the representative figure."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 6.76
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 326
+      },
+      "sourceNote": "MPERC ARR & Retail Supply Tariff Order for FY 2025-26, Schedule LV-4 (LT Industrial: processing/manufacturing units, cold storage, flour mills, ginning/pressing, dal mills etc.), demand-based tariff (mandatory for all LT industrial consumers), non-seasonal, urban area (PRIMARY, https://portal.mpcz.in/upload_files/pdf/mperc_regulation/tariff_details/LT_tarrif/Tariff_LT_Year_25_26.pdf). Rural fixed charge is Rs.211/kW instead. Consumers with contract demand up to 20 HP/15 kW get a 30% discount on both energy and fixed charges (not modelled here)."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": 300,
+          "ratePerUnit": 5.07
+        },
+        {
+          "minUnits": 301,
+          "maxUnits": 750,
+          "ratePerUnit": 6.1
+        },
+        {
+          "minUnits": 751,
+          "maxUnits": null,
+          "ratePerUnit": 6.38
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 89.81
+      },
+      "sourceNote": "MPERC ARR & Retail Supply Tariff Order for FY 2025-26, Schedule LV-5.1 (Agriculture: pump sets, chaff cutters, threshers, lift irrigation) (PRIMARY, https://portal.mpcz.in/upload_files/pdf/mperc_regulation/tariff_details/LT_tarrif/Tariff_LT_Year_25_26.pdf). Fixed charge is quoted per HP and rises with consumption (Rs.67/HP up to 300 units, Rs.83/HP for 301-750, Rs.91/HP beyond); this file uses the first-tier value converted to Rs./kW using 1 HP = 0.746 kW."
     }
   ],
   "fuelCostAdjustment": 0.3,

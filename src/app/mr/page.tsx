@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: mrTexts.metaTitle,
   description: mrTexts.metaDescription,
   alternates: { canonical: `${SITE}/mr`, languages: homeHreflangAlternates() },
-  openGraph: { url: `${SITE}/mr`, type: 'website' },
+  openGraph: { url: `${SITE}/mr`, type: 'website', locale: 'mr_IN' },
 }
 
 export default function HomeMr() {

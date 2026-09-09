@@ -1,12 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import LegalPageShell from '@/components/LegalPageShell'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Methodology — How DesiMetrics Sources & Verifies Data',
   description:
     'Exactly how DesiMetrics sources tariff data from SERC orders, validates it, and calculates bills — including the sourceUrl, lastVerified and verifiedBy fields behind every calculator.',
-  alternates: { canonical: 'https://desimetrics.com/methodology' },
+  alternates: {
+    canonical: 'https://desimetrics.com/methodology',
+    languages: getAlternateLanguages('/methodology'),
+  },
 }
 
 export default function MethodologyPage() {

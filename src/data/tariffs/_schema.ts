@@ -136,6 +136,19 @@ export const ConnectionTypeSchema = z.object({
   slabs: SlabList,
   fixedCharge: FixedChargeSchema,
   meterRent: NonNegative.optional(),
+  /**
+   * Per-category overrides. Real tariff orders commonly charge a different
+   * electricity duty (and occasionally a different FCA) for
+   * commercial/industrial/agriculture than for residential — e.g.
+   * Maharashtra's MERC order: 16% duty on Domestic vs 21% on Commercial and
+   * Industrial. Omit to fall back to the tariff file's top-level value.
+   */
+  electricityDutyPercent: NonNegative.optional(),
+  fuelCostAdjustment: z.number().optional(),
+  /** Free-text citation/caveat when this category's data comes from a
+   *  different source, or a different part of the same order, than the
+   *  file's top-level `sourceUrl`/`verifiedBy`. */
+  sourceNote: z.string().optional(),
 })
 export type ConnectionType = z.infer<typeof ConnectionTypeSchema>
 

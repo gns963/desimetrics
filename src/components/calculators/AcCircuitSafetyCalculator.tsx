@@ -4,7 +4,37 @@ import { useMemo, useState } from 'react'
 import { recommendAcCircuit } from '@/lib/calc/ac'
 import { CalculatorCard, CalculatorCta, CalculatorHeader, SliderField } from './CalculatorShell'
 
-export default function AcCircuitSafetyCalculator() {
+export interface AcCircuitSafetyCalculatorTexts {
+  title: string
+  subtitle: string
+  currentLabel: string
+  currentUnit: string
+  currentHint: string
+  ctaLabel: string
+  disclaimer: string
+  mcbLabel: string
+  wireLabel: string
+  wireUnit: string
+}
+
+const defaultTexts: AcCircuitSafetyCalculatorTexts = {
+  title: 'AC Circuit Safety Calculator',
+  subtitle: 'MCB rating & wire gauge guidance',
+  currentLabel: 'AC rated current',
+  currentUnit: 'A',
+  currentHint: "From the AC's nameplate — usually labelled 'Rated Current' in Amps.",
+  ctaLabel: 'Get Circuit Recommendation',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  mcbLabel: 'Recommended MCB',
+  wireLabel: 'Recommended wire',
+  wireUnit: 'sq mm',
+}
+
+export default function AcCircuitSafetyCalculator({
+  texts = defaultTexts,
+}: {
+  texts?: AcCircuitSafetyCalculatorTexts
+} = {}) {
   const [current, setCurrent] = useState(6)
 
   const { result, error } = useMemo(() => {
@@ -25,24 +55,24 @@ export default function AcCircuitSafetyCalculator() {
     <CalculatorCard>
       <CalculatorHeader
         icon="🛡️"
-        title="AC Circuit Safety Calculator"
-        subtitle="MCB rating & wire gauge guidance"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
         <SliderField
           id="ac-circuit-current"
-          label="AC rated current"
+          label={texts.currentLabel}
           value={current}
           onChange={setCurrent}
           min={1}
           max={20}
           step={0.5}
-          unit="A"
-          hint="From the AC's nameplate — usually labelled 'Rated Current' in Amps."
+          unit={texts.currentUnit}
+          hint={texts.currentHint}
         />
 
-        <CalculatorCta label="Get Circuit Recommendation" tone="brass" />
+        <CalculatorCta label={texts.ctaLabel} tone="brass" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-ac/15 bg-hub-ac/5 p-5">
@@ -56,7 +86,7 @@ export default function AcCircuitSafetyCalculator() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-ash/60">
-                  Recommended MCB
+                  {texts.mcbLabel}
                 </p>
                 <p className="font-display text-3xl font-bold tabular-nums text-hub-ac">
                   {result.recommendedMcbAmps} A
@@ -64,10 +94,10 @@ export default function AcCircuitSafetyCalculator() {
               </div>
               <div>
                 <p className="text-sm text-ash/60">
-                  Recommended wire
+                  {texts.wireLabel}
                 </p>
                 <p className="font-display text-3xl font-bold tabular-nums text-hub-ac">
-                  {result.recommendedWireSqmm} sq mm
+                  {result.recommendedWireSqmm} {texts.wireUnit}
                 </p>
               </div>
             </div>

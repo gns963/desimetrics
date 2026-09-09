@@ -32,6 +32,17 @@
         "basis": "perLoad",
         "perKW": 120
       }
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.95 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 290
+      },
+      "sourceNote": "SOURCED (secondary, cross-verified across 3 independent news reports) — HERC FY2025-26 Retail Supply Tariff Order (Petition No. 66 of 2024, dated 28.03.2025, effective 01.04.2025): LT Industrial 'supply at 11 kVAh' energy charge raised to Rs 6.95/kVAh (from Rs 6.65) and fixed/demand charge raised to Rs 290/kVA/month (from Rs 165); rate is technically per kVA of contract demand, applied here via the perLoad/perKW field per this dataset's convention for kVA-billed categories. Cross-verified identically across https://www.indiatvnews.com/haryana/haryana-power-regulator-announces-new-tariff-hikes-electricity-rates-here-s-how-much-you-will-pay-2025-04-02-983459, https://theprint.in/india/haryana-power-regulator-announces-new-tariff-hikes-electricity-rates/2574654/, and https://www.devdiscourse.com/article/headlines/3330612-herc-unveils-2025-26-tariff-order-power-rates-rise-in-haryana. The primary HERC order PDF (herc.gov.in/WriteReadData/Orders/O20250328.pdf) and UHBVN's own sales circular (uhbvn.org.in) are scanned image PDFs with no extractable text and could not be verified directly; HERC's website was also unreachable during verification."
     }
   ],
   "fuelCostAdjustment": 0,

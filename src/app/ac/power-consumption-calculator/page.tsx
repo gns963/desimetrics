@@ -4,6 +4,7 @@ import AcPowerConsumptionCalculator from '@/components/calculators/AcPowerConsum
 import PageHero from '@/components/PageHero'
 import { calculateAcPowerConsumption } from '@/lib/calc/ac'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/ac/power-consumption-calculator'
@@ -14,8 +15,11 @@ export const metadata: Metadata = {
   title: 'AC Power Consumption Calculator 2026 — From Rated Current (Amps)',
   description:
     'Calculate your air conditioner\'s power draw and unit (kWh) consumption from its nameplate rated current in Amps, an alternative to the tonnage/star-rating method.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/ac/power-consumption-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

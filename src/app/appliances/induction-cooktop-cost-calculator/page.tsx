@@ -6,6 +6,7 @@ import discomsJson from '@/data/discoms.json'
 import { simpleApplianceCost } from '@/lib/calc/appliance'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/induction-cooktop-cost-calculator'
@@ -20,8 +21,11 @@ export const metadata: Metadata = {
   title: 'Induction Cooktop Electricity Cost Calculator 2026 — India',
   description:
     'Calculate your induction cooktop\'s electricity cost by wattage and daily cooking time, priced at your DISCOM\'s real tariff.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/induction-cooktop-cost-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

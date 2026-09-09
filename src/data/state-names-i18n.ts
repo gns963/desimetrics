@@ -3,7 +3,7 @@
  * transliterations, not subjective translation, so usable directly without
  * a native-speaker review pass (unlike computed/billing sentences).
  */
-export type LocaleCode = 'hi' | 'ta' | 'te' | 'mr' | 'bn' | 'kn' | 'gu'
+export type LocaleCode = 'hi' | 'ta' | 'te' | 'mr' | 'bn' | 'kn' | 'gu' | 'ml'
 
 const HI: Record<string, string> = {
   'Andhra Pradesh': 'आंध्र प्रदेश',
@@ -278,7 +278,46 @@ const GU: Record<string, string> = {
   Puducherry: 'પુડુચેરી',
 }
 
-const MAPS: Record<LocaleCode, Record<string, string>> = { hi: HI, ta: TA, te: TE, mr: MR, bn: BN, kn: KN, gu: GU }
+const ML: Record<string, string> = {
+  'Andhra Pradesh': 'ആന്ധ്രാപ്രദേശ്',
+  'Arunachal Pradesh': 'അരുണാചൽ പ്രദേശ്',
+  Assam: 'അസം',
+  Bihar: 'ബീഹാർ',
+  Chhattisgarh: 'ഛത്തീസ്ഗഢ്',
+  Goa: 'ഗോവ',
+  Gujarat: 'ഗുജറാത്ത്',
+  Haryana: 'ഹരിയാന',
+  'Himachal Pradesh': 'ഹിമാചൽ പ്രദേശ്',
+  Jharkhand: 'ജാർഖണ്ഡ്',
+  Karnataka: 'കർണാടക',
+  Kerala: 'കേരളം',
+  'Madhya Pradesh': 'മധ്യപ്രദേശ്',
+  Maharashtra: 'മഹാരാഷ്ട്ര',
+  Manipur: 'മണിപ്പൂർ',
+  Meghalaya: 'മേഘാലയ',
+  Mizoram: 'മിസോറം',
+  Nagaland: 'നാഗാലാൻഡ്',
+  Odisha: 'ഒഡീഷ',
+  Punjab: 'പഞ്ചാബ്',
+  Rajasthan: 'രാജസ്ഥാൻ',
+  Sikkim: 'സിക്കിം',
+  'Tamil Nadu': 'തമിഴ്‌നാട്',
+  Telangana: 'തെലങ്കാന',
+  Tripura: 'ത്രിപുര',
+  'Uttar Pradesh': 'ഉത്തർപ്രദേശ്',
+  Uttarakhand: 'ഉത്തരാഖണ്ഡ്',
+  'West Bengal': 'പശ്ചിമ ബംഗാൾ',
+  'Andaman & Nicobar Islands': 'ആൻഡമാൻ നിക്കോബാർ ദ്വീപുകൾ',
+  Chandigarh: 'ചണ്ഡീഗഢ്',
+  'Dadra & Nagar Haveli and Daman & Diu': 'ദാദ്ര, നഗർ ഹവേലി, ദാമൻ, ദിയു',
+  Delhi: 'ഡൽഹി',
+  'Jammu & Kashmir': 'ജമ്മു കശ്മീർ',
+  Ladakh: 'ലഡാക്ക്',
+  Lakshadweep: 'ലക്ഷദ്വീപ്',
+  Puducherry: 'പുതുച്ചേരി',
+}
+
+const MAPS: Record<LocaleCode, Record<string, string>> = { hi: HI, ta: TA, te: TE, mr: MR, bn: BN, kn: KN, gu: GU, ml: ML }
 
 export function stateNameFor(locale: LocaleCode, englishName: string): string {
   return MAPS[locale][englishName] ?? englishName

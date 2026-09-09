@@ -10,7 +10,49 @@ const VOLTAGE_OPTIONS: { value: string; label: string; icon: string }[] = [
   { value: '48', label: '48V (4 batteries)', icon: '🔋🔋🔋' },
 ]
 
-export default function InverterBackupCalculator() {
+export interface InverterBackupCalculatorTexts {
+  title: string
+  subtitle: string
+  ahLabel: string
+  ahUnit: string
+  ahHint: string
+  voltageLegend: string
+  voltageOptions: { value: string; label: string; icon: string }[]
+  loadLabel: string
+  loadUnit: string
+  ctaLabel: string
+  disclaimer: string
+  safeTimeLabel: string
+  safeTimeSub: string
+  fullTimeLabel: string
+  fullTimeSub: string
+  hoursUnit: string
+}
+
+const defaultTexts: InverterBackupCalculatorTexts = {
+  title: 'Inverter Battery Backup Calculator',
+  subtitle: 'How long your battery will actually last',
+  ahLabel: 'Battery capacity',
+  ahUnit: 'Ah',
+  ahHint: "Printed on the battery's nameplate, e.g. '150 Ah'.",
+  voltageLegend: 'Battery bank voltage',
+  voltageOptions: VOLTAGE_OPTIONS,
+  loadLabel: 'Connected load',
+  loadUnit: 'W',
+  ctaLabel: 'Calculate Backup Time',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  safeTimeLabel: 'Safe backup time',
+  safeTimeSub: '50% depth of discharge',
+  fullTimeLabel: 'Full-capacity time',
+  fullTimeSub: 'fully drained',
+  hoursUnit: 'hrs',
+}
+
+export default function InverterBackupCalculator({
+  texts = defaultTexts,
+}: {
+  texts?: InverterBackupCalculatorTexts
+} = {}) {
   const [batteryAh, setBatteryAh] = useState(150)
   const [voltage, setVoltage] = useState('12')
   const [loadWatts, setLoadWatts] = useState(400)
@@ -37,26 +79,26 @@ export default function InverterBackupCalculator() {
     <CalculatorCard>
       <CalculatorHeader
         icon="🔋"
-        title="Inverter Battery Backup Calculator"
-        subtitle="How long your battery will actually last"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
         <SliderField
           id="backup-ah"
-          label="Battery capacity"
+          label={texts.ahLabel}
           value={batteryAh}
           onChange={setBatteryAh}
           min={20}
           max={300}
           step={5}
-          unit="Ah"
-          hint="Printed on the battery's nameplate, e.g. '150 Ah'."
+          unit={texts.ahUnit}
+          hint={texts.ahHint}
         />
 
         <OptionCardGroup
-          legend="Battery bank voltage"
-          options={VOLTAGE_OPTIONS}
+          legend={texts.voltageLegend}
+          options={texts.voltageOptions}
           value={voltage}
           onChange={setVoltage}
           columns={3}
@@ -64,16 +106,16 @@ export default function InverterBackupCalculator() {
 
         <SliderField
           id="backup-load"
-          label="Connected load"
+          label={texts.loadLabel}
           value={loadWatts}
           onChange={setLoadWatts}
           min={50}
           max={2000}
           step={25}
-          unit="W"
+          unit={texts.loadUnit}
         />
 
-        <CalculatorCta label="Calculate Backup Time" tone="appliance" />
+        <CalculatorCta label={texts.ctaLabel} tone="appliance" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-appliance/15 bg-hub-appliance/5 p-5">
@@ -87,24 +129,24 @@ export default function InverterBackupCalculator() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-ash/60">
-                  Safe backup time
+                  {texts.safeTimeLabel}
                 </p>
                 <p className="font-display text-3xl font-bold tabular-nums text-hub-appliance">
-                  {result.safeCapacityHours} hrs
+                  {result.safeCapacityHours} {texts.hoursUnit}
                 </p>
                 <p className="text-xs text-ash/50">
-                  50% depth of discharge
+                  {texts.safeTimeSub}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-ash/60">
-                  Full-capacity time
+                  {texts.fullTimeLabel}
                 </p>
                 <p className="font-display text-3xl font-bold tabular-nums text-ink-navy">
-                  {result.fullCapacityHours} hrs
+                  {result.fullCapacityHours} {texts.hoursUnit}
                 </p>
                 <p className="text-xs text-ash/50">
-                  fully drained
+                  {texts.fullTimeSub}
                 </p>
               </div>
             </div>

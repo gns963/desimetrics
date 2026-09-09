@@ -15,6 +15,40 @@
         "basis": "perLoad",
         "perKW": 110
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 8.00 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 210
+      },
+      "sourceNote": "SOURCED (secondary) — BESCOM LT-3 Commercial, flat rate, per multiple bill-calculator sites citing the March 2025 KERC combined tariff order (eff. April 2025): Rs.8.00/unit + Rs.210/kW fixed charge. This file's top-level Rs.0.36/unit KERC surcharge and electricity duty (not modelled at top level either) apply on top. One secondary source instead cited Rs.5.95/unit + 9% duty for this category, but that figure looked like a probable mix-up with the residential LT-2A rate on the same page, so it was not used. Pending primary KERC order cross-check."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 500, "ratePerUnit": 6.50 },
+        { "minUnits": 501, "maxUnits": null, "ratePerUnit": 7.50 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 180
+      },
+      "sourceNote": "SOURCED (secondary) — BESCOM LT-5 Industrial per bill-calculator sites citing the March 2025 KERC order: Rs.180/kW fixed charge (consistent across sources); energy rate Rs.6.50/unit up to 500 units and Rs.7.50/unit above 500. Pending primary KERC order cross-check."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 0 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "SOURCED (secondary) — BESCOM LT-4 IP-set (irrigation pump set) agricultural category: pump sets up to 10HP receive free electricity under Karnataka's long-standing farm-power subsidy (well-documented policy, also referenced in KERC tariff commentary re LT-4(a)). Above 10HP or unmetered/other sub-categories may attract charges cited inconsistently across sources (Rs.3.50-8.30/unit) — not modelled here given the conflicting figures. Pending primary KERC order cross-check."
     }
   ],
   "fuelCostAdjustment": 0.36,

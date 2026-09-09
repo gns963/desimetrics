@@ -6,6 +6,7 @@ import { CALCULATOR_PAGES } from '@/data/calculator-pages'
 import discomsJson from '@/data/discoms.json'
 import { getTariff } from '@/lib/calc/electricity'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -13,8 +14,11 @@ export const metadata: Metadata = {
   title: 'Electricity Bill Calculators by State & DISCOM (India) | DesiMetrics',
   description:
     'Free, accurate electricity bill calculators for Indian DISCOMs — real telescopic slab tariffs, subsidies and fuel cost adjustment. TNEB, MSEDCL, UPPCL, BESCOM, KSEB and WBSEDCL, with more states coming.',
-  alternates: { canonical: `${SITE}/electricity` },
-  openGraph: { url: `${SITE}/electricity`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}/electricity`,
+    languages: getAlternateLanguages('/electricity'),
+  },
+  openGraph: { url: `${SITE}/electricity`, type: 'website', locale: 'en_IN' },
 }
 
 const live = CALCULATOR_PAGES.map((p) => {
@@ -105,6 +109,21 @@ export default function ElectricityHubPage() {
       />
 
       <main className="mx-auto max-w-4xl px-4 py-8">
+      <Link
+        href="/electricity/tariffs"
+        className="mb-10 flex items-center justify-between gap-3 rounded-xl border border-brass/20 bg-brass/5 p-5 transition hover:border-brass/50 hover:shadow-sm"
+      >
+        <div>
+          <p className="font-display text-lg font-semibold text-ink-navy">
+            📋 Browse the full Tariff Directory
+          </p>
+          <p className="mt-1 text-sm text-ash/70">
+            Domestic, Commercial, Industrial and Agriculture tariff rates for every state and UT.
+          </p>
+        </div>
+        <span className="shrink-0 text-sm font-semibold text-brass">View all →</span>
+      </Link>
+
       <section aria-labelledby="more-tools" className="mb-10">
         <h2 id="more-tools" className="font-display mb-4 text-2xl font-semibold">
           More electricity tools

@@ -46,11 +46,11 @@ export async function generateMetadata({
     return {
       title: `${board.name} Water Bill Calculator 2026 — Real Tariff | DesiMetrics`,
       description: `Estimate your ${board.name} water bill using their real, dated domestic tariff — not a guessed rate.`,
-      alternates: {
-        canonical: `${SITE}${path}`,
-        languages: { 'en-IN': `${SITE}${path}`, 'hi-IN': `${SITE}/hi${path}` },
-      },
-      openGraph: { url: `${SITE}${path}`, type: 'website' },
+      // No languages alternate to /hi yet: the Hindi version is
+      // chrome-translated only and is noindexed until genuinely translated —
+      // see hi/water/[slug].
+      alternates: { canonical: `${SITE}${path}` },
+      openGraph: { url: `${SITE}${path}`, type: 'website', locale: 'en_IN' },
     }
   }
   const entry = getState(slug)
@@ -58,11 +58,8 @@ export async function generateMetadata({
   return {
     title: `${entry.state} Water Bill Calculator 2026 | DesiMetrics`,
     description: `Estimate your water bill in ${entry.state} from your own consumption and board's rate.`,
-    alternates: {
-      canonical: `${SITE}${path}`,
-      languages: { 'en-IN': `${SITE}${path}`, 'hi-IN': `${SITE}/hi${path}` },
-    },
-    openGraph: { url: `${SITE}${path}`, type: 'website' },
+    alternates: { canonical: `${SITE}${path}` },
+    openGraph: { url: `${SITE}${path}`, type: 'website', locale: 'en_IN' },
   }
 }
 

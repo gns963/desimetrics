@@ -186,10 +186,12 @@ export function CalculatorCta({
   label,
   onClick,
   tone = 'brass',
+  disclaimer = 'Results are approximate estimates. Your actual bill may vary.',
 }: {
   label: string
   onClick?: () => void
   tone?: 'brass' | 'financial' | 'appliance' | 'fuel' | 'water' | 'gas'
+  disclaimer?: string
 }) {
   return (
     <div className="mt-1">
@@ -202,7 +204,7 @@ export function CalculatorCta({
         {label}
       </button>
       <p className="mt-2 text-center text-xs text-ash/50">
-        Results are approximate estimates. Your actual bill may vary.
+        {disclaimer}
       </p>
     </div>
   )

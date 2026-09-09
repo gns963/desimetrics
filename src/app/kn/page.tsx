@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: knTexts.metaTitle,
   description: knTexts.metaDescription,
   alternates: { canonical: `${SITE}/kn`, languages: homeHreflangAlternates() },
-  openGraph: { url: `${SITE}/kn`, type: 'website' },
+  openGraph: { url: `${SITE}/kn`, type: 'website', locale: 'kn_IN' },
 }
 
 export default function HomeKn() {

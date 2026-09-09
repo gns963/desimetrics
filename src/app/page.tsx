@@ -402,7 +402,7 @@ export const metadata: Metadata = {
     canonical: `${SITE}/`,
     languages: homeHreflangAlternates(),
   },
-  openGraph: { url: `${SITE}/`, type: 'website' },
+  openGraph: { url: `${SITE}/`, type: 'website', locale: 'en_IN' },
 }
 
 export default function Home() {

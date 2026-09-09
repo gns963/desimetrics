@@ -5,6 +5,7 @@ import PageHero from '@/components/PageHero'
 import { estimateLpgUsage } from '@/lib/calc/fuel'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/fuel-cost/lpg-cylinder-usage-calculator'
@@ -15,8 +16,11 @@ export const metadata: Metadata = {
   title: 'LPG Cylinder Usage Calculator 2026 — How Long It Lasts',
   description:
     'Estimate how many days your LPG cylinder will last from your daily cooking (burner) hours, and the equivalent daily and monthly cost.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/fuel-cost/lpg-cylinder-usage-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

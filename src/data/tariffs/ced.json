@@ -27,6 +27,43 @@
         "basis": "flat",
         "flat": 30
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 4.5 },
+        { "minUnits": 101, "maxUnits": 200, "ratePerUnit": 4.6 },
+        { "minUnits": 201, "maxUnits": null, "ratePerUnit": 5.5 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 120
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) Order on Approval of ARR and Determination of Retail Tariff for MYT Control Period FY2025-26 to FY2029-30, Chandigarh Power Distribution Ltd (CPDL), Table 121 (FY2025-26 column) and Section 8.2 category NDS-I 'Non-Domestic Service': https://jercuts.gov.in/wp-content/uploads/2025/10/Chandigarh-MYT-order-Final.pdf, pp.149,154. Fixed charge and slabs published in Rs./kVA and Rs./kVAh; treated here as Rs./kW and Rs./kWh."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 500, "ratePerUnit": 4.4 },
+        { "minUnits": 501, "maxUnits": 1000, "ratePerUnit": 4.5 },
+        { "minUnits": 1001, "maxUnits": null, "ratePerUnit": 4.6 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 200
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) Chandigarh MYT order, Table 121 (FY2025-26 column) and Section 8.2 category LTIS-I 'Industrial Services': https://jercuts.gov.in/wp-content/uploads/2025/10/Chandigarh-MYT-order-Final.pdf, pp.150,157. Fixed charge and slabs published in Rs./kVA and Rs./kVAh; treated here as Rs./kW and Rs./kWh."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 2.85 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 10
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) Chandigarh MYT order, Table 121 (FY2025-26 column) and Section 8.2 category LTAS-I 'Agricultural Service, connected load up to 10 kW': https://jercuts.gov.in/wp-content/uploads/2025/10/Chandigarh-MYT-order-Final.pdf, pp.150,156. Larger/demand-based agricultural connections (LTAS-II/III, up to 85 kW) pay a slightly higher rate on a Rs./kVA basis, not modelled here."
     }
   ],
   "fuelCostAdjustment": 0.15,

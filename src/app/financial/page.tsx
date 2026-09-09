@@ -3,6 +3,7 @@ import Link from 'next/link'
 import CrossHubLinks from '@/components/CrossHubLinks'
 import PageHero from '@/components/PageHero'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -10,8 +11,11 @@ export const metadata: Metadata = {
   title: 'Financial Calculators — GST, SIP, Income Tax & Gratuity (India)',
   description:
     'Free Indian personal-finance calculators: GST calculator, SIP returns, new vs old income tax regime for FY 2026-27, and gratuity — accurate, fast and mobile-friendly.',
-  alternates: { canonical: `${SITE}/financial` },
-  openGraph: { url: `${SITE}/financial`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}/financial`,
+    languages: getAlternateLanguages('/financial'),
+  },
+  openGraph: { url: `${SITE}/financial`, type: 'website', locale: 'en_IN' },
 }
 
 const cards = [

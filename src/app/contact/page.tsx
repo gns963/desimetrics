@@ -1,11 +1,15 @@
 import type { Metadata } from 'next'
 import LegalPageShell from '@/components/LegalPageShell'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Contact DesiMetrics — Corrections, Requests & Partnerships',
   description:
     'Get in touch with DesiMetrics — report a tariff error, request a state or DISCOM, or discuss a partnership. We especially welcome corrections backed by an official order.',
-  alternates: { canonical: 'https://desimetrics.com/contact' },
+  alternates: {
+    canonical: 'https://desimetrics.com/contact',
+    languages: getAlternateLanguages('/contact'),
+  },
 }
 
 export default function ContactPage() {

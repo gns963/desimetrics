@@ -7,6 +7,7 @@ import discomsJson from '@/data/discoms.json'
 import { calculateEvChargingCost } from '@/lib/calc/ev'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/electricity/ev-charging-cost-calculator'
@@ -21,8 +22,11 @@ export const metadata: Metadata = {
   title: 'EV Charging Cost Calculator 2026 — Home Charging Cost (India)',
   description:
     'Calculate what a full home EV charge costs, and your cost per km, priced at your DISCOM\'s real tariff — from your battery capacity and range.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/electricity/ev-charging-cost-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

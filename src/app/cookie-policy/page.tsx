@@ -1,12 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import LegalPageShell from '@/components/LegalPageShell'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Cookie Policy — DesiMetrics',
   description:
     'What cookies DesiMetrics uses — essential, analytics and advertising (including Google AdSense and DoubleClick) — and how to control or opt out of them.',
-  alternates: { canonical: 'https://desimetrics.com/cookie-policy' },
+  alternates: {
+    canonical: 'https://desimetrics.com/cookie-policy',
+    languages: getAlternateLanguages('/cookie-policy'),
+  },
 }
 
 export default function CookiePolicyPage() {

@@ -22,6 +22,28 @@
         "basis": "flat",
         "flat": 30
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.5 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 120
+      },
+      "sourceNote": "SOURCED (secondary) — eb.billcalculator.in, P&ED Mizoram 'Commercial/Non-Domestic (LT)' category: flat ₹7.50/unit (not slabbed), fixed ₹120/kW/month. Directionally cross-checked against JERC's official (but now 11-year-stale) FY2014-15 tariff order (power.mizoram.gov.in), which shows Non-Domestic/Commercial LT as slabbed ₹3.30/₹4.30/₹5.20 per kWh with fixed ₹50/kW — same 'commercial costs more than domestic' ordering holds, but no current (c.2025) primary JERC/P&ED tariff order was found to verify the exact rate. Pending primary-source verification."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 90
+      },
+      "sourceNote": "SOURCED (secondary) — eb.billcalculator.in, P&ED Mizoram 'Small Industrial Power (LT)' category: flat ₹6.00/unit (not slabbed), fixed ₹90/kW/month. Directionally cross-checked against JERC's official (but now 11-year-stale) FY2014-15 tariff order (power.mizoram.gov.in), which shows Industrial LT as slabbed ₹3.45/₹4.10 per kWh with fixed ₹50/kW — same relative ordering (industrial below commercial) holds, but no current (c.2025) primary JERC/P&ED tariff order was found to verify the exact rate. Pending primary-source verification."
     }
   ],
   "fuelCostAdjustment": 0,

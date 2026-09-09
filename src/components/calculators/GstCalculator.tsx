@@ -13,7 +13,50 @@ import { CalculatorCard, CalculatorCta, CalculatorHeader } from './CalculatorShe
 // change further.
 const RATES = [0, 3, 5, 12, 18, 28, 40]
 
-export default function GstCalculator() {
+export interface GstCalculatorTexts {
+  title: string
+  subtitle: string
+  amountLabel: string
+  amountError: string
+  rateLabel: string
+  modeLegend: string
+  exclusiveLabel: string
+  inclusiveLabel: string
+  ctaLabel: string
+  disclaimer: string
+  totalInclLabel: string
+  totalPayableLabel: string
+  baseAmountLabel: string
+  /** Use {rate} placeholder. */
+  gstAtRateTemplate: string
+  cgstLabel: string
+  sgstLabel: string
+}
+
+const defaultTexts: GstCalculatorTexts = {
+  title: 'GST Calculator',
+  subtitle: 'Add or remove GST from any amount',
+  amountLabel: 'Amount (₹)',
+  amountError: 'Enter a valid amount.',
+  rateLabel: 'GST rate',
+  modeLegend: 'Amount is',
+  exclusiveLabel: 'GST-exclusive (add GST)',
+  inclusiveLabel: 'GST-inclusive (remove GST)',
+  ctaLabel: 'Calculate GST',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  totalInclLabel: 'Total (incl. GST)',
+  totalPayableLabel: 'Total payable',
+  baseAmountLabel: 'Base amount',
+  gstAtRateTemplate: 'GST @ {rate}%',
+  cgstLabel: 'CGST',
+  sgstLabel: 'SGST',
+}
+
+export default function GstCalculator({
+  texts = defaultTexts,
+}: {
+  texts?: GstCalculatorTexts
+} = {}) {
   const [amountStr, setAmountStr] = useState('1000')
   const [rate, setRate] = useState(18)
   const [mode, setMode] = useState<'exclusive' | 'inclusive'>('exclusive')
@@ -21,16 +64,16 @@ export default function GstCalculator() {
   const { result, error } = useMemo(() => {
     const amount = Number(amountStr)
     if (!Number.isFinite(amount) || amount < 0)
-      return { result: null, error: 'Enter a valid amount.' }
+      return { result: null, error: texts.amountError }
     return { result: calculateGst(amount, rate, mode), error: null as string | null }
-  }, [amountStr, rate, mode])
+  }, [amountStr, rate, mode, texts.amountError])
 
   const fieldCls =
     'w-full rounded-lg border border-hairline px-3 py-2.5 outline-none focus:border-hub-financial focus:ring-2 focus:ring-hub-financial/30'
 
   return (
     <CalculatorCard>
-      <CalculatorHeader icon="🧾" title="GST Calculator" subtitle="Add or remove GST from any amount" />
+      <CalculatorHeader icon="🧾" title={texts.title} subtitle={texts.subtitle} />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
         <div>
@@ -38,7 +81,7 @@ export default function GstCalculator() {
             htmlFor="gst-amount"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            Amount (₹)
+            {texts.amountLabel}
           </label>
           <input
             id="gst-amount"
@@ -55,7 +98,7 @@ export default function GstCalculator() {
             htmlFor="gst-rate"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            GST rate
+            {texts.rateLabel}
           </label>
           <select
             id="gst-rate"
@@ -73,13 +116,13 @@ export default function GstCalculator() {
 
         <fieldset>
           <legend className="mb-1.5 block text-sm font-medium text-ash">
-            Amount is
+            {texts.modeLegend}
           </legend>
           <div className="flex gap-2">
             {(
               [
-                ['exclusive', 'GST-exclusive (add GST)'],
-                ['inclusive', 'GST-inclusive (remove GST)'],
+                ['exclusive', texts.exclusiveLabel],
+                ['inclusive', texts.inclusiveLabel],
               ] as const
             ).map(([val, label]) => (
               <button
@@ -99,7 +142,7 @@ export default function GstCalculator() {
           </div>
         </fieldset>
 
-        <CalculatorCta label="Calculate GST" tone="financial" />
+        <CalculatorCta label={texts.ctaLabel} tone="financial" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hairline bg-paper p-5">
@@ -112,7 +155,7 @@ export default function GstCalculator() {
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Total {mode === 'inclusive' ? '(incl. GST)' : 'payable'}
+                {mode === 'inclusive' ? texts.totalInclLabel : texts.totalPayableLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-ink-navy">
                 {formatINR(result.total)}
@@ -120,18 +163,18 @@ export default function GstCalculator() {
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <dt className="text-ash/60">
-                Base amount
+                {texts.baseAmountLabel}
               </dt>
               <dd className="text-right tabular-nums">{formatINR(result.base)}</dd>
               <dt className="text-ash/60">
-                GST @ {result.ratePercent}%
+                {texts.gstAtRateTemplate.replace('{rate}', String(result.ratePercent))}
               </dt>
               <dd className="text-right tabular-nums">
                 {formatINR(result.gstAmount)}
               </dd>
-              <dt className="text-ash/60">CGST</dt>
+              <dt className="text-ash/60">{texts.cgstLabel}</dt>
               <dd className="text-right tabular-nums">{formatINR(result.cgst)}</dd>
-              <dt className="text-ash/60">SGST</dt>
+              <dt className="text-ash/60">{texts.sgstLabel}</dt>
               <dd className="text-right tabular-nums">{formatINR(result.sgst)}</dd>
             </dl>
           </div>

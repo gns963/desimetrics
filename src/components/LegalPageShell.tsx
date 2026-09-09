@@ -9,6 +9,7 @@ export default function LegalPageShell({
   children,
   stub = true,
   path,
+  locale = 'en',
 }: {
   title: string
   intro: string
@@ -17,9 +18,12 @@ export default function LegalPageShell({
   stub?: boolean
   /** This page's own path, e.g. "/privacy" — used for BreadcrumbList schema. */
   path: string
+  /** UI language for the shell chrome (breadcrumb, footer note). Content itself is passed in via title/intro/children. */
+  locale?: 'en' | 'hi'
 }) {
+  const hi = locale === 'hi'
   const breadcrumb = breadcrumbLd([
-    { name: 'Home', path: '' },
+    { name: hi ? 'होम' : 'Home', path: '' },
     { name: title, path },
   ])
 
@@ -29,8 +33,8 @@ export default function LegalPageShell({
         <div className="hero-grid-overlay pointer-events-none absolute inset-0" aria-hidden />
         <div className="relative mx-auto max-w-3xl px-4">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-white/50">
-            <Link href="/" className="hover:text-brass">
-              Home
+            <Link href={hi ? '/hi' : '/'} className="hover:text-brass">
+              {hi ? 'होम' : 'Home'}
             </Link>{' '}
             / <span className="text-white/80">{title}</span>
           </nav>
@@ -44,8 +48,12 @@ export default function LegalPageShell({
       <main className="mx-auto max-w-3xl px-4 py-12">
         <div className="space-y-4 text-ash/80">{children}</div>
         <p className="mt-10 text-sm text-ash/40">
-          Last updated: 29 August 2026
-          {stub ? ' · This page is a stub and will be expanded before launch.' : ''}
+          {hi ? 'आखिरी बार अपडेट: 29 अगस्त 2026' : 'Last updated: 29 August 2026'}
+          {stub
+            ? hi
+              ? ' · यह पेज एक स्टब है और लॉन्च से पहले विस्तृत किया जाएगा।'
+              : ' · This page is a stub and will be expanded before launch.'
+            : ''}
         </p>
         <script
           type="application/ld+json"

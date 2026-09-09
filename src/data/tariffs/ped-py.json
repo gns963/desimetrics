@@ -33,6 +33,43 @@
         "singlePhase": 25,
         "threePhase": 75
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 6.25 },
+        { "minUnits": 101, "maxUnits": 200, "ratePerUnit": 7.3 },
+        { "minUnits": 201, "maxUnits": null, "ratePerUnit": 8.05 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 200
+      },
+      "sourceNote": "PRIMARY — JERC 'NDS-I (Commercial), Demand Based' category, Table 6-3 'Tariff schedule approved by the Commission for FY 2025-26', JERC Tariff Order dated 24 Sept 2025 for Electricity Department, Govt. of Puducherry (Petition No. 139/2025, electricity.py.gov.in). Fixed charge is ₹200/kVA (not strictly kW) or part thereof/month, modelled here via the perLoad/perKW field. This approved schedule takes effect from 1 October 2025, slightly after this file's top-level effectiveFrom date; the file's residential slabs pre-date this order and were not revised as part of this update."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 500, "ratePerUnit": 7.3 },
+        { "minUnits": 501, "maxUnits": 1000, "ratePerUnit": 7.5 },
+        { "minUnits": 1001, "maxUnits": null, "ratePerUnit": 7.75 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 100
+      },
+      "sourceNote": "PRIMARY — JERC 'LTIS-I (Industries), Demand Based' category, Table 6-3 'Tariff schedule approved by the Commission for FY 2025-26', JERC Tariff Order dated 24 Sept 2025 for Electricity Department, Govt. of Puducherry (Petition No. 139/2025, electricity.py.gov.in). Fixed charge is ₹100/kVA (not strictly kW) or part thereof/month, modelled here via the perLoad/perKW field. Effective from 1 October 2025."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 0.25 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 10
+      },
+      "sourceNote": "PRIMARY — JERC 'LTAS-I (Small Farmers), Connected Load Based' category, Table 6-3 'Tariff schedule approved by the Commission for FY 2025-26', JERC Tariff Order dated 24 Sept 2025 for Electricity Department, Govt. of Puducherry (Petition No. 139/2025, electricity.py.gov.in): heavily subsidised flat ₹0.25/kWh, fixed ₹10/kW or part thereof/month. Unmetered consumers under this category pay only the fixed charge (₹35/kW/month), not modelled here. 'LTAS-II (Other Farmers)' is a separate, less-subsidised demand-based category (₹0.35/kVAh, fixed ₹40/kVA) not modelled. Effective from 1 October 2025."
     }
   ],
   "fuelCostAdjustment": 0,

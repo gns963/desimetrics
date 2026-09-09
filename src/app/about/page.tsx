@@ -2,12 +2,16 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import LegalPageShell from '@/components/LegalPageShell'
 import { tariffRegistry } from '@/lib/calc/electricity'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'About DesiMetrics — Indian Utility & Finance Calculators',
   description:
     'DesiMetrics builds accurate, source-cited calculators for Indian electricity bills, rooftop solar, AC running cost and personal finance. Learn who we are and how we work.',
-  alternates: { canonical: 'https://desimetrics.com/about' },
+  alternates: {
+    canonical: 'https://desimetrics.com/about',
+    languages: getAlternateLanguages('/about'),
+  },
 }
 
 const discomCount = Object.keys(tariffRegistry).length

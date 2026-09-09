@@ -6,6 +6,7 @@ import PageHero from '@/components/PageHero'
 import { vehicleCostPerKm } from '@/lib/calc/fuel'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/fuel-cost/petrol-diesel-cost-per-km-calculator'
@@ -16,8 +17,11 @@ export const metadata: Metadata = {
   title: 'Petrol/Diesel Cost Per KM Calculator 2026 — Vehicle Running Cost',
   description:
     'Calculate your vehicle\'s real fuel cost per km, per month and per year from today\'s fuel price and your mileage — for petrol, diesel or CNG.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/fuel-cost/petrol-diesel-cost-per-km-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

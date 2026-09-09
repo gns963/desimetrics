@@ -17,6 +17,39 @@
         "basis": "perLoad",
         "perKW": 100
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.7 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 200
+      },
+      "sourceNote": "PRIMARY — Jharkhand State Electricity Regulatory Commission (JSERC), Order on True-up for FY 2023-24, APR for FY 2024-25 and ARR & Tariff for FY 2025-26 (JBVNL), Chapter 12 Tariff Schedule (applicable from 01.05.2025), 'Commercial Services' — Urban category: Rs 6.70/kWh energy charge, Rs 200/kW/month fixed charge (used here, for consistency with this file's residential entry which also uses the Urban rate). Rural category is Rs 6.20/kWh with Rs 120/kW/month fixed charge. http://jserc.org/pdf/tariff_order/jbvnl-2025.pdf"
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.1 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 150
+      },
+      "sourceNote": "PRIMARY — JSERC JBVNL Tariff Order for FY 2025-26, Chapter 12, 'Low Tension Industrial Services (LTIS)' — applies to industrial/processing units with contracted load up to 100 kVA: Rs 6.10/kVAh energy charge, Rs 150/kVA/month fixed/demand charge. http://jserc.org/pdf/tariff_order/jbvnl-2025.pdf"
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.3 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 67.02
+      },
+      "sourceNote": "PRIMARY — JSERC JBVNL Tariff Order for FY 2025-26, Chapter 12, 'Irrigation & Agriculture Service (IAS)': Rs 5.30/kWh energy charge; fixed charge originally Rs 50/HP/month, converted to Rs/kW using 1 HP = 0.746 kW (50/0.746 ≈ 67.02) for schema compatibility. http://jserc.org/pdf/tariff_order/jbvnl-2025.pdf"
     }
   ],
   "fuelCostAdjustment": 0,

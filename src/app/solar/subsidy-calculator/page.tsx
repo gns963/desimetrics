@@ -5,6 +5,7 @@ import PageHero from '@/components/PageHero'
 import SolarSubsidyCalculator from '@/components/calculators/SolarSubsidyCalculator'
 import HowToApplyPMSuryaGhar, { PM_SURYA_GHAR_STEPS } from '@/components/solar/HowToApplyPMSuryaGhar'
 import SubsidyTierCards from '@/components/solar/SubsidyTierCards'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/solar/subsidy-calculator'
@@ -13,8 +14,11 @@ export const metadata: Metadata = {
   title: 'PM Surya Ghar Subsidy Calculator 2026 — Eligibility & Amount',
   description:
     'Check your PM Surya Ghar: Muft Bijli Yojana rooftop solar subsidy and eligibility. ₹30,000/kW up to 2 kW, ₹18,000 for the 3rd kW, capped at ₹78,000.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/solar/subsidy-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const faqs: { q: string; a: string }[] = [

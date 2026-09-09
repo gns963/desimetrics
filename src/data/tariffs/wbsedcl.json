@@ -17,6 +17,45 @@
         "basis": "perLoad",
         "perKW": 90
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 180, "ratePerUnit": 5.77 },
+        { "minUnits": 181, "maxUnits": 300, "ratePerUnit": 7.52 },
+        { "minUnits": 301, "maxUnits": 450, "ratePerUnit": 8.20 },
+        { "minUnits": 451, "maxUnits": 900, "ratePerUnit": 8.51 },
+        { "minUnits": 901, "maxUnits": null, "ratePerUnit": 9.02 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 180
+      },
+      "sourceNote": "PRIMARY — WBERC Tariff Order dated 20.03.2025, per WBSEDCL 'Gist of Tariff Order 2025-26' (excluding erstwhile DPL area), https://www.wbsedcl.in/irj/go/km/docs/internet/new_website/pdf/Tariff_Volumn/Gist%20of%20Tariff%20Order%202025-26_28_03.pdf. Rate A(CM) Commercial, quarterly slabs already match this file's quarterly billing cycle; fixed charge is Rs.60/kVA/month in the order, x3 = Rs.180/quarter. Excludes MVCA (monthly variable cost adjustment) and electricity duty."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 1500, "ratePerUnit": 5.23 },
+        { "minUnits": 1501, "maxUnits": 6000, "ratePerUnit": 7.86 },
+        { "minUnits": 6001, "maxUnits": null, "ratePerUnit": 7.83 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 225
+      },
+      "sourceNote": "PRIMARY — WBERC Tariff Order dated 20.03.2025, per WBSEDCL 'Gist of Tariff Order 2025-26', same URL as commercial. Rate B(I-U) Industry (Urban); order gives MONTHLY slabs (first 500 units: Rs.5.23, next 1500: Rs.7.86, above 2000: Rs.7.83) which have been x3'd here to match this file's quarterly billing cycle. Fixed charge Rs.75/kVA/month x3 = Rs.225/quarter. Rate B(I-R) Industry (Rural) is nearly identical (5.07/7.65/7.57) and not modelled separately. Excludes MVCA and electricity duty."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 3.27 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 90
+      },
+      "sourceNote": "PRIMARY — WBERC Tariff Order dated 20.03.2025, per WBSEDCL 'Gist of Tariff Order 2025-26' Govt-subsidy annexure, same URL as commercial. Rate C(T) Irrigation pumping for Agriculture (metered) is a Time-of-Day tariff; this is the daytime (06:00-17:00) rate net of Govt of West Bengal subsidy (gross Rs.3.50, subsidy Rs.0.23). Evening peak (17:00-23:00) net rate is much higher (Rs.7.48/unit) and night (23:00-06:00) is Rs.2.42/unit — using a single flat rate here understates bills for evening-heavy usage since ToD billing isn't modelled. Fixed charge net of subsidy Rs.30/kVA/month (gross Rs.40, subsidy Rs.10), x3 = Rs.90/quarter."
     }
   ],
   "fuelCostAdjustment": 0,

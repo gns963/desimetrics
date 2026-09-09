@@ -32,6 +32,51 @@
         "basis": "flat",
         "flat": 70
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 8.94
+        }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 150
+      },
+      "sourceNote": "PRIMARY — APDCL Schedule of Tariff w.e.f. 01-04-2025 (AERC order dated 25-03-2025, Petition No. 21 of FY2024), category LT-IV 'Commercial load above 0.5 kW to 30 kW': https://www.apdcl.org/website/docs/acts_and_rules/Tariff_schedule_with_subsidy_2025-26.pdf. Full-cost energy charge shown (no state subsidy applies to this category)."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 6.84
+        }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 80
+      },
+      "sourceNote": "PRIMARY — APDCL Schedule of Tariff w.e.f. 01-04-2025, category LT-VIII(ii) 'Small Industries Urban upto 30kW': https://www.apdcl.org/website/docs/acts_and_rules/Tariff_schedule_with_subsidy_2025-26.pdf. APDCL also offers a lower LT-VIII(i) 'Small Industries Rural' rate of ₹6.59/kWh (fixed ₹70/kW/month), not modelled here."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 6.09
+        }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 65
+      },
+      "sourceNote": "PRIMARY — APDCL Schedule of Tariff w.e.f. 01-04-2025, category LT-VII 'Agriculture upto 30 kW': https://www.apdcl.org/website/docs/acts_and_rules/Tariff_schedule_with_subsidy_2025-26.pdf."
     }
   ],
   "fuelCostAdjustment": 0,

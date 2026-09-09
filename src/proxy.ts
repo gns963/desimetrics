@@ -1,0 +1,26 @@
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+/**
+ * Locale folders are plain nested App Router segments (not a `[locale]`
+ * dynamic route), so the root layout has no built-in way to know which
+ * locale a request is for — and Next.js only allows the root layout to
+ * render the `<html>` tag, so a nested layout per locale can't set `lang`
+ * either. This proxy reads the first path segment and forwards it as
+ * a request header so the root layout can set `<html lang>` correctly per
+ * request. See SEO audit 2026-09-07.
+ */
+const LOCALES = new Set(['hi', 'ta', 'te', 'mr', 'bn', 'kn', 'gu', 'ml'])
+
+export function proxy(request: NextRequest) {
+  const firstSegment = request.nextUrl.pathname.split('/')[1]
+  const locale = LOCALES.has(firstSegment) ? firstSegment : 'en'
+
+  const headers = new Headers(request.headers)
+  headers.set('x-locale', locale)
+  return NextResponse.next({ request: { headers } })
+}
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.\\w+$).*)'],
+}

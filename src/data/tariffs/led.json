@@ -17,6 +17,71 @@
         "basis": "flat",
         "flat": 20
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": 100,
+          "ratePerUnit": 11.85
+        },
+        {
+          "minUnits": 101,
+          "maxUnits": 200,
+          "ratePerUnit": 13.6
+        },
+        {
+          "minUnits": 201,
+          "maxUnits": null,
+          "ratePerUnit": 17.75
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 35
+      },
+      "sourceNote": "Department of Electricity, UT of Lakshadweep — official tariff schedule (PRIMARY, https://powerlak.utl.gov.in/EBCMsConsumerPortal/frmTariff.aspx), NDS-I (Non-Domestic/Commercial: shops, hospitals, offices etc., up to 85kW/100kVA). Rates are quoted per kVAh; represented here as Rs./kWh. A 4.40% regulatory surcharge applies on top of energy + demand charges across all categories and is not modelled here."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": 500,
+          "ratePerUnit": 11.85
+        },
+        {
+          "minUnits": 501,
+          "maxUnits": 1000,
+          "ratePerUnit": 13.6
+        },
+        {
+          "minUnits": 1001,
+          "maxUnits": null,
+          "ratePerUnit": 17.75
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 65
+      },
+      "sourceNote": "Department of Electricity, UT of Lakshadweep — official tariff schedule (PRIMARY, https://powerlak.utl.gov.in/EBCMsConsumerPortal/frmTariff.aspx), LTIS-I (Industrial Service, up to 85kW/100kVA). Rates are quoted per kVAh; represented here as Rs./kWh. A 4.40% regulatory surcharge applies on top of energy + demand charges across all categories and is not modelled here."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 3.25
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 10
+      },
+      "sourceNote": "Department of Electricity, UT of Lakshadweep — official tariff schedule (PRIMARY, https://powerlak.utl.gov.in/EBCMsConsumerPortal/frmTariff.aspx), LTAS-I (Agricultural Service, up to 10kW). Larger agricultural connections (LTAS-II/III, beyond 10kW up to 85kW/100kVA) pay the same Rs.3.25/unit rate on a kVAh basis with the same Rs.10/kVA fixed charge, so this figure applies broadly across the category."
     }
   ],
   "fuelCostAdjustment": 0,

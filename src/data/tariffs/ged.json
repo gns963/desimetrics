@@ -37,6 +37,43 @@
         "basis": "perLoad",
         "perKW": 25
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 4.0 },
+        { "minUnits": 101, "maxUnits": 200, "ratePerUnit": 5.75 },
+        { "minUnits": 201, "maxUnits": null, "ratePerUnit": 6.4 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 60
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs), Order on Approval of True-up for FY 2023-24 and ARR for 4th MYT Control Period (FY 2025-26 to FY 2029-30), Table 187 'Approved tariff by the Commission for 4th Control Period', category NDS-I (Non-Domestic/Commercial LT), FY 2025-26 column: 0-100 units @ Rs 4.00/kVAh, 101-200 units @ Rs 5.75/kVAh, above 200 units @ Rs 6.40/kVAh; fixed charge Rs 60/kVA or part thereof/month. https://www.goaelectricity.gov.in/Regulations/TARIFF%20ORDER%20w.e.f%201st%20October%202025.pdf (w.e.f. 1 Oct 2025; several other Non-Domestic sub-categories — NDS-II through V — exist for specific consumer types and are not used here)."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 500, "ratePerUnit": 4.2 },
+        { "minUnits": 501, "maxUnits": 1000, "ratePerUnit": 4.7 },
+        { "minUnits": 1001, "maxUnits": null, "ratePerUnit": 5.0 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 65
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) Tariff Order, Table 187, category LTIS-I (LT Industrial Supply), FY 2025-26 column: 0-500 units @ Rs 4.20/kVAh, 501-1000 units @ Rs 4.70/kVAh, above 1000 units @ Rs 5.00/kVAh; fixed charge Rs 65/kVA or part thereof/month. https://www.goaelectricity.gov.in/Regulations/TARIFF%20ORDER%20w.e.f%201st%20October%202025.pdf"
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 1.6 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 25
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) Tariff Order, Table 187, category LTAS-I (LT Agricultural Supply), FY 2025-26 column: flat Rs 1.60/kWh, all units; fixed charge Rs 25/kW or part thereof/month. LTAS-II and LTAS-III are separate agricultural sub-categories (kVAh-metered, slightly higher rates) not used here. https://www.goaelectricity.gov.in/Regulations/TARIFF%20ORDER%20w.e.f%201st%20October%202025.pdf"
     }
   ],
   "fuelCostAdjustment": 0,

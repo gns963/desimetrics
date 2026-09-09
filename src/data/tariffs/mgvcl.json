@@ -32,6 +32,39 @@
         "basis": "flat",
         "flat": 90
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 4.35 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 50
+      },
+      "sourceNote": "PRIMARY — GERC 'Tariff Schedule of DGVCL, MGVCL, PGVCL & UGVCL' effective 01.04.2025, https://gercin.org/wp-content/uploads/2025/04/Tariff-Schedule-of-DGVCL-MGVCL-PGVCL-UGVCL-w.e.f.-01.04.2025.pdf (state-uniform tariff for all four GERC-regulated DISCOMs, so applies to MGVCL). Rate: Non-RGP (services not covered elsewhere, aggregate load up to 40kW — the general commercial category), connected-load-below-10kW tier: Rs.4.35/unit flat + Rs.50/kW/month for first 10kW. For load 10-40kW, fixed charge steps to Rs.85/kW for the additional kW and energy rate rises to Rs.4.65/unit, plus a Rs.0.45/unit peak-hours (07-11h & 18-22h) surcharge for load above 10kW — none of the load tiering or ToD surcharge is modelled here. Electricity duty is extra and not quantified in the order."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 4.6 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 90
+      },
+      "sourceNote": "PRIMARY — GERC 'Tariff Schedule of DGVCL, MGVCL, PGVCL & UGVCL' effective 01.04.2025, same URL as commercial. Gujarat's LT tariff schedule has no separate 'LT Industrial' category name — Rate: LTMD ('services not covered in any other tariff category', aggregate load above 40kW) is the general LT tariff that most small/medium LT industrial (and other high-load) connections fall under, so it is used here as the industrial proxy. Demand charge is tiered (Rs.90/kW for first 40kW, Rs.130/kW for next 20kW, Rs.195/kW above 60kW, Rs.265/kW for demand in excess of contract) — only the first-40kW tier (Rs.90/kW) is modelled. Energy charge Rs.4.60/unit flat, plus Rs.0.45/unit peak-hours surcharge (not modelled). Electricity duty is extra and not quantified in the order."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 0.6 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 20
+      },
+      "sourceNote": "PRIMARY — GERC 'Tariff Schedule of DGVCL, MGVCL, PGVCL & UGVCL' effective 01.04.2025, same URL as commercial. Rate: AG, metered-tariff option (fixed Rs.20/HP/month + Rs.0.60/unit) — Gujarat bills this per HP, not per kW, and the fixed charge here is entered directly in the schema's perKW field without HP-to-kW conversion (1 HP = 0.746 kW), so results will be off if the app's 'sanctioned load' input is genuinely in kW. An unmetered flat-HP alternative also exists (Rs.200/HP/month all-inclusive, no separate energy charge) and is not modelled. LTP-Lift Irrigation (canal/river schemes up to 125HP) is a separate, higher-rate category (Rs.20/HP + Rs.0.80/unit) also not modelled."
     }
   ],
   "fuelCostAdjustment": 0,

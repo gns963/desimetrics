@@ -4,6 +4,7 @@ import AcTonnageCalculator from '@/components/calculators/AcTonnageCalculator'
 import PageHero from '@/components/PageHero'
 import { recommendTonnage } from '@/lib/calc/ac'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/ac/tonnage-calculator'
@@ -17,8 +18,11 @@ export const metadata: Metadata = {
   title: 'AC Tonnage Calculator 2026 — Room Size & BTU Guide (India)',
   description:
     'Find the right AC tonnage for your room size in sq ft, adjusted for sun exposure and top-floor heat gain. Room-size chart, BTU conversion, and step-by-step method — no fabricated stats.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/ac/tonnage-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 // ---------------------------------------------------------------------------

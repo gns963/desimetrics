@@ -16,10 +16,47 @@ const TON_OPTIONS = [
   { value: '2', label: '2 Ton', icon: '🥶' },
 ]
 
+export interface StarComparisonToolTexts {
+  title: string
+  subtitle: string
+  discomLabel: string
+  tonnageLegend: string
+  tonOptions: { value: string; label: string; icon: string }[]
+  hoursLabel: string
+  hoursUnit: string
+  ctaLabel: string
+  disclaimer: string
+  threeStarCostLabel: string
+  fiveStarCostLabel: string
+  savesLabel: string
+  perYearSuffix: string
+  /** Use {tenYear} and {rate} placeholders. */
+  tenYearTemplate: string
+}
+
+const defaultTexts: StarComparisonToolTexts = {
+  title: '3★ vs 5★ Savings',
+  subtitle: 'See the real annual cost difference',
+  discomLabel: 'DISCOM / state',
+  tonnageLegend: 'Tonnage',
+  tonOptions: TON_OPTIONS,
+  hoursLabel: 'Daily usage',
+  hoursUnit: 'hrs/day',
+  ctaLabel: 'Compare Savings',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  threeStarCostLabel: '3-star annual cost',
+  fiveStarCostLabel: '5-star annual cost',
+  savesLabel: 'A 5-star saves you',
+  perYearSuffix: '/year',
+  tenYearTemplate: '≈ {tenYear} over 10 years (at {rate}/unit)',
+}
+
 export default function StarComparisonTool({
   discoms,
+  texts = defaultTexts,
 }: {
   discoms: StarCompareDiscom[]
+  texts?: StarComparisonToolTexts
 }) {
   const [discomCode, setDiscomCode] = useState(discoms[0]?.code ?? '')
   const [tonnage, setTonnage] = useState('1.5')
@@ -52,8 +89,8 @@ export default function StarComparisonTool({
     <CalculatorCard>
       <CalculatorHeader
         icon="⚖️"
-        title="3★ vs 5★ Savings"
-        subtitle="See the real annual cost difference"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -62,7 +99,7 @@ export default function StarComparisonTool({
             htmlFor="cmp-discom"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            DISCOM / state
+            {texts.discomLabel}
           </label>
           <select
             id="cmp-discom"
@@ -79,8 +116,8 @@ export default function StarComparisonTool({
         </div>
 
         <OptionCardGroup
-          legend="Tonnage"
-          options={TON_OPTIONS}
+          legend={texts.tonnageLegend}
+          options={texts.tonOptions}
           value={tonnage}
           onChange={setTonnage}
           columns={3}
@@ -88,15 +125,15 @@ export default function StarComparisonTool({
 
         <SliderField
           id="cmp-hours"
-          label="Daily usage"
+          label={texts.hoursLabel}
           value={hours}
           onChange={setHours}
           min={1}
           max={24}
-          unit="hrs/day"
+          unit={texts.hoursUnit}
         />
 
-        <CalculatorCta label="Compare Savings" />
+        <CalculatorCta label={texts.ctaLabel} disclaimer={texts.disclaimer} />
       </form>
 
       {data && (
@@ -105,7 +142,7 @@ export default function StarComparisonTool({
             <div>
               <div className="flex justify-between text-sm">
                 <span className="font-medium text-ash">
-                  3-star annual cost
+                  {texts.threeStarCostLabel}
                 </span>
                 <span className="tabular-nums">{formatINR(data.cost3)}</span>
               </div>
@@ -119,7 +156,7 @@ export default function StarComparisonTool({
             <div>
               <div className="flex justify-between text-sm">
                 <span className="font-medium text-ash">
-                  5-star annual cost
+                  {texts.fiveStarCostLabel}
                 </span>
                 <span className="tabular-nums">{formatINR(data.cost5)}</span>
               </div>
@@ -133,13 +170,14 @@ export default function StarComparisonTool({
           </div>
 
           <div className="rounded-xl bg-spark-teal/10 p-4">
-            <p className="text-sm text-spark-teal">A 5-star saves you</p>
+            <p className="text-sm text-spark-teal">{texts.savesLabel}</p>
             <p className="font-display text-3xl font-bold tabular-nums text-spark-teal">
-              {formatINR(data.annualSaving)}/year
+              {formatINR(data.annualSaving)}{texts.perYearSuffix}
             </p>
             <p className="text-sm text-spark-teal/80">
-              ≈ {formatINR(data.tenYearSaving)} over 10 years (at{' '}
-              {formatINR(data.rate)}/unit)
+              {texts.tenYearTemplate
+                .replace('{tenYear}', formatINR(data.tenYearSaving))
+                .replace('{rate}', formatINR(data.rate))}
             </p>
           </div>
         </div>

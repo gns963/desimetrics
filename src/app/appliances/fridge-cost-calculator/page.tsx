@@ -6,6 +6,7 @@ import discomsJson from '@/data/discoms.json'
 import { fridgeCost } from '@/lib/calc/appliance'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/fridge-cost-calculator'
@@ -20,8 +21,11 @@ export const metadata: Metadata = {
   title: 'Fridge Electricity Cost Calculator 2026 — From Your BEE Label',
   description:
     'Calculate your refrigerator\'s electricity cost from the annual energy consumption figure printed on its BEE star label, priced at your DISCOM\'s real tariff.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/fridge-cost-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

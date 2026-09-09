@@ -28,10 +28,56 @@ const STAR_OPTIONS = [
   { value: '5', label: '5 Star', icon: '⭐⭐⭐⭐⭐' },
 ]
 
+export interface AcBillCalculatorTexts {
+  title: string
+  subtitle: string
+  discomLabel: string
+  tonnageLegend: string
+  tonOptions: { value: string; label: string; icon: string }[]
+  starLegend: string
+  starOptions: { value: string; label: string; icon: string }[]
+  hoursLabel: string
+  hoursUnit: string
+  ctaLabel: string
+  monthlyLabel: string
+  /** Use {annual} and {units} placeholders. */
+  yearlyTemplate: string
+  /** Use {amount} placeholder. */
+  fiveStarSavingsTemplate: string
+  inputPowerLabel: string
+  iseerLabel: string
+  unitsPerDayLabel: string
+  billedAtLabel: string
+  disclaimer: string
+}
+
+const defaultTexts: AcBillCalculatorTexts = {
+  title: 'AC Running Cost Calculator',
+  subtitle: "Estimate your air conditioner's electricity cost",
+  discomLabel: 'DISCOM / state',
+  tonnageLegend: 'Tonnage',
+  tonOptions: TON_OPTIONS,
+  starLegend: 'Star rating',
+  starOptions: STAR_OPTIONS,
+  hoursLabel: 'Daily usage',
+  hoursUnit: 'hrs/day',
+  ctaLabel: 'Calculate Running Cost',
+  monthlyLabel: 'Estimated monthly running cost',
+  yearlyTemplate: '≈ {annual}/year · {units} units/month',
+  fiveStarSavingsTemplate: 'Switching to 5-star saves {amount}/year',
+  inputPowerLabel: 'Input power',
+  iseerLabel: 'ISEER',
+  unitsPerDayLabel: 'Units per day',
+  billedAtLabel: 'Billed at (top slab)',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+}
+
 export default function AcBillCalculator({
   discoms,
+  texts = defaultTexts,
 }: {
   discoms: AcDiscomOption[]
+  texts?: AcBillCalculatorTexts
 }) {
   const [discomCode, setDiscomCode] = useState(discoms[0]?.code ?? '')
   const [tonnage, setTonnage] = useState('1.5')
@@ -84,8 +130,8 @@ export default function AcBillCalculator({
     <CalculatorCard>
       <CalculatorHeader
         icon="❄️"
-        title="AC Running Cost Calculator"
-        subtitle="Estimate your air conditioner's electricity cost"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -94,7 +140,7 @@ export default function AcBillCalculator({
             htmlFor="ac-discom"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            DISCOM / state
+            {texts.discomLabel}
           </label>
           <select
             id="ac-discom"
@@ -111,15 +157,15 @@ export default function AcBillCalculator({
         </div>
 
         <OptionCardGroup
-          legend="Tonnage"
-          options={TON_OPTIONS}
+          legend={texts.tonnageLegend}
+          options={texts.tonOptions}
           value={tonnage}
           onChange={setTonnage}
         />
 
         <OptionCardGroup
-          legend="Star rating"
-          options={STAR_OPTIONS}
+          legend={texts.starLegend}
+          options={texts.starOptions}
           value={starRating}
           onChange={setStarRating}
           columns={3}
@@ -127,15 +173,15 @@ export default function AcBillCalculator({
 
         <SliderField
           id="ac-hours"
-          label="Daily usage"
+          label={texts.hoursLabel}
           value={hours}
           onChange={setHours}
           min={1}
           max={24}
-          unit="hrs/day"
+          unit={texts.hoursUnit}
         />
 
-        <CalculatorCta label="Calculate Running Cost" />
+        <CalculatorCta label={texts.ctaLabel} disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-ac/15 bg-hub-ac/5 p-5">
@@ -148,36 +194,40 @@ export default function AcBillCalculator({
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Estimated monthly running cost
+                {texts.monthlyLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-hub-ac">
                 {formatINR(result.monthlyCost)}
               </p>
               <p className="text-sm text-ash/60">
-                ≈ {formatINR(result.annualCost)}/year ·{' '}
-                {result.monthlyUnits} units/month
+                {texts.yearlyTemplate
+                  .replace('{annual}', formatINR(result.annualCost))
+                  .replace('{units}', String(result.monthlyUnits))}
               </p>
               {fiveStarAnnualSavings != null && fiveStarAnnualSavings > 0 && (
                 <p className="mt-1 text-sm">
                   <span className="font-semibold text-spark-teal">
-                    Switching to 5-star saves {formatINR(fiveStarAnnualSavings)}/year
+                    {texts.fiveStarSavingsTemplate.replace(
+                      '{amount}',
+                      formatINR(fiveStarAnnualSavings),
+                    )}
                   </span>
                 </p>
               )}
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <dt className="text-ash/60">
-                Input power
+                {texts.inputPowerLabel}
               </dt>
               <dd className="text-right tabular-nums">{result.inputKw} kW</dd>
-              <dt className="text-ash/60">ISEER</dt>
+              <dt className="text-ash/60">{texts.iseerLabel}</dt>
               <dd className="text-right tabular-nums">{result.iseer}</dd>
               <dt className="text-ash/60">
-                Units per day
+                {texts.unitsPerDayLabel}
               </dt>
               <dd className="text-right tabular-nums">{result.dailyUnits}</dd>
               <dt className="text-ash/60">
-                Billed at (top slab)
+                {texts.billedAtLabel}
               </dt>
               <dd className="text-right tabular-nums">
                 {formatINR(result.effectiveRatePerUnit)}/unit

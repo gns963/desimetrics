@@ -6,6 +6,7 @@ import {
   getCalculatorPage,
 } from '@/data/calculator-pages'
 import { hiDiscomPageTexts } from '@/data/discom-page-texts'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -24,17 +25,23 @@ export async function generateMetadata({
   const config = getCalculatorPage(slug)
   if (!config) return {}
   const path = `/electricity/${slug}`
+  // Most DISCOMs here are still chrome-translated only (English
+  // h1/metadata/JSON-LD) and stay noindexed — see SEO audit 2026-09-07.
+  // A DISCOM with a genuine translations.hi entry (see
+  // DiscomPageConfig.translations in calculator-pages.tsx) is real,
+  // reviewed content and gets indexed + a proper hreflang set.
+  const translated = Boolean(config.translations?.hi)
   return {
-    // Hindi-translated chrome only; the config's own metaTitle/metaDescription
-    // are per-DISCOM authored English copy not yet translated (tracked
-    // separately) — reuse them for now rather than leaving metadata empty.
-    title: config.metaTitle,
-    description: config.metaDescription,
+    title: translated ? config.translations!.hi!.metaTitle : config.metaTitle,
+    description: translated
+      ? config.translations!.hi!.metaDescription
+      : config.metaDescription,
     alternates: {
       canonical: `${SITE}/hi${path}`,
-      languages: { 'en-IN': `${SITE}${path}`, 'hi-IN': `${SITE}/hi${path}` },
+      ...(translated ? { languages: getAlternateLanguages(path) } : {}),
     },
-    openGraph: { url: `${SITE}/hi${path}`, type: 'website' },
+    openGraph: { url: `${SITE}/hi${path}`, type: 'website', locale: 'hi_IN' },
+    robots: translated ? undefined : { index: false, follow: true },
   }
 }
 

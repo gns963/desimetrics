@@ -22,6 +22,40 @@
         "basis": "perLoad",
         "perKW": 40
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 7.79 },
+        { "minUnits": 101, "maxUnits": null, "ratePerUnit": 8.21 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 60
+      },
+      "sourceNote": "PRIMARY — BERC 'NDS-I Rural (Metered)' non-domestic/commercial category, Approved Tariff for NBPDCL & SBPDCL area, FY2025-26 (berc.co.in, Tariff_Chart_FY_2025-26.pdf). Fixed charge is ₹60/kVA (not strictly kW) or part thereof/month; modelled here via the perLoad/perKW field. 'NDS-II' (demand-based, urban) categories have different rates (e.g. contract demand 0.5-70kW: ₹300/kW fixed, ₹7.73-8.93/kWh) not modelled."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.79 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 288
+      },
+      "sourceNote": "PRIMARY — BERC 'LTIS-I' Low Tension Industrial category, Approved Tariff for NBPDCL & SBPDCL area, FY2025-26 (berc.co.in, Tariff_Chart_FY_2025-26.pdf): flat ₹7.79/kVAh (not slabbed), fixed ₹288/kVA or part thereof/month (per kVA, modelled here via the perLoad/perKW field). 'LTIS-II' has the same energy rate with a higher fixed charge (₹360/kVA)."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.17 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 500
+      },
+      "sourceNote": "PRIMARY — BERC 'IAS-II (Metered, Demand based)' Irrigation & Agriculture Services category, Approved Tariff for NBPDCL & SBPDCL area, FY2025-26 (berc.co.in, Tariff_Chart_FY_2025-26.pdf): flat ₹7.17/kVAh, fixed ₹500/kVA or part thereof/month (per kVA, modelled here via the perLoad/perKW field). The smaller/connected-load-based 'IAS-I (Metered)' category is cheaper (₹6.74/kWh) but bills its fixed charge per HP (₹100/HP/month) rather than per kW/kVA, which this schema cannot represent without a unit-conversion assumption, so IAS-II was used instead as the closer structural fit."
     }
   ],
   "fuelCostAdjustment": 0,

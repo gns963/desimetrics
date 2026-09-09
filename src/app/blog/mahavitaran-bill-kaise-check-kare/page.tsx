@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import PageHero from '@/components/PageHero'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/blog/mahavitaran-bill-kaise-check-kare'
@@ -13,8 +14,11 @@ const LAST_VERIFIED = '4 September 2026'
 export const metadata: Metadata = {
   title: 'Mahavitaran Bill: Check & Pay Your MSEDCL Bill Online (2026)',
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'article' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/blog/mahavitaran-bill-kaise-check-kare'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'article', locale: 'en_IN' },
 }
 
 const breadcrumb = breadcrumbLd([

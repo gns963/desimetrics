@@ -6,6 +6,7 @@ import discomsJson from '@/data/discoms.json'
 import { calculateAcCost } from '@/lib/calc/ac'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/ac/comparison-tool'
@@ -41,8 +42,11 @@ export const metadata: Metadata = {
   title: 'AC Comparison Tool 2026 — Compare Any Two Configurations (India)',
   description:
     'Compare any two AC configurations side by side — different tonnage, star rating or both — on real running cost using your DISCOM\'s tariff.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/ac/comparison-tool'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

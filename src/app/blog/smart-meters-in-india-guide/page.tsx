@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import PageHero from '@/components/PageHero'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/blog/smart-meters-in-india-guide'
@@ -13,8 +14,11 @@ const LAST_VERIFIED = '4 September 2026'
 export const metadata: Metadata = {
   title: 'Smart Meters in India: Mandatory? Recharge & Fixes (2026)',
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'article' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/blog/smart-meters-in-india-guide'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'article', locale: 'en_IN' },
 }
 
 const breadcrumb = breadcrumbLd([

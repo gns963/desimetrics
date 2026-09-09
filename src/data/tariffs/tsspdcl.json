@@ -32,6 +32,42 @@
         "basis": "perLoad",
         "perKW": 10
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 8.5 },
+        { "minUnits": 101, "maxUnits": 300, "ratePerUnit": 9.9 },
+        { "minUnits": 301, "maxUnits": 500, "ratePerUnit": 10.4 },
+        { "minUnits": 501, "maxUnits": null, "ratePerUnit": 11.0 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 70
+      },
+      "sourceNote": "PRIMARY — TGERC Retail Supply Tariff Schedule FY2025-26 (eff. 01.05.2025-31.03.2026) for TGSPDCL/TGNPDCL, https://tgsouthernpower.org/resources/PDF/Tariffs/63tarifffile.pdf. Category LT-II(B) Non-Domestic/Commercial (above 50 units/month); a smaller LT-II(A) up-to-50-units/month band exists at a flat Rs.7.00/unit with Rs.30/kW fixed charge, not modelled here. Demand charge steps up to Rs.100/kW above 301 units/month (not modelled — this file uses the Rs.70/kW rate applicable up to 300 units). Electricity duty is extra per the Telangana Electricity Duty Act and not quantified in the order (falls back to this file's top-level 6%, which may not be accurate for commercial)."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.7 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 100
+      },
+      "sourceNote": "PRIMARY — TGERC Retail Supply Tariff Schedule FY2025-26, https://tgsouthernpower.org/resources/PDF/Tariffs/63tarifffile.pdf. Category LT-III Industries (flat rate, not slabbed by consumption); upper contract-load limit 75kW/100HP (93kW/125HP for rice mills). Sub-categories with lower rates exist for pisciculture/sugarcane crushing (Rs.6.20/unit, Rs.50/kW) and poultry (Rs.7.00/unit, Rs.65/kW) — not modelled here."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 0 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "PRIMARY — TGERC Retail Supply Tariff Schedule FY2025-26, https://tgsouthernpower.org/resources/PDF/Tariffs/63tarifffile.pdf. Category LT-V(A) Agricultural, 'Other than Corporate Farmers' — free supply (Rs.0/unit), which covers the vast majority of Telangana farm connections. 'Corporate Farmers' under the same category pay Rs.2.50/unit (HP-based, no fixed charge) — not modelled here."
     }
   ],
   "fuelCostAdjustment": 0,

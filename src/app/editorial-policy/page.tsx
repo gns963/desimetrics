@@ -1,12 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import LegalPageShell from '@/components/LegalPageShell'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Editorial Policy — Accuracy, Sourcing & Corrections | DesiMetrics',
   description:
     'Our editorial standards: how we source and verify data, label unverified figures, correct mistakes, and keep calculators independent of advertising and affiliate income.',
-  alternates: { canonical: 'https://desimetrics.com/editorial-policy' },
+  alternates: {
+    canonical: 'https://desimetrics.com/editorial-policy',
+    languages: getAlternateLanguages('/editorial-policy'),
+  },
 }
 
 export default function EditorialPolicyPage() {

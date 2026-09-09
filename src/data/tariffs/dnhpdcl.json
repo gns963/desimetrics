@@ -22,6 +22,40 @@
         "basis": "flat",
         "flat": 30
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 3.35 },
+        { "minUnits": 101, "maxUnits": null, "ratePerUnit": 4.35 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 20
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) DNHPDCL Tariff Order, Table 167 'Tariff Schedule for FY 2022-23' (Non-Domestic/Commercial category): 0-100 units @ Rs 3.35/kWh, 101+ units @ Rs 4.35/kWh, fixed charge Rs 20/kW/month. https://jercuts.gov.in/wp-content/uploads/2023/11/68-22-23-DNHPDCL-Tariff-Order_1005.pdf — cross-verified against the identical schedule in JERC's consolidated https://jercuts.gov.in/wp-content/uploads/2022/09/Current_electricity_tariff.pdf. This is the most recent published DNHPDCL retail tariff schedule found; no later revision was located."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 3.85 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 107.24
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) DNHPDCL Tariff Order, Table 167 (LT Industrial / LTP Motive Power): rate varies by sanctioned load, not consumption slab — Rs 3.65/kVAh (fixed Rs 30/HP/month) up to 20 HP, Rs 3.85/kVAh (fixed Rs 80/HP/month) above 20 HP. This entry uses the 'above 20 HP' tier as representative for LT industrial connections; fixed charge converted from Rs/HP to Rs/kW (1 HP = 0.746 kW: 80/0.746 ≈ 107.24) for schema compatibility. Source: https://jercuts.gov.in/wp-content/uploads/2023/11/68-22-23-DNHPDCL-Tariff-Order_1005.pdf, cross-verified against https://jercuts.gov.in/wp-content/uploads/2022/09/Current_electricity_tariff.pdf."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 0.9 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) DNHPDCL Tariff Order, Table 167 (Agriculture & Poultry, no fixed charge): Rs 0.90/kWh for sanctioned load up to 10 HP; Rs 1.30/kWh beyond 10 HP up to 99 HP. This entry uses the up-to-10-HP tier as representative (rate varies by sanctioned load, not consumption). Source: https://jercuts.gov.in/wp-content/uploads/2023/11/68-22-23-DNHPDCL-Tariff-Order_1005.pdf, cross-verified against https://jercuts.gov.in/wp-content/uploads/2022/09/Current_electricity_tariff.pdf."
     }
   ],
   "fuelCostAdjustment": 0,

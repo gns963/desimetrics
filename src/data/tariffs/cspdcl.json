@@ -37,6 +37,41 @@
         "basis": "perLoad",
         "perKW": 20
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 6.3 },
+        { "minUnits": 101, "maxUnits": 400, "ratePerUnit": 7.3 },
+        { "minUnits": 401, "maxUnits": null, "ratePerUnit": 8.7 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 50
+      },
+      "sourceNote": "PRIMARY — CSERC Tariff Schedule for FY 2025-26 (effective 01-07-2025), category LV-2.1 'Non-Domestic, Single Phase up to 5 kW': https://cserc.gov.in/upload/upload_terrif_order/17522356311.pdf, p.3. Three-phase Non-Domestic (LV-2.2) is demand-billed and not modelled here."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.05 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 120
+      },
+      "sourceNote": "PRIMARY — CSERC Tariff Schedule for FY 2025-26, category LV-5.2.1 'L.V. Industry — Other Industries, up to 25 HP / 18.7 kW': https://cserc.gov.in/upload/upload_terrif_order/17522356311.pdf, p.5-6. Larger LT industries (>25 HP) pay ₹6.80/kWh with ₹150/kW fixed charge; specific listed industries (flour mills, rice mills, etc.) get a lower LV-5.1 rate of ₹5.05/kWh — neither modelled here."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.8 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 134
+      },
+      "sourceNote": "PRIMARY — CSERC Tariff Schedule for FY 2025-26, category LV-3 'Agriculture': https://cserc.gov.in/upload/upload_terrif_order/17522356311.pdf, p.4. Fixed charge published as ₹100/HP/month; converted to ₹134/kW/month using the HP-to-kW equivalence given in the same order's LV-4 table. A 30% energy-charge concession applies to non-subsidized pump connections, not modelled here."
     }
   ],
   "fuelCostAdjustment": 0.3,

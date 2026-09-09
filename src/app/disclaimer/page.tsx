@@ -1,12 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import LegalPageShell from '@/components/LegalPageShell'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Disclaimer — DesiMetrics',
   description:
     'Important limitations of DesiMetrics estimates: what tariff components we do not model, and why results are indicative, not professional, tax or investment advice.',
-  alternates: { canonical: 'https://desimetrics.com/disclaimer' },
+  alternates: {
+    canonical: 'https://desimetrics.com/disclaimer',
+    languages: getAlternateLanguages('/disclaimer'),
+  },
 }
 
 export default function DisclaimerPage() {

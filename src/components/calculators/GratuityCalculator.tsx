@@ -5,7 +5,42 @@ import { calculateGratuity } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { CalculatorCard, CalculatorCta, CalculatorHeader, SliderField } from './CalculatorShell'
 
-export default function GratuityCalculator() {
+export interface GratuityCalculatorTexts {
+  title: string
+  subtitle: string
+  salaryLabel: string
+  yearsLabel: string
+  yearsUnit: string
+  yearsHint: string
+  ctaLabel: string
+  disclaimer: string
+  payableLabel: string
+  /** Use {years} placeholder. */
+  eligibleTemplate: string
+  notEligibleMessage: string
+  cappedMessage: string
+}
+
+const defaultTexts: GratuityCalculatorTexts = {
+  title: 'Gratuity Calculator',
+  subtitle: "What you're owed under the Payment of Gratuity Act",
+  salaryLabel: 'Last drawn monthly salary — Basic + DA (₹)',
+  yearsLabel: 'Years of service',
+  yearsUnit: 'yrs',
+  yearsHint: 'A part-year over 6 months counts as a full year.',
+  ctaLabel: 'Calculate Gratuity',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  payableLabel: 'Gratuity payable',
+  eligibleTemplate: 'Based on {years} years of service (15/26 formula).',
+  notEligibleMessage: 'Not eligible — gratuity requires at least 5 years of continuous service under the Payment of Gratuity Act.',
+  cappedMessage: 'Capped at the statutory ceiling of ₹20,00,000.',
+}
+
+export default function GratuityCalculator({
+  texts = defaultTexts,
+}: {
+  texts?: GratuityCalculatorTexts
+} = {}) {
   const [salary, setSalary] = useState(50000)
   const [years, setYears] = useState(10)
 
@@ -18,8 +53,8 @@ export default function GratuityCalculator() {
     <CalculatorCard>
       <CalculatorHeader
         icon="💼"
-        title="Gratuity Calculator"
-        subtitle="What you're owed under the Payment of Gratuity Act"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -28,7 +63,7 @@ export default function GratuityCalculator() {
             htmlFor="grat-salary"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            Last drawn monthly salary — Basic + DA (₹)
+            {texts.salaryLabel}
           </label>
           <input
             id="grat-salary"
@@ -42,39 +77,38 @@ export default function GratuityCalculator() {
 
         <SliderField
           id="grat-years"
-          label="Years of service"
+          label={texts.yearsLabel}
           value={years}
           onChange={setYears}
           min={0}
           max={40}
-          unit="yrs"
-          hint="A part-year over 6 months counts as a full year."
+          unit={texts.yearsUnit}
+          hint={texts.yearsHint}
         />
 
-        <CalculatorCta label="Calculate Gratuity" tone="financial" />
+        <CalculatorCta label={texts.ctaLabel} tone="financial" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hairline bg-paper p-5">
         <div className="grid gap-3">
           <p className="text-sm text-ash/60">
-            Gratuity payable
+            {texts.payableLabel}
           </p>
           <p className="font-display text-4xl font-bold tabular-nums text-ink-navy">
             {formatINR(result.gratuity)}
           </p>
           {result.eligible ? (
             <p className="text-sm text-ash/60">
-              Based on {result.roundedYears} years of service (15/26 formula).
+              {texts.eligibleTemplate.replace('{years}', String(result.roundedYears))}
             </p>
           ) : (
             <p className="rounded-lg bg-brass/10 px-3 py-2 text-sm text-brass">
-              Not eligible — gratuity requires at least 5 years of continuous
-              service under the Payment of Gratuity Act.
+              {texts.notEligibleMessage}
             </p>
           )}
           {result.capped && (
             <p className="text-xs text-brass">
-              Capped at the statutory ceiling of ₹20,00,000.
+              {texts.cappedMessage}
             </p>
           )}
         </div>

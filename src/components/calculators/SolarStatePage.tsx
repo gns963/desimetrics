@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import PageHero from '@/components/PageHero'
-import SolarRoiCalculator from '@/components/calculators/SolarRoiCalculator'
+import SolarRoiCalculator, { type SolarRoiCalculatorTexts } from '@/components/calculators/SolarRoiCalculator'
 import discomsJson from '@/data/discoms.json'
 import { calculateSolarRoi } from '@/lib/calc/solar'
 import { formatINR } from '@/lib/format'
@@ -11,31 +11,74 @@ const liveDiscoms = discomsJson.states.flatMap((s) =>
   s.discoms.filter((d) => d.hasTariffFile).map((d) => ({ code: d.code, state: s.state })),
 )
 
+const solarRoiTextsHi: SolarRoiCalculatorTexts = {
+  title: 'सोलर ROI कैलकुलेटर',
+  subtitle: 'रूफटॉप सिस्टम से पेबैक अवधि और बचत',
+  discomLabel: 'आपका DISCOM / राज्य',
+  unitsLabel: 'औसत मासिक खपत',
+  unitsUnit: 'यूनिट',
+  kwLabel: 'सिस्टम साइज़',
+  kwUnit: 'kW',
+  kwHint: 'सुझाव: हर 100–150 मासिक यूनिट पर लगभग 1 kW एक सामान्य शुरुआती बिंदु है।',
+  ctaLabel: 'सोलर बचत निकालें',
+  disclaimer: 'नतीजे अनुमानित हैं। आपका असली बिल अलग हो सकता है।',
+  paybackLabel: 'पेबैक अवधि',
+  paybackUnit: 'साल',
+  thenSavesTemplate: 'फिर ~{amount} की बचत',
+  recoveredLabel: 'सिस्टम की लागत वसूल, साल 1',
+  systemCostLabel: 'सिस्टम की लागत',
+  subsidyLabel: 'PM सूर्य घर सब्सिडी',
+  netCostLabel: 'नेट लागत',
+  annualGenLabel: 'सालाना जनरेशन',
+  annualGenUnit: 'यूनिट',
+  monthlySavingsLabel: 'मासिक बचत',
+  lifetimeSavingsLabel: '25-साल की नेट बचत',
+}
+
 export default function SolarStatePage({
   state,
   discomCode,
   slug,
+  locale = 'en',
 }: {
   state: string
   discomCode: string
   slug: string
+  locale?: 'en' | 'hi'
 }) {
+  const hi = locale === 'hi'
+  const base = hi ? `/hi/solar/bill-calculator/${discomCode.toLowerCase()}` : `/solar/bill-calculator/${discomCode.toLowerCase()}`
   const example = calculateSolarRoi({ discomCode, monthlyUnits: 300, systemSizeKw: 3 })
 
-  const faqs = [
-    {
-      q: `How much does a rooftop solar system cost in ${state}?`,
-      a: `A 3 kW system costs about ${formatINR(example.systemCost)} before subsidy in our estimate, dropping to ${formatINR(example.netCost)} after the PM Surya Ghar central subsidy. Actual installer quotes vary by panel type, roof condition and local installation costs.`,
-    },
-    {
-      q: `Does this use ${discomCode}'s real tariff?`,
-      a: `Yes — savings are computed against ${discomCode}'s actual telescopic slab tariff, so solar is valued at offsetting your real, most expensive units first, not a flat national average rate.`,
-    },
-    {
-      q: 'What subsidy is available?',
-      a: 'PM Surya Ghar: Muft Bijli Yojana, the central government scheme, pays ₹30,000/kW for the first 2 kW and ₹18,000 for the 3rd kW, capped at ₹78,000 — the same nationwide, regardless of state.',
-    },
-  ]
+  const faqs = hi
+    ? [
+        {
+          q: `${state} में रूफटॉप सोलर सिस्टम की कीमत कितनी है?`,
+          a: `हमारे अनुमान में सब्सिडी से पहले 3 kW सिस्टम की कीमत लगभग ${formatINR(example.systemCost)} है, जो PM सूर्य घर केंद्रीय सब्सिडी के बाद ${formatINR(example.netCost)} तक गिर जाती है। असली इंस्टॉलर कोट पैनल के प्रकार, छत की स्थिति और स्थानीय इंस्टॉलेशन लागत के हिसाब से अलग हो सकते हैं।`,
+        },
+        {
+          q: `क्या यह ${discomCode} के असली टैरिफ का इस्तेमाल करता है?`,
+          a: `हां — बचत ${discomCode} के असली टेलिस्कोपिक स्लैब टैरिफ के आधार पर गिनी जाती है, ताकि सोलर की कीमत पहले आपकी असली, सबसे महंगी यूनिट्स को ऑफसेट करने पर आधारित हो, किसी फ्लैट राष्ट्रीय औसत दर पर नहीं।`,
+        },
+        {
+          q: 'कौन सी सब्सिडी उपलब्ध है?',
+          a: 'PM सूर्य घर: मुफ्त बिजली योजना, केंद्र सरकार की योजना, पहले 2 kW के लिए ₹30,000/kW और तीसरे kW के लिए ₹18,000 देती है, अधिकतम ₹78,000 तक — राज्य चाहे जो भी हो, पूरे देश में समान।',
+        },
+      ]
+    : [
+        {
+          q: `How much does a rooftop solar system cost in ${state}?`,
+          a: `A 3 kW system costs about ${formatINR(example.systemCost)} before subsidy in our estimate, dropping to ${formatINR(example.netCost)} after the PM Surya Ghar central subsidy. Actual installer quotes vary by panel type, roof condition and local installation costs.`,
+        },
+        {
+          q: `Does this use ${discomCode}'s real tariff?`,
+          a: `Yes — savings are computed against ${discomCode}'s actual telescopic slab tariff, so solar is valued at offsetting your real, most expensive units first, not a flat national average rate.`,
+        },
+        {
+          q: 'What subsidy is available?',
+          a: 'PM Surya Ghar: Muft Bijli Yojana, the central government scheme, pays ₹30,000/kW for the first 2 kW and ₹18,000 for the 3rd kW, capped at ₹78,000 — the same nationwide, regardless of state.',
+        },
+      ]
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -49,7 +92,7 @@ export default function SolarStatePage({
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: `${state} Solar Bill Calculator`,
-    url: `${SITE}/solar/bill-calculator/${discomCode.toLowerCase()}`,
+    url: `${SITE}${base}`,
     applicationCategory: 'FinanceApplication',
     operatingSystem: 'Any',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
@@ -61,29 +104,46 @@ export default function SolarStatePage({
       <PageHero
         hub="solar"
         breadcrumb={[
-          { label: 'Solar', href: '/solar' },
-          { label: 'Bill Calculator', href: '/solar/bill-calculator' },
-          { label: state, href: `/solar/bill-calculator/${discomCode.toLowerCase()}` },
+          { label: hi ? 'सोलर' : 'Solar', href: hi ? '/hi/solar' : '/solar' },
+          { label: hi ? 'बिल कैलकुलेटर' : 'Bill Calculator', href: hi ? '/hi/solar/bill-calculator' : '/solar/bill-calculator' },
+          { label: state, href: base },
         ]}
         badgeLabel={
           <>
             <span aria-hidden>☀️</span> Solar hub
           </>
         }
-        h1={`${state} Solar Bill Calculator`}
+        h1={hi ? `${state} सोलर बिल कैलकुलेटर` : `${state} Solar Bill Calculator`}
         subtitle={
-          <>
-            Estimate your rooftop solar payback and savings in {state}, using{' '}
-            <strong>{discomCode}&apos;s real telescopic tariff</strong> and the
-            PM Surya Ghar central subsidy.
-          </>
+          hi ? (
+            <>
+              {state} में अपने रूफटॉप सोलर की पेबैक और बचत का अनुमान लगाएं,{' '}
+              <strong>{discomCode} के असली टेलिस्कोपिक टैरिफ</strong> और PM
+              सूर्य घर केंद्रीय सब्सिडी का इस्तेमाल करते हुए।
+            </>
+          ) : (
+            <>
+              Estimate your rooftop solar payback and savings in {state}, using{' '}
+              <strong>{discomCode}&apos;s real telescopic tariff</strong> and the
+              PM Surya Ghar central subsidy.
+            </>
+          )
         }
-        stats={[
-          { icon: '💸', big: '₹78,000', small: 'Max subsidy', tone: 'hub' },
-          { icon: '☀️', big: '~4u/kW/day', small: 'Generation assumption', tone: 'hub' },
-          { icon: '📆', big: '25 yrs', small: 'System lifetime', tone: 'hub' },
-          { icon: '📊', big: discomCode, small: 'Real tariff', tone: 'hub' },
-        ]}
+        stats={
+          hi
+            ? [
+                { icon: '💸', big: '₹78,000', small: 'अधिकतम सब्सिडी', tone: 'hub' },
+                { icon: '☀️', big: '~4u/kW/दिन', small: 'जनरेशन मान्यता', tone: 'hub' },
+                { icon: '📆', big: '25 साल', small: 'सिस्टम की उम्र', tone: 'hub' },
+                { icon: '📊', big: discomCode, small: 'असली टैरिफ', tone: 'hub' },
+              ]
+            : [
+                { icon: '💸', big: '₹78,000', small: 'Max subsidy', tone: 'hub' },
+                { icon: '☀️', big: '~4u/kW/day', small: 'Generation assumption', tone: 'hub' },
+                { icon: '📆', big: '25 yrs', small: 'System lifetime', tone: 'hub' },
+                { icon: '📊', big: discomCode, small: 'Real tariff', tone: 'hub' },
+              ]
+        }
       />
 
       <main className="mx-auto max-w-4xl px-4 py-8">
@@ -95,68 +155,90 @@ export default function SolarStatePage({
           id="worked-example"
           className="font-display text-sm font-semibold tracking-wide text-brass uppercase"
         >
-          Worked example
+          {hi ? 'उदाहरण गणना' : 'Worked example'}
         </h2>
         <p className="mt-2 text-ash/80">
-          A <strong>3 kW</strong> rooftop system for a {state} home using 300
-          units/month costs about <strong>{formatINR(example.systemCost)}</strong>,
-          drops to <strong>{formatINR(example.netCost)}</strong> after the{' '}
-          {formatINR(example.subsidy)} PM Surya Ghar subsidy, saves ~
-          <strong className="text-spark-teal">{formatINR(example.annualSavings)}</strong>
-          /year, and pays back in about{' '}
-          <strong>
-            {example.paybackYears != null ? `${example.paybackYears} years` : 'N/A'}
-          </strong>
-          .
+          {hi ? (
+            <>
+              {state} के एक घर के लिए महीने में 300 यूनिट इस्तेमाल पर{' '}
+              <strong>3 kW</strong> का रूफटॉप सिस्टम लगभग{' '}
+              <strong>{formatINR(example.systemCost)}</strong> का पड़ता है,{' '}
+              {formatINR(example.subsidy)} PM सूर्य घर सब्सिडी के बाद{' '}
+              <strong>{formatINR(example.netCost)}</strong> तक गिर जाता है, ~
+              <strong className="text-spark-teal">{formatINR(example.annualSavings)}</strong>
+              /साल बचाता है, और लगभग{' '}
+              <strong>
+                {example.paybackYears != null ? `${example.paybackYears} साल` : 'लागू नहीं'}
+              </strong>{' '}
+              में लागत वसूल कर लेता है।
+            </>
+          ) : (
+            <>
+              A <strong>3 kW</strong> rooftop system for a {state} home using 300
+              units/month costs about <strong>{formatINR(example.systemCost)}</strong>,
+              drops to <strong>{formatINR(example.netCost)}</strong> after the{' '}
+              {formatINR(example.subsidy)} PM Surya Ghar subsidy, saves ~
+              <strong className="text-spark-teal">{formatINR(example.annualSavings)}</strong>
+              /year, and pays back in about{' '}
+              <strong>
+                {example.paybackYears != null ? `${example.paybackYears} years` : 'N/A'}
+              </strong>
+              .
+            </>
+          )}
         </p>
       </section>
 
       <section aria-labelledby="calculator" className="mb-10">
         <h2 id="calculator" className="font-display mb-4 text-2xl font-semibold">
-          Calculate your {state} solar payback
+          {hi ? `अपना ${state} सोलर पेबैक निकालें` : `Calculate your ${state} solar payback`}
         </h2>
-        <SolarRoiCalculator discoms={liveDiscoms} defaultDiscomCode={discomCode} />
+        <SolarRoiCalculator
+          discoms={liveDiscoms}
+          defaultDiscomCode={discomCode}
+          texts={hi ? solarRoiTextsHi : undefined}
+        />
       </section>
 
       <section aria-labelledby="related" className="mb-10">
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
-          Related calculators
+          {hi ? 'जुड़े हुए कैलकुलेटर' : 'Related calculators'}
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <Link
-            href="/solar/subsidy-calculator"
+            href={hi ? '/hi/solar/subsidy-calculator' : '/solar/subsidy-calculator'}
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-solar/50 hover:shadow-sm"
           >
             <span className="text-xl" aria-hidden>💸</span>
             <p className="font-display mt-2 font-bold text-ink-navy">
-              PM Surya Ghar subsidy
+              {hi ? 'PM सूर्य घर सब्सिडी' : 'PM Surya Ghar subsidy'}
             </p>
             <p className="mt-1 text-xs text-ash/60">
-              Check your exact eligibility and subsidy amount.
+              {hi ? 'अपनी सटीक पात्रता और सब्सिडी राशि जांचें।' : 'Check your exact eligibility and subsidy amount.'}
             </p>
           </Link>
           <Link
-            href="/solar/panel-size-calculator"
+            href={hi ? '/hi/solar/panel-size-calculator' : '/solar/panel-size-calculator'}
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-solar/50 hover:shadow-sm"
           >
             <span className="text-xl" aria-hidden>📐</span>
             <p className="font-display mt-2 font-bold text-ink-navy">
-              Panel size calculator
+              {hi ? 'पैनल साइज़ कैलकुलेटर' : 'Panel size calculator'}
             </p>
             <p className="mt-1 text-xs text-ash/60">
-              What system size and roof area you need.
+              {hi ? 'आपको किस सिस्टम साइज़ और छत के क्षेत्रफल की ज़रूरत है।' : 'What system size and roof area you need.'}
             </p>
           </Link>
           <Link
-            href={`/electricity/${slug}`}
+            href={hi ? `/hi/electricity/${slug}` : `/electricity/${slug}`}
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
           >
             <span className="text-xl" aria-hidden>⚡</span>
             <p className="font-display mt-2 font-bold text-ink-navy">
-              {state} bill calculator
+              {hi ? `${state} बिल कैलकुलेटर` : `${state} bill calculator`}
             </p>
             <p className="mt-1 text-xs text-ash/60">
-              See your full {discomCode} electricity bill.
+              {hi ? `अपना पूरा ${discomCode} बिजली बिल देखें।` : `See your full ${discomCode} electricity bill.`}
             </p>
           </Link>
         </div>
@@ -164,7 +246,7 @@ export default function SolarStatePage({
 
       <section aria-labelledby="faq" className="mb-10">
         <h2 id="faq" className="font-display mb-4 text-2xl font-semibold">
-          Frequently asked questions
+          {hi ? 'अक्सर पूछे जाने वाले सवाल' : 'Frequently asked questions'}
         </h2>
         <div className="divide-y divide-hairline">
           {faqs.map((f, i) => (

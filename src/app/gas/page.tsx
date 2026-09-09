@@ -6,6 +6,7 @@ import { FlameIcon } from '@/components/HubMotifIcon'
 import SplitHero from '@/components/SplitHero'
 import { GAS_COMPANIES } from '@/data/gas-companies'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -13,8 +14,11 @@ export const metadata: Metadata = {
   title: 'Gas Bill Calculator (PNG, India) 2026 | DesiMetrics',
   description:
     'Estimate your piped natural gas (PNG) bill from your own consumption and provider\'s rate — honest calculator covering every major Indian city gas company.',
-  alternates: { canonical: `${SITE}/gas` },
-  openGraph: { url: `${SITE}/gas`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}/gas`,
+    languages: getAlternateLanguages('/gas'),
+  },
+  openGraph: { url: `${SITE}/gas`, type: 'website', locale: 'en_IN' },
 }
 
 const breadcrumb = breadcrumbLd([

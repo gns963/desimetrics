@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: teTexts.metaTitle,
   description: teTexts.metaDescription,
   alternates: { canonical: `${SITE}/te`, languages: homeHreflangAlternates() },
-  openGraph: { url: `${SITE}/te`, type: 'website' },
+  openGraph: { url: `${SITE}/te`, type: 'website', locale: 'te_IN' },
 }
 
 export default function HomeTe() {

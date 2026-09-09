@@ -4,6 +4,7 @@ import SolarPanelSizeCalculator from '@/components/calculators/SolarPanelSizeCal
 import PageHero from '@/components/PageHero'
 import { ROOF_SQFT_PER_KW, recommendSystemSize } from '@/lib/calc/solar'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/solar/panel-size-calculator'
@@ -16,8 +17,11 @@ export const metadata: Metadata = {
   title: 'Solar Panel Size Calculator 2026 — System kW & Roof Area (India)',
   description:
     'Find the rooftop solar system size (kW) and roof area you need to offset your electricity bill, from your monthly consumption and target offset percentage.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/solar/panel-size-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

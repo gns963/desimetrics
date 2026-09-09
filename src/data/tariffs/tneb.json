@@ -17,6 +17,42 @@
         "singlePhase": 100,
         "threePhase": 200
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 6.65 },
+        { "minUnits": 101, "maxUnits": null, "ratePerUnit": 10.45 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 110
+      },
+      "electricityDutyPercent": 5,
+      "sourceNote": "SOURCED (secondary) — TANGEDCO LT Commercial (General Purpose) category, per tneb.billcalculator.in/tneb-tariff-rates/ and tnebbillcalculator.com/tneb-tariff-details/ (two independent calculator sites, cross-checked, matching figures) citing TNERC's CPI-indexed tariff order. Bimonthly total consumption up to 100 units billed at Rs.6.65/unit, above 100 units at Rs.10.45/unit — this appears to be a NON-TELESCOPIC (whole-bill-at-one-rate) structure rather than incremental slabs, so representing it as telescopic slabs here may understate bills; not independently verified against a primary TNERC order PDF. Fixed charge steps up above 50kW (to Rs.332/kW then Rs.608/kW) — not modelled. 5% State Electricity Tax applies on the energy charge. Pending primary TNERC order cross-check."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 8.25 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 84
+      },
+      "electricityDutyPercent": 5,
+      "sourceNote": "SOURCED (secondary) — TANGEDCO LT-IIIB Industries & IT category, per tneb.billcalculator.in/tneb-tariff-rates/ and tnebbillcalculator.com/tneb-tariff-details/ (cross-checked, matching figures): flat rate Rs.8.25/unit + Rs.84/kW fixed charge (0-50kW band; steps up to Rs.165/kW and Rs.608/kW at higher loads, not modelled). Separate lower-rate sub-categories exist for cottage/micro industries (~Rs.4.95-7.15/unit) and power looms — not modelled. 5% State Electricity Tax applies. Pending primary TNERC order cross-check."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 0 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "SOURCED (secondary) — TANGEDCO LT-IV Agricultural category, per tneb.billcalculator.in/tneb-tariff-rates/ and tnebbillcalculator.com/tneb-tariff-details/: fully subsidised/free supply for agricultural (pump-set) connections, exempt from electricity tax. Pending primary TNERC order cross-check."
     }
   ],
   "fuelCostAdjustment": 0.35,

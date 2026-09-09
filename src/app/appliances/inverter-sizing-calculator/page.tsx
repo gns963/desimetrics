@@ -4,6 +4,7 @@ import InverterSizingCalculator from '@/components/calculators/InverterSizingCal
 import PageHero from '@/components/PageHero'
 import { sizeInverter } from '@/lib/calc/inverter'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/inverter-sizing-calculator'
@@ -14,8 +15,11 @@ export const metadata: Metadata = {
   title: 'Home UPS / Inverter Sizing Calculator 2026 — VA & Battery Ah',
   description:
     'Find the right inverter VA rating and battery Ah capacity for your home backup load and desired backup hours, using standard electrical sizing formulas.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/inverter-sizing-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

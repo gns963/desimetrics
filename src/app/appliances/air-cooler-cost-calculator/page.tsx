@@ -6,6 +6,7 @@ import discomsJson from '@/data/discoms.json'
 import { simpleApplianceCost } from '@/lib/calc/appliance'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/air-cooler-cost-calculator'
@@ -20,8 +21,11 @@ export const metadata: Metadata = {
   title: 'Air Cooler Electricity Cost Calculator 2026 — Monthly & Yearly',
   description:
     'Calculate your air cooler\'s (desert, tower or personal) electricity cost by wattage and daily hours, priced at your DISCOM\'s real tariff.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/air-cooler-cost-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

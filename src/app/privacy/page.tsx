@@ -1,12 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import LegalPageShell from '@/components/LegalPageShell'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — DesiMetrics',
   description:
     'How DesiMetrics collects, uses and protects your data — including calculators that run in your browser, our installer lead form, analytics, advertising and affiliate partners.',
-  alternates: { canonical: 'https://desimetrics.com/privacy' },
+  alternates: {
+    canonical: 'https://desimetrics.com/privacy',
+    languages: getAlternateLanguages('/privacy'),
+  },
 }
 
 export default function PrivacyPage() {

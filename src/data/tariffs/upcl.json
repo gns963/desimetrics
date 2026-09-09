@@ -32,6 +32,39 @@
         "basis": "flat",
         "flat": 85
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.75 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 110
+      },
+      "sourceNote": "PRIMARY — UPCL/UERC tariff filing (UERC petition document, citing the 'Existing' tariff in effect per the Tariff Order dated 11.04.2025 for FY2025-26), RTS-2 'Non-Domestic Consumer', category '2.2 Other non-Domestic Users, Others upto 25kW not covered in 2.1': Rs 110/kW/month fixed, Rs 7.75/kWh flat (not slabbed). Other RTS-2 tiers not modelled: Govt/Educational/Hospital institutions (upto 25kW: Rs 90/kW fixed + Rs 6.00/kWh; above 25kW: Rs 100/kVA fixed + Rs 5.85/kVAh), small-load exemption (upto 4kW & consumption upto 60 units/month: Rs 90/kW fixed + Rs 5.75/kWh), above 25kW (Rs 115/kVA fixed + Rs 7.80/kVAh), Single Point Bulk Supply, and Independent Advertisement Hoardings (Rs 140/kW + Rs 8.60/kWh). Source: https://cdnbbsr.s3waas.gov.in/s3cf05968255451bdefe3c5bc64d550517/uploads/2025/12/20251226266181352.pdf (UERC petition document tabulating Existing vs Proposed FY2026-27 rates; the Existing column reflects the current approved FY2025-26 tariff)."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.75 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 185
+      },
+      "sourceNote": "PRIMARY — same UERC document, RTS-5 'HT & LT Industry', 'Total LT — LT Industries (upto 75kW) — Normal Hours' (existing FY2025-26 rate): Rs 185/kVA/month fixed, Rs 5.75/kVAh energy; rate is per kVA of contract demand, applied here via the perLoad/perKW field per this dataset's convention. Peak-hour (Rs 7.48/kVAh) and off-peak (Rs 4.31/kVAh) time-of-day rates not modelled — this uses the Normal-Hours rate as representative. Source: https://cdnbbsr.s3waas.gov.in/s3cf05968255451bdefe3c5bc64d550517/uploads/2025/12/20251226266181352.pdf."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 2.7 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "PRIMARY — same UERC document, RTS-4 'Private Tubewells/Pumping Sets', '1. Metered' (existing FY2025-26 rate): Rs 2.70/kWh, no separate fixed/demand charge listed for this category. RTS-4A 'Agriculture Allied Services' (a related but distinct category for higher-load/agro-processing connections) not modelled: Metered upto 25kW: Rs 3.80/kWh, no fixed charge; 25-75kW: Rs 75/kVA fixed + Rs 3.80/kVAh; above 75kW: Rs 100/kVA fixed + Rs 4.00/kVAh. Source: https://cdnbbsr.s3waas.gov.in/s3cf05968255451bdefe3c5bc64d550517/uploads/2025/12/20251226266181352.pdf."
     }
   ],
   "fuelCostAdjustment": 0,

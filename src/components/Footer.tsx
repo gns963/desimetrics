@@ -13,6 +13,7 @@ const BOTTOM_GROUPS: { heading: string; links: { label: string; href: string }[]
   {
     heading: 'Trust',
     links: [
+      { label: 'Tariff Directory', href: '/electricity/tariffs' },
       { label: 'Methodology', href: '/methodology' },
       { label: 'Data Sources', href: '/data-sources' },
       { label: 'Editorial Policy', href: '/editorial-policy' },

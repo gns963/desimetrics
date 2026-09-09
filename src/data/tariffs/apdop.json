@@ -17,6 +17,28 @@
         "basis": "flat",
         "flat": 30
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.65 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 30
+      },
+      "sourceNote": "SOURCED (secondary) — Arunachal Pradesh (APDoP) commercial LT energy charge of ₹5.65/kWh per bajajfinserv.in, corroborated by Mercom India's coverage of APSERC continuing the existing tariff structure into FY2026-27 (APSERC formally re-adopted the FY2018-19 order for every subsequent year through at least FY2023-24 — see APSERC Petition TP-01 of 2023 order dated 25-10-2023). This ₹5.65 figure is consistent with the file's existing flat ₹4.40 domestic rate, which the same secondary sources corroborate. Fixed charge is NOT separately published for this category in the sources found; assumed same as domestic (₹30/connection/month) pending primary APSERC schedule cross-check."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 4.95 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 30
+      },
+      "sourceNote": "SOURCED (secondary) — Arunachal Pradesh (APDoP) industrial LT energy charge of ₹4.95/kWh per bajajfinserv.in, corroborated by Mercom India's coverage of APSERC continuing the existing tariff structure into FY2026-27. Fixed charge is NOT separately published for this category in the sources found; assumed same as domestic (₹30/connection/month) pending primary APSERC schedule cross-check."
     }
   ],
   "fuelCostAdjustment": 0,

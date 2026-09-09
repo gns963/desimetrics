@@ -11,7 +11,48 @@ const CYLINDER_OPTIONS: { value: string; label: string; icon: string }[] = [
   { value: '19', label: '19 kg', icon: '🛢️' },
 ]
 
-export default function LpgUsageCalculator() {
+export interface LpgUsageCalculatorTexts {
+  title: string
+  subtitle: string
+  cylinderLegend: string
+  cylinderOptions: { value: string; label: string; icon: string }[]
+  priceLabel: string
+  priceUnit: string
+  priceHint: string
+  hoursLabel: string
+  hoursUnit: string
+  hoursHint: string
+  ctaLabel: string
+  disclaimer: string
+  daysRemainingLabel: string
+  daysUnit: string
+  /** Use {daily} and {monthly} placeholders. */
+  costSummaryTemplate: string
+}
+
+const defaultTexts: LpgUsageCalculatorTexts = {
+  title: 'LPG Cylinder Usage Calculator',
+  subtitle: 'How long your cylinder will last',
+  cylinderLegend: 'Cylinder size',
+  cylinderOptions: CYLINDER_OPTIONS,
+  priceLabel: 'Cylinder price',
+  priceUnit: '₹',
+  priceHint: 'Check your latest refill receipt — price varies by state and company.',
+  hoursLabel: 'Daily burner-hours',
+  hoursUnit: 'hrs/day',
+  hoursHint: 'Total active flame time across all burners you use in a day.',
+  ctaLabel: 'Calculate LPG Usage',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  daysRemainingLabel: 'Estimated days remaining',
+  daysUnit: 'days',
+  costSummaryTemplate: '≈ {daily}/day · {monthly}/month equivalent',
+}
+
+export default function LpgUsageCalculator({
+  texts = defaultTexts,
+}: {
+  texts?: LpgUsageCalculatorTexts
+} = {}) {
   const [cylinderKg, setCylinderKg] = useState('14.2')
   const [price, setPrice] = useState(900)
   const [dailyHours, setDailyHours] = useState(1.5)
@@ -38,14 +79,14 @@ export default function LpgUsageCalculator() {
     <CalculatorCard>
       <CalculatorHeader
         icon="🔥"
-        title="LPG Cylinder Usage Calculator"
-        subtitle="How long your cylinder will last"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
         <OptionCardGroup
-          legend="Cylinder size"
-          options={CYLINDER_OPTIONS}
+          legend={texts.cylinderLegend}
+          options={texts.cylinderOptions}
           value={cylinderKg}
           onChange={setCylinderKg}
           columns={3}
@@ -53,29 +94,29 @@ export default function LpgUsageCalculator() {
 
         <SliderField
           id="lpg-price"
-          label="Cylinder price"
+          label={texts.priceLabel}
           value={price}
           onChange={setPrice}
           min={300}
           max={2000}
           step={10}
-          unit="₹"
-          hint="Check your latest refill receipt — price varies by state and company."
+          unit={texts.priceUnit}
+          hint={texts.priceHint}
         />
 
         <SliderField
           id="lpg-hours"
-          label="Daily burner-hours"
+          label={texts.hoursLabel}
           value={dailyHours}
           onChange={setDailyHours}
           min={0.5}
           max={6}
           step={0.5}
-          unit="hrs/day"
-          hint="Total active flame time across all burners you use in a day."
+          unit={texts.hoursUnit}
+          hint={texts.hoursHint}
         />
 
-        <CalculatorCta label="Calculate LPG Usage" tone="fuel" />
+        <CalculatorCta label={texts.ctaLabel} tone="fuel" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-fuel/15 bg-hub-fuel/5 p-5">
@@ -88,14 +129,15 @@ export default function LpgUsageCalculator() {
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Estimated days remaining
+                {texts.daysRemainingLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-hub-fuel">
-                {result.daysRemaining} days
+                {result.daysRemaining} {texts.daysUnit}
               </p>
               <p className="text-sm text-ash/60">
-                ≈ {formatINR(result.dailyCost)}/day · {formatINR(result.monthlyCost)}
-                /month equivalent
+                {texts.costSummaryTemplate
+                  .replace('{daily}', formatINR(result.dailyCost))
+                  .replace('{monthly}', formatINR(result.monthlyCost))}
               </p>
             </div>
             <p className="text-xs text-ash/50">

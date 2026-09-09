@@ -5,6 +5,7 @@ import GratuityCalculator from '@/components/calculators/GratuityCalculator'
 import { calculateGratuity } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/financial/gratuity-calculator'
@@ -15,8 +16,11 @@ export const metadata: Metadata = {
   title: 'Gratuity Calculator 2026 — Payment of Gratuity Act Formula',
   description:
     'Free gratuity calculator for India. Compute your gratuity from last drawn Basic + DA and years of service using the 15/26 formula, with the ₹20 lakh statutory cap.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/financial/gratuity-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const faqs = [

@@ -4,6 +4,7 @@ import PageHero from '@/components/PageHero'
 import { CALCULATOR_PAGES } from '@/data/calculator-pages'
 import { getTariff } from '@/lib/calc/electricity'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/solar/bill-calculator'
@@ -17,8 +18,11 @@ export const metadata: Metadata = {
   title: 'Solar Bill Calculator by State (India) 2026 | DesiMetrics',
   description:
     'Estimate rooftop solar payback and savings for every Indian state and union territory, using each DISCOM\'s real tariff and the PM Surya Ghar subsidy.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/solar/bill-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const breadcrumb = breadcrumbLd([

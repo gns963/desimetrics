@@ -22,6 +22,42 @@
         "basis": "flat",
         "flat": 30
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 200, "ratePerUnit": 7.5 },
+        { "minUnits": 201, "maxUnits": 500, "ratePerUnit": 9.5 },
+        { "minUnits": 501, "maxUnits": null, "ratePerUnit": 12 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 30
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) Order on True-up of FY2015-16 and MYT/ARR for 2nd Control Period, Petition No. 274/2019 (effective 01-06-2019), Ch.7 'Tariff Schedule', category 'Commercial': as currently published by the department at https://nec.andamannicobar.gov.in/assets/docs/tariff.pdf. This is the most recent tariff schedule found publicly listed by EDA&N (no later revision located). Fixed charge shown (₹30/connection/month) is the single-phase rate for the 0-500 unit slabs; a three-phase rate of ₹125/connection/month applies to the 501+ slab, not modelled here."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 500, "ratePerUnit": 6 },
+        { "minUnits": 501, "maxUnits": null, "ratePerUnit": 8 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 50
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) Order, Petition No. 274/2019, Ch.7 'Tariff Schedule', category 'Industrial': https://nec.andamannicobar.gov.in/assets/docs/tariff.pdf. Fixed charge published as ₹50/kVA/month; treated here as Rs./kW."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 1.6 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 50
+      },
+      "sourceNote": "PRIMARY — JERC (Goa & UTs) Order, Petition No. 274/2019, Ch.7 'Tariff Schedule', category 'Irrigation Pumps and Agriculture': https://nec.andamannicobar.gov.in/assets/docs/tariff.pdf. Fixed charge published as ₹50/kVA/month; treated here as Rs./kW."
     }
   ],
   "fuelCostAdjustment": 0,

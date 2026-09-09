@@ -8,6 +8,7 @@ import discomsJson from '@/data/discoms.json'
 import { ISEER_BY_STAR, acDailyUnits, marginalRatePerUnit } from '@/lib/calc/ac'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/ac/comparisons/3-star-vs-5-star-savings-guide'
@@ -43,8 +44,11 @@ export const metadata: Metadata = {
   title: '3 Star vs 5 Star AC — Savings Guide 2026 (Is 5 Star Worth It?)',
   description:
     'Interactive 3-star vs 5-star AC comparison. See the exact annual electricity savings of a 5-star inverter AC by usage hours and your DISCOM tariff, and whether the higher price pays back.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'article' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/ac/comparisons/3-star-vs-5-star-savings-guide'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'article', locale: 'en_IN' },
 }
 
 const faqs = [

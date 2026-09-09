@@ -22,6 +22,43 @@
         "basis": "flat",
         "flat": 30
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 60, "ratePerUnit": 8.15 },
+        { "minUnits": 61, "maxUnits": 240, "ratePerUnit": 9.45 },
+        { "minUnits": 241, "maxUnits": null, "ratePerUnit": 9.85 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 200
+      },
+      "sourceNote": "PRIMARY — Nagaland Electricity Regulatory Commission (NERC), Tariff Order for FY 2025-26, Table 8.3 'Tariff approved by the Commission for FY 2025-26' (Category 'D' Commercial, telescopic billing): <60 units @ Rs 8.15/kWh, 61-240 units @ Rs 9.45/kWh, >240 units @ Rs 9.85/kWh; monthly minimum charge Rs 200/kW of contract demand. http://nerc.org.in/images/doc/TRUE_UP_FY_2022-23_APR_FY_2024-25_.pdf (combined True-up/APR/Tariff Order document)."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 500, "ratePerUnit": 7.15 },
+        { "minUnits": 501, "maxUnits": 5000, "ratePerUnit": 7.75 },
+        { "minUnits": 5001, "maxUnits": null, "ratePerUnit": 8.25 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 200
+      },
+      "sourceNote": "PRIMARY — NERC Tariff Order for FY 2025-26, Table 8.3 (Category 'B' Industrial, telescopic billing): <500 units @ Rs 7.15/kWh, 501-5000 units @ Rs 7.75/kWh, >5000 units @ Rs 8.25/kWh; monthly minimum charge Rs 200/kW of contract demand. http://nerc.org.in/images/doc/TRUE_UP_FY_2022-23_APR_FY_2024-25_.pdf."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 3.65 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "PRIMARY — NERC Tariff Order for FY 2025-26, Table 8.3 (Category 'H' Agriculture): flat Rs 3.65/kWh for all units, no minimum/fixed charge listed for this category. http://nerc.org.in/images/doc/TRUE_UP_FY_2022-23_APR_FY_2024-25_.pdf."
     }
   ],
   "fuelCostAdjustment": 0,

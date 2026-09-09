@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: bnTexts.metaTitle,
   description: bnTexts.metaDescription,
   alternates: { canonical: `${SITE}/bn`, languages: homeHreflangAlternates() },
-  openGraph: { url: `${SITE}/bn`, type: 'website' },
+  openGraph: { url: `${SITE}/bn`, type: 'website', locale: 'bn_IN' },
 }
 
 export default function HomeBn() {

@@ -5,6 +5,7 @@ import { allDiscomCodeSlugs, getCalculatorPageByDiscomSlug } from '@/data/calcul
 import { marginalRatePerUnit } from '@/lib/calc/ac'
 import { getTariff } from '@/lib/calc/electricity'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -28,8 +29,11 @@ export async function generateMetadata({
   return {
     title: `${tariff.state} 1 Unit Electricity Price 2026 — ₹${rate.toFixed(2)}/unit`,
     description: `What 1 unit of electricity costs in ${tariff.state} under ${tariff.discomCode}'s real tariff — full slab-wise rates, FCA and duty.`,
-    alternates: { canonical: `${SITE}${path}` },
-    openGraph: { url: `${SITE}${path}`, type: 'website' },
+    alternates: {
+      canonical: `${SITE}${path}`,
+      languages: getAlternateLanguages(path),
+    },
+    openGraph: { url: `${SITE}${path}`, type: 'website', locale: 'en_IN' },
   }
 }
 

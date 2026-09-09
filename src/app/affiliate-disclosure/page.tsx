@@ -1,11 +1,15 @@
 import type { Metadata } from 'next'
 import LegalPageShell from '@/components/LegalPageShell'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Affiliate Disclosure — DesiMetrics',
   description:
     'How DesiMetrics uses affiliate links, including the Amazon Associates Programme, and our commitment to editorial independence.',
-  alternates: { canonical: 'https://desimetrics.com/affiliate-disclosure' },
+  alternates: {
+    canonical: 'https://desimetrics.com/affiliate-disclosure',
+    languages: getAlternateLanguages('/affiliate-disclosure'),
+  },
 }
 
 export default function AffiliateDisclosurePage() {

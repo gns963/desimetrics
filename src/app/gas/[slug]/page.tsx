@@ -5,6 +5,7 @@ import GasCompanyPage from '@/components/calculators/GasCompanyPage'
 import { allGasCompanySlugs, getGasCompany } from '@/data/gas-companies'
 import { getGasCgdBySlug } from '@/data/gas-cgds'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -28,16 +29,22 @@ export async function generateMetadata({
     return {
       title: `${company.name} PNG Bill Calculator 2026 — Real Tariff | DesiMetrics`,
       description: `Estimate your ${company.name} piped natural gas (PNG) bill using their real, dated domestic tariff — not a guessed rate.`,
-      alternates: { canonical: `${SITE}${path}` },
-      openGraph: { url: `${SITE}${path}`, type: 'website' },
+      alternates: {
+        canonical: `${SITE}${path}`,
+        languages: getAlternateLanguages(path),
+      },
+      openGraph: { url: `${SITE}${path}`, type: 'website', locale: 'en_IN' },
     }
   }
   const titleSuffix = /\bgas\b/i.test(company.name) ? 'Bill Calculator' : 'Gas Bill Calculator'
   return {
     title: `${company.name} ${titleSuffix} 2026 | DesiMetrics`,
     description: `Estimate your ${company.name} piped natural gas (PNG) bill from your own consumption and rate.`,
-    alternates: { canonical: `${SITE}${path}` },
-    openGraph: { url: `${SITE}${path}`, type: 'website' },
+    alternates: {
+      canonical: `${SITE}${path}`,
+      languages: getAlternateLanguages(path),
+    },
+    openGraph: { url: `${SITE}${path}`, type: 'website', locale: 'en_IN' },
   }
 }
 

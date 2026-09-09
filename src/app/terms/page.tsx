@@ -1,12 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import LegalPageShell from '@/components/LegalPageShell'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 export const metadata: Metadata = {
   title: 'Terms of Use — DesiMetrics',
   description:
     'The terms governing your use of DesiMetrics, including that our calculators provide estimates, not professional advice, and our limitation of liability.',
-  alternates: { canonical: 'https://desimetrics.com/terms' },
+  alternates: {
+    canonical: 'https://desimetrics.com/terms',
+    languages: getAlternateLanguages('/terms'),
+  },
 }
 
 export default function TermsPage() {

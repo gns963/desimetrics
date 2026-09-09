@@ -14,7 +14,55 @@ export interface DiscomOption {
 
 let nextId = 1
 
-export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] }) {
+export interface ApplianceBuilderTexts {
+  title: string
+  subtitle: string
+  discomLabel: string
+  inputMethodLabel: string
+  applianceModeLabel: string
+  meterModeLabel: string
+  meterUnitsLabel: string
+  estimatedBillLabel: string
+  addApplianceLabel: string
+  emptyStateLabel: string
+  hoursUnit: string
+  perMonthUnit: string
+  /** Use {units} and {rate} placeholders. */
+  slabCrossedTemplate: string
+  ctaLabel: string
+  /** Use {units} placeholder. */
+  combinedBillTemplate: string
+  energyChargeLabel: string
+  fixedChargeLabel: string
+}
+
+const defaultTexts: ApplianceBuilderTexts = {
+  title: 'Household Bill Builder',
+  subtitle: 'Add your appliances, priced through your real DISCOM slab tariff',
+  discomLabel: 'DISCOM / state',
+  inputMethodLabel: 'Input method',
+  applianceModeLabel: 'I know my appliances',
+  meterModeLabel: 'I have my meter reading',
+  meterUnitsLabel: 'Monthly units (from your meter/bill)',
+  estimatedBillLabel: 'Estimated bill',
+  addApplianceLabel: '+ Add appliance',
+  emptyStateLabel: 'Add appliances one at a time to build your household total.',
+  hoursUnit: 'hrs/day',
+  perMonthUnit: 'u/mo',
+  slabCrossedTemplate: '⚠ Adding this pushes your total to {units} units — into the {rate}/unit slab.',
+  ctaLabel: 'Calculate Household Total',
+  combinedBillTemplate: 'Combined household bill ({units} units)',
+  energyChargeLabel: 'Energy charge',
+  fixedChargeLabel: 'Fixed charge',
+}
+
+export default function ApplianceBuilder({
+  discoms,
+  texts = defaultTexts,
+}: {
+  discoms: DiscomOption[]
+  texts?: ApplianceBuilderTexts
+}) {
   const [discomCode, setDiscomCode] = useState(discoms[0]?.code ?? '')
   const [mode, setMode] = useState<'appliances' | 'meter'>('appliances')
   const [items, setItems] = useState<BuilderApplianceItem[]>([])
@@ -72,14 +120,14 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
     <CalculatorCard>
       <CalculatorHeader
         icon="🏠"
-        title="Household Bill Builder"
-        subtitle="Add your appliances, priced through your real DISCOM slab tariff"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <div className="mb-5 grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor={`${selectId}-discom`} className="mb-1.5 block text-sm font-medium text-ash">
-            DISCOM / state
+            {texts.discomLabel}
           </label>
           <select
             id={`${selectId}-discom`}
@@ -96,13 +144,13 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
         </div>
         <div>
           <span className="mb-1.5 block text-sm font-medium text-ash">
-            Input method
+            {texts.inputMethodLabel}
           </span>
           <div className="flex gap-2">
             {(
               [
-                ['appliances', 'I know my appliances'],
-                ['meter', 'I have my meter reading'],
+                ['appliances', texts.applianceModeLabel],
+                ['meter', texts.meterModeLabel],
               ] as const
             ).map(([val, label]) => (
               <button
@@ -127,7 +175,7 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
         <div className="grid gap-5">
           <div>
             <label htmlFor={`${selectId}-meter`} className="mb-1.5 flex items-center justify-between text-sm font-medium text-ash">
-              <span>Monthly units (from your meter/bill)</span>
+              <span>{texts.meterUnitsLabel}</span>
               <span className="tabular-nums text-ink-navy">{meterUnits}</span>
             </label>
             <input
@@ -143,7 +191,7 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
           </div>
           {meterBill && (
             <div className="rounded-xl border border-hub-electricity/15 bg-hub-electricity/5 p-5">
-              <p className="text-sm text-ash/60">Estimated bill</p>
+              <p className="text-sm text-ash/60">{texts.estimatedBillLabel}</p>
               <p className="font-display text-4xl font-bold tabular-nums text-hub-electricity">
                 {formatINR(meterBill.total)}
               </p>
@@ -173,13 +221,13 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
               onClick={addAppliance}
               className="shrink-0 rounded-lg bg-brass px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brass/90"
             >
-              + Add appliance
+              {texts.addApplianceLabel}
             </button>
           </div>
 
           {items.length === 0 ? (
             <p className="mb-5 rounded-xl border border-dashed border-hairline p-6 text-center text-sm text-ash/60">
-              Add appliances one at a time to build your household total.
+              {texts.emptyStateLabel}
             </p>
           ) : (
             <div className="mb-5 space-y-3">
@@ -202,12 +250,12 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
                           aria-label={`${item.name} daily hours`}
                         />
                         <span className="w-16 shrink-0 text-right text-xs tabular-nums text-ash/60">
-                          {item.hoursPerDay.toFixed(1)} hrs/day
+                          {item.hoursPerDay.toFixed(1)} {texts.hoursUnit}
                         </span>
                       </div>
                     </div>
                     <p className="shrink-0 text-right text-sm font-semibold tabular-nums text-hub-electricity">
-                      {item.monthlyUnits} u/mo
+                      {item.monthlyUnits} {texts.perMonthUnit}
                     </p>
                     <button
                       type="button"
@@ -220,8 +268,9 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
                   </div>
                   {item.slabCrossed && item.slabAfter && (
                     <p className="mt-1 rounded-lg bg-caution-amber/10 px-3 py-1.5 text-xs font-medium text-caution-amber">
-                      ⚠ Adding this pushes your total to {item.cumulativeUnitsAfter} units — into the{' '}
-                      {formatINR(item.slabAfter.ratePerUnit)}/unit slab.
+                      {texts.slabCrossedTemplate
+                        .replace('{units}', String(item.cumulativeUnitsAfter))
+                        .replace('{rate}', formatINR(item.slabAfter.ratePerUnit))}
                     </p>
                   )}
                 </div>
@@ -229,7 +278,7 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
             </div>
           )}
 
-          <CalculatorCta label="Calculate Household Total" tone="brass" />
+          <CalculatorCta label={texts.ctaLabel} tone="brass" />
 
           {error && (
             <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -240,16 +289,16 @@ export default function ApplianceBuilder({ discoms }: { discoms: DiscomOption[] 
             <div className="mt-4 grid gap-4 rounded-xl border border-hub-electricity/15 bg-hub-electricity/5 p-5">
               <div>
                 <p className="text-sm text-ash/60">
-                  Combined household bill ({result.totalMonthlyUnits} units)
+                  {texts.combinedBillTemplate.replace('{units}', String(result.totalMonthlyUnits))}
                 </p>
                 <p className="font-display text-4xl font-bold tabular-nums text-hub-electricity">
                   {formatINR(result.bill.total)}
                 </p>
               </div>
               <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                <dt className="text-ash/60">Energy charge</dt>
+                <dt className="text-ash/60">{texts.energyChargeLabel}</dt>
                 <dd className="text-right tabular-nums">{formatINR(result.bill.energyChargeGross)}</dd>
-                <dt className="text-ash/60">Fixed charge</dt>
+                <dt className="text-ash/60">{texts.fixedChargeLabel}</dt>
                 <dd className="text-right tabular-nums">{formatINR(result.bill.fixedCharge.amount)}</dd>
               </dl>
             </div>

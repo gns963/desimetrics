@@ -10,23 +10,22 @@ import SolarCrossSell from '@/components/SolarCrossSell'
 import TableOfContents from '@/components/TableOfContents'
 import ThresholdCallout from '@/components/ThresholdCallout'
 import { CALCULATOR_PAGES, type DiscomPageConfig } from '@/data/calculator-pages'
-import type { FixedCharge } from '@/data/tariffs/_schema'
-import { enDiscomPageTexts, type DiscomPageTexts } from '@/data/discom-page-texts'
+import {
+  enDiscomPageTexts,
+  hiDiscomPageTexts,
+  mrDiscomPageTexts,
+  taDiscomPageTexts,
+  teDiscomPageTexts,
+  knDiscomPageTexts,
+  bnDiscomPageTexts,
+  guDiscomPageTexts,
+  mlDiscomPageTexts,
+  type DiscomPageTexts,
+} from '@/data/discom-page-texts'
 import { computeBill, getTariff } from '@/lib/calc/electricity'
-import { cycleLabel, formatINR, formatIsoDate } from '@/lib/format'
+import { cycleLabel, fixedChargeLabel, formatINR, formatIsoDate } from '@/lib/format'
 
 const SITE = 'https://desimetrics.com'
-
-function fixedChargeLabel(fc: FixedCharge): string {
-  switch (fc.basis) {
-    case 'perPhase':
-      return `₹${fc.singlePhase} / ₹${fc.threePhase} (single / three-phase)`
-    case 'perLoad':
-      return `₹${fc.perKW}/kW of sanctioned load`
-    case 'flat':
-      return `₹${fc.flat}`
-  }
-}
 
 export default function DiscomCalculatorPage({
   config,
@@ -36,11 +35,55 @@ export default function DiscomCalculatorPage({
   texts?: DiscomPageTexts
 }) {
   const t = texts
+  const locale: 'en' | 'hi' | 'mr' | 'ta' | 'te' | 'kn' | 'bn' | 'gu' | 'ml' =
+    texts === hiDiscomPageTexts
+      ? 'hi'
+      : texts === mrDiscomPageTexts
+        ? 'mr'
+        : texts === taDiscomPageTexts
+          ? 'ta'
+          : texts === teDiscomPageTexts
+            ? 'te'
+            : texts === knDiscomPageTexts
+              ? 'kn'
+              : texts === bnDiscomPageTexts
+                ? 'bn'
+                : texts === guDiscomPageTexts
+                  ? 'gu'
+                  : texts === mlDiscomPageTexts
+                    ? 'ml'
+                    : 'en'
+  const hi = locale === 'hi'
+  // Only Hindi currently has chrome-translated (if not content-translated)
+  // versions of the OTHER 35 DISCOM pages, so neighbour-comparison links
+  // from a Marathi/Tamil page fall back to the English neighbour page —
+  // there's no /mr or /ta version of e.g. BESCOM's page to link to.
+  const neighborLocalePrefix = hi ? '/hi' : ''
+  // Genuine, hand-authored content for this specific DISCOM in this
+  // locale — falls back to the English config for any field a translation
+  // doesn't override. See DiscomPageConfig.translations in calculator-pages.tsx.
+  const tr = locale !== 'en' ? config.translations?.[locale] : undefined
+  const content = {
+    h1: tr?.h1 ?? config.h1,
+    breadcrumbLabel: tr?.breadcrumbLabel ?? config.breadcrumbLabel,
+    intro: tr?.intro ?? config.intro,
+    explainer: tr?.explainer ?? config.explainer,
+    faqs: tr?.faqs ?? config.faqs,
+    billTraps: tr?.billTraps ?? config.billTraps,
+    aboutDiscom: tr?.aboutDiscom ?? config.aboutDiscom,
+    coverageQA: tr?.coverageQA ?? config.coverageQA,
+    howToPay: config.howToPay
+      ? { ...config.howToPay, ...(tr?.howToPay ?? {}) }
+      : undefined,
+    thresholdCallout: tr?.thresholdCallout ?? config.thresholdCallout,
+  }
   const tariff = getTariff(config.discomCode)
   const residential =
     tariff.connectionTypes.find((c) => c.connectionType === 'residential') ??
     tariff.connectionTypes[0]
   const path = `/electricity/${config.slug}`
+  const localePath = locale !== 'en' ? `/${locale}${path}` : path
+  const localeBase = locale !== 'en' ? `${SITE}/${locale}` : SITE
 
   const topRate = residential.slabs[residential.slabs.length - 1].ratePerUnit
   const fcaIncluded = tariff.fuelCostAdjustment > 0
@@ -112,7 +155,7 @@ export default function DiscomCalculatorPage({
     { id: 'billing-cycle', label: t.toc.billingCycle },
     { id: 'tariff-table', label: t.toc.tariffTable(tariff.state) },
     { id: 'worked-examples', label: t.toc.workedExamples },
-    ...(config.billTraps ? [{ id: 'bill-traps', label: t.toc.billTraps }] : []),
+    ...(content.billTraps ? [{ id: 'bill-traps', label: t.toc.billTraps }] : []),
     { id: 'how-calculated', label: t.toc.howCalculated },
     { id: 'bill-audit', label: t.toc.billAudit },
     { id: 'whats-included', label: t.toc.whatsIncluded },
@@ -124,9 +167,9 @@ export default function DiscomCalculatorPage({
       : []),
     { id: 'tips', label: t.toc.tips },
     { id: 'net-metering', label: t.toc.netMetering },
-    ...(config.aboutDiscom ? [{ id: 'about', label: t.toc.about(tariff.discomCode) }] : []),
-    ...(config.coverageQA ? [{ id: 'coverage', label: t.toc.coverage }] : []),
-    ...(config.howToPay ? [{ id: 'how-to-pay', label: t.toc.howToPay }] : []),
+    ...(content.aboutDiscom ? [{ id: 'about', label: t.toc.about(tariff.discomCode) }] : []),
+    ...(content.coverageQA ? [{ id: 'coverage', label: t.toc.coverage }] : []),
+    ...(content.howToPay ? [{ id: 'how-to-pay', label: t.toc.howToPay }] : []),
     { id: 'faq', label: t.toc.faq },
     { id: 'related', label: t.toc.related },
   ]
@@ -142,7 +185,7 @@ export default function DiscomCalculatorPage({
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: config.faqs.map((f) => ({
+    mainEntity: content.faqs.map((f) => ({
       '@type': 'Question',
       name: f.q,
       acceptedAnswer: { '@type': 'Answer', text: f.a },
@@ -152,26 +195,31 @@ export default function DiscomCalculatorPage({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+      { '@type': 'ListItem', position: 1, name: t.breadcrumbHome, item: localeBase },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Electricity',
-        item: `${SITE}/electricity`,
+        name: t.breadcrumbElectricity,
+        item: `${localeBase}/electricity`,
       },
       {
+        // content.breadcrumbLabel resolves to a genuine translation where
+        // one exists (see DiscomPageConfig.translations); otherwise it's
+        // per-DISCOM authored English copy, not yet translated — that's the
+        // actual content work the remaining DISCOM pages' noindex is
+        // waiting on. See SEO audit 2026-09-07.
         '@type': 'ListItem',
         position: 3,
-        name: config.breadcrumbLabel,
-        item: `${SITE}${path}`,
+        name: content.breadcrumbLabel,
+        item: `${SITE}${localePath}`,
       },
     ],
   }
   const webAppLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: config.breadcrumbLabel,
-    url: `${SITE}${path}`,
+    name: content.breadcrumbLabel,
+    url: `${SITE}${localePath}`,
     applicationCategory: 'FinanceApplication',
     operatingSystem: 'Any',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
@@ -183,7 +231,7 @@ export default function DiscomCalculatorPage({
     '@type': 'Dataset',
     name: `${tariff.discomName} residential tariff slabs`,
     description: `Telescopic domestic electricity tariff slabs for ${tariff.state}, effective ${tariff.effectiveFrom}.`,
-    url: `${SITE}${path}#tariff-table`,
+    url: `${SITE}${localePath}#tariff-table`,
     dateModified: tariff.lastVerified,
     creator: { '@type': 'Organization', name: 'DesiMetrics', url: SITE },
     license: tariff.sourceUrl,
@@ -215,19 +263,22 @@ export default function DiscomCalculatorPage({
           <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/50">
             <ol className="flex flex-wrap items-center gap-1.5">
               <li>
-                <Link href="/" className="hover:text-brass">
+                <Link href={locale !== 'en' ? `/${locale}` : '/'} className="hover:text-brass">
                   {t.breadcrumbHome}
                 </Link>
               </li>
               <li aria-hidden>/</li>
               <li>
-                <Link href="/electricity" className="hover:text-brass">
+                <Link
+                  href={locale !== 'en' ? `/${locale}/electricity` : '/electricity'}
+                  className="hover:text-brass"
+                >
                   {t.breadcrumbElectricity}
                 </Link>
               </li>
               <li aria-hidden>/</li>
               <li className="font-medium text-white/80">
-                {config.breadcrumbLabel}
+                {content.breadcrumbLabel}
               </li>
             </ol>
           </nav>
@@ -237,18 +288,19 @@ export default function DiscomCalculatorPage({
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-brass/30 bg-brass/10 px-3 py-1 text-xs font-semibold text-brass">
                 <span className="h-1.5 w-1.5 rounded-full bg-brass" aria-hidden />
-                {tariff.state} · {tariff.discomCode} · {cycleLabel(tariff.billingCycle)} slab logic
+                {tariff.state} · {tariff.discomCode} · {cycleLabel(tariff.billingCycle, locale)}{' '}
+                {t.slabLogicLabel}
               </span>
 
               <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                {config.h1}
+                {content.h1}
               </h1>
               <p className="mt-2 font-display text-xl font-extrabold tracking-tight text-brass sm:text-2xl">
                 {t.heroSubhead(tariff.state)}
               </p>
 
               <p className="mt-4 max-w-xl text-lg text-white/70">
-                {config.intro}
+                {content.intro}
               </p>
 
               <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -277,7 +329,7 @@ export default function DiscomCalculatorPage({
                   <span aria-hidden>⚡</span> {t.heroWorkedExampleLabel}
                 </p>
                 <p className="mt-2 text-sm text-white/70">
-                  {t.heroWorkedExampleLead(config.exampleUnits, cycleLabel(tariff.billingCycle))}
+                  {t.heroWorkedExampleLead(config.exampleUnits, cycleLabel(tariff.billingCycle, locale))}
                 </p>
                 <div className="mt-1">
                   <WorkedExampleTotal amount={example.total} />
@@ -309,12 +361,12 @@ export default function DiscomCalculatorPage({
                   for the Verified chip only. */}
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  ['⚡', `₹${topRate.toFixed(2)}`, 'Top slab rate', 'brass'],
-                  ['📅', cycleLabel(tariff.billingCycle), 'Billing', 'hub-ac'],
-                  ['⛽', fcaIncluded ? `₹${tariff.fuelCostAdjustment}` : 'None', 'FCA / unit', 'caution-amber'],
+                  ['⚡', `₹${topRate.toFixed(2)}`, t.statTopSlabRate, 'brass'],
+                  ['📅', cycleLabel(tariff.billingCycle, locale), t.statBilling, 'hub-ac'],
+                  ['⛽', fcaIncluded ? `₹${tariff.fuelCostAdjustment}` : t.statNone, t.statFcaPerUnit, 'caution-amber'],
                   freeUnitsScheme
-                    ? ['🎁', `${freeUnitsScheme.discountValue}u`, 'Free subsidy', 'spark-teal']
-                    : ['✓', formatIsoDate(tariff.lastVerified), 'Verified', 'seal-red'],
+                    ? ['🎁', `${freeUnitsScheme.discountValue}u`, t.statFreeSubsidy, 'spark-teal']
+                    : ['✓', formatIsoDate(tariff.lastVerified), t.statVerified, 'seal-red'],
                 ].map(([icon, big, small, tone]) => (
                   <div
                     key={small as string}
@@ -381,16 +433,14 @@ export default function DiscomCalculatorPage({
             <span aria-hidden>⚡</span> {t.workedExampleHeading}
           </h2>
           <p className="mt-3 text-lg text-ash/90">
-            A <strong>{config.exampleUnits}-unit</strong>{' '}
-            {cycleLabel(tariff.billingCycle)} {tariff.state} residential bill
-            (single-phase) works out to{' '}
+            {t.workedExampleLead(config.exampleUnits, cycleLabel(tariff.billingCycle, locale), tariff.state)}{' '}
             <WorkedExampleTotal amount={example.total} />
             {example.monthlyEquivalent && (
               <>
                 {' '}
                 — {t.workedExampleAboutPerMonth}{' '}
                 <strong>{formatINR(example.monthlyEquivalent.total)}</strong>{' '}
-                per month
+                {t.perMonthLabel}
               </>
             )}
             . {t.workedExampleThatIs} {formatINR(example.energyChargeGross)} {t.energyLabel}
@@ -456,19 +506,19 @@ export default function DiscomCalculatorPage({
           >
             {tariff.billingCycle === 'monthly'
               ? t.monthlyBillingCycle
-              : t.cycleRule(cycleLabel(tariff.billingCycle))}
+              : t.cycleRule(cycleLabel(tariff.billingCycle, locale))}
           </h2>
           <p className="text-ash/80">
-            {t.billingCycleBody(tariff.discomCode, cycleLabel(tariff.billingCycle))}
+            {t.billingCycleBody(tariff.discomCode, cycleLabel(tariff.billingCycle, locale))}
             {tariff.billingCycle !== 'monthly' &&
               t.billingCycleLongBody(
                 tariff.billingCycle === 'bimonthly' ? '~60-day' : '~90-day',
                 tariff.billingCycle === 'bimonthly' ? '2' : '3',
               )}
           </p>
-          {config.thresholdCallout && (
+          {content.thresholdCallout && (
             <div className="mt-4">
-              <ThresholdCallout {...config.thresholdCallout} />
+              <ThresholdCallout {...content.thresholdCallout} />
             </div>
           )}
         </section>
@@ -592,7 +642,7 @@ export default function DiscomCalculatorPage({
 
         {/* Common bill traps — only where authored. Caution-amber signals a
             warning worth knowing about, without the alarm of red. */}
-        {config.billTraps && (
+        {content.billTraps && (
           <section aria-labelledby="bill-traps" className="mb-10 scroll-mt-20">
             <h2
               id="bill-traps"
@@ -601,7 +651,7 @@ export default function DiscomCalculatorPage({
               {t.commonBillTraps(tariff.discomCode)}
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
-              {config.billTraps.map((trap, i) => (
+              {content.billTraps.map((trap, i) => (
                 <div
                   key={i}
                   className="rounded-xl border border-hairline border-l-4 border-l-caution-amber bg-paper p-5"
@@ -627,7 +677,7 @@ export default function DiscomCalculatorPage({
             {t.howBillCalculated(config.discomCode)}
           </h2>
           <div className="space-y-4 text-ash/80">
-            {config.explainer.map((block, i) => (
+            {content.explainer.map((block, i) => (
               <div key={i}>
                 <h3 className="font-semibold text-ash">
                   {block.title}
@@ -776,8 +826,11 @@ export default function DiscomCalculatorPage({
               currentDiscomCode={tariff.discomCode}
               compareDiscomCodes={neighbors.map((n) => n.discomCode)}
               discomHrefs={Object.fromEntries([
-                [tariff.discomCode, path],
-                ...neighbors.map((n) => [n.discomCode, `/electricity/${n.slug}`]),
+                [tariff.discomCode, localePath],
+                ...neighbors.map((n) => [
+                  n.discomCode,
+                  `${neighborLocalePrefix}/electricity/${n.slug}`,
+                ]),
               ])}
             />
             <p className="mt-3 text-sm text-ash/70">
@@ -843,14 +896,14 @@ export default function DiscomCalculatorPage({
           </h2>
           <p className="text-ash/80">
             {t.netMeteringBody}{' '}
-            <Link href="/solar/roi-calculator" className="text-brass underline">
+            <Link href={hi ? '/hi/solar/roi-calculator' : '/solar/roi-calculator'} className="text-brass underline">
               {t.estimateSolarPayback}
             </Link>
           </p>
         </section>
 
         {/* About the DISCOM — only where authored */}
-        {config.aboutDiscom && (
+        {content.aboutDiscom && (
           <section aria-labelledby="about" className="mb-10 scroll-mt-20">
             <h2
               id="about"
@@ -859,7 +912,7 @@ export default function DiscomCalculatorPage({
               {t.aboutHeading(tariff.discomCode)}
             </h2>
             <div className="space-y-3 text-ash/80">
-              {config.aboutDiscom.map((p, i) => (
+              {content.aboutDiscom.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
             </div>
@@ -867,22 +920,22 @@ export default function DiscomCalculatorPage({
         )}
 
         {/* Coverage Q&A — only where authored */}
-        {config.coverageQA && (
+        {content.coverageQA && (
           <section aria-labelledby="coverage" className="mb-10 scroll-mt-20">
             <h2
               id="coverage"
               className="mb-2 font-display text-2xl font-bold text-ink-navy"
             >
-              {config.coverageQA.q}
+              {content.coverageQA.q}
             </h2>
             <p className="text-ash/80">
-              {config.coverageQA.a}
+              {content.coverageQA.a}
             </p>
           </section>
         )}
 
         {/* How to pay — only where authored */}
-        {config.howToPay && (
+        {content.howToPay && (
           <section aria-labelledby="how-to-pay" className="mb-10 scroll-mt-20">
             <h2
               id="how-to-pay"
@@ -891,7 +944,7 @@ export default function DiscomCalculatorPage({
               {t.howToPayHeading}
             </h2>
             <ol className="space-y-2">
-              {config.howToPay.steps.map((s, i) => (
+              {content.howToPay.steps.map((s, i) => (
                 <li key={i} className="flex gap-3">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brass font-display text-xs font-bold text-white">
                     {i + 1}
@@ -902,7 +955,7 @@ export default function DiscomCalculatorPage({
             </ol>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <a
-                href={config.howToPay.portalUrl}
+                href={content.howToPay.portalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-3 rounded-xl border border-brass/20 bg-brass/5 p-4 transition hover:border-brass/50 hover:shadow-sm"
@@ -915,7 +968,7 @@ export default function DiscomCalculatorPage({
                     {t.officialPortal}
                   </p>
                   <p className="truncate font-semibold text-ink-navy">
-                    {config.howToPay.portalLabel}
+                    {content.howToPay.portalLabel}
                   </p>
                 </div>
                 <span className="shrink-0 text-brass opacity-0 transition group-hover:opacity-100" aria-hidden>
@@ -931,7 +984,7 @@ export default function DiscomCalculatorPage({
                     {t.helpline}
                   </p>
                   <p className="font-semibold text-ink-navy">
-                    {config.howToPay.helpline}
+                    {content.howToPay.helpline}
                   </p>
                 </div>
               </div>
@@ -948,7 +1001,7 @@ export default function DiscomCalculatorPage({
             {t.faqHeading}
           </h2>
           <div className="divide-y divide-hairline">
-            {config.faqs.map((f, i) => (
+            {content.faqs.map((f, i) => (
               <details key={i} className="group py-3">
                 <summary className="cursor-pointer list-none font-medium text-ash marker:hidden">
                   {f.q}
@@ -970,7 +1023,7 @@ export default function DiscomCalculatorPage({
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
               ...neighbors.map((n) => ({
-                href: `/electricity/${n.slug}`,
+                href: `${neighborLocalePrefix}/electricity/${n.slug}`,
                 icon: '⚡',
                 chip: 'bg-hub-electricity/15',
                 accent: 'text-hub-electricity',
@@ -979,7 +1032,7 @@ export default function DiscomCalculatorPage({
                 sub: `${n.discomCode} bill calculator`,
               })),
               {
-                href: '/electricity',
+                href: hi ? '/hi/electricity' : '/electricity',
                 icon: '🗺️',
                 chip: 'bg-hub-electricity/15',
                 accent: 'text-hub-electricity',
@@ -988,7 +1041,7 @@ export default function DiscomCalculatorPage({
                 sub: t.relatedAllStates.sub,
               },
               {
-                href: '/solar/roi-calculator',
+                href: hi ? '/hi/solar/roi-calculator' : '/solar/roi-calculator',
                 icon: '☀️',
                 chip: 'bg-hub-solar/15',
                 accent: 'text-hub-solar',
@@ -997,7 +1050,7 @@ export default function DiscomCalculatorPage({
                 sub: t.relatedSolarRoi.sub,
               },
               {
-                href: '/ac/bill-calculator',
+                href: hi ? '/hi/ac/bill-calculator' : '/ac/bill-calculator',
                 icon: '❄️',
                 chip: 'bg-hub-ac/15',
                 accent: 'text-hub-ac',
@@ -1006,7 +1059,7 @@ export default function DiscomCalculatorPage({
                 sub: t.relatedAcCost.sub,
               },
               {
-                href: '/financial',
+                href: hi ? '/hi/financial' : '/financial',
                 icon: '🧮',
                 chip: 'bg-hub-financial/15',
                 accent: 'text-hub-financial',

@@ -5,6 +5,7 @@ import PageHero from '@/components/PageHero'
 import { calculateGst } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/financial/gst-calculator'
@@ -15,8 +16,11 @@ export const metadata: Metadata = {
   title: 'GST Calculator 2026 — Add or Remove GST (5%, 12%, 18%, 28%)',
   description:
     'Free GST calculator for India. Add GST to a base price or extract GST from an inclusive amount, with CGST/SGST split, for all standard slabs.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/financial/gst-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const faqs = [

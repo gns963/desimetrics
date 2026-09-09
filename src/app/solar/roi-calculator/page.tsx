@@ -14,6 +14,7 @@ import discomsJson from '@/data/discoms.json'
 import { getTariff } from '@/lib/calc/electricity'
 import { calculateSolarRoi, projectSolarCostComparison } from '@/lib/calc/solar'
 import { formatINR } from '@/lib/format'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/solar/roi-calculator'
@@ -47,8 +48,11 @@ export const metadata: Metadata = {
   title: 'Solar ROI Calculator 2026 — Rooftop Payback & PM Surya Ghar Savings',
   description:
     'Calculate rooftop solar payback period and savings using your DISCOM’s real tariff. Includes PM Surya Ghar subsidy (₹30k/₹60k/₹78k), net cost and 25-year savings.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/solar/roi-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

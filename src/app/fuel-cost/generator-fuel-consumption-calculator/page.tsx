@@ -6,6 +6,7 @@ import { marginalRatePerUnit } from '@/lib/calc/ac'
 import { estimateGeneratorCost, estimateGeneratorCostPerUnit } from '@/lib/calc/fuel'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/fuel-cost/generator-fuel-consumption-calculator'
@@ -18,8 +19,11 @@ export const metadata: Metadata = {
   title: 'Generator Fuel Consumption Calculator 2026 — Diesel Running Cost',
   description:
     'Calculate the fuel cost of running your diesel or petrol generator, from its own rated consumption (L/hr), fuel price and hours run.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/fuel-cost/generator-fuel-consumption-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

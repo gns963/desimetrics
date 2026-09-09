@@ -27,6 +27,51 @@
         "basis": "perLoad",
         "perKW": 80
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 7.45
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 170
+      },
+      "sourceNote": "MePDCL official Notification of Electricity Distribution Tariff for FY 2026-27 (per MSERC Order, Case No. 11 of 2025 dated 26.03.2026), effective 1 April 2026, Commercial (CLT) category (PRIMARY, https://mepdcl.in/docs/current_tariff.pdf). Flat energy charge regardless of consumption; fixed charge is per kVA/month. This is the most recent published MePDCL tariff and postdates this file's residential entry, which is sourced separately at an older (FY2025-26) rate — the two entries are therefore of different tariff vintages."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 6.6
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 170
+      },
+      "sourceNote": "MePDCL official Notification of Electricity Distribution Tariff for FY 2026-27 (per MSERC Order, Case No. 11 of 2025 dated 26.03.2026), effective 1 April 2026, Industrial Low Tension (ILT) category (PRIMARY, https://mepdcl.in/docs/current_tariff.pdf). Flat energy charge regardless of consumption; fixed charge is per kVA/month."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 3.15
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 130
+      },
+      "sourceNote": "MePDCL official Notification of Electricity Distribution Tariff for FY 2026-27 (per MSERC Order, Case No. 11 of 2025 dated 26.03.2026), effective 1 April 2026, Agriculture/Irrigation (AP) category (PRIMARY, https://mepdcl.in/docs/current_tariff.pdf). Flat energy charge regardless of consumption."
     }
   ],
   "fuelCostAdjustment": 0,

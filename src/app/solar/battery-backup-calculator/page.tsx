@@ -4,6 +4,7 @@ import SolarBatteryBackupCalculator from '@/components/calculators/SolarBatteryB
 import PageHero from '@/components/PageHero'
 import { sizeSolarBattery } from '@/lib/calc/solar'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/solar/battery-backup-calculator'
@@ -14,8 +15,11 @@ export const metadata: Metadata = {
   title: 'Solar Battery Backup Calculator 2026 — kWh Sizing (India)',
   description:
     'Size the battery bank for your solar system, from your critical daily load and days of autonomy — with lead-acid vs lithium depth-of-discharge compared.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/solar/battery-backup-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

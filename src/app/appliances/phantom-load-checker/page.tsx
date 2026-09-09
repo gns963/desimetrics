@@ -6,6 +6,7 @@ import discomsJson from '@/data/discoms.json'
 import { marginalRatePerUnit } from '@/lib/calc/ac'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/phantom-load-checker'
@@ -22,8 +23,11 @@ export const metadata: Metadata = {
   title: 'Phantom Load / Standby Power Checker 2026 — India',
   description:
     'Find out what your always-on standby devices (router, set-top box, chargers left plugged in) cost you over a year, priced at your real DISCOM tariff.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/phantom-load-checker'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

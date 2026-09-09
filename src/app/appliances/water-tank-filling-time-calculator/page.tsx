@@ -4,6 +4,7 @@ import WaterTankFillCalculator from '@/components/calculators/WaterTankFillCalcu
 import PageHero from '@/components/PageHero'
 import { estimateTankFillTime } from '@/lib/calc/watertank'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/water-tank-filling-time-calculator'
@@ -14,8 +15,11 @@ export const metadata: Metadata = {
   title: 'Water Tank Filling Time Calculator 2026 — By Capacity & Pump Flow',
   description:
     'Calculate how long your water tank takes to fill from its capacity in litres and your pump\'s flow rate in LPM, with a note on why real-world lift affects flow.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/water-tank-filling-time-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

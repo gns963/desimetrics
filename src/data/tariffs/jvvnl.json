@@ -32,6 +32,56 @@
         "basis": "perLoad",
         "perKW": 275
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": 100,
+          "ratePerUnit": 7
+        },
+        {
+          "minUnits": 101,
+          "maxUnits": null,
+          "ratePerUnit": 8.5
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 160
+      },
+      "sourceNote": "JAIPUR Discom (JVVNL) \"Tariff for Supply of Electricity-2025\", Schedule NDS/LT-2 (Non-Domestic Service), consumers above 5kW sanctioned load (PRIMARY-hosted copy, https://cescrajasthan.co.in/kedl/pages/event/uploads/Tariff-2025%202.pdf). Fixed charge shown (Rs.160/kW/month) applies to consumption up to 500 units/month; it rises to Rs.200/kW/month (or Rs.320/kVA of billing demand if SCL>18.65kW) above 500 units/month. Consumers with sanctioned load up to 5kW instead pay a flat Rs.350-700/connection/month fixed charge (not modelled here). This may reflect a more detailed/current schedule than the file's existing residential entry, which is separately marked as a secondary-sourced approximation pending primary cross-check."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 6
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 120.64
+      },
+      "sourceNote": "JAIPUR Discom (JVVNL) \"Tariff for Supply of Electricity-2025\", Schedule LT-5 (Small Industries, connected load up to 25 HP / 18.65 kW) (PRIMARY-hosted copy, https://cescrajasthan.co.in/kedl/pages/event/uploads/Tariff-2025%202.pdf). Flat energy charge of Rs.6.00/unit regardless of consumption. Fixed charge quoted as Rs.90/HP/month for consumption up to 500 units/month (converted here to Rs./kW using 1 HP = 0.746 kW); it rises to Rs.150/HP/month above 500 units/month."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 5.25
+        }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 40.21
+      },
+      "sourceNote": "JAIPUR Discom (JVVNL) \"Tariff for Supply of Electricity-2025\", Schedule AG/MS/LT-4 (Agriculture Service, Metered Supply), \"General\"/block-hours-supply category (PRIMARY-hosted copy, https://cescrajasthan.co.in/kedl/pages/event/uploads/Tariff-2025%202.pdf). Fixed charge quoted as Rs.30/HP/month, converted here to Rs./kW using 1 HP = 0.746 kW. Consumers taking supply beyond block hours instead pay Rs.7.00/unit with a fixed charge of Rs.60/HP/month (not modelled here)."
     }
   ],
   "fuelCostAdjustment": 0.22,

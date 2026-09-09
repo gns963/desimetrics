@@ -4,6 +4,7 @@ import RoomCoolingTimeCalculator from '@/components/calculators/RoomCoolingTimeC
 import PageHero from '@/components/PageHero'
 import { estimateCoolingTime } from '@/lib/calc/cooling'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/room-cooling-time-calculator'
@@ -14,8 +15,11 @@ export const metadata: Metadata = {
   title: 'Room Cooling Time Calculator 2026 — AC Pull-Down Time Estimate',
   description:
     'Estimate the theoretical minimum time your AC takes to cool a room\'s air by a given temperature drop, using real thermodynamic formulas — not a guessed multiplier.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/room-cooling-time-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

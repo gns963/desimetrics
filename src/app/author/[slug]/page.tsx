@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { allAuthorSlugs, getAuthor } from '@/data/authors'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -22,7 +23,10 @@ export async function generateMetadata({
   return {
     title: `${author.name} — ${author.role} | DesiMetrics`,
     description: author.bio[0]?.slice(0, 155),
-    alternates: { canonical: `${SITE}/author/${slug}` },
+    alternates: {
+      canonical: `${SITE}/author/${slug}`,
+      languages: getAlternateLanguages(`/author/${slug}`),
+    },
   }
 }
 

@@ -27,6 +27,44 @@
         "basis": "perLoad",
         "perKW": 70
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 7.07 },
+        { "minUnits": 101, "maxUnits": 200, "ratePerUnit": 7.85 },
+        { "minUnits": 201, "maxUnits": null, "ratePerUnit": 8.3 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 85
+      },
+      "meterRent": 40,
+      "sourceNote": "SOURCED (secondary) — electricbill.in Manipur MSPDCL tariff listing, LT Non-Domestic/Commercial category. Numbers are internally consistent with the expected cross-subsidy pattern (commercial > residential > agriculture) but could not be cross-checked against a primary JERC/MSPDCL tariff order PDF — the only official tariff PDF link found (mspdcl.in) returned HTTP 404 at time of research, and no working replacement was located. Pending primary-source verification."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.15 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 70
+      },
+      "meterRent": 40,
+      "sourceNote": "SOURCED (secondary) — electricbill.in Manipur MSPDCL tariff listing, 'Cottage & Small Industry' LT category (flat ₹6.15/unit, not slabbed), chosen as the representative small/LT industrial tier over the site's 'Medium Industry' (₹8.80/unit) and 'Large Industry' (₹9.85/unit) categories, which are more likely HT. Not cross-checked against a primary JERC/MSPDCL tariff order — the official mspdcl.in tariff PDF link returned HTTP 404 at time of research. Pending primary-source verification."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 4.91 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 65
+      },
+      "meterRent": 25,
+      "sourceNote": "SOURCED (secondary) — electricbill.in Manipur MSPDCL tariff listing, 'LT Irrigation & Agriculture' category (flat ₹4.91/unit, not slabbed). Rate is below both the residential slab-2 and slab-3 rates and below all commercial/industrial rates, broadly consistent with expected agricultural cross-subsidy, but not cross-checked against a primary JERC/MSPDCL tariff order — the official mspdcl.in tariff PDF link returned HTTP 404 at time of research. Pending primary-source verification."
     }
   ],
   "fuelCostAdjustment": 0,

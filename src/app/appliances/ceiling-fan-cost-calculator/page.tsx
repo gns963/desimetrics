@@ -6,6 +6,7 @@ import discomsJson from '@/data/discoms.json'
 import { simpleApplianceCost } from '@/lib/calc/appliance'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/ceiling-fan-cost-calculator'
@@ -20,8 +21,11 @@ export const metadata: Metadata = {
   title: 'Ceiling Fan Electricity Cost Calculator 2026 — Monthly & Yearly',
   description:
     'Calculate your ceiling fan\'s electricity cost by wattage and daily hours, priced at your DISCOM\'s real tariff. Compare standard, BEE 5-star and BLDC fans.',
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/appliances/ceiling-fan-cost-calculator'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
 }
 
 const webAppLd = {

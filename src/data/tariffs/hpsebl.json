@@ -27,6 +27,39 @@
         "basis": "flat",
         "flat": 40
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.4 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 145
+      },
+      "sourceNote": "PRIMARY — HPERC, 'Business Plan and MYT Order for 5th Control Period (FY25-29)' / HPSEBL Retail Supply Tariff Order for FY 2025-26, Schedule - Commercial Supply (CS), Single Part Tariff for Contract Demand <=20 kVA: flat Rs 6.40/kWh energy charge, Rs 145/month fixed charge. Larger connections (>20 kVA) use a two-part kVAh + demand-charge structure not modelled here. https://peak-files.estonetech.in/peak-data-files/Himachal%20Pradesh%20State%20Electricity%20Board%20Limited%20Retail%20Supply%20Tariff%20Order%202025-26.pdf"
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.72 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 155
+      },
+      "sourceNote": "PRIMARY — HPERC HPSEBL Retail Supply Tariff Order for FY 2025-26, Schedule - Small Industrial Power Supply (SIP, Contract Demand up to 50 kVA), Single Part Tariff for Contract Demand <=20 kVA: flat Rs 5.72/kWh, Rs 155/month fixed charge. Larger LT industrial connections (>20 kVA up to 50 kVA) use a kVAh + demand-charge structure not modelled here; Medium/Large Industrial Power Supply (HT) is a separate, higher-voltage schedule not used. https://peak-files.estonetech.in/peak-data-files/Himachal%20Pradesh%20State%20Electricity%20Board%20Limited%20Retail%20Supply%20Tariff%20Order%202025-26.pdf"
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.04 }
+      ],
+      "fixedCharge": {
+        "basis": "flat",
+        "flat": 105
+      },
+      "sourceNote": "PRIMARY — HPERC HPSEBL Retail Supply Tariff Order for FY 2025-26, Schedule - Irrigation and Drinking Water Pumping Supply (IDWPS), which covers agricultural/irrigation pumping loads in HP's tariff structure (there is no separate 'Agriculture' schedule name). Single Part Tariff for Contract Demand <=20 kVA: flat Rs 5.04/kWh, Rs 105/month fixed charge. Larger connections (>20 kVA) use an LT/HT/EHT kVAh + demand-charge structure not modelled here. https://peak-files.estonetech.in/peak-data-files/Himachal%20Pradesh%20State%20Electricity%20Board%20Limited%20Retail%20Supply%20Tariff%20Order%202025-26.pdf"
     }
   ],
   "fuelCostAdjustment": 0,

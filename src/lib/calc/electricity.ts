@@ -363,10 +363,11 @@ export function computeBill(
     eligibility,
   )
 
-  const fcaAmount = tariff.fuelCostAdjustment * unitsConsumed
+  const effectiveFca = ct.fuelCostAdjustment ?? tariff.fuelCostAdjustment
+  const effectiveDutyPercent = ct.electricityDutyPercent ?? tariff.electricityDutyPercent
+  const fcaAmount = effectiveFca * unitsConsumed
   const fixed = computeFixedCharge(ct.fixedCharge, phase, sanctionedLoad)
-  const dutyAmount =
-    (subsidy.adjustedCharge * tariff.electricityDutyPercent) / 100
+  const dutyAmount = (subsidy.adjustedCharge * effectiveDutyPercent) / 100
   const meterRent = ct.meterRent ?? 0
 
   const total =
@@ -419,7 +420,7 @@ export function computeBill(
     energyChargeNet: round2(subsidy.adjustedCharge),
 
     fuelCostAdjustment: {
-      ratePerUnit: tariff.fuelCostAdjustment,
+      ratePerUnit: effectiveFca,
       amount: round2(fcaAmount),
     },
     fixedCharge: {
@@ -428,7 +429,7 @@ export function computeBill(
       detail: fixed.detail,
     },
     electricityDuty: {
-      percent: tariff.electricityDutyPercent,
+      percent: effectiveDutyPercent,
       amount: round2(dutyAmount),
     },
     meterRent: round2(meterRent),

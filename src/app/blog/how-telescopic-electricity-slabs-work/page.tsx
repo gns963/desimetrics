@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import PageHero from '@/components/PageHero'
 import { breadcrumbLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/blog/how-telescopic-electricity-slabs-work'
@@ -12,8 +13,11 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: 'How Telescopic Electricity Slabs Work (Simple Guide)',
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE}${PATH}` },
-  openGraph: { url: `${SITE}${PATH}`, type: 'article' },
+  alternates: {
+    canonical: `${SITE}${PATH}`,
+    languages: getAlternateLanguages('/blog/how-telescopic-electricity-slabs-work'),
+  },
+  openGraph: { url: `${SITE}${PATH}`, type: 'article', locale: 'en_IN' },
 }
 
 const breadcrumb = breadcrumbLd([

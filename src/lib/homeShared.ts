@@ -14,24 +14,17 @@ import tnebJson from '@/data/tariffs/tneb.json'
 import { parseTariffFile } from '@/data/tariffs/_schema'
 import { calculateAcCost } from '@/lib/calc/ac'
 import { computeBill, getTariff } from '@/lib/calc/electricity'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 import { calculateSolarRoi } from '@/lib/calc/solar'
 import { formatINR, formatIsoDate } from '@/lib/format'
 
 export const SITE = 'https://desimetrics.com'
 
 /** Every translated homepage cross-links to every other one via hreflang —
- *  shared here so adding a new language only means adding one line. */
+ *  delegates to the shared, existence-driven alternates helper so this
+ *  never lists a locale that isn't actually built. See i18n-alternates.ts. */
 export function homeHreflangAlternates(): Record<string, string> {
-  return {
-    'en-IN': `${SITE}/`,
-    'hi-IN': `${SITE}/hi`,
-    'ta-IN': `${SITE}/ta`,
-    'te-IN': `${SITE}/te`,
-    'mr-IN': `${SITE}/mr`,
-    'bn-IN': `${SITE}/bn`,
-    'kn-IN': `${SITE}/kn`,
-    'gu-IN': `${SITE}/gu`,
-  }
+  return getAlternateLanguages('')
 }
 
 const tariff = parseTariffFile(tnebJson)

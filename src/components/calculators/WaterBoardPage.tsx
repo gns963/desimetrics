@@ -14,7 +14,11 @@ import WaterNeighborDiagnostic from '@/components/water/WaterNeighborDiagnostic'
 import WaterSlabBand from '@/components/water/WaterSlabBand'
 import { getWaterBoardFacts } from '@/data/water-board-facts'
 import waterBoardsJson from '@/data/water-boards.json'
-import { enWaterBoardPageTexts, type WaterBoardPageTexts } from '@/data/water-board-page-texts'
+import {
+  enWaterBoardPageTexts,
+  hiWaterBoardPageTexts,
+  type WaterBoardPageTexts,
+} from '@/data/water-board-page-texts'
 import { computeWaterBill, getConnectionTariff, getWaterTariff, waterTariffRegistry } from '@/lib/calc/water'
 import { formatINR, formatIsoDate } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
@@ -35,12 +39,15 @@ export default function WaterBoardPage({
   texts?: WaterBoardPageTexts
 }) {
   const t = texts
+  const hi = texts === hiWaterBoardPageTexts
   const tariff = getWaterTariff(boardCode)
   // The page describes the domestic tariff by default — the calculator
   // itself lets a visitor switch to commercial/industrial where we have it.
   const connection = getConnectionTariff(tariff, 'domestic')
   const commercial = tariff.connectionTypes.find((c) => c.connectionType === 'commercial')
   const path = `/water/${slug}`
+  const localePath = hi ? `/hi${path}` : path
+  const localeBase = hi ? `${SITE}/hi` : SITE
   const defaultMeter = Object.keys(connection.fixedChargeByMeterSize)[0]
   const topRate = connection.slabs[connection.slabs.length - 1].ratePerKL
   const freeKl = connection.freeAllowance?.kl
@@ -176,9 +183,12 @@ export default function WaterBoardPage({
     ],
   }
   const breadcrumb = breadcrumbLd([
-    { name: 'Home', path: '' },
-    { name: t.breadcrumbWater, path: '/water' },
-    { name: tariff.boardName, path },
+    { name: hi ? 'होम' : 'Home', path: hi ? '/hi' : '' },
+    { name: t.breadcrumbWater, path: hi ? '/hi/water' : '/water' },
+    // tariff.boardName is per-board authored English copy, not yet
+    // translated (the actual content work this page's noindex is waiting
+    // on) — left as-is deliberately. See SEO audit 2026-09-07.
+    { name: tariff.boardName, path: localePath },
   ])
 
   return (

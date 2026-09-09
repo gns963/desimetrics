@@ -10,7 +10,46 @@ export interface DiscomOption {
   state: string
 }
 
-export default function FridgeCostCalculator({ discoms }: { discoms: DiscomOption[] }) {
+export interface FridgeCostCalculatorTexts {
+  title: string
+  subtitle: string
+  discomLabel: string
+  annualLabel: string
+  annualUnit: string
+  annualHint: string
+  ctaLabel: string
+  disclaimer: string
+  monthlyCostLabel: string
+  /** Use {annual} and {units} placeholders. */
+  yearlyTemplate: string
+  fromLabelLabel: string
+  fromLabelUnit: string
+  billedAtLabel: string
+}
+
+const defaultTexts: FridgeCostCalculatorTexts = {
+  title: 'Fridge Cost Calculator',
+  subtitle: "From your fridge's own BEE label figure",
+  discomLabel: 'DISCOM / state',
+  annualLabel: 'Annual energy consumption (from BEE label)',
+  annualUnit: 'units/yr',
+  annualHint: "Look for the yellow BEE star sticker on your fridge — it states 'annual energy consumption' in kWh/year directly.",
+  ctaLabel: 'Calculate Fridge Cost',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  monthlyCostLabel: 'Estimated monthly cost',
+  yearlyTemplate: '≈ {annual}/year · {units} units/day',
+  fromLabelLabel: 'From BEE label',
+  fromLabelUnit: 'units/yr',
+  billedAtLabel: 'Billed at (top slab)',
+}
+
+export default function FridgeCostCalculator({
+  discoms,
+  texts = defaultTexts,
+}: {
+  discoms: DiscomOption[]
+  texts?: FridgeCostCalculatorTexts
+}) {
   const [discomCode, setDiscomCode] = useState(discoms[0]?.code ?? '')
   const [annualUnits, setAnnualUnits] = useState(200)
 
@@ -35,8 +74,8 @@ export default function FridgeCostCalculator({ discoms }: { discoms: DiscomOptio
     <CalculatorCard>
       <CalculatorHeader
         icon="❄️"
-        title="Fridge Cost Calculator"
-        subtitle="From your fridge's own BEE label figure"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
@@ -45,7 +84,7 @@ export default function FridgeCostCalculator({ discoms }: { discoms: DiscomOptio
             htmlFor="fridge-discom"
             className="mb-1.5 block text-sm font-medium text-ash"
           >
-            DISCOM / state
+            {texts.discomLabel}
           </label>
           <select
             id="fridge-discom"
@@ -63,17 +102,17 @@ export default function FridgeCostCalculator({ discoms }: { discoms: DiscomOptio
 
         <SliderField
           id="fridge-annual"
-          label="Annual energy consumption (from BEE label)"
+          label={texts.annualLabel}
           value={annualUnits}
           onChange={setAnnualUnits}
           min={80}
           max={500}
           step={5}
-          unit="units/yr"
-          hint="Look for the yellow BEE star sticker on your fridge — it states 'annual energy consumption' in kWh/year directly."
+          unit={texts.annualUnit}
+          hint={texts.annualHint}
         />
 
-        <CalculatorCta label="Calculate Fridge Cost" tone="appliance" />
+        <CalculatorCta label={texts.ctaLabel} tone="appliance" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-appliance/15 bg-hub-appliance/5 p-5">
@@ -86,22 +125,24 @@ export default function FridgeCostCalculator({ discoms }: { discoms: DiscomOptio
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Estimated monthly cost
+                {texts.monthlyCostLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-hub-appliance">
                 {formatINR(result.monthlyCost)}
               </p>
               <p className="text-sm text-ash/60">
-                ≈ {formatINR(result.annualCost)}/year · {result.dailyUnits} units/day
+                {texts.yearlyTemplate
+                  .replace('{annual}', formatINR(result.annualCost))
+                  .replace('{units}', String(result.dailyUnits))}
               </p>
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <dt className="text-ash/60">
-                From BEE label
+                {texts.fromLabelLabel}
               </dt>
-              <dd className="text-right tabular-nums">{result.annualUnitsFromLabel} units/yr</dd>
+              <dd className="text-right tabular-nums">{result.annualUnitsFromLabel} {texts.fromLabelUnit}</dd>
               <dt className="text-ash/60">
-                Billed at (top slab)
+                {texts.billedAtLabel}
               </dt>
               <dd className="text-right tabular-nums">
                 {formatINR(result.effectiveRatePerUnit)}/unit

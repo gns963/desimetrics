@@ -17,6 +17,40 @@
         "perKW": 110
       },
       "meterRent": 20
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 300, "ratePerUnit": 7.5 },
+        { "minUnits": 301, "maxUnits": null, "ratePerUnit": 8.4 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 330
+      },
+      "sourceNote": "PRIMARY — UPERC Tariff Order for UPPCL DISCOMs (DVVNL/MVVNL/PVVNL/PUVVNL/KESCO) FY2025-26, Annexure-I Rate Schedule, LMV-2 'Non-Domestic Light, Fan & Power', section (b) 'all other cases including urban consumers', Contracted Load 'Up to 4 kW': Rs 330/kW/month fixed, Rs 7.50/kWh up to 300 units/month, Rs 8.40/kWh above 300 units/month. 'Above 4kW' tier (fixed Rs 450/kW, Rs 7.50/kWh up to 1000 units then Rs 8.75/kWh) and the Rural-Schedule flat rate (Rs 110/kW fixed, Rs 5.50/kWh) not modelled; seasonal minimum charge of Rs 600/kW (Apr-Sep) or Rs 475/kW (Oct-Mar) also not modelled. Source: https://www.uperc.org/App_File/UPPCLTariffOrderFY2025-26-pdf1122202564623PM.pdf, Annexure-I (p.502-504)."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.3 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 290
+      },
+      "sourceNote": "PRIMARY — same UPERC order, Annexure-I, LMV-6 'Small and Medium Power' (contracted load < 100 HP / 75 kW), section (A) 'Consumers getting supply other than Rural Schedule — Base Rate': Rs 290/kW/month fixed, Rs 7.30/kWh energy. A Time-of-Day surcharge/rebate of ±15% on the energy charge during specified peak/off-peak windows is not modelled; the Rural-Schedule 7.5% rebate on the base rate is also not modelled. Source: https://www.uperc.org/App_File/UPPCLTariffOrderFY2025-26-pdf1122202564623PM.pdf, Annexure-I (p.512-513)."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.5 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 174.26
+      },
+      "sourceNote": "PRIMARY — same UPERC order, Annexure-I, LMV-5 'Small Power for Private Tube Wells/Pumping Sets for Irrigation Purposes', section (B) 'Urban Schedule, Metered Supply', tariff excluding cross-subsidy adjustment: Rs 130/BHP/month fixed (converted here to ≈Rs 174.26/kW using 1 BHP = 0.746 kW, per this dataset's convention for BHP-billed categories), Rs 6.50/kWh energy. UPPCL's internal cross-subsidy adjustment reduces the actual payable energy rate to Rs 6.00/kWh (not modelled). IMPORTANT CAVEAT: most UP private tubewell connections are billed under the heavily Government-of-UP-subsidized Rural Schedule, where the final payable rate is only Rs 70/BHP/month fixed + Rs 2.00/kWh energy (before subsidy: Rs 775/BHP + Rs 6.50/kWh) — that rural/subsidized schedule is NOT modelled here, so this entry will significantly overstate bills for typical rural agricultural consumers. Source: https://www.uperc.org/App_File/UPPCLTariffOrderFY2025-26-pdf1122202564623PM.pdf, Annexure-I (p.507-510)."
     }
   ],
   "fuelCostAdjustment": 0.15,

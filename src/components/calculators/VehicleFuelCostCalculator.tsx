@@ -5,7 +5,47 @@ import { vehicleCostPerKm } from '@/lib/calc/fuel'
 import { formatINR } from '@/lib/format'
 import { CalculatorCard, CalculatorCta, CalculatorHeader, SliderField } from './CalculatorShell'
 
-export default function VehicleFuelCostCalculator() {
+export interface VehicleFuelCostCalculatorTexts {
+  title: string
+  subtitle: string
+  priceLabel: string
+  priceUnit: string
+  priceHint: string
+  mileageLabel: string
+  mileageUnit: string
+  monthlyKmLabel: string
+  monthlyKmUnit: string
+  ctaLabel: string
+  disclaimer: string
+  costPerKmLabel: string
+  monthlyCostLabel: string
+  annualCostLabel: string
+  fuelUsedLabel: string
+}
+
+const defaultTexts: VehicleFuelCostCalculatorTexts = {
+  title: 'Petrol/Diesel Cost Per KM Calculator',
+  subtitle: "Your vehicle's real running cost",
+  priceLabel: 'Fuel price',
+  priceUnit: '₹/litre',
+  priceHint: "Check today's local price — it varies by state and fuel type.",
+  mileageLabel: 'Vehicle mileage',
+  mileageUnit: 'km/litre',
+  monthlyKmLabel: 'Monthly distance',
+  monthlyKmUnit: 'km',
+  ctaLabel: 'Calculate Fuel Cost',
+  disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
+  costPerKmLabel: 'Cost per km',
+  monthlyCostLabel: 'Monthly fuel cost',
+  annualCostLabel: 'Annual fuel cost',
+  fuelUsedLabel: 'Fuel used/month',
+}
+
+export default function VehicleFuelCostCalculator({
+  texts = defaultTexts,
+}: {
+  texts?: VehicleFuelCostCalculatorTexts
+} = {}) {
   const [fuelPrice, setFuelPrice] = useState(100)
   const [mileage, setMileage] = useState(18)
   const [monthlyKm, setMonthlyKm] = useState(1000)
@@ -32,44 +72,44 @@ export default function VehicleFuelCostCalculator() {
     <CalculatorCard>
       <CalculatorHeader
         icon="⛽"
-        title="Petrol/Diesel Cost Per KM Calculator"
-        subtitle="Your vehicle's real running cost"
+        title={texts.title}
+        subtitle={texts.subtitle}
       />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
         <SliderField
           id="fuel-price"
-          label="Fuel price"
+          label={texts.priceLabel}
           value={fuelPrice}
           onChange={setFuelPrice}
           min={60}
           max={130}
-          unit="₹/litre"
-          hint="Check today's local price — it varies by state and fuel type."
+          unit={texts.priceUnit}
+          hint={texts.priceHint}
         />
 
         <SliderField
           id="fuel-mileage"
-          label="Vehicle mileage"
+          label={texts.mileageLabel}
           value={mileage}
           onChange={setMileage}
           min={5}
           max={40}
-          unit="km/litre"
+          unit={texts.mileageUnit}
         />
 
         <SliderField
           id="fuel-monthly-km"
-          label="Monthly distance"
+          label={texts.monthlyKmLabel}
           value={monthlyKm}
           onChange={setMonthlyKm}
           min={100}
           max={5000}
           step={50}
-          unit="km"
+          unit={texts.monthlyKmUnit}
         />
 
-        <CalculatorCta label="Calculate Fuel Cost" tone="fuel" />
+        <CalculatorCta label={texts.ctaLabel} tone="fuel" disclaimer={texts.disclaimer} />
       </form>
 
       <div className="mt-6 rounded-xl border border-hub-fuel/15 bg-hub-fuel/5 p-5">
@@ -82,7 +122,7 @@ export default function VehicleFuelCostCalculator() {
           <div className="grid gap-4">
             <div>
               <p className="text-sm text-ash/60">
-                Cost per km
+                {texts.costPerKmLabel}
               </p>
               <p className="font-display text-4xl font-bold tabular-nums text-hub-fuel">
                 {formatINR(result.costPerKm)}
@@ -90,15 +130,15 @@ export default function VehicleFuelCostCalculator() {
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <dt className="text-ash/60">
-                Monthly fuel cost
+                {texts.monthlyCostLabel}
               </dt>
               <dd className="text-right tabular-nums">{formatINR(result.monthlyCost)}</dd>
               <dt className="text-ash/60">
-                Annual fuel cost
+                {texts.annualCostLabel}
               </dt>
               <dd className="text-right tabular-nums">{formatINR(result.annualCost)}</dd>
               <dt className="text-ash/60">
-                Fuel used/month
+                {texts.fuelUsedLabel}
               </dt>
               <dd className="text-right tabular-nums">{result.monthlyFuelLitres} L</dd>
             </dl>

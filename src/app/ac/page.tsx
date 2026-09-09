@@ -5,6 +5,7 @@ import SplitHero from '@/components/SplitHero'
 import { calculateAcCost } from '@/lib/calc/ac'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
+import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -19,8 +20,11 @@ export const metadata: Metadata = {
   title: 'AC Calculators — Running Cost, Tonnage & Star Rating (India)',
   description:
     'Free air-conditioner tools for India: running-cost calculator using your DISCOM tariff, room-size tonnage calculator, and a 3-star vs 5-star savings comparison.',
-  alternates: { canonical: `${SITE}/ac` },
-  openGraph: { url: `${SITE}/ac`, type: 'website' },
+  alternates: {
+    canonical: `${SITE}/ac`,
+    languages: getAlternateLanguages('/ac'),
+  },
+  openGraph: { url: `${SITE}/ac`, type: 'website', locale: 'en_IN' },
 }
 
 const cards = [

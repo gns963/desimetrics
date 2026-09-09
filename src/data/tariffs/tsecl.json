@@ -27,6 +27,40 @@
         "basis": "perLoad",
         "perKW": 16
       }
+    },
+    {
+      "connectionType": "commercial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": 150, "ratePerUnit": 7.37 },
+        { "minUnits": 151, "maxUnits": null, "ratePerUnit": 7.99 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 18
+      },
+      "sourceNote": "SOURCED (primary energy rates + secondary fixed-charge update) — Energy charges from TSECL's Tariff Order FY2024-25, Annexure 2, category 'Small Commercial / Pan shop': Rs 7.37/unit up to 150 units, Rs 7.99/unit above (https://tsecl.in/sites/default/files/2024-09/Tariff_Schedule_for_FY_2024-25.pdf). TERC/TSECL confirmed energy charges are UNCHANGED for FY2025-26 (per tripurainfo.com: 'TSECL Keeps Power Tariff Unchanged for FY 2025-26'). Fixed charge updated to the new uniform Rs 18/kW/month for commercial consumers introduced in the tariff restructuring effective November 1, 2025 (per indiatodayne.in), superseding the old per-connection fees (Rs 35/55/75). Semi-Commercial and Three-Phase commercial tiers (Rs 8.15-8.46/kWh) not modelled."
+    },
+    {
+      "connectionType": "industrial",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.83 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 65
+      },
+      "sourceNote": "SOURCED (secondary/primary-adjacent) — TSECL Tariff Order FY2024-25, Annexure 2, Industrial category 'Above 5 to 20 HP: All units' tier (used as representative small/medium LT industrial connection): Rs 7.83/unit, fixed Rs 65/kW/month. TERC/TSECL confirmed energy charges unchanged for FY2025-26 (tripurainfo.com); the November 2025 fixed-charge restructuring reported by indiatodayne.in was specific to domestic and commercial categories only, so the FY2024-25 industrial fixed charge is retained here. Other industrial HP tiers not modelled: Up to 5HP (Rs 6.54-7.01/unit, fixed Rs 40-45/kW), Above 20-100HP (Rs 7.98/unit, fixed Rs 85/kW), Above 100HP (Rs 7.99/unit, fixed Rs 100/kW). Source: https://tsecl.in/sites/default/files/2024-09/Tariff_Schedule_for_FY_2024-25.pdf."
+    },
+    {
+      "connectionType": "agriculture",
+      "slabs": [
+        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.72 }
+      ],
+      "fixedCharge": {
+        "basis": "perLoad",
+        "perKW": 45
+      },
+      "sourceNote": "SOURCED (secondary/primary-adjacent) — TSECL Tariff Order FY2024-25, Annexure 2, Irrigation category 'Up to 5 H.P.: All units' tier: Rs 5.72/unit (before Government subsidy), fixed Rs 45/kW/month. TERC/TSECL confirmed energy charges unchanged for FY2025-26 (tripurainfo.com). This is the approved pre-subsidy tariff; a Government of Tripura subsidy of Rs 1.40/unit reduces the actual payable rate to Rs 4.32/unit in the source order, but that subsidy is not modelled here (consistent with how other categories in this dataset use the approved gross tariff rate). 'Above 5 H.P.' tier (Rs 6.88/unit, fixed Rs 80/kW) not modelled. Source: https://tsecl.in/sites/default/files/2024-09/Tariff_Schedule_for_FY_2024-25.pdf."
     }
   ],
   "fuelCostAdjustment": 0.2,
