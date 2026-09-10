@@ -154,6 +154,7 @@ export default function DiscomCalculatorPage({
     { id: 'budget-tool', label: t.toc.budgetTool },
     { id: 'how-to-use', label: t.toc.howToUse },
     { id: 'billing-cycle', label: t.toc.billingCycle },
+    { id: 'slabs-explainer', label: t.toc.slabsExplainer },
     { id: 'tariff-table', label: t.toc.tariffTable(tariff.state) },
     { id: 'worked-examples', label: t.toc.workedExamples },
     ...(locale === 'en'
@@ -170,10 +171,12 @@ export default function DiscomCalculatorPage({
       ? [{ id: 'comparison', label: t.toc.comparison(tariff.discomCode) }]
       : []),
     { id: 'tips', label: t.toc.tips },
+    { id: 'energy-tips', label: t.toc.energyTips },
     { id: 'net-metering', label: t.toc.netMetering },
     ...(content.aboutDiscom ? [{ id: 'about', label: t.toc.about(tariff.discomCode) }] : []),
     ...(content.coverageQA ? [{ id: 'coverage', label: t.toc.coverage }] : []),
     ...(content.howToPay ? [{ id: 'how-to-pay', label: t.toc.howToPay }] : []),
+    { id: 'why-use', label: t.toc.whyUse },
     { id: 'faq', label: t.toc.faq },
     { id: 'related', label: t.toc.related },
   ]
@@ -524,6 +527,32 @@ export default function DiscomCalculatorPage({
             <div className="mt-4">
               <ThresholdCallout {...content.thresholdCallout} />
             </div>
+          )}
+        </section>
+
+        {/* What are slabs — generic explainer */}
+        <section aria-labelledby="slabs-explainer" className="mb-10 scroll-mt-20">
+          <h2
+            id="slabs-explainer"
+            className="mb-4 font-display text-2xl font-bold text-ink-navy"
+          >
+            {t.slabsExplainer.heading}
+          </h2>
+          <p className="text-ash/80">{t.slabsExplainer.intro}</p>
+          <ul className="mt-3 list-disc space-y-1.5 pl-5 text-ash/80">
+            {t.slabsExplainer.bullets.map((b, i) => (
+              <li key={i}>{b}</li>
+            ))}
+          </ul>
+          {locale === 'en' && (
+            <p className="mt-3 text-sm">
+              <Link
+                href="/blog/how-telescopic-electricity-slabs-work"
+                className="text-brass underline"
+              >
+                {t.slabsExplainer.readMore}
+              </Link>
+            </p>
           )}
         </section>
 
@@ -917,6 +946,27 @@ export default function DiscomCalculatorPage({
           </ul>
         </section>
 
+        {/* Energy saving tips — general consumption advice */}
+        <section aria-labelledby="energy-tips" className="mb-10 scroll-mt-20">
+          <h2
+            id="energy-tips"
+            className="mb-4 font-display text-2xl font-bold text-ink-navy"
+          >
+            {t.energyTips.heading(tariff.state)}
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {t.energyTips.items.map((item, i) => (
+              <div
+                key={i}
+                className="rounded-xl border border-hairline bg-mist/50 p-4"
+              >
+                <p className="font-semibold text-ink-navy">{item.title}</p>
+                <p className="mt-1 text-sm text-ash/70">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Net metering explainer */}
         <section aria-labelledby="net-metering" className="mb-10 scroll-mt-20">
           <h2
@@ -1022,6 +1072,26 @@ export default function DiscomCalculatorPage({
             </div>
           </section>
         )}
+
+        {/* Why use this calculator */}
+        <section aria-labelledby="why-use" className="mb-10 scroll-mt-20">
+          <h2
+            id="why-use"
+            className="mb-4 font-display text-2xl font-bold text-ink-navy"
+          >
+            {t.whyUse.heading}
+          </h2>
+          <ul className="space-y-2">
+            {t.whyUse.items.map((item, i) => (
+              <li key={i} className="flex gap-2 text-ash/80">
+                <span className="text-spark-teal" aria-hidden>
+                  ✓
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         {/* FAQ */}
         <section aria-labelledby="faq" className="mb-10 scroll-mt-20">
