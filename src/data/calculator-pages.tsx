@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Link from 'next/link'
 
 /**
  * Per-DISCOM page content. The page template (DiscomCalculatorPage) is shared;
@@ -235,19 +236,24 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     ],
     aboutDiscom: [
       <>
-        Tamil Nadu Electricity Board (TNEB) was formed on 1 July 1957 as a
-        single, vertically integrated utility. On 1 November 2010, under the
-        Electricity Act 2003, it was restructured into three entities: TNEB
-        Ltd (holding company), Tamil Nadu Generation and Distribution
-        Corporation Ltd (TANGEDCO) for generation and distribution, and Tamil
-        Nadu Transmission Corporation Ltd (TANTRANSCO) for transmission.
+        <strong>1957</strong> — Tamil Nadu Electricity Board (TNEB) formed as
+        a single, vertically integrated utility.
       </>,
       <>
-        On 27 June 2024, TANGEDCO&apos;s distribution business was renamed
-        Tamil Nadu Power Distribution Corporation Ltd (TNPDCL). Both
-        &quot;TANGEDCO&quot; and the older &quot;TNEB&quot; name remain in
-        everyday use — on bills, signage and customer service — alongside the
-        newer TNPDCL name.
+        <strong>2010</strong> — Restructured under the Electricity Act 2003
+        into three entities: TNEB Ltd (holding company), Tamil Nadu
+        Generation and Distribution Corporation Ltd (TANGEDCO) for
+        generation and distribution, and Tamil Nadu Transmission Corporation
+        Ltd (TANTRANSCO) for transmission.
+      </>,
+      <>
+        <strong>2024</strong> — TANGEDCO&apos;s distribution business renamed
+        Tamil Nadu Power Distribution Corporation Ltd (TNPDCL).
+      </>,
+      <>
+        <strong>Today</strong> — &quot;TNEB&quot;, &quot;TANGEDCO&quot; and
+        &quot;TNPDCL&quot; are all still used interchangeably on bills,
+        signage and customer service.
       </>,
     ],
     coverageQA: {
@@ -429,7 +435,8 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
           <>
             27 जून 2024 को, TANGEDCO के डिस्ट्रिब्यूशन बिज़नेस का नाम
             बदलकर तमिलनाडु पावर डिस्ट्रिब्यूशन कॉर्पोरेशन लिमिटेड
-            (TNPDCL) कर दिया गया। "TANGEDCO" और पुराना "TNEB" नाम दोनों
+            (TNPDCL) कर दिया गया। &quot;TANGEDCO&quot; और पुराना
+            &quot;TNEB&quot; नाम दोनों
             — बिलों, साइनेज और कस्टमर सर्विस पर — नए TNPDCL नाम के
             साथ-साथ आम इस्तेमाल में बने हुए हैं।
           </>,
@@ -620,7 +627,8 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
           <>
             27 ஜூன் 2024 அன்று, TANGEDCO-வின் விநியோக வணிகம்
             தமிழ்நாடு மின் விநியோக கழகம் லிமிடெட் (TNPDCL) என
-            மறுபெயரிடப்பட்டது. "TANGEDCO" மற்றும் பழைய "TNEB" பெயர்
+            மறுபெயரிடப்பட்டது. &quot;TANGEDCO&quot; மற்றும் பழைய
+            &quot;TNEB&quot; பெயர்
             இரண்டும் — பில்கள், அடையாள பலகைகள் மற்றும் வாடிக்கையாளர்
             சேவையில் — புதிய TNPDCL பெயருடன் அன்றாட பயன்பாட்டில்
             உள்ளன.
@@ -678,7 +686,11 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     intro: (
       <>
         Estimate your MSEDCL (Mahavitaran) electricity bill for Maharashtra.
-        Unlike Tamil Nadu, MSEDCL bills domestic consumers{' '}
+        Unlike{' '}
+        <Link href="/electricity/tneb-bill-calculator" className="underline">
+          Tamil Nadu
+        </Link>
+        , MSEDCL bills domestic consumers{' '}
         <strong>every month</strong>, and Maharashtra layers one of India&apos;s
         highest <strong>electricity duties (16%)</strong> on top of the energy,
         wheeling and fixed charges.
@@ -780,8 +792,15 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
         title: 'Monthly, not bi-monthly',
         body: (
           <>
-            If you&apos;re used to a bi-monthly cycle (as in Tamil Nadu or
-            Kerala), note MSEDCL reads meters and bills every month — the
+            If you&apos;re used to a bi-monthly cycle (as in{' '}
+            <Link href="/electricity/tneb-bill-calculator" className="underline">
+              Tamil Nadu
+            </Link>{' '}
+            or{' '}
+            <Link href="/electricity/kseb-bill-calculator" className="underline">
+              Kerala
+            </Link>
+            ), note MSEDCL reads meters and bills every month — the
             units you enter should be one month&apos;s consumption, not two.
           </>
         ),
@@ -800,19 +819,18 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     ],
     aboutDiscom: [
       <>
-        The Maharashtra State Electricity Board (MSEB) was unbundled on 6 June
-        2005, under the Electricity Act 2003, into four separate companies:
-        MSEB Holding Company, Maharashtra State Power Generation Co.
-        (Mahagenco), Maharashtra State Electricity Transmission Co.
-        (Mahatransco), and Maharashtra State Electricity Distribution Co. Ltd
-        (MSEDCL) — commonly called Mahavitaran or Mahadiscom — which handles
-        billing and distribution.
+        <strong>2005</strong> — Maharashtra State Electricity Board (MSEB)
+        unbundled under the Electricity Act 2003 into four companies: MSEB
+        Holding Company, Mahagenco (generation), Mahatransco (transmission),
+        and MSEDCL (distribution) — commonly called Mahavitaran or
+        Mahadiscom.
       </>,
       <>
-        MSEDCL distributes power across almost all of Maharashtra, but not
-        most of Mumbai city itself: BEST, Tata Power and Adani Electricity
-        Mumbai hold the distribution licences there, while MSEDCL covers some
-        Mumbai suburbs (such as Mulund and Bhandup) and the rest of the state.
+        <strong>Coverage</strong> — MSEDCL distributes power across almost
+        all of Maharashtra, but not most of Mumbai city itself: BEST, Tata
+        Power and Adani Electricity Mumbai hold the licences there, while
+        MSEDCL covers some Mumbai suburbs (Mulund, Bhandup) and the rest of
+        the state.
       </>,
     ],
     coverageQA: {
@@ -1260,7 +1278,11 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
         title: 'Fixed charge is per kilowatt of load',
         body: (
           <>
-            Unlike Tamil Nadu&apos;s flat phase-based charge, UPPCL levies its
+            Unlike{' '}
+            <Link href="/electricity/tneb-bill-calculator" className="underline">
+              Tamil Nadu
+            </Link>
+            &apos;s flat phase-based charge, UPPCL levies its
             fixed charge at <strong>₹110 per kW of sanctioned load</strong> per
             month — so a 3 kW connection pays ₹330 fixed before a single unit is
             billed. A ₹20 meter rent and a ₹0.15/unit regulatory true-up also
@@ -1344,18 +1366,19 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     ],
     aboutDiscom: [
       <>
-        Uttar Pradesh Power Corporation Ltd (UPPCL) was incorporated on 30
-        November 1999 and commenced business on 15 January 2000, as part of
-        the unbundling of the Uttar Pradesh State Electricity Board (UPSEB)
-        into separate transmission/distribution and generation entities.
+        <strong>1999–2000</strong> — Uttar Pradesh Power Corporation Ltd
+        (UPPCL) incorporated 30 November 1999, began operating 15 January
+        2000, as the Uttar Pradesh State Electricity Board (UPSEB) was
+        unbundled into separate transmission/distribution and generation
+        entities.
       </>,
       <>
-        UPPCL bills consumers through five regional subsidiaries: Purvanchal
-        Vidyut Vitran Nigam (PuVVNL), Madhyanchal Vidyut Vitran Nigam
-        (MVVNL), Paschimanchal Vidyut Vitran Nigam (PVVNL), Dakshinanchal
-        Vidyut Vitran Nigam (DVVNL), and Kanpur Electricity Supply Company
-        (KESCO) for the Kanpur Municipal Corporation area specifically. All
-        follow the same UPERC-approved tariff.
+        <strong>Subsidiaries</strong> — UPPCL bills consumers through five
+        regional subsidiaries: Purvanchal Vidyut Vitran Nigam (PuVVNL),
+        Madhyanchal Vidyut Vitran Nigam (MVVNL), Paschimanchal Vidyut Vitran
+        Nigam (PVVNL), Dakshinanchal Vidyut Vitran Nigam (DVVNL), and Kanpur
+        Electricity Supply Company (KESCO) for the Kanpur Municipal
+        Corporation area — all on the same UPERC-approved tariff.
       </>,
     ],
     coverageQA: {
@@ -1514,17 +1537,17 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     ],
     aboutDiscom: [
       <>
-        BESCOM (Bangalore Electricity Supply Company Ltd) was formed on 1 June
-        2002, when the Karnataka Power Transmission Corporation Ltd
-        (KPTCL)&apos;s distribution business was split into five regional
-        companies — BESCOM, MESCOM, HESCOM, GESCOM and CESC — while KPTCL
-        retained transmission.
+        <strong>2002</strong> — BESCOM (Bangalore Electricity Supply Company
+        Ltd) formed 1 June 2002, when the Karnataka Power Transmission
+        Corporation Ltd (KPTCL)&apos;s distribution business split into five
+        regional companies — BESCOM, MESCOM, HESCOM, GESCOM and CESC — while
+        KPTCL retained transmission.
       </>,
       <>
-        BESCOM&apos;s territory covers Bangalore Urban and Bangalore Rural
-        districts plus six neighbouring districts (Chikkaballapura, Kolar,
-        Davanagere, Tumkur, Chitradurga and Ramanagara) — a wider area than
-        Bangalore city alone.
+        <strong>Coverage</strong> — BESCOM&apos;s territory covers Bangalore
+        Urban and Bangalore Rural districts plus six neighbouring districts
+        (Chikkaballapura, Kolar, Davanagere, Tumkur, Chitradurga,
+        Ramanagara) — wider than Bangalore city alone.
       </>,
     ],
     coverageQA: {
@@ -1983,25 +2006,35 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
           <>
             KSEB&apos;s fixed charge is ₹80 for single-phase and ₹220 for
             three-phase connections per bi-monthly cycle — a similar
-            structure to Tamil Nadu&apos;s, but at different amounts.
+            structure to{' '}
+            <Link href="/electricity/tneb-bill-calculator" className="underline">
+              Tamil Nadu
+            </Link>
+            &apos;s, but at different amounts.
           </>
         ),
       },
     ],
     aboutDiscom: [
       <>
-        The Kerala State Electricity Board (KSEB) began functioning on 31
-        March 1957. Under the Electricity Act 2003, it was converted into a
-        company — Kerala State Electricity Board Limited (KSEBL) —
-        incorporated on 14 January 2011 and operating independently from 1
-        November 2013. &ldquo;KSEB&rdquo; remains the name most commonly used
-        for bills and customer service.
+        <strong>1957</strong> — Kerala State Electricity Board (KSEB) began
+        functioning 31 March 1957.
       </>,
       <>
-        KSEB distributes power across nearly all of Kerala, with a few
-        exceptions: the Thrissur Municipal Corporation area, the Munnar
-        (Kannan Devan Hills) area, and several small industrial-park zones
-        are served by separate, smaller licensees.
+        <strong>2011–2013</strong> — converted under the Electricity Act
+        2003 into a company, Kerala State Electricity Board Limited (KSEBL),
+        incorporated 14 January 2011, operating independently from 1
+        November 2013.
+      </>,
+      <>
+        <strong>Today</strong> — &quot;KSEB&quot; remains the name most
+        commonly used for bills and customer service.
+      </>,
+      <>
+        <strong>Coverage</strong> — nearly all of Kerala, except the
+        Thrissur Municipal Corporation area, the Munnar (Kannan Devan Hills)
+        area, and several small industrial-park zones, which have their own
+        separate licensees.
       </>,
     ],
     coverageQA: {
@@ -2462,17 +2495,20 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     ],
     aboutDiscom: [
       <>
-        The West Bengal State Electricity Board (WBSEB) was formed in 1955.
-        Under the state&apos;s 2007 Power Reform Scheme, it was unbundled on 1
-        April 2007 into West Bengal State Electricity Distribution Company
-        Ltd (WBSEDCL) for distribution and West Bengal State Electricity
-        Transmission Company Ltd (WBSETCL) for transmission.
+        <strong>1955</strong> — West Bengal State Electricity Board (WBSEB)
+        formed.
       </>,
       <>
-        WBSEDCL distributes power across most of West Bengal, but not
-        Kolkata: the city, Howrah and parts of North/South 24 Parganas and
-        Hooghly are served by CESC Limited, a long-standing private
-        distribution licensee with its own separate tariff.
+        <strong>2007</strong> — Unbundled 1 April 2007 under the state&apos;s
+        Power Reform Scheme into West Bengal State Electricity Distribution
+        Company Ltd (WBSEDCL) for distribution and West Bengal State
+        Electricity Transmission Company Ltd (WBSETCL) for transmission.
+      </>,
+      <>
+        <strong>Coverage</strong> — WBSEDCL distributes power across most of
+        West Bengal, but not Kolkata: the city, Howrah and parts of
+        North/South 24 Parganas and Hooghly are served by CESC Limited, a
+        separate private licensee with its own tariff.
       </>,
     ],
     coverageQA: {
@@ -2795,8 +2831,20 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "FPPCA surcharge isn't included in this estimate", body: "MGVCL adds a monthly Fuel & Power Purchase Cost Adjustment (FPPCA) that varies and is not modelled here, so your real bill will differ by that amount." },
     ],
     aboutDiscom: [
-      "The Gujarat Electricity Board (GEB) was reorganised into a generation company (GSECL), a transmission company (GETCO), and four distribution companies under a holding company, Gujarat Urja Vikas Nigam Ltd (GUVNL). Madhya Gujarat Vij Company Ltd (MGVCL) was incorporated on 15 September 2003 and became operational on 1 April 2005.",
-      "MGVCL serves Vadodara and 12 districts of central Gujarat. The other three distribution companies — UGVCL (north Gujarat, including Ahmedabad), PGVCL (Saurashtra) and DGVCL (south Gujarat, including Surat) — cover the rest of the state.",
+      <>
+        <strong>2003–2005</strong> — Gujarat Electricity Board (GEB)
+        reorganised into a generation company (GSECL), a transmission
+        company (GETCO), and four distribution companies under a holding
+        company, Gujarat Urja Vikas Nigam Ltd (GUVNL). Madhya Gujarat Vij
+        Company Ltd (MGVCL) incorporated 15 September 2003, operational
+        from 1 April 2005.
+      </>,
+      <>
+        <strong>Coverage</strong> — MGVCL serves Vadodara and 12 districts
+        of central Gujarat. The other three distribution companies — UGVCL
+        (north Gujarat, including Ahmedabad), PGVCL (Saurashtra) and DGVCL
+        (south Gujarat, including Surat) — cover the rest of the state.
+      </>,
     ],
     coverageQA: {
       q: "Does MGVCL supply electricity to Ahmedabad?",
@@ -2957,8 +3005,21 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Electricity duty and urban cess aren't in this estimate", body: "Rajasthan's roughly 40 paise/unit electricity duty and an urban cess are not modelled here, so your real JVVNL bill will run a little higher than this calculator shows." },
     ],
     aboutDiscom: [
-      "The Rajasthan State Electricity Board (RSEB) was unbundled on 19 June 2000 into separate generation, transmission and distribution entities. Distribution was further split by region into three companies: Jaipur Vidyut Vitran Nigam Ltd (JVVNL) for the east, Ajmer Vidyut Vitran Nigam Ltd (AVVNL) for the central/south, and Jodhpur Vidyut Vitran Nigam Ltd (JdVVNL) for the west.",
-      "JVVNL serves Jaipur and around a dozen eastern districts — including Dausa, Alwar, Bharatpur, Kota, Bundi, Baran, Jhalawar, Sawai Madhopur and Karauli. All three Rajasthan discoms bill on the same RERC-approved tariff.",
+      <>
+        <strong>19 June 2000</strong> — Rajasthan State Electricity Board
+        (RSEB) unbundled into separate generation, transmission and
+        distribution entities. Distribution was further split by region
+        into three companies: Jaipur Vidyut Vitran Nigam Ltd (JVVNL) for
+        the east, Ajmer Vidyut Vitran Nigam Ltd (AVVNL) for the
+        central/south, and Jodhpur Vidyut Vitran Nigam Ltd (JdVVNL) for
+        the west.
+      </>,
+      <>
+        <strong>Coverage</strong> — JVVNL serves Jaipur and around a dozen
+        eastern districts, including Dausa, Alwar, Bharatpur, Kota, Bundi,
+        Baran, Jhalawar, Sawai Madhopur and Karauli. All three Rajasthan
+        discoms bill on the same RERC-approved tariff.
+      </>,
     ],
     coverageQA: {
       q: "Does JVVNL supply electricity to all of Rajasthan?",
@@ -3005,12 +3066,31 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Billing is bi-monthly in practice", body: "This calculator uses a representative monthly schedule, but many PSPCL domestic bills are actually issued every two months — check your bill's actual period before comparing to this estimate." },
     ],
     aboutDiscom: [
-      "The Punjab State Electricity Board (PSEB) was unbundled on 16 April 2010 into Punjab State Power Corporation Ltd (PSPCL), which took over generation and distribution, and Punjab State Transmission Corporation Ltd (PSTCL), which took over transmission and state load dispatch.",
-      "Unlike several neighbouring states, Punjab was not further split by region — PSPCL is the sole distribution company for the entire state.",
+      <>
+        <strong>16 April 2010</strong> — Punjab State Electricity Board (PSEB)
+        unbundled into Punjab State Power Corporation Ltd (PSPCL), which took
+        over generation and distribution, and Punjab State Transmission
+        Corporation Ltd (PSTCL), which took over transmission and state load
+        dispatch.
+      </>,
+      <>
+        <strong>Today</strong> — Unlike several neighbouring states, Punjab
+        was not further split by region; PSPCL is the sole distribution
+        company for the entire state.
+      </>,
     ],
     coverageQA: {
       q: "Does PSPCL supply electricity to all of Punjab?",
-      a: "Yes. PSPCL is Punjab's single, statewide distribution company — there is no regional split like Rajasthan's three discoms or Uttar Pradesh's five.",
+      a: (
+        <>
+          Yes. PSPCL is Punjab&apos;s single, statewide distribution company —
+          there is no regional split like{' '}
+          <Link href="/electricity/rajasthan-electricity-bill-calculator" className="underline">
+            Rajasthan&apos;s
+          </Link>{' '}
+          three discoms or Uttar Pradesh&apos;s five.
+        </>
+      ),
     },
     howToPay: {
       portalUrl: "https://billpayment.pspcl.in/",
@@ -3061,8 +3141,20 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "The free-unit benefit needs opting in", body: "The up-to-200-free-units scheme is not automatic — eligible consumers must be opted in on their account. Check your latest bill to confirm the subsidy is actually being applied." },
     ],
     aboutDiscom: [
-      "The Delhi Vidyut Board (DVB), a state-owned integrated utility, was unbundled in 2002 after years of heavy technical and commercial losses. Its distribution business was privatised into three companies: BSES Rajdhani Power Ltd (BRPL), BSES Yamuna Power Ltd (BYPL), and Tata Power Delhi Distribution Ltd (TPDDL, originally NDPL).",
-      "BRPL serves South and West Delhi — about 30 lakh consumers across areas including Dwarka, Janakpuri, Saket, Vasant Kunj, R.K. Puram and Najafgarh — while BYPL and TPDDL cover the rest of the capital.",
+      <>
+        <strong>2002</strong> — The state-owned Delhi Vidyut Board (DVB), an
+        integrated utility, unbundled after years of heavy technical and
+        commercial losses. Its distribution business was privatised into
+        three companies: BSES Rajdhani Power Ltd (BRPL), BSES Yamuna Power
+        Ltd (BYPL), and Tata Power Delhi Distribution Ltd (TPDDL, originally
+        NDPL).
+      </>,
+      <>
+        <strong>Today</strong> — BRPL serves South and West Delhi — about 30
+        lakh consumers across areas including Dwarka, Janakpuri, Saket,
+        Vasant Kunj, R.K. Puram and Najafgarh — while BYPL and TPDDL cover the
+        rest of the capital.
+      </>,
     ],
     coverageQA: {
       q: "Does BRPL supply electricity to all of Delhi?",
@@ -3117,8 +3209,20 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "6% electricity duty applies on top of slabs", body: "Telangana's 6% electricity duty is charged on the energy charge in addition to the slab rates and fixed charge, and is often overlooked when estimating a bill by hand." },
     ],
     aboutDiscom: [
-      "When the state of Andhra Pradesh was bifurcated on 2 June 2014 under the Andhra Pradesh Reorganisation Act, 2014, the distribution business serving the newly created Telangana was restructured into two companies: Telangana State Southern Power Distribution Company Ltd (TGSPDCL, also referred to as TSSPDCL) and Telangana State Northern Power Distribution Company Ltd (TGNPDCL).",
-      "TGSPDCL covers Hyderabad and 14 other southern districts (including Rangareddy, Medchal, Nalgonda and Mahabubnagar), serving around 11.1 million consumers. TGNPDCL covers the 18 northern districts from Hanumakonda.",
+      <>
+        <strong>2 June 2014</strong> — When Andhra Pradesh was bifurcated
+        under the Andhra Pradesh Reorganisation Act, 2014, the distribution
+        business serving the newly created Telangana was restructured into
+        two companies: Telangana State Southern Power Distribution Company
+        Ltd (TGSPDCL, also referred to as TSSPDCL) and Telangana State
+        Northern Power Distribution Company Ltd (TGNPDCL).
+      </>,
+      <>
+        <strong>Today</strong> — TGSPDCL covers Hyderabad and 14 other
+        southern districts (including Rangareddy, Medchal, Nalgonda and
+        Mahabubnagar), serving around 11.1 million consumers. TGNPDCL covers
+        the 18 northern districts from Hanumakonda.
+      </>,
     ],
     coverageQA: {
       q: "Does TGSPDCL (TSSPDCL) supply electricity to Hyderabad?",
@@ -3267,8 +3371,22 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "The ₹0.06/unit electricity duty isn't in this estimate", body: "It's a small flat addition, but consistently omitted when people estimate their bill by hand." },
     ],
     aboutDiscom: [
-      "Southern Power Distribution Company of AP Ltd (APSPDCL) was incorporated on 1 April 2000 to distribute electricity in Krishna, Guntur, Prakasam, Nellore, Chittoor and Kadapa districts, headquartered at Tirupati.",
-      "When Andhra Pradesh was bifurcated on 2 June 2014 to create Telangana, Anantapur and Kurnool districts were added to APSPDCL's territory. Coastal-north Andhra Pradesh, including Visakhapatnam, is served by a separate company, APEPDCL (Eastern Power Distribution Company).",
+      <>
+        <strong>1 April 2000</strong> — Southern Power Distribution Company
+        of AP Ltd (APSPDCL) incorporated to distribute electricity in
+        Krishna, Guntur, Prakasam, Nellore, Chittoor and Kadapa districts,
+        headquartered at Tirupati.
+      </>,
+      <>
+        <strong>2 June 2014</strong> — When Andhra Pradesh was bifurcated to
+        create Telangana, Anantapur and Kurnool districts were added to
+        APSPDCL&apos;s territory.
+      </>,
+      <>
+        <strong>Today</strong> — Coastal-north Andhra Pradesh, including
+        Visakhapatnam, is served by a separate company, APEPDCL (Eastern
+        Power Distribution Company).
+      </>,
     ],
     coverageQA: {
       q: "Does APSPDCL supply electricity to Visakhapatnam?",
@@ -3417,8 +3535,20 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "The VCA surcharge moves and isn't included", body: "MPCZ's ₹0.30/unit variable cost adjustment can change, and isn't reflected in this estimate, so your real bill may differ slightly." },
     ],
     aboutDiscom: [
-      "The Madhya Pradesh State Electricity Board (MPSEB) was unbundled in July 2002 under the state's power sector reform, with MPSEB continuing as a holding company over three regional distribution companies — MP Madhya Kshetra Vidyut Vitaran Co. (MPCZ, central), MP Paschim Kshetra Vidyut Vitaran Co. (MPWZ, west) and MP Poorv Kshetra Vidyut Vitaran Co. (MPEZ, east) — plus separate generation and transmission companies.",
-      "MPCZ serves Bhopal, Gwalior and the Bhopal, Hoshangabad, Gwalior and Chambal commissionaries. Indore falls under MPWZ instead.",
+      <>
+        <strong>July 2002</strong> — The Madhya Pradesh State Electricity
+        Board (MPSEB) unbundled under the state&apos;s power sector reform,
+        continuing as a holding company over three regional distribution
+        companies — MP Madhya Kshetra Vidyut Vitaran Co. (MPCZ, central), MP
+        Paschim Kshetra Vidyut Vitaran Co. (MPWZ, west) and MP Poorv Kshetra
+        Vidyut Vitaran Co. (MPEZ, east) — plus separate generation and
+        transmission companies.
+      </>,
+      <>
+        <strong>Today</strong> — MPCZ serves Bhopal, Gwalior and the Bhopal,
+        Hoshangabad, Gwalior and Chambal commissionaries. Indore falls under
+        MPWZ instead.
+      </>,
     ],
     coverageQA: {
       q: "Does MPCZ supply electricity to Indore?",
@@ -3465,8 +3595,21 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "FPPCA surcharge and duty aren't in this estimate", body: "Haryana's fuel and power purchase cost adjustment and electricity duty are not modelled, so your real UHBVN bill will run a little higher than this calculator shows." },
     ],
     aboutDiscom: [
-      "The Haryana State Electricity Board (HSEB) was unbundled on 14 August 1998, under the Haryana Electricity Reforms Act. Its distribution business was split geographically and transferred to two new companies — Uttar Haryana Bijli Vitran Nigam (UHBVN) and Dakshin Haryana Bijli Vitran Nigam (DHBVN) — both commencing operations on 1 July 1999.",
-      "UHBVN serves northern Haryana: Panchkula, Ambala, Yamunanagar, Kurukshetra, Kaithal, Karnal, Panipat, Sonepat, Rohtak and Jhajjar/Jind districts. DHBVN covers the south, including Gurgaon, Faridabad, Hisar, Fatehabad, Bhiwani, Sirsa, Mewat and Rewari.",
+      <>
+        <strong>14 August 1998</strong> — The Haryana State Electricity Board
+        (HSEB) unbundled under the Haryana Electricity Reforms Act. Its
+        distribution business was split geographically and transferred to
+        two new companies — Uttar Haryana Bijli Vitran Nigam (UHBVN) and
+        Dakshin Haryana Bijli Vitran Nigam (DHBVN).
+      </>,
+      <>
+        <strong>1 July 1999</strong> — UHBVN and DHBVN both commenced
+        operations. UHBVN serves northern Haryana: Panchkula, Ambala,
+        Yamunanagar, Kurukshetra, Kaithal, Karnal, Panipat, Sonepat, Rohtak
+        and Jhajjar/Jind districts. DHBVN covers the south, including
+        Gurgaon, Faridabad, Hisar, Fatehabad, Bhiwani, Sirsa, Mewat and
+        Rewari.
+      </>,
     ],
     coverageQA: {
       q: "Does UHBVN supply electricity to Gurgaon?",
@@ -3513,8 +3656,17 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "HPSEBL is statewide — no regional discom to check", body: "Unlike several neighbouring states, Himachal Pradesh has one electricity board for the whole state, so there's no risk of being on a different discom than expected." },
     ],
     aboutDiscom: [
-      "The Himachal Pradesh State Electricity Board was constituted on 1 September 1971, under the Electricity Supply Act, 1948, as a vertically integrated state utility.",
-      "It was reorganised into Himachal Pradesh State Electricity Board Ltd (HPSEBL), a limited company, with effect from 14 June 2010. HPSEBL remains the sole distribution licensee for the entire state, headquartered in Shimla.",
+      <>
+        <strong>1 September 1971</strong> — The Himachal Pradesh State
+        Electricity Board constituted under the Electricity Supply Act,
+        1948, as a vertically integrated state utility.
+      </>,
+      <>
+        <strong>14 June 2010</strong> — Reorganised into Himachal Pradesh
+        State Electricity Board Ltd (HPSEBL), a limited company. HPSEBL
+        remains the sole distribution licensee for the entire state,
+        headquartered in Shimla.
+      </>,
     ],
     coverageQA: {
       q: "Does HPSEBL supply electricity to all of Himachal Pradesh?",
@@ -3561,8 +3713,25 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Electricity duty isn't in this estimate", body: "A ₹0.15/unit electricity duty applies on top of the slab charges and is not modelled here, so your real UPCL bill will run slightly higher." },
     ],
     aboutDiscom: [
-      "When Uttarakhand was created from Uttar Pradesh under the UP Reorganisation Act, 2000 — following the 1999 trifurcation of the erstwhile UP State Electricity Board under the UP Electricity Reforms Act, 1999 — its share of distribution assets was transferred to a new company, Uttarakhand Power Corporation Ltd (UPCL), incorporated on 12 February 2001.",
-      "UPCL is the sole distribution licensee for the state, serving all 13 districts — Dehradun, Haridwar, Nainital, Udham Singh Nagar, Pauri, Tehri, Pithoragarh, Almora, Uttarkashi, Rudraprayag, Chamoli, Bageshwar and Champawat.",
+      <>
+        <strong>1999</strong> — UP State Electricity Board trifurcated under
+        the UP Electricity Reforms Act, 1999.
+      </>,
+      <>
+        <strong>2000</strong> — Uttarakhand created from Uttar Pradesh under
+        the UP Reorganisation Act, 2000.
+      </>,
+      <>
+        <strong>2001</strong> — Uttarakhand Power Corporation Ltd (UPCL)
+        incorporated on 12 February 2001, taking over the state&apos;s share
+        of distribution assets.
+      </>,
+      <>
+        <strong>Today</strong> — UPCL is the sole distribution licensee for
+        all 13 districts: Dehradun, Haridwar, Nainital, Udham Singh Nagar,
+        Pauri, Tehri, Pithoragarh, Almora, Uttarkashi, Rudraprayag, Chamoli,
+        Bageshwar and Champawat.
+      </>,
     ],
     coverageQA: {
       q: "Does UPCL supply electricity to Dehradun and Nainital?",
@@ -3609,8 +3778,19 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "GED is a government department, not a company", body: "Unlike most states, Goa's electricity supply is run directly by a government department rather than a corporatised discom — billing processes and portals may look different from states you're used to." },
     ],
     aboutDiscom: [
-      "The Goa Electricity Department (GED) was established in 1963 and remains a direct department of the Government of Goa — it was never unbundled or corporatised into a separate distribution company, unlike almost every other Indian state.",
-      "GED is the sole licensee for generation, transmission and distribution across the entire state, covering Panaji, Margao, Vasco and all other areas of Goa.",
+      <>
+        <strong>1963</strong> — Goa Electricity Department (GED) established.
+      </>,
+      <>
+        <strong>Today</strong> — Still a direct department of the Government
+        of Goa, never unbundled or corporatised, unlike almost every other
+        Indian state.
+      </>,
+      <>
+        <strong>Today</strong> — Sole licensee for generation, transmission
+        and distribution across the entire state, covering Panaji, Margao,
+        Vasco and every other area of Goa.
+      </>,
     ],
     coverageQA: {
       q: "Does GED supply electricity to all of Goa?",
@@ -3657,8 +3837,21 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Kutir Jyoti is a separate, lower category", body: "BPL households fall under the Kutir Jyoti scheme with different (lower) rates — this calculator uses the standard domestic (DS-I) tariff, not Kutir Jyoti." },
     ],
     aboutDiscom: [
-      "The Bihar State Electricity Board (BSEB) was unbundled on 1 November 2012, under Section 14 of the Electricity Act, 2003, into five successor companies including two regional distribution companies split by geography.",
-      "South Bihar Power Distribution Company Ltd (SBPDCL) serves 17 southern districts including Patna, Nalanda, Gaya and Bhagalpur, covering over 50 lakh consumers. North Bihar Power Distribution Company Ltd (NBPDCL) covers the northern districts on the same BSEB-successor tariff.",
+      <>
+        <strong>2012</strong> — Bihar State Electricity Board (BSEB)
+        unbundled on 1 November 2012, under Section 14 of the Electricity
+        Act 2003, into five successor companies.
+      </>,
+      <>
+        <strong>Today</strong> — South Bihar Power Distribution Company Ltd
+        (SBPDCL) serves 17 southern districts — including Patna, Nalanda,
+        Gaya and Bhagalpur — covering over 50 lakh consumers.
+      </>,
+      <>
+        <strong>Today</strong> — North Bihar Power Distribution Company Ltd
+        (NBPDCL) covers the northern districts on the same BSEB-successor
+        tariff.
+      </>,
     ],
     coverageQA: {
       q: "Does SBPDCL supply electricity to Patna?",
@@ -3705,8 +3898,27 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Electricity duty isn't in this estimate", body: "A ₹0.06/unit electricity duty applies on top of the slab charges and is not modelled here." },
     ],
     aboutDiscom: [
-      "TP Central Odisha Distribution Ltd (TPCODL) was incorporated on 6 April 2020 as a wholly owned subsidiary of the state-owned GRIDCO, taking over the former Central Electricity Supply Utility (CESU). Tata Power won a public-private partnership bid for all four Odisha discoms and acquired a 51% stake in TPCODL for ₹178.5 crore, with GRIDCO retaining the remaining 49%.",
-      "TPCODL holds the 25-year OERC distribution licence (effective 1 June 2020) for the Bhubaneswar (Circles I & II), Cuttack, Paradeep and Dhenkanal circles. The rest of Odisha is served by three sister Tata Power-managed companies: TPWODL (west), TPSODL (south) and TPNODL (north).",
+      <>
+        <strong>2020</strong> — TP Central Odisha Distribution Ltd (TPCODL)
+        incorporated on 6 April 2020 as a wholly owned subsidiary of
+        state-owned GRIDCO, taking over the former Central Electricity
+        Supply Utility (CESU).
+      </>,
+      <>
+        <strong>2020</strong> — Tata Power won a public-private partnership
+        bid for all four Odisha discoms, acquiring a 51% stake in TPCODL for
+        ₹178.5 crore; GRIDCO retained the remaining 49%.
+      </>,
+      <>
+        <strong>2020</strong> — TPCODL&apos;s 25-year OERC distribution
+        licence took effect 1 June 2020, covering Bhubaneswar (Circles I &amp; II),
+        Cuttack, Paradeep and Dhenkanal.
+      </>,
+      <>
+        <strong>Today</strong> — The rest of Odisha is served by three
+        sister Tata Power-managed companies: TPWODL (west), TPSODL (south)
+        and TPNODL (north).
+      </>,
     ],
     coverageQA: {
       q: "Does TPCODL supply electricity to Bhubaneswar?",
@@ -3753,8 +3965,21 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "APDCL is statewide — no regional discom to check", body: "Unlike Bihar, Odisha or Rajasthan, Assam has a single distribution company for the whole state, so there's no risk of being billed by a different entity." },
     ],
     aboutDiscom: [
-      "The Assam State Electricity Board (ASEB) was unbundled in December 2004, as part of state power sector reforms, into one generation company, one transmission company and three distribution companies. Assam Power Distribution Company Ltd (APDCL) was incorporated on 23 October 2009 to consolidate and take over ASEB's distribution business.",
-      "APDCL is the sole distribution licensee for the entire state, serving over 33 lakh consumers from Sadiya in the east to Dhubri in the west, including Guwahati.",
+      <>
+        <strong>2004</strong> — Assam State Electricity Board (ASEB)
+        unbundled in December 2004 into one generation, one transmission and
+        three distribution companies.
+      </>,
+      <>
+        <strong>2009</strong> — Assam Power Distribution Company Ltd (APDCL)
+        incorporated on 23 October 2009 to consolidate and take over
+        ASEB&apos;s distribution business statewide.
+      </>,
+      <>
+        <strong>Today</strong> — APDCL is the sole distribution licensee for
+        the entire state, serving over 33 lakh consumers from Sadiya in the
+        east to Dhubri in the west, including Guwahati.
+      </>,
     ],
     coverageQA: {
       q: "Does APDCL supply electricity to Guwahati?",
@@ -3801,8 +4026,25 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Rural rates are cheaper and not modelled here", body: "This calculator uses the urban (DS-II) rate of ₹6.85/unit. Rural domestic (DS-I) connections are billed at a lower ₹6.70/unit with a different fixed charge, which isn't reflected in this estimate." },
     ],
     aboutDiscom: [
-      "Jharkhand Bijli Vitran Nigam Ltd (JBVNL) was incorporated on 23 October 2013 and commenced operations on 6 January 2014, taking over the distribution business of the erstwhile Jharkhand State Electricity Board (JSEB) — itself formed when Jharkhand was carved out of Bihar in 2000.",
-      "JBVNL operates through seven electric supply areas — Ranchi, Dhanbad, Singhbhum, Hazaribagh, Giridih, Dumka and Medininagar — covering cities including Ranchi, Jamshedpur, Bokaro, Deoghar and Palamu.",
+      <>
+        <strong>2000</strong> — Jharkhand carved out of Bihar; Jharkhand
+        State Electricity Board (JSEB) formed.
+      </>,
+      <>
+        <strong>2013</strong> — Jharkhand Bijli Vitran Nigam Ltd (JBVNL)
+        incorporated on 23 October 2013, taking over JSEB&apos;s distribution
+        business.
+      </>,
+      <>
+        <strong>2014</strong> — JBVNL commenced operations on 6 January
+        2014.
+      </>,
+      <>
+        <strong>Today</strong> — Operates through seven electric supply
+        areas — Ranchi, Dhanbad, Singhbhum, Hazaribagh, Giridih, Dumka and
+        Medininagar — covering cities including Ranchi, Jamshedpur, Bokaro,
+        Deoghar and Palamu.
+      </>,
     ],
     coverageQA: {
       q: "Does JBVNL supply electricity to Ranchi and Jamshedpur?",
@@ -3849,8 +4091,26 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "8% electricity duty is easy to overlook", body: "Chhattisgarh's roughly 8% electricity duty applies on top of the slab charges and fixed charge, and is one of the higher duty rates among neighbouring states." },
     ],
     aboutDiscom: [
-      "When Chhattisgarh was carved out of Madhya Pradesh on 1 November 2000, under the MP Reorganisation Act, 2000, the erstwhile MP Electricity Board (MPEB) was split between the two new states. The Chhattisgarh State Electricity Board (CSEB) began operations on 1 December 2000.",
-      "Following the Electricity Act 2003, CSEB was restructured into five companies. Chhattisgarh State Power Distribution Co. Ltd (CSPDCL) was established on 1 January 2009 and is the sole distribution licensee for all 33 districts of the state, including Raipur, Bilaspur, Durg-Bhilai and Korba.",
+      <>
+        <strong>2000</strong> — Chhattisgarh carved out of Madhya Pradesh on
+        1 November 2000, under the MP Reorganisation Act, 2000; the
+        erstwhile MP Electricity Board (MPEB) split between the two new
+        states.
+      </>,
+      <>
+        <strong>2000</strong> — Chhattisgarh State Electricity Board (CSEB)
+        began operations on 1 December 2000.
+      </>,
+      <>
+        <strong>2009</strong> — Following the Electricity Act 2003, CSEB was
+        restructured into five companies; Chhattisgarh State Power
+        Distribution Co. Ltd (CSPDCL) established on 1 January 2009.
+      </>,
+      <>
+        <strong>Today</strong> — Sole distribution licensee for all 33
+        districts of the state, including Raipur, Bilaspur, Durg-Bhilai and
+        Korba.
+      </>,
     ],
     coverageQA: {
       q: "Does CSPDCL supply electricity to Raipur?",
@@ -3893,12 +4153,31 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     ],
     billTraps: [
       { title: "CED is now CPDL — a private operator, not a government office", body: "Since 1 February 2025, Chandigarh's power distribution has been run by Chandigarh Power Distribution Ltd (CPDL), part of the RPSG/CESC Group — not the UT government department. Older bookmarks or references to the government's sampark.chd.nic.in payment page may be out of date; use CPDL's official chandigarhpower.com portal." },
-      { title: "Fixed charge is a flat ₹30/month, not per-phase or per-kW", body: "Unlike Punjab or Haryana next door, which charge based on load or phase, Chandigarh charges a single flat ₹30/month fixed charge for every domestic connection." },
+      { title: "Fixed charge is a flat ₹30/month, not per-phase or per-kW", body: <>Unlike <Link href="/electricity/punjab-electricity-bill-calculator" className="underline">Punjab</Link> or <Link href="/electricity/haryana-electricity-bill-calculator" className="underline">Haryana</Link> next door, which charge based on load or phase, Chandigarh charges a single flat ₹30/month fixed charge for every domestic connection.</> },
       { title: "Privatisation didn't change the regulator or tariff-setting process", body: "CPDL still operates under JERC-approved tariffs, the same regulatory framework as before privatisation — rates aren't set unilaterally by the new private operator." },
     ],
     aboutDiscom: [
-      "Chandigarh's local electricity distribution was taken over by the Chandigarh Administration from the Punjab State Electricity Board on 2 May 1967, and run for decades by the Electricity Wing of the Engineering Department (CED) as a UT government department.",
-      "In May 2020, the Union Power Ministry decided to privatise power distribution across Union Territories, starting with Chandigarh. After Punjab & Haryana High Court (November 2024) and Supreme Court (December 2024) approvals, distribution transferred to Chandigarh Power Distribution Ltd (CPDL) — a subsidiary of Eminent Electricity Distribution Ltd (EEDL), part of the RP-Sanjiv Goenka (CESC) Group — on 1 February 2025, for a consideration of around ₹871 crore. CPDL now serves over 240,000 customers across Chandigarh's 114 sq km.",
+      <>
+        <strong>1967</strong> — Chandigarh Administration took over local
+        distribution from the Punjab State Electricity Board on 2 May, run
+        for decades by the Engineering Department&apos;s Electricity Wing
+        (CED).
+      </>,
+      <>
+        <strong>2020</strong> — Union Power Ministry decided to privatise
+        power distribution across Union Territories, starting with
+        Chandigarh.
+      </>,
+      <>
+        <strong>2025</strong> — After Punjab &amp; Haryana High Court and
+        Supreme Court approvals, distribution transferred to Chandigarh
+        Power Distribution Ltd (CPDL) — part of the RP-Sanjiv Goenka (CESC)
+        Group — on 1 February, for around ₹871 crore.
+      </>,
+      <>
+        <strong>Today</strong> — CPDL serves over 240,000 customers across
+        Chandigarh&apos;s 114 sq km, still under JERC-regulated tariffs.
+      </>,
     ],
     coverageQA: {
       q: "Is Chandigarh's electricity still supplied by a government department?",
@@ -3945,8 +4224,36 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Fixed charge depends on phase, not category", body: "The ₹25 vs ₹75 fixed charge split is based on whether your connection is single-phase or three-phase, not on your consumption or connection category — check your meter type if your fixed charge looks unexpected." },
     ],
     aboutDiscom: [
-      "The Electricity Department, Government of Puducherry (PED) is a deemed licensee under Section 14 of the Electricity Act, 2003, for transmission, distribution and retail supply across the Union Territory. Unlike most Indian states, Puducherry has not corporatized its power utility into a separate company — PED operates directly as a government department.",
-      "PED supplies all four regions of the Union Territory — Puducherry, Karaikal, Yanam and Mahe — despite them being non-contiguous enclaves surrounded by Tamil Nadu, Andhra Pradesh and Kerala. All towns and villages in the UT were fully electrified as early as 1972.",
+      <>
+        <strong>1972</strong> — All towns and villages in the Union
+        Territory were fully electrified.
+      </>,
+      <>
+        <strong>Legal status</strong> — PED is a deemed licensee under
+        Section 14 of the Electricity Act, 2003; unlike most Indian states,
+        Puducherry has not corporatized its power utility into a separate
+        company.
+      </>,
+      <>
+        <strong>Coverage</strong> — PED supplies all four regions of the
+        Union Territory — Puducherry, Karaikal, Yanam and Mahe — despite
+        them being non-contiguous enclaves surrounded by{" "}
+        <Link href="/electricity/tneb-bill-calculator" className="underline">
+          Tamil Nadu
+        </Link>
+        ,{" "}
+        <Link
+          href="/electricity/andhra-pradesh-electricity-bill-calculator"
+          className="underline"
+        >
+          Andhra Pradesh
+        </Link>{" "}
+        and{" "}
+        <Link href="/electricity/kseb-bill-calculator" className="underline">
+          Kerala
+        </Link>
+        .
+      </>,
     ],
     coverageQA: {
       q: "Does PED supply electricity to Karaikal, Yanam and Mahe as well as Puducherry town?",
@@ -3993,8 +4300,30 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Deeply subsidised rates don't reflect the real cost of supply", body: "J&K's domestic tariff of ₹2.45–4.60/unit is well below the actual cost of power procurement, with the gap covered by UT subsidy — a useful fact if you're comparing J&K's low bill to a neighbouring state and wondering why the difference is so large." },
     ],
     aboutDiscom: [
-      "J&K's Power Development Department was unbundled into five companies — J&K Power Corporation Ltd (JKPCL), J&K Power Transmission Corporation Ltd (JKPTCL), Jammu Power Distribution Corporation Ltd (JPDCL), Kashmir Power Distribution Corporation Ltd (KPDCL) and a Ladakh power entity — following State Administrative Council approval on 23 October 2019. JPDCL itself was incorporated a week later, on 30 October 2019.",
-      "JPDCL distributes electricity across 10 districts of the Jammu division: Jammu, Samba, Kathua, Kishtwar, Doda, Reasi, Ramban, Poonch, Rajouri and Udhampur. The Kashmir valley is served separately by KPDCL, and Ladakh — split off as its own Union Territory in 2019 — is now served by the Ladakh Power Development Department (LPDD).",
+      <>
+        <strong>23 October 2019</strong> — State Administrative Council
+        approved unbundling J&amp;K&apos;s Power Development Department into
+        five companies: JKPCL, JKPTCL, JPDCL, KPDCL and a Ladakh power
+        entity.
+      </>,
+      <>
+        <strong>30 October 2019</strong> — JPDCL itself was incorporated, a
+        week after the approval.
+      </>,
+      <>
+        <strong>Coverage</strong> — JPDCL distributes electricity across 10
+        districts of the Jammu division: Jammu, Samba, Kathua, Kishtwar,
+        Doda, Reasi, Ramban, Poonch, Rajouri and Udhampur.
+      </>,
+      <>
+        <strong>Neighbours</strong> — The Kashmir valley is served
+        separately by KPDCL, and Ladakh — split off as its own Union
+        Territory in 2019 — is now served by the{" "}
+        <Link href="/electricity/ladakh-electricity-bill-calculator" className="underline">
+          Ladakh Power Development Department (LPDD)
+        </Link>
+        .
+      </>,
     ],
     coverageQA: {
       q: "Does JPDCL supply electricity to Srinagar or the Kashmir valley?",
@@ -4041,8 +4370,28 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "The ₹0.20/unit fuel surcharge is easy to miss", body: "On top of the slab rates, a small fuel and variable-cost adjustment of ₹0.20/unit applies to your whole consumption — it's a modest amount but not shown in the headline slab rates." },
     ],
     aboutDiscom: [
-      "Tripura State Electricity Corporation Ltd (TSECL) was incorporated on 9 June 2004 and commenced operations on 1 January 2005, taking over the assets and network of Tripura's erstwhile state Power Department as the UT's deemed licensee for generation, transmission and distribution.",
-      "Generation was later split into a separate company, Tripura Power Generation Ltd (TPGL), in January 2015, and transmission into Tripura Power Transmission Ltd (TPTL) on 19 January 2023 — TSECL today handles distribution and retail billing for around 9.33 lakh consumers statewide.",
+      <>
+        <strong>2004</strong> — Tripura State Electricity Corporation Ltd
+        (TSECL) incorporated on 9 June, taking over the assets and network
+        of Tripura&apos;s erstwhile state Power Department.
+      </>,
+      <>
+        <strong>2005</strong> — Commenced operations on 1 January as the
+        state&apos;s deemed licensee for generation, transmission and
+        distribution.
+      </>,
+      <>
+        <strong>2015</strong> — Generation split into a separate company,
+        Tripura Power Generation Ltd (TPGL), in January.
+      </>,
+      <>
+        <strong>2023</strong> — Transmission split into Tripura Power
+        Transmission Ltd (TPTL) on 19 January.
+      </>,
+      <>
+        <strong>Today</strong> — TSECL handles distribution and retail
+        billing for around 9.33 lakh consumers statewide.
+      </>,
     ],
     coverageQA: {
       q: "Does TSECL supply electricity across all of Tripura?",
@@ -4085,12 +4434,29 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     ],
     billTraps: [
       { title: "Each slab step adds roughly ₹1/unit", body: "Sikkim's rate climbs from ₹1.10 to ₹2.10 to ₹3.10 to ₹4.10/unit in fairly even ₹1 steps — cheap at low consumption, but your average rate rises quickly as you cross 50, 100 and 200 units, faster than the flat-looking headline rate suggests." },
-      { title: "EPD is a government department, not a corporation", body: "Like Puducherry, Sikkim has not corporatized its power utility — EPD operates as a direct state government department. Billing and support channels can differ from the corporatized DISCOM model used in most other states." },
+      { title: "EPD is a government department, not a corporation", body: <>Like <Link href="/electricity/puducherry-electricity-bill-calculator" className="underline">Puducherry</Link>, Sikkim has not corporatized its power utility — EPD operates as a direct state government department. Billing and support channels can differ from the corporatized DISCOM model used in most other states.</> },
       { title: "Fixed charge is phase-based, not load-based", body: "Sikkim charges a flat ₹50 (single-phase) or ₹200 (three-phase) fixed charge regardless of your sanctioned load in kW — unlike neighbouring northeast states such as Tripura and Manipur, which charge per kW." },
     ],
     aboutDiscom: [
-      "Sikkim's power sector dates to 27 May 1927, when a 50 kW micro-hydel plant was commissioned at Ranikhola near Gangtok — one of the earliest hydro installations in the eastern Himalayas. A diesel power house followed in Gangtok in 1957.",
-      "After Sikkim joined the Indian Union on 16 May 1975 as its 22nd state, the power network expanded substantially to reach remote mountainous areas. Electricity is supplied directly by the state government's Energy & Power Department (EPD) — Sikkim has not corporatized its distribution business into a separate company.",
+      <>
+        <strong>1927</strong> — A 50 kW micro-hydel plant was commissioned
+        at Ranikhola near Gangtok on 27 May, one of the earliest hydro
+        installations in the eastern Himalayas.
+      </>,
+      <>
+        <strong>1957</strong> — A diesel power house followed in Gangtok.
+      </>,
+      <>
+        <strong>1975</strong> — Sikkim joined the Indian Union on 16 May as
+        its 22nd state, and the power network expanded substantially to
+        reach remote mountainous areas.
+      </>,
+      <>
+        <strong>Today</strong> — Electricity is supplied directly by the
+        state government&apos;s Energy &amp; Power Department (EPD) — Sikkim
+        has not corporatized its distribution business into a separate
+        company.
+      </>,
     ],
     coverageQA: {
       q: "Does EPD supply electricity across all of Sikkim, including remote mountain areas?",
@@ -4137,8 +4503,22 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "The BPL concessional rate isn't applied automatically", body: "A ₹3.65/unit concessional rate for the first 30 units is available to BPL households, but this calculator uses the standard domestic slabs — check your own BPL/scheme eligibility separately." },
     ],
     aboutDiscom: [
-      "Under the Meghalaya Power Sector Reforms Transfer Scheme, 2010, the state government unbundled the former Meghalaya State Electricity Board into four companies: Meghalaya Energy Corporation Ltd (MeECL, the holding company), Meghalaya Power Distribution Corporation Ltd (MePDCL, distribution), Meghalaya Power Generation Corporation Ltd (MePGCL, generation) and Meghalaya Power Transmission Corporation Ltd (MePTCL, transmission).",
-      "MePDCL itself was incorporated on 18 December 2009 and has been vested with statewide distribution since the transfer scheme took effect, serving both urban centres like Shillong and rural areas across the state.",
+      <>
+        <strong>2009</strong> — Meghalaya Power Distribution Corporation Ltd
+        (MePDCL) incorporated on 18 December.
+      </>,
+      <>
+        <strong>2010</strong> — Under the Meghalaya Power Sector Reforms
+        Transfer Scheme, the state government unbundled the former Meghalaya
+        State Electricity Board into four companies: MeECL (holding
+        company), MePDCL (distribution), MePGCL (generation) and MePTCL
+        (transmission).
+      </>,
+      <>
+        <strong>Today</strong> — MePDCL has been vested with statewide
+        distribution since the transfer scheme took effect, serving both
+        urban centres like Shillong and rural areas across the state.
+      </>,
     ],
     coverageQA: {
       q: "Does MePDCL supply electricity across all of Meghalaya, including Shillong?",
@@ -4185,8 +4565,22 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "5% electricity duty applies on top of energy and fixed charges", body: "Like most northeast states, Manipur adds a 5% electricity duty to the combined energy and fixed charge — easy to forget when mentally estimating from the slab rates alone." },
     ],
     aboutDiscom: [
-      "The erstwhile Electricity Department, Government of Manipur, was unbundled on 1 February 2014 under the Manipur State Electricity Reforms Transfer Scheme, 2013 (as mandated by the Electricity Act, 2003), into two state-owned companies: Manipur State Power Company Ltd (MSPCL) and Manipur State Power Distribution Co. Ltd (MSPDCL).",
-      "MSPDCL is a 100% subsidiary of MSPCL, incorporated to carry out power distribution and retail supply within the state as a deemed licensee. It houses the entire 11kV-and-below distribution network across Manipur's districts, including Imphal.",
+      <>
+        <strong>2013</strong> — Manipur State Electricity Reforms Transfer
+        Scheme notified, as mandated by the Electricity Act, 2003.
+      </>,
+      <>
+        <strong>2014</strong> — The erstwhile Electricity Department,
+        Government of Manipur, was unbundled on 1 February into two
+        state-owned companies: Manipur State Power Company Ltd (MSPCL) and
+        Manipur State Power Distribution Co. Ltd (MSPDCL).
+      </>,
+      <>
+        <strong>Today</strong> — MSPDCL, a 100% subsidiary of MSPCL, carries
+        out power distribution and retail supply within the state as a
+        deemed licensee, housing the entire 11kV-and-below distribution
+        network across Manipur&apos;s districts, including Imphal.
+      </>,
     ],
     coverageQA: {
       q: "Does MSPDCL supply electricity across all of Manipur, including Imphal?",
@@ -4233,8 +4627,24 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Published slab/rate detail is limited for this state", body: "Public secondary sources for Arunachal Pradesh's tariff structure are thinner than for most states — this estimate uses the published flat domestic rate, and you should treat it as indicative pending confirmation against your own bill or the APSERC tariff order." },
     ],
     aboutDiscom: [
-      "The Department of Power (DoP), Government of Arunachal Pradesh, is a state government department — not a corporatized company — responsible for transmission and distribution of electricity across the state, and for advising the state government on power-sector matters.",
-      "DoP is headquartered in Itanagar and operates through divisional and sub-divisional offices across Arunachal Pradesh's districts. Tariffs are approved by the Arunachal Pradesh State Electricity Regulatory Commission (APSERC).",
+      <>
+        <strong>Structure</strong> — The Department of Power (DoP),
+        Government of Arunachal Pradesh, is a state government department,
+        not a corporatized company.
+      </>,
+      <>
+        <strong>Role</strong> — Responsible for transmission and
+        distribution of electricity across the state, and for advising the
+        state government on power-sector matters.
+      </>,
+      <>
+        <strong>Headquarters</strong> — Itanagar, with divisional and
+        sub-divisional offices across the state&apos;s districts.
+      </>,
+      <>
+        <strong>Regulator</strong> — Tariffs are approved by the Arunachal
+        Pradesh State Electricity Regulatory Commission (APSERC).
+      </>,
     ],
     coverageQA: {
       q: "Does the Department of Power supply electricity across all of Arunachal Pradesh?",
@@ -4278,11 +4688,32 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     billTraps: [
       { title: "A single department runs generation through to your meter", body: "Unlike states that have split generation, transmission and distribution into separate companies, Mizoram's PED handles all three as one integrated department — useful to know since a single helpline covers supply issues end-to-end." },
       { title: "The jump above 100 units is steep", body: "Mizoram's rate rises from ₹4.20 to ₹6.00/unit once you cross 100 units — a roughly 43% jump on every unit beyond the first slab, larger than in many other states." },
-      { title: "Fixed charge is a flat ₹30/month, not tied to load", body: "Every domestic connection pays the same ₹30 fixed charge regardless of sanctioned load or phase, unlike neighbouring Tripura and Manipur, which charge per kW." },
+      { title: "Fixed charge is a flat ₹30/month, not tied to load", body: <>Every domestic connection pays the same ₹30 fixed charge regardless of sanctioned load or phase, unlike neighbouring <Link href="/electricity/tripura-electricity-bill-calculator" className="underline">Tripura</Link> and <Link href="/electricity/manipur-electricity-bill-calculator" className="underline">Manipur</Link>, which charge per kW.</> },
     ],
     aboutDiscom: [
-      "Before Mizoram had its own power administration, electricity generation and distribution were managed by the Assam State Electricity Board (ASEB) until March 1975. The Power & Electricity Department (PED) was created that year under the State PWD's Superintending Engineer before becoming independent in the early 1980s.",
-      "PED reached full directorate-level status in 1983 with the creation of a Chief Engineer post, and an Engineer-in-Chief post was added in 2008 as head of department. PED functions as an integrated utility — generation, transmission, distribution and despatch — headquartered in Khatla, Aizawl.",
+      <>
+        <strong>Before 1975</strong> — Electricity generation and
+        distribution in Mizoram were managed by the Assam State Electricity
+        Board (ASEB).
+      </>,
+      <>
+        <strong>1975</strong> — The Power &amp; Electricity Department (PED)
+        was created under the State PWD&apos;s Superintending Engineer,
+        becoming independent in the early 1980s.
+      </>,
+      <>
+        <strong>1983</strong> — PED reached full directorate-level status
+        with the creation of a Chief Engineer post.
+      </>,
+      <>
+        <strong>2008</strong> — An Engineer-in-Chief post was added as head
+        of department.
+      </>,
+      <>
+        <strong>Today</strong> — PED functions as an integrated utility —
+        generation, transmission, distribution and despatch — headquartered
+        in Khatla, Aizawl.
+      </>,
     ],
     coverageQA: {
       q: "Does PED-MZ supply electricity across all of Mizoram, including Aizawl?",
@@ -4329,8 +4760,26 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Published tariff detail is thin for this state", body: "Public secondary sources for Nagaland's exact domestic slab structure are limited — treat this estimate as indicative and confirm the current rate against your own DOPN bill." },
     ],
     aboutDiscom: [
-      "The Department of Power, Nagaland (DOPN) is the state government department responsible for generation, transmission and distribution of electricity across the state, managing supply to both urban centres and rural areas.",
-      "Facing recurring financial losses in the distribution business, the Nagaland government introduced an electricity 'communitisation' policy in the early 2000s, transferring day-to-day distribution management and revenue collection in many villages to local Village Electricity Boards, while DOPN retains ownership of the network and overall responsibility for supply.",
+      <>
+        <strong>Structure</strong> — The Department of Power, Nagaland
+        (DOPN) is the state government department responsible for
+        generation, transmission and distribution of electricity across
+        Nagaland.
+      </>,
+      <>
+        <strong>Coverage</strong> — Manages supply to both urban centres and
+        rural areas statewide.
+      </>,
+      <>
+        <strong>Early 2000s</strong> — Facing recurring financial losses,
+        Nagaland introduced an electricity &quot;communitisation&quot;
+        policy, transferring day-to-day distribution management and revenue
+        collection in many villages to local Village Electricity Boards.
+      </>,
+      <>
+        <strong>Today</strong> — DOPN retains ownership of the network and
+        overall responsibility for supply, even in communitised villages.
+      </>,
     ],
     coverageQA: {
       q: "Does DOPN supply electricity across all of Nagaland, including Kohima and Dimapur?",
@@ -4376,8 +4825,25 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Not every village is electrified via the conventional grid", body: "Of 547 villages in the territory, 479 are electrified through conventional supply or solar power plants, and 68 uninhabited villages are not electrified at all — solar-served hamlets may have different billing arrangements than this calculator assumes." },
     ],
     aboutDiscom: [
-      "The Electricity Department, Andaman & Nicobar (ANED) traces its roots to 1926, when the British installed a 100 kW steam-driven generator at Ross Island, followed by DC generating sets at Port Blair in 1929. After Independence, two 550 kW steam turbines were commissioned at the Chatham Island power house in 1951.",
-      "Because the islands are separated by sea over long distances, ANED does not run a single unified grid — it operates around 35 independent diesel power houses, each serving its own local area, alongside solar power plants for some remote villages.",
+      <>
+        <strong>1926</strong> — The British installed a 100 kW
+        steam-driven generator at Ross Island, the origin of ANED&apos;s
+        network.
+      </>,
+      <>
+        <strong>1929</strong> — DC generating sets were added at Port
+        Blair.
+      </>,
+      <>
+        <strong>1951</strong> — After Independence, two 550 kW steam
+        turbines were commissioned at the Chatham Island power house.
+      </>,
+      <>
+        <strong>Today</strong> — ANED runs no single unified grid; it
+        operates roughly 35 independent diesel power houses, each serving
+        its own local area, alongside solar plants for some remote
+        villages.
+      </>,
     ],
     howToPay: {
       portalUrl: "https://urjapay.andaman.gov.in/",
@@ -4420,8 +4886,31 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "The jump above 100 units is large", body: "The domestic rate rises from ₹4.00 to ₹6.50/unit once you cross 100 units — a 62% jump on every additional unit." },
     ],
     aboutDiscom: [
-      "The Union Territories of Dadra & Nagar Haveli and Daman & Diu merged into a single UT on 26 January 2020. DNH Power Distribution Corporation Ltd (DNHPDCL), originally founded in 2012 to serve DNH, was restructured and renamed DNH & DD Power Corporation Ltd, retaining only the transmission function (220/66 kV substations and solar generation) as a 100% UT-owned entity.",
-      "From 1 April 2022, retail distribution and billing across the whole merged UT moved to a new joint-venture company, Dadra and Nagar Haveli and Daman and Diu Power Distribution Corporation Ltd (DNHDDPDCL), with Torrent Power holding 51% and the UT administration the remaining 49% — one of the first Indian Union Territories to privatise its power distribution business. The venture serves roughly 150,000 customers.",
+      <>
+        <strong>2012</strong> — DNH Power Distribution Corporation Ltd
+        (DNHPDCL) was founded to serve Dadra &amp; Nagar Haveli.
+      </>,
+      <>
+        <strong>26 January 2020</strong> — The Union Territories of Dadra
+        &amp; Nagar Haveli and Daman &amp; Diu merged into a single UT.
+      </>,
+      <>
+        <strong>Restructuring</strong> — DNHPDCL was renamed DNH &amp; DD
+        Power Corporation Ltd, retaining only the transmission function
+        (220/66 kV substations and solar generation) as a 100% UT-owned
+        entity.
+      </>,
+      <>
+        <strong>1 April 2022</strong> — Retail distribution and billing
+        moved to a new joint-venture company, DNHDDPDCL, with Torrent Power
+        holding 51% and the UT administration the remaining 49% — one of the
+        first Indian Union Territories to privatise its power distribution
+        business.
+      </>,
+      <>
+        <strong>Scale</strong> — The venture serves roughly 150,000
+        customers.
+      </>,
     ],
     coverageQA: {
       q: "Does one company handle both Dadra & Nagar Haveli and Daman & Diu?",
@@ -4467,8 +4956,27 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { title: "Published tariff detail is limited for this UT", body: "Public secondary sources for Lakshadweep's exact domestic tariff structure are thin — treat this flat-rate estimate as indicative and confirm against your own LED bill." },
     ],
     aboutDiscom: [
-      "The Electricity Department, Lakshadweep (LED), electrified the islands gradually: Minicoy was the first, in 1962, followed by Kavaratti in 1964, Amini and Andrott in 1965 and 1966, and Bitra — the last — in 1982.",
-      "LED operates electricity service sub-divisions across the inhabited islands — Minicoy, Kavaratti, Amini, Andrott, Kalpeni, Agatti, Kadmat, Chetlat, Bitra and Bangaram — with its main divisional office headquartered in Kavaratti.",
+      <>
+        <strong>1962</strong> — Minicoy became the first island
+        electrified.
+      </>,
+      <>
+        <strong>1964</strong> — Kavaratti followed.
+      </>,
+      <>
+        <strong>1965–66</strong> — Amini and Andrott were electrified.
+      </>,
+      <>
+        <strong>1982</strong> — Bitra, the last inhabited island, was
+        connected.
+      </>,
+      <>
+        <strong>Today</strong> — The Electricity Department, Lakshadweep
+        (LED) operates service sub-divisions across all ten inhabited
+        islands — Minicoy, Kavaratti, Amini, Andrott, Kalpeni, Agatti,
+        Kadmat, Chetlat, Bitra and Bangaram — with its main office in
+        Kavaratti.
+      </>,
     ],
     coverageQA: {
       q: "Does LED supply electricity to every inhabited island in Lakshadweep?",
@@ -4511,12 +5019,29 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     ],
     billTraps: [
       { title: "This tariff is an approximation, not a confirmed Ladakh-specific order", body: "No dedicated, published Ladakh domestic tariff order was found — this calculator approximates Ladakh's likely rates from the JERC Jammu & Kashmir schedule since both fall under the same regulatory framework. Treat every figure as indicative and confirm against your own LPDD bill." },
-      { title: "LPDD is separate from J&K's JPDCL and KPDCL", body: "Since Ladakh became its own Union Territory in 2019, its power utility (LPDD) is a distinct entity from Jammu's JPDCL and Kashmir's KPDCL, even though all three currently sit under the same JERC regulatory umbrella." },
+      { title: "LPDD is separate from J&K's JPDCL and KPDCL", body: <>Since Ladakh became its own Union Territory in 2019, its power utility (LPDD) is a distinct entity from Jammu&apos;s <Link href="/electricity/jammu-and-kashmir-electricity-bill-calculator" className="underline">JPDCL</Link> and Kashmir&apos;s KPDCL, even though all three currently sit under the same JERC regulatory umbrella.</> },
       { title: "A confirmed UT-wide helpline number is hard to find publicly", body: "Unlike most states with a well-publicised 1912 or toll-free line, LPDD's public helpline information is limited — your local division office or the LPDD consumer portal are the more reliable contact points." },
     ],
     aboutDiscom: [
-      "The Ladakh Power Development Department (LPDD) was established after Ladakh was carved out as a separate Union Territory in 2019, following the reorganisation of the former state of Jammu & Kashmir. LPDD comprises three verticals — generation, transmission and distribution — and is the sole power utility for the UT.",
-      "LPDD operates several small hydro power plants across Leh and Kargil districts, with roughly 10 MW of installed capacity and further hydro projects under construction, alongside grid input from other sources for the region's 66kV/33kV/11kV distribution network.",
+      <>
+        <strong>2019</strong> — The Ladakh Power Development Department
+        (LPDD) was established after Ladakh was carved out as a separate
+        Union Territory from the former state of Jammu &amp; Kashmir.
+      </>,
+      <>
+        <strong>Structure</strong> — Comprises three verticals — generation,
+        transmission and distribution — and is the sole power utility for
+        the UT.
+      </>,
+      <>
+        <strong>Generation</strong> — Operates several small hydro power
+        plants across Leh and Kargil districts, with roughly 10 MW of
+        installed capacity and more under construction.
+      </>,
+      <>
+        <strong>Network</strong> — Distributes via a 66kV/33kV/11kV grid,
+        supplemented by input from other sources.
+      </>,
     ],
     coverageQA: {
       q: "Does LPDD supply electricity to both Leh and Kargil districts?",

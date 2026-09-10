@@ -26,6 +26,13 @@ const CATEGORY_ICON: Record<ConnectionCategory, string> = {
   agriculture: '🌾',
 }
 
+const CATEGORY_BLURB: Record<ConnectionCategory, string> = {
+  residential: 'households',
+  commercial: 'shops and businesses',
+  industrial: 'factories and manufacturing units',
+  agriculture: 'irrigation and farm-pump connections',
+}
+
 function isFlatRate(ct: ConnectionType): boolean {
   return ct.slabs.length === 1 && ct.slabs[0].minUnits === 0
 }
@@ -315,28 +322,49 @@ export default function TariffDirectoryPage({
           <div>
             <h3 className="font-semibold text-ash">Tariff Categories</h3>
             <p className="mt-1">
-              The tariff schedule for {tariff.state} covers {categories.length} consumer categories
-              shown above ({categories.map((c) => CATEGORY_LABEL[c.connectionType]).join(', ')}).
-              Each category has its own energy rates and fixed charges designed for domestic,
-              commercial, industrial or agricultural usage.
+              The tariff schedule for {tariff.state} covers {categories.length} consumer{' '}
+              {categories.length === 1 ? 'category' : 'categories'}:
             </p>
+            <ul className="mt-1 list-disc space-y-1 pl-5">
+              {categories.map((c) => (
+                <li key={c.connectionType}>
+                  <strong>{CATEGORY_LABEL[c.connectionType]}</strong> — for{' '}
+                  {CATEGORY_BLURB[c.connectionType]}.
+                </li>
+              ))}
+            </ul>
           </div>
           <div>
             <h3 className="font-semibold text-ash">Fixed Charges and Other Charges</h3>
             <p className="mt-1">
-              In addition to unit energy rates, {tariff.discomCode} electricity bills include fixed
-              charges{tariff.electricityDutyPercent > 0 ? `, a state electricity duty of ${tariff.electricityDutyPercent}%,` : ''}
-              {tariff.fuelCostAdjustment > 0 ? ` a fuel cost adjustment of ₹${tariff.fuelCostAdjustment}/unit,` : ''}{' '}
-              and (where applicable) meter rent based on connection parameters.
+              On top of unit energy rates, {tariff.discomCode} bills can include:
             </p>
+            <ul className="mt-1 list-disc space-y-1 pl-5">
+              <li>A fixed or demand charge, based on connection parameters.</li>
+              {tariff.electricityDutyPercent > 0 && (
+                <li>A state electricity duty of {tariff.electricityDutyPercent}%.</li>
+              )}
+              {tariff.fuelCostAdjustment > 0 && (
+                <li>A fuel cost adjustment of ₹{tariff.fuelCostAdjustment}/unit.</li>
+              )}
+              <li>Meter rent, where applicable.</li>
+            </ul>
           </div>
           <div>
             <h3 className="font-semibold text-ash">Electricity Bill Calculation</h3>
             <p className="mt-1">
-              To estimate your electricity bill for {tariff.state}, multiply your{' '}
-              {cycleLabel(tariff.billingCycle)} energy consumption in kilowatt-hours (units) by the
-              applicable slab rates, add fixed charges, and include applicable taxes or duties. You
-              can compute your estimated bill instantly using our{' '}
+              To estimate your {tariff.state} electricity bill by hand:
+            </p>
+            <ol className="mt-1 list-decimal space-y-1 pl-5">
+              <li>
+                Multiply your {cycleLabel(tariff.billingCycle)} consumption in kilowatt-hours
+                (units) by the applicable slab rate for each band.
+              </li>
+              <li>Add the fixed or demand charge.</li>
+              <li>Add electricity duty and any fuel cost adjustment that applies.</li>
+            </ol>
+            <p className="mt-1">
+              Or skip the arithmetic with our{' '}
               <Link href={calculatorPath} className="text-brass underline">
                 {tariff.discomCode} electricity bill calculator
               </Link>

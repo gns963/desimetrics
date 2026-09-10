@@ -215,16 +215,30 @@ export default function ElectricityTariffDirectoryHub() {
             Understanding Electricity Tariffs in India
           </h2>
           <p className="text-ash/80">
-            Electricity tariffs in India are set independently by each state&apos;s
-            Electricity Regulatory Commission (SERC) or, for Union Territories, the
-            Joint Electricity Regulatory Commission (JERC) — not by the central
-            government. Each regulator approves a tariff order for the DISCOM(s)
-            operating in its territory, covering per-unit slab rates, fixed or
-            demand charges, and a set of connection categories such as Domestic,
-            Commercial, Industrial and Agriculture. Most residential tariffs are
-            telescopic — each consumption slab is billed at its own rate — though
-            some non-domestic categories use a single flat rate instead.
+            Each of India&apos;s 36 states and union territories sets its own
+            electricity tariff — not the central government. Every tariff order
+            covers four things:
           </p>
+          <ul className="list-disc space-y-1.5 pl-5 text-ash/80">
+            <li>
+              <strong>Who sets it</strong> — the state Electricity Regulatory
+              Commission (SERC), or the Joint Electricity Regulatory Commission
+              (JERC) for Union Territories.
+            </li>
+            <li>
+              <strong>What it covers</strong> — per-unit slab rates, fixed or demand
+              charges, and connection categories such as Domestic, Commercial,
+              Industrial and Agriculture.
+            </li>
+            <li>
+              <strong>How it&apos;s billed</strong> — most residential tariffs are
+              telescopic, so each slab is billed at its own rate (see{' '}
+              <Link href="/blog/how-telescopic-electricity-slabs-work" className="text-brass underline">
+                how telescopic slabs work
+              </Link>
+              ); some non-domestic categories use one flat rate instead.
+            </li>
+          </ul>
         </section>
 
         <section aria-labelledby="why-differ" className="mb-10 space-y-3">
@@ -232,15 +246,21 @@ export default function ElectricityTariffDirectoryHub() {
             Why Electricity Tariff Rates Differ by State
           </h2>
           <p className="text-ash/80">
-            Rates vary from state to state because each SERC sets tariffs based on
-            that state&apos;s own cost of power purchase and distribution, the DISCOM&apos;s
-            revenue requirement, cross-subsidy rules between consumer categories,
-            and state-specific subsidy schemes (for example, free or discounted
-            units for low-consumption households in some states). Electricity
-            duty — a state government levy added on top of the energy charge — is
-            also set independently and differs by state and by connection
-            category.
+            Each SERC sets tariffs around that state&apos;s own situation, mainly:
           </p>
+          <ul className="list-disc space-y-1.5 pl-5 text-ash/80">
+            <li>The cost of power purchase and distribution in that state.</li>
+            <li>The DISCOM&apos;s own revenue requirement.</li>
+            <li>Cross-subsidy rules between consumer categories.</li>
+            <li>
+              State-specific subsidy schemes — free or discounted units for
+              low-consumption households, in some states.
+            </li>
+            <li>
+              Electricity duty — a state levy on top of the energy charge, set
+              independently per state and per connection category.
+            </li>
+          </ul>
         </section>
 
         <section aria-labelledby="categories-explainer" className="mb-10 space-y-3">
@@ -258,6 +278,103 @@ export default function ElectricityTariffDirectoryHub() {
             distinct agricultural tariff, or a reliable published rate for it
             could not be verified — those are omitted rather than estimated.
           </p>
+          <p className="text-ash/80">
+            Categories are priced differently because most states cross-subsidise
+            Agriculture and Domestic use with higher Commercial and Industrial
+            rates — for example:
+          </p>
+          <ul className="list-disc space-y-1.5 pl-5 text-ash/80">
+            <li>
+              <Link href="/electricity/gujarat-electricity-bill-calculator/tariffs" className="text-brass underline">
+                Gujarat&apos;s MGVCL
+              </Link>{' '}
+              prices Agriculture at a flat ₹0.60/unit against ₹4.35/unit for
+              Commercial — roughly a sevenfold gap on the energy charge alone.
+            </li>
+            <li>
+              <Link href="/electricity/tneb-bill-calculator/tariffs" className="text-brass underline">
+                Tamil Nadu&apos;s TNEB
+              </Link>{' '}
+              charges no electricity duty on Domestic use but adds a 5% duty on
+              both Commercial and Industrial bills, widening the gap further.
+            </li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="revision-cycle" className="mb-10 space-y-3">
+          <h2 id="revision-cycle" className="font-display text-2xl font-semibold">
+            When Are Tariffs Revised?
+          </h2>
+          <p className="text-ash/80">
+            32 of the 36 tariff orders in this directory take effect on 1 April,
+            the start of India&apos;s financial year — the point at which most SERCs
+            issue a fresh annual order. Four revise off-cycle:
+          </p>
+          <ul className="list-disc space-y-1.5 pl-5 text-ash/80">
+            <li>
+              <Link href="/electricity/jharkhand-electricity-bill-calculator/tariffs" className="text-brass underline">
+                Jharkhand
+              </Link>{' '}
+              — 1 May
+            </li>
+            <li>
+              <Link href="/electricity/jammu-and-kashmir-electricity-bill-calculator/tariffs" className="text-brass underline">
+                Jammu &amp; Kashmir
+              </Link>{' '}
+              — 1 September
+            </li>
+            <li>
+              <Link href="/electricity/chandigarh-electricity-bill-calculator/tariffs" className="text-brass underline">
+                Chandigarh
+              </Link>{' '}
+              and{' '}
+              <Link href="/electricity/tripura-electricity-bill-calculator/tariffs" className="text-brass underline">
+                Tripura
+              </Link>{' '}
+              — both 1 November
+            </li>
+          </ul>
+          <p className="text-ash/80">
+            A mid-year surcharge can still apply on top of any order. The
+            &quot;Last Updated&quot; date on each state&apos;s card above, not a
+            general industry pattern, is the reliable way to check whether a
+            given rate is current.
+          </p>
+        </section>
+
+        <section aria-labelledby="related-tools" className="mb-10">
+          <h2 id="related-tools" className="mb-4 font-display text-2xl font-semibold">
+            Related Tools
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <Link
+              href="/electricity"
+              className="rounded-xl border border-hairline bg-paper p-4 transition hover:border-brass/50 hover:shadow-sm"
+            >
+              <p className="font-semibold text-ink-navy">Electricity Bill Calculator</p>
+              <p className="mt-1 text-sm text-ash/70">
+                Estimate your actual bill once you know the tariff.
+              </p>
+            </Link>
+            <Link
+              href="/ac/bill-calculator"
+              className="rounded-xl border border-hairline bg-paper p-4 transition hover:border-brass/50 hover:shadow-sm"
+            >
+              <p className="font-semibold text-ink-navy">AC Bill Calculator</p>
+              <p className="mt-1 text-sm text-ash/70">
+                What your air conditioner costs on your state&apos;s top slab.
+              </p>
+            </Link>
+            <Link
+              href="/solar/roi-calculator"
+              className="rounded-xl border border-hairline bg-paper p-4 transition hover:border-brass/50 hover:shadow-sm"
+            >
+              <p className="font-semibold text-ink-navy">Solar ROI Calculator</p>
+              <p className="mt-1 text-sm text-ash/70">
+                Rooftop solar payback time on your own tariff.
+              </p>
+            </Link>
+          </div>
         </section>
 
         <section aria-labelledby="faq" className="mb-10">

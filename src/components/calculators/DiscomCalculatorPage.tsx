@@ -942,11 +942,11 @@ export default function DiscomCalculatorPage({
             >
               {t.aboutHeading(tariff.discomCode)}
             </h2>
-            <div className="space-y-3 text-ash/80">
+            <ul className="list-disc space-y-2 pl-5 text-ash/80">
               {content.aboutDiscom.map((p, i) => (
-                <p key={i}>{p}</p>
+                <li key={i}>{p}</li>
               ))}
-            </div>
+            </ul>
           </section>
         )}
 
