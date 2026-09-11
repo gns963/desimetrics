@@ -545,14 +545,25 @@ export default function DiscomCalculatorPage({
             ))}
           </ul>
           {locale === 'en' && (
-            <p className="mt-3 text-sm">
-              <Link
-                href="/blog/how-telescopic-electricity-slabs-work"
-                className="text-brass underline"
-              >
-                {t.slabsExplainer.readMore}
-              </Link>
-            </p>
+            <>
+              <p className="mt-3 text-sm">
+                <Link
+                  href="/blog/how-telescopic-electricity-slabs-work"
+                  className="text-brass underline"
+                >
+                  {t.slabsExplainer.readMore}
+                </Link>
+              </p>
+              <p className="mt-2 text-sm">
+                <Link
+                  href="/blog/fixed-charges-vs-fca-electricity-bill"
+                  className="text-brass underline"
+                >
+                  Estimate not matching your real bill? See why fixed charges, FCA and
+                  duty sit on top of this estimate →
+                </Link>
+              </p>
+            </>
           )}
         </section>
 

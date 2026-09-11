@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Fixed Charges vs FCA: Why Your Electricity Bill Changes',
+    tag: 'Explainer',
+    href: '/blog/fixed-charges-vs-fca-electricity-bill',
+    live: true,
+  },
+  {
     title: 'How Much Does Running an AC Actually Cost in India?',
     tag: 'AC',
     href: '/blog/ac-running-cost-india-guide',
