@@ -428,12 +428,16 @@ export default function MsedclCompleteGuidePage() {
             <Link href="/blog/uppcl-complete-guide-electricity-bill" className="text-brass underline">
               UPPCL complete guide
             </Link>
-            ), and BESCOM&apos;s domestic duty rate isn&apos;t reliably verified at
-            all yet — see our{' '}
+            ), while BESCOM and WBSEDCL both have the same unverified-duty gap —
+            see our{' '}
             <Link href="/blog/bescom-complete-guide-electricity-bill" className="text-brass underline">
-              BESCOM complete guide
-            </Link>
-            .
+              BESCOM
+            </Link>{' '}
+            and{' '}
+            <Link href="/blog/wbsedcl-complete-guide-electricity-bill" className="text-brass underline">
+              WBSEDCL
+            </Link>{' '}
+            complete guides.
           </p>
           <p className={`mt-3 ${pCls}`}>
             For industrial connections, we don&apos;t have a reliably verified duty

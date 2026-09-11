@@ -462,9 +462,14 @@ export default function BescomCompleteGuidePage() {
             <Link href="/blog/uppcl-complete-guide-electricity-bill" className="text-brass underline">
               UPPCL
             </Link>{' '}
-            complete guides. Until we can confirm Karnataka&apos;s actual rate against
-            a primary KERC order, check your own bill&apos;s duty line directly rather
-            than trusting the calculator&apos;s 0% as fact.
+            complete guides. West Bengal&apos;s WBSEDCL has the exact same
+            unverified-duty gap as BESCOM — see our{' '}
+            <Link href="/blog/wbsedcl-complete-guide-electricity-bill" className="text-brass underline">
+              WBSEDCL complete guide
+            </Link>
+            . Until we can confirm Karnataka&apos;s actual rate against a primary
+            KERC order, check your own bill&apos;s duty line directly rather than
+            trusting the calculator&apos;s 0% as fact.
           </p>
           <p className={takeawayCls}>
             Takeaway: this is the one line on a BESCOM bill our calculator likely

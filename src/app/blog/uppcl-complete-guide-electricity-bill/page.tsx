@@ -456,12 +456,17 @@ export default function UppclCompleteGuidePage() {
             <Link href="/blog/msedcl-complete-guide-electricity-bill" className="text-brass underline">
               MSEDCL complete guide
             </Link>{' '}
-            for that comparison in full — and unlike either state, BESCOM&apos;s
-            domestic duty rate isn&apos;t reliably verified yet at all, per our{' '}
+            for that comparison in full — and unlike either state, BESCOM and
+            WBSEDCL both have an unverified duty rate rather than a confirmed one,
+            per our{' '}
             <Link href="/blog/bescom-complete-guide-electricity-bill" className="text-brass underline">
-              BESCOM complete guide
-            </Link>
-            .
+              BESCOM
+            </Link>{' '}
+            and{' '}
+            <Link href="/blog/wbsedcl-complete-guide-electricity-bill" className="text-brass underline">
+              WBSEDCL
+            </Link>{' '}
+            complete guides.
           </p>
           <p className={takeawayCls}>
             Takeaway: UP&apos;s 5% duty is genuinely light by Indian standards — a
