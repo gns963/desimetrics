@@ -12,6 +12,15 @@ const PATH = '/fuel-cost/lpg-cylinder-usage-calculator'
 
 const example = estimateLpgUsage({ cylinderKg: 14.2, cylinderPrice: 900, dailyBurnerHours: 1.5 })
 
+const CYLINDER_SIZES = [5, 14.2, 19]
+const BURNER_HOURS = [1, 1.5, 2]
+const referenceTable = CYLINDER_SIZES.map((kg) => ({
+  kg,
+  days: BURNER_HOURS.map(
+    (hrs) => estimateLpgUsage({ cylinderKg: kg, cylinderPrice: 1, dailyBurnerHours: hrs }).daysRemaining,
+  ),
+}))
+
 export const metadata: Metadata = {
   title: 'LPG Cylinder Usage Calculator 2026 — How Long It Lasts',
   description:
@@ -110,6 +119,75 @@ export default function LpgUsagePage() {
           Calculate your cylinder&apos;s life
         </h2>
         <LpgUsageCalculator />
+      </section>
+
+      <section aria-labelledby="how-calculated" className="mb-10">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          How this estimate is calculated
+        </h2>
+        <p className="text-ash/80">
+          The calculator works from one assumption and your own daily
+          cooking time:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Burner-hours', 'total active flame time across every burner you use in a day — two burners run for 30 minutes each is 1 burner-hour, not 30 minutes.'],
+            ['0.25 kg/hour', 'a commonly cited consumption rate for a medium-to-full domestic flame — an assumption, not a measurement of your specific stove.'],
+            ['Days remaining', 'cylinder weight (kg) ÷ (burner-hours/day × 0.25 kg/hour).'],
+            ['Daily and monthly cost', 'your cylinder price ÷ days remaining, then × 30 for the monthly figure.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="reference" className="mb-10">
+        <h2 id="reference" className="font-display mb-2 text-2xl font-semibold">
+          How long each cylinder size lasts
+        </h2>
+        <p className="mb-4 text-sm text-ash/60">
+          Days remaining at the 0.25 kg/hour assumption above — swap in your
+          own burner-hours in the calculator for your real figure.
+        </p>
+        <div className="overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-hairline bg-paper">
+                <th className="p-3 text-left font-semibold text-ink-navy">
+                  Cylinder size
+                </th>
+                {BURNER_HOURS.map((hrs) => (
+                  <th key={hrs} className="p-3 text-right font-semibold text-ink-navy">
+                    {hrs} hr/day
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {referenceTable.map((row) => (
+                <tr key={row.kg}>
+                  <td className="p-3 text-ash/80">{row.kg} kg</td>
+                  {row.days.map((d, i) => (
+                    <td key={i} className="p-3 text-right tabular-nums text-ash/80">
+                      {d} days
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-sm text-ash/60">
+          5 kg (the small &quot;FTL&quot;/composite cylinder) suits a single
+          person or a backup connection; 14.2 kg is the standard domestic
+          cylinder; 19 kg is the commercial size used by restaurants and
+          shops, not typically sold for home use.
+        </p>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

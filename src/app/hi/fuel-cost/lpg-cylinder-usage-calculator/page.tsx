@@ -12,6 +12,15 @@ const PATH = '/fuel-cost/lpg-cylinder-usage-calculator'
 
 const example = estimateLpgUsage({ cylinderKg: 14.2, cylinderPrice: 900, dailyBurnerHours: 1.5 })
 
+const CYLINDER_SIZES = [5, 14.2, 19]
+const BURNER_HOURS = [1, 1.5, 2]
+const referenceTable = CYLINDER_SIZES.map((kg) => ({
+  kg,
+  days: BURNER_HOURS.map(
+    (hrs) => estimateLpgUsage({ cylinderKg: kg, cylinderPrice: 1, dailyBurnerHours: hrs }).daysRemaining,
+  ),
+}))
+
 export const metadata: Metadata = {
   title: 'LPG सिलेंडर इस्तेमाल कैलकुलेटर 2026 — यह कितनी देर चलता है',
   description:
@@ -133,6 +142,74 @@ export default function LpgUsagePageHi() {
           अपने सिलेंडर की उम्र निकालें
         </h2>
         <LpgUsageCalculator texts={lpgTextsHi} />
+      </section>
+
+      <section aria-labelledby="how-calculated" className="mb-10">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          यह अनुमान कैसे निकाला जाता है
+        </h2>
+        <p className="text-ash/80">
+          कैलकुलेटर एक मान्यता और आपके रोज़ के खाना पकाने के समय से काम करता है:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['बर्नर-घंटा', 'एक दिन में आप जितने बर्नर इस्तेमाल करते हैं उन सबका कुल सक्रिय फ्लेम समय — दो बर्नर 30-30 मिनट चलें तो यह 1 बर्नर-घंटा है, 30 मिनट नहीं।'],
+            ['0.25 kg/घंटा', 'मध्यम-से-पूरी घरेलू फ्लेम के लिए आम तौर पर बताई जाने वाली खपत दर — यह एक मान्यता है, आपके खास चूल्हे का माप नहीं।'],
+            ['बचे दिन', 'सिलेंडर का वज़न (kg) ÷ (बर्नर-घंटे/दिन × 0.25 kg/घंटा)।'],
+            ['रोज़ और मासिक खर्च', 'आपकी सिलेंडर कीमत ÷ बचे दिन, फिर मासिक आंकड़े के लिए × 30।'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="reference" className="mb-10">
+        <h2 id="reference" className="font-display mb-2 text-2xl font-semibold">
+          हर सिलेंडर साइज़ कितने दिन चलता है
+        </h2>
+        <p className="mb-4 text-sm text-ash/60">
+          ऊपर बताई गई 0.25 kg/घंटा मान्यता पर बचे दिन — अपने असली आंकड़े के लिए
+          कैलकुलेटर में अपने बर्नर-घंटे डालें।
+        </p>
+        <div className="overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-hairline bg-paper">
+                <th className="p-3 text-left font-semibold text-ink-navy">
+                  सिलेंडर साइज़
+                </th>
+                {BURNER_HOURS.map((hrs) => (
+                  <th key={hrs} className="p-3 text-right font-semibold text-ink-navy">
+                    {hrs} घंटे/दिन
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {referenceTable.map((row) => (
+                <tr key={row.kg}>
+                  <td className="p-3 text-ash/80">{row.kg} kg</td>
+                  {row.days.map((d, i) => (
+                    <td key={i} className="p-3 text-right tabular-nums text-ash/80">
+                      {d} दिन
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-sm text-ash/60">
+          5 kg (छोटा &quot;FTL&quot;/कंपोज़िट सिलेंडर) एक व्यक्ति या बैकअप
+          कनेक्शन के लिए उपयुक्त है; 14.2 kg मानक घरेलू सिलेंडर है; 19 kg
+          वाणिज्यिक साइज़ है जो रेस्टोरेंट और दुकानों में इस्तेमाल होता है,
+          आमतौर पर घरेलू इस्तेमाल के लिए नहीं बेचा जाता।
+        </p>
       </section>
 
       <section aria-labelledby="related" className="mb-10">
