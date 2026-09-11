@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Complete Guide to MSEDCL (Mahavitaran) Electricity Bill',
+    tag: 'Reference',
+    href: '/blog/msedcl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
     title: 'How Water Bills Are Calculated in India: A City-Wise Guide',
     tag: 'Water',
     href: '/blog/how-water-bills-calculated-india',
