@@ -19,6 +19,42 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'BESCOM बिजली बिल की पूरी गाइड',
+    tag: 'रेफरेंस',
+    href: '/hi/blog/bescom-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
+    title: 'UPPCL बिजली बिल की पूरी गाइड',
+    tag: 'रेफरेंस',
+    href: '/hi/blog/uppcl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
+    title: 'MSEDCL (महावितरण) बिजली बिल की पूरी गाइड',
+    tag: 'रेफरेंस',
+    href: '/hi/blog/msedcl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
+    title: 'भारत में पानी का बिल कैसे बनता है: शहर-दर-शहर गाइड',
+    tag: 'पानी',
+    href: '/hi/blog/how-water-bills-calculated-india',
+    live: true,
+  },
+  {
+    title: 'PM सूर्य घर मुफ्त बिजली योजना: पूरी सब्सिडी गाइड',
+    tag: 'सोलर',
+    href: '/hi/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide',
+    live: true,
+  },
+  {
+    title: 'फिक्स्ड चार्ज बनाम FCA: आपका बिजली बिल क्यों बदलता है',
+    tag: 'एक्सप्लेनर',
+    href: '/hi/blog/fixed-charges-vs-fca-electricity-bill',
+    live: true,
+  },
+  {
     title: 'भारत में AC चलाने का असल खर्च कितना आता है?',
     tag: 'AC',
     href: '/hi/blog/ac-running-cost-india-guide',
