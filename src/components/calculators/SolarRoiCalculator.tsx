@@ -48,7 +48,7 @@ const defaultTexts: SolarRoiCalculatorTexts = {
   disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
   paybackLabel: 'Payback period',
   paybackUnit: 'yrs',
-  thenSavesTemplate: 'then ~{amount} saved',
+  thenSavesTemplate: 'then saves about {amount}',
   recoveredLabel: 'System cost recovered, year 1',
   systemCostLabel: 'System cost',
   subsidyLabel: 'PM Surya Ghar subsidy',

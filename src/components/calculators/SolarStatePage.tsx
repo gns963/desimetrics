@@ -24,7 +24,7 @@ const solarRoiTextsHi: SolarRoiCalculatorTexts = {
   disclaimer: 'नतीजे अनुमानित हैं। आपका असली बिल अलग हो सकता है।',
   paybackLabel: 'पेबैक अवधि',
   paybackUnit: 'साल',
-  thenSavesTemplate: 'फिर ~{amount} की बचत',
+  thenSavesTemplate: 'फिर करीब {amount} की बचत',
   recoveredLabel: 'सिस्टम की लागत वसूल, साल 1',
   systemCostLabel: 'सिस्टम की लागत',
   subsidyLabel: 'PM सूर्य घर सब्सिडी',
@@ -164,7 +164,7 @@ export default function SolarStatePage({
               <strong>3 kW</strong> का रूफटॉप सिस्टम लगभग{' '}
               <strong>{formatINR(example.systemCost)}</strong> का पड़ता है,{' '}
               {formatINR(example.subsidy)} PM सूर्य घर सब्सिडी के बाद{' '}
-              <strong>{formatINR(example.netCost)}</strong> तक गिर जाता है, ~
+              <strong>{formatINR(example.netCost)}</strong> तक गिर जाता है, करीब{' '}
               <strong className="text-spark-teal">{formatINR(example.annualSavings)}</strong>
               /साल बचाता है, और लगभग{' '}
               <strong>
@@ -177,7 +177,7 @@ export default function SolarStatePage({
               A <strong>3 kW</strong> rooftop system for a {state} home using 300
               units/month costs about <strong>{formatINR(example.systemCost)}</strong>,
               drops to <strong>{formatINR(example.netCost)}</strong> after the{' '}
-              {formatINR(example.subsidy)} PM Surya Ghar subsidy, saves ~
+              {formatINR(example.subsidy)} PM Surya Ghar subsidy, saves about{' '}
               <strong className="text-spark-teal">{formatINR(example.annualSavings)}</strong>
               /year, and pays back in about{' '}
               <strong>
@@ -198,6 +198,125 @@ export default function SolarStatePage({
           defaultDiscomCode={discomCode}
           texts={hi ? solarRoiTextsHi : undefined}
         />
+      </section>
+
+      <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          {hi ? 'यह अनुमान कैसे गिना जाता है' : 'How this estimate is calculated'}
+        </h2>
+        {hi ? (
+          <>
+            <p className="text-ash/80">
+              हर हिस्से को असली, स्रोत-सत्यापित आंकड़ों पर आधारित रखा गया है —
+              किसी राष्ट्रीय औसत पर नहीं:
+            </p>
+            <ul className="mt-3 space-y-2">
+              {[
+                ['जनरेशन', `भारत के औसत के आधार पर करीब 4 यूनिट/kW/दिन मानी जाती है, इसलिए एक 3 kW सिस्टम साल में लगभग ${(3 * 4 * 365).toLocaleString('en-IN')} यूनिट बनाता है।`],
+                ['असली टैरिफ पर आधारित बचत', `बचत = सोलर से पहले का बिल − सोलर के बाद का बिल, ${discomCode} के असली टेलिस्कोपिक स्लैब पर गिना गया, ताकि सोलर आपकी सबसे महंगी टॉप-स्लैब यूनिट्स की भरपाई पहले करे।`],
+                ['सब्सिडी', 'PM सूर्य घर की केंद्रीय सब्सिडी (पहले 2 kW के लिए ₹30,000/kW, तीसरे kW के लिए ₹18,000, अधिकतम ₹78,000) सिस्टम की लागत से घटाकर नेट लागत निकाली जाती है।'],
+                ['पेबैक', 'नेट लागत ÷ सालाना बचत — यानी कितने साल में सिस्टम अपनी लागत वसूल कर लेता है।'],
+              ].map(([t, d]) => (
+                <li key={t} className="flex items-start gap-2">
+                  <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+                  <span className="text-ash/80">
+                    <strong className="text-ink-navy">{t}</strong> — {d}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <>
+            <p className="text-ash/80">
+              Every piece of this estimate is grounded in real, sourced data —
+              not a flat national average:
+            </p>
+            <ul className="mt-3 space-y-2">
+              {[
+                ['Generation', `assumed at ~4 units/kW/day (the commonly cited India average), so a 3 kW system generates roughly ${(3 * 4 * 365).toLocaleString('en-IN')} units a year.`],
+                ['Savings priced on your real tariff', `savings = your bill before solar minus your bill after solar, computed against ${discomCode}'s actual telescopic slabs, so solar offsets your most expensive top-slab units first.`],
+                ['Subsidy', "the PM Surya Ghar central subsidy (₹30,000/kW for the first 2 kW, ₹18,000 for the 3rd, capped at ₹78,000) is subtracted from system cost to get your net cost."],
+                ['Payback', 'net cost ÷ annual savings — how many years it takes the system to pay for itself.'],
+              ].map(([t, d]) => (
+                <li key={t} className="flex items-start gap-2">
+                  <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+                  <span className="text-ash/80">
+                    <strong className="text-ink-navy">{t}</strong> — {d}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </section>
+
+      <section aria-labelledby="what-changes" className="mb-10 scroll-mt-20">
+        <h2 id="what-changes" className="font-display mb-4 text-2xl font-semibold">
+          {hi ? 'आपका असली आंकड़ा किन बातों से बदल सकता है' : 'What can change your real number'}
+        </h2>
+        <ul className="space-y-2">
+          {(hi
+            ? [
+                ['छत की धूप और छाया', 'दक्षिण की तरफ, बिना छाया वाली छत ज़्यादा जनरेशन देती है — छायादार या गलत दिशा वाली छत मानी गई यूनिट से कम बनाती है।'],
+                ['असली इंस्टॉलर कोट', 'सिस्टम की लागत यहां एक अनुमान है — पैनल ब्रांड, इंस्टॉलेशन की गुणवत्ता और आपके शहर के हिसाब से असली कोट अलग होगा।'],
+                ['नेट मीटरिंग की दर', 'अगर आपका सिस्टम आपकी खपत से ज़्यादा बनाता है, तो अतिरिक्त यूनिट्स की कीमत आपके राज्य के नेट मीटरिंग एक्सपोर्ट रेट पर निर्भर करती है, जो यहां मॉडल नहीं किया गया।'],
+                ['दिन में इस्तेमाल का पैटर्न', 'दिन में ज़्यादा बिजली इस्तेमाल करने वाला घर सीधे इस्तेमाल से ज़्यादा फायदा उठाता है, बजाय ग्रिड एक्सपोर्ट क्रेडिट के — जो आम तौर पर कम मूल्यवान होता है।'],
+              ]
+            : [
+                ['Roof orientation and shading', 'a south-facing, unshaded roof generates more than assumed here — a shaded or poorly oriented roof generates less.'],
+                ['Real installer quotes', 'system cost here is an estimate — panel brand, installation quality and your city all move the actual quote.'],
+                ['Net metering export rate', "if your system generates more than you consume, the value of the surplus depends on your state's net-metering export rate, which isn't modelled here."],
+                ['Your daytime usage pattern', 'a household that uses more power during daylight hours gets more value from direct self-consumption than from grid export credit, which is usually worth less.'],
+              ]
+          ).map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-caution-amber" aria-hidden>!</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          {hi ? (
+            <>
+              पूरी जानकारी के लिए देखें हमारी{' '}
+              <Link
+                href={hi ? '/hi/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide' : '/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide'}
+                className="text-brass underline"
+              >
+                PM सूर्य घर सब्सिडी गाइड
+              </Link>{' '}
+              (पात्रता, दस्तावेज़, आवेदन कैसे करें), या{' '}
+              <Link
+                href={hi ? '/hi/blog/is-rooftop-solar-worth-it-in-india-2026' : '/blog/is-rooftop-solar-worth-it-in-india-2026'}
+                className="text-brass underline"
+              >
+                2026 में रूफटॉप सोलर लगाना फायदेमंद है या नहीं
+              </Link>{' '}
+              पर व्यापक फायदे/नुकसान की चर्चा।
+            </>
+          ) : (
+            <>
+              For the full picture, see our{' '}
+              <Link
+                href="/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide"
+                className="text-brass underline"
+              >
+                PM Surya Ghar subsidy guide
+              </Link>{' '}
+              (eligibility, documents, how to apply) or the broader{' '}
+              <Link
+                href="/blog/is-rooftop-solar-worth-it-in-india-2026"
+                className="text-brass underline"
+              >
+                is rooftop solar worth it in India in 2026?
+              </Link>{' '}
+              pros-and-cons case.
+            </>
+          )}
+        </p>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

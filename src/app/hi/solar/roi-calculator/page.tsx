@@ -167,7 +167,7 @@ const solarRoiTextsHi: SolarRoiCalculatorTexts = {
   disclaimer: 'नतीजे अनुमानित हैं। आपका असली बिल अलग हो सकता है।',
   paybackLabel: 'पेबैक अवधि',
   paybackUnit: 'साल',
-  thenSavesTemplate: 'फिर ~{amount} की बचत',
+  thenSavesTemplate: 'फिर करीब {amount} की बचत',
   recoveredLabel: 'सिस्टम की लागत वसूल, साल 1',
   systemCostLabel: 'सिस्टम की लागत',
   subsidyLabel: 'PM सूर्य घर सब्सिडी',
