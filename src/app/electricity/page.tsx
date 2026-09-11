@@ -111,7 +111,7 @@ export default function ElectricityHubPage() {
       <main className="mx-auto max-w-4xl px-4 py-8">
       <Link
         href="/electricity/tariffs"
-        className="mb-10 flex items-center justify-between gap-3 rounded-xl border border-brass/20 bg-brass/5 p-5 transition hover:border-brass/50 hover:shadow-sm"
+        className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-brass/20 bg-brass/5 p-5 transition hover:border-brass/50 hover:shadow-sm"
       >
         <div>
           <p className="font-display text-lg font-semibold text-ink-navy">
@@ -122,6 +122,21 @@ export default function ElectricityHubPage() {
           </p>
         </div>
         <span className="shrink-0 text-sm font-semibold text-brass">View all →</span>
+      </Link>
+
+      <Link
+        href="/blog/electricity-bill-guides"
+        className="mb-10 flex items-center justify-between gap-3 rounded-xl border border-hub-electricity/20 bg-hub-electricity/5 p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+      >
+        <div>
+          <p className="font-display text-lg font-semibold text-ink-navy">
+            📚 Read a Complete Guide
+          </p>
+          <p className="mt-1 text-sm text-ash/70">
+            In-depth reference pages — tariff tables, a worked example and how to pay — for the states we&apos;ve covered so far.
+          </p>
+        </div>
+        <span className="shrink-0 text-sm font-semibold text-hub-electricity">View guides →</span>
       </Link>
 
       <section aria-labelledby="more-tools" className="mb-10">

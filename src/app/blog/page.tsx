@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Complete Electricity Bill Guides, by State',
+    tag: 'Reference',
+    href: '/blog/electricity-bill-guides',
+    live: true,
+  },
+  {
     title: 'Complete Guide to WBSEDCL Electricity Bill',
     tag: 'Reference',
     href: '/blog/wbsedcl-complete-guide-electricity-bill',
