@@ -17,7 +17,19 @@ const liveDiscoms = discomsJson.states.flatMap((s) =>
 
 const rate = marginalRatePerUnit('TNEB')
 const exampleWatts = 8 + 12 + 3
-const exampleAnnual = ((exampleWatts * 24) / 1000) * 365 * rate
+const exampleDailyUnits = (exampleWatts * 24) / 1000
+const exampleAnnual = exampleDailyUnits * 365 * rate
+
+const referenceDevices: [string, string][] = [
+  ['Wi-Fi router', '8W'],
+  ['Set-top box (DTH/cable)', '12W'],
+  ['Inverter/UPS in standby (not charging)', '10W'],
+  ['Desktop PC/monitor on standby', '5W'],
+  ['TV on standby (not switched off at plug)', '3W'],
+  ['Microwave (clock/display)', '3W'],
+  ['Washing machine on standby', '2W'],
+  ['Phone/laptop charger left plugged in (no device)', '1W'],
+]
 
 export const metadata: Metadata = {
   title: 'Phantom Load / Standby Power Checker 2026 — India',
@@ -113,6 +125,81 @@ export default function PhantomLoadPage() {
       />
 
       <main className="mx-auto max-w-4xl px-4 py-8">
+      <section
+        aria-labelledby="worked-example"
+        className="mb-8 rounded-xl border border-hairline border-l-4 border-l-brass bg-paper p-5"
+      >
+        <h2
+          id="worked-example"
+          className="font-display text-sm font-semibold tracking-wide text-brass uppercase"
+        >
+          Worked example
+        </h2>
+        <p className="mt-2 text-ash/80">
+          A router (8W) + set-top box (12W) + a TV left on standby (3W) draw{' '}
+          <strong>{exampleWatts}W continuously</strong> — that&apos;s{' '}
+          {exampleDailyUnits.toFixed(2)} units/day, or about{' '}
+          <strong>{formatINR(exampleAnnual)}/year</strong> at Tamil Nadu&apos;s
+          top-slab rate. Check the calculator below with your own devices and
+          DISCOM for your real figure.
+        </p>
+      </section>
+
+      <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          How standby cost is calculated
+        </h2>
+        <p className="text-ash/80">
+          Every device you tick runs 24 hours a day, 365 days a year, whether
+          you notice it or not — so the annual cost is just watts converted
+          to units, priced at your tariff:
+        </p>
+        <ol className="mt-3 space-y-2">
+          {[
+            'Add up the standby wattage of every device you\'ve ticked.',
+            'Multiply by 24 hours, then divide by 1,000 to get daily units (kWh).',
+            'Multiply by 365 days for annual units.',
+            'Multiply by your DISCOM\'s marginal (top-slab) rate, since standby draw sits on top of whatever else you already use.',
+          ].map((s, i) => (
+            <li key={i} className="flex gap-3">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-hub-appliance font-display text-xs font-bold text-white">
+                {i + 1}
+              </span>
+              <span className="text-ash/80">{s}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="reference" className="mb-10 scroll-mt-20">
+        <h2 id="reference" className="font-display mb-4 text-2xl font-semibold">
+          Typical standby wattage by device
+        </h2>
+        <p className="text-ash/80">
+          The calculator above uses these commonly-cited planning estimates —
+          your exact device may draw more or less, so a plug-in power meter
+          gives a precise reading if you want one:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Device</th>
+                <th className="px-4 py-2 text-right font-semibold">Standby draw</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {referenceDevices.map(([name, watts]) => (
+                <tr key={name}>
+                  <td className="px-4 py-2 font-medium">{name}</td>
+                  <td className="px-4 py-2 text-right tabular-nums">{watts}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section aria-labelledby="calculator" className="mb-10 scroll-mt-20">
         <h2 id="calculator" className="font-display mb-4 text-2xl font-semibold">
           Check your standby load

@@ -133,6 +133,63 @@ export default function SipCalculatorPage() {
         <SipCalculator />
       </section>
 
+      <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          How the maturity value is calculated
+        </h2>
+        <p className="text-ash/80">
+          Each monthly instalment compounds for a different length of time —
+          your first instalment earns returns for the full duration, your
+          last one for barely a month — so the calculator uses the standard
+          future-value-of-an-annuity formula rather than simple multiplication:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Variable</th>
+                <th className="px-4 py-2 font-semibold">Meaning</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              <tr>
+                <td className="px-4 py-2 font-medium">P</td>
+                <td className="px-4 py-2">Your fixed monthly investment</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">i</td>
+                <td className="px-4 py-2">Monthly return (annual rate ÷ 12)</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">n</td>
+                <td className="px-4 py-2">Total number of months invested</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">M</td>
+                <td className="px-4 py-2">Maturity value — what the calculator solves for</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-ash/80">
+          Two things drive the gap between what you invest and what you get
+          back:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Compounding', 'each month\'s return itself starts earning returns, so growth accelerates the longer you stay invested.'],
+            ['Rupee-cost averaging', 'a fixed monthly amount buys more units when the market is down and fewer when it\'s up, smoothing your average purchase price over the ups and downs — this is the main argument for SIP over trying to time a single lump-sum entry.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <FinancialCrossSell current="sip-calculator" />
 
       <section aria-labelledby="faq" className="mb-10">

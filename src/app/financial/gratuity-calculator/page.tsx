@@ -142,6 +142,40 @@ export default function GratuityCalculatorPage() {
         <GratuityCalculator />
       </section>
 
+      <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          How the 15/26 formula works
+        </h2>
+        <p className="text-ash/80">
+          The Payment of Gratuity Act fixes gratuity at 15 days&apos; wages
+          for every completed year of service, using a 26-day working month
+          as the base — not your calendar salary directly:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['15', 'days\' wages paid per year of service — the core entitlement.'],
+            ['26', 'assumed working days in a month (excluding weekly offs) — this divides your monthly Basic + DA down to a daily rate.'],
+            ['Basic + DA only', 'other components like HRA, bonus and allowances are excluded from the calculation base.'],
+            ['6+ months rounds up', 'a part-year of more than 6 months counts as a full additional year of service.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          Two limits cap this formula in practice: you generally need{' '}
+          <strong>5 years of continuous service</strong> to qualify at all
+          (waived on death or disability), and the payout is capped at{' '}
+          <strong>₹20,00,000</strong> regardless of how the formula computes
+          — any amount above that depends on your employer&apos;s own policy,
+          not the statutory Act.
+        </p>
+      </section>
+
       <FinancialCrossSell current="gratuity-calculator" />
 
       <section aria-labelledby="faq" className="mb-10">

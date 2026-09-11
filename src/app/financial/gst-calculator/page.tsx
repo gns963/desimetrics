@@ -165,6 +165,58 @@ export default function GstCalculatorPage() {
         </p>
       </section>
 
+      <section aria-labelledby="slabs" className="mb-10 scroll-mt-20">
+        <h2 id="slabs" className="font-display mb-4 text-2xl font-semibold">
+          GST slabs this calculator supports
+        </h2>
+        <p className="text-ash/80">
+          The calculator lets you pick any of these rates — exact item-to-slab
+          mapping is set by the GST Council and varies by good or service, so
+          use this as a quick reference, not a classification guide:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Rate</th>
+                <th className="px-4 py-2 font-semibold">Typically used for</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              <tr>
+                <td className="px-4 py-2 font-medium">0%</td>
+                <td className="px-4 py-2">Exempted essentials (many unprocessed foods, specific healthcare/education services)</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">3%</td>
+                <td className="px-4 py-2">Gold, silver and jewellery</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">5%</td>
+                <td className="px-4 py-2">GST 2.0 merit rate — many household essentials and packaged goods</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">12% / 28%</td>
+                <td className="px-4 py-2">Pre-GST-2.0 slabs — some goods and older references may still cite these</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">18%</td>
+                <td className="px-4 py-2">GST 2.0 standard rate — most goods and services</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">40%</td>
+                <td className="px-4 py-2">Select luxury and demerit goods</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-ash/50">
+          Always confirm the exact current rate for your specific goods or
+          service against the official GST Council/CBIC notification before
+          using it for invoicing or filing.
+        </p>
+      </section>
+
       <FinancialCrossSell current="gst-calculator" />
 
       <section aria-labelledby="faq" className="mb-10">
