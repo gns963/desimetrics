@@ -456,7 +456,12 @@ export default function UppclCompleteGuidePage() {
             <Link href="/blog/msedcl-complete-guide-electricity-bill" className="text-brass underline">
               MSEDCL complete guide
             </Link>{' '}
-            for that comparison in full.
+            for that comparison in full — and unlike either state, BESCOM&apos;s
+            domestic duty rate isn&apos;t reliably verified yet at all, per our{' '}
+            <Link href="/blog/bescom-complete-guide-electricity-bill" className="text-brass underline">
+              BESCOM complete guide
+            </Link>
+            .
           </p>
           <p className={takeawayCls}>
             Takeaway: UP&apos;s 5% duty is genuinely light by Indian standards — a
@@ -611,6 +616,20 @@ export default function UppclCompleteGuidePage() {
               </p>
               <p className="mt-1 text-xs text-ash/60">
                 Why your bill moves even when your units don&apos;t.
+              </p>
+            </Link>
+            <Link
+              href="/blog/bescom-complete-guide-electricity-bill"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📋
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                BESCOM complete guide
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                See Karnataka&apos;s Gruha Jyothi free-units scheme.
               </p>
             </Link>
           </div>

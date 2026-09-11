@@ -424,9 +424,14 @@ export default function MsedclCompleteGuidePage() {
             charge</strong> — among the highest domestic electricity duty rates of
             any Indian state, and typically the second-largest line on a Mahavitaran
             bill after the energy charge itself. For comparison, Uttar Pradesh
-            charges just 5% on the same basis — see our{' '}
+            charges just 5% on the same basis (see our{' '}
             <Link href="/blog/uppcl-complete-guide-electricity-bill" className="text-brass underline">
               UPPCL complete guide
+            </Link>
+            ), and BESCOM&apos;s domestic duty rate isn&apos;t reliably verified at
+            all yet — see our{' '}
+            <Link href="/blog/bescom-complete-guide-electricity-bill" className="text-brass underline">
+              BESCOM complete guide
             </Link>
             .
           </p>
@@ -588,6 +593,20 @@ export default function MsedclCompleteGuidePage() {
               </p>
               <p className="mt-1 text-xs text-ash/60">
                 Why your bill moves even when your units don&apos;t.
+              </p>
+            </Link>
+            <Link
+              href="/blog/bescom-complete-guide-electricity-bill"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📋
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                BESCOM complete guide
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                See Karnataka&apos;s Gruha Jyothi free-units scheme.
               </p>
             </Link>
           </div>

@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Complete Guide to BESCOM Electricity Bill',
+    tag: 'Reference',
+    href: '/blog/bescom-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
     title: 'Complete Guide to UPPCL Electricity Bill',
     tag: 'Reference',
     href: '/blog/uppcl-complete-guide-electricity-bill',
