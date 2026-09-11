@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import discomsJson from '@/data/discoms.json'
 import PageHero from '@/components/PageHero'
+import { getAcBrand } from '@/data/ac-brands'
 import { calculateAcCost } from '@/lib/calc/ac'
 import { formatINR } from '@/lib/format'
 import AcBillCalculator, { type AcBillCalculatorTexts } from './AcBillCalculator'
@@ -52,6 +53,7 @@ export default function AcBrandPage({
 }) {
   const hi = locale === 'hi'
   const base = hi ? `/hi/ac/brands/${slug}` : `/ac/brands/${slug}`
+  const brand = getAcBrand(slug)
   const example = calculateAcCost({
     discomCode: 'TNEB',
     tonnage: 1.5,
@@ -241,6 +243,30 @@ export default function AcBrandPage({
           )}
         </div>
       </section>
+
+      {brand && (
+        <section aria-labelledby="about-brand" className="mb-10">
+          <h2 id="about-brand" className="font-display mb-4 text-2xl font-semibold">
+            {hi ? `${brandName} के बारे में` : `About ${brandName}`}
+          </h2>
+          <p className="text-ash/80">
+            {hi ? brand.originHi : brand.origin}{' '}
+            {hi ? (
+              <>
+                लेकिन ब्रांड चाहे जो भी हो, इसके ISEER-रेटेड स्प्लिट और विंडो AC
+                भारत में बिकने वाले हर दूसरे ब्रांड जैसे ही असली दक्षता मानक पर
+                चलते हैं — नीचे देखें यह अनुमान कैसे निकाला जाता है।
+              </>
+            ) : (
+              <>
+                Whatever the brand, its ISEER-rated split and window ACs run on
+                the same real efficiency standard as every other brand sold in
+                India — see how this estimate is calculated above.
+              </>
+            )}
+          </p>
+        </section>
+      )}
 
       <section aria-labelledby="related" className="mb-10">
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
