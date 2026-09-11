@@ -174,26 +174,43 @@ export default function SolarHubPage() {
         ))}
       </section>
 
-      <section aria-labelledby="how-solar" className="mb-10">
+      <section aria-labelledby="how-solar" className="mb-10 scroll-mt-20">
         <h2 id="how-solar" className="font-display mb-4 text-2xl font-semibold">
           How PM Surya Ghar makes solar affordable
         </h2>
-        <div className="space-y-3 text-ash/80">
-          <p>
-            PM Surya Ghar: Muft Bijli Yojana is the central government&apos;s
-            rooftop solar scheme for households. It pays{' '}
-            <strong>₹30,000/kW for the first 2 kW</strong> and{' '}
-            <strong>₹18,000 for the 3rd kW</strong>, capped at{' '}
-            <strong>₹78,000</strong> — credited to your bank account after
-            installation.
-          </p>
-          <p>
-            Combined with net metering and telescopic tariffs (where solar
-            offsets your most expensive units first), a typical 3 kW system pays
-            for itself in roughly 4–6 years and then generates largely free power
-            for two decades.
-          </p>
-        </div>
+        <p className="text-ash/80">
+          <strong>PM Surya Ghar: Muft Bijli Yojana</strong> is the central
+          government&apos;s rooftop solar scheme for households, credited to
+          your bank account after installation:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['₹30,000/kW', 'for the first 2 kW of system size.'],
+            ['₹18,000', 'for the 3rd kW.'],
+            ['₹78,000 cap', 'the maximum subsidy for a 3 kW system or larger — see our full subsidy guide for eligibility and how to apply.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          Combined with net metering and telescopic tariffs (where solar
+          offsets your most expensive units first), a typical 3 kW system pays
+          for itself in roughly 4–6 years and then generates largely free power
+          for two decades. See the full walkthrough — eligibility, documents,
+          how to apply and common rejection reasons — in our{' '}
+          <Link href="/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide" className="text-brass underline">
+            PM Surya Ghar subsidy guide
+          </Link>
+          , or the broader cost/payback/pros-and-cons case in{' '}
+          <Link href="/blog/is-rooftop-solar-worth-it-in-india-2026" className="text-brass underline">
+            is rooftop solar worth it in India in 2026?
+          </Link>
+        </p>
       </section>
 
       <section aria-labelledby="leadgen" className="mb-6">

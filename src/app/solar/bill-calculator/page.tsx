@@ -83,6 +83,43 @@ export default function SolarBillCalculatorIndexPage() {
       />
 
       <main className="mx-auto max-w-4xl px-4 py-8">
+      <section aria-labelledby="what-this-shows" className="mb-10 scroll-mt-20">
+        <h2 id="what-this-shows" className="font-display mb-4 text-2xl font-semibold">
+          What each state page shows
+        </h2>
+        <p className="text-ash/80">
+          Pick your state below for a rooftop solar payback estimate priced
+          on your own DISCOM&apos;s real tariff, not a flat national rate:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['System cost and subsidy', 'an illustrative system cost before subsidy, and the net cost after the PM Surya Ghar central subsidy (up to ₹78,000) is applied.'],
+            ['Payback period', 'how many years of savings it takes to recover your net cost, based on your state\'s actual per-unit tariff.'],
+            ['Annual and lifetime savings', 'monthly savings and a 25-year net savings figure, over the panels\' typical working life.'],
+            ['Your real tariff, not an average', 'savings are computed against your own DISCOM\'s telescopic slab structure, so solar is valued at offsetting your most expensive units first.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          Each state page runs the same calculation engine as our general{' '}
+          <Link href="/solar/roi-calculator" className="text-brass underline">
+            solar ROI calculator
+          </Link>{' '}
+          — this directory just saves you picking your DISCOM from a dropdown.
+          For the subsidy rules and eligibility in full, see our{' '}
+          <Link href="/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide" className="text-brass underline">
+            PM Surya Ghar subsidy guide
+          </Link>
+          .
+        </p>
+      </section>
+
       <section aria-labelledby="states" className="mb-10">
         <h2 id="states" className="font-display mb-4 text-2xl font-semibold">
           All states
