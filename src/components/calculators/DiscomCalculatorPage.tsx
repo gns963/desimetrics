@@ -25,6 +25,7 @@ import {
 } from '@/data/discom-page-texts'
 import { computeBill, getTariff } from '@/lib/calc/electricity'
 import { cycleLabel, fixedChargeLabel, formatINR, formatIsoDate } from '@/lib/format'
+import { getLocaleSwitcherOptions } from '@/lib/i18n-alternates'
 
 const SITE = 'https://desimetrics.com'
 
@@ -85,6 +86,10 @@ export default function DiscomCalculatorPage({
   const path = `/electricity/${config.slug}`
   const localePath = locale !== 'en' ? `/${locale}${path}` : path
   const localeBase = locale !== 'en' ? `${SITE}/${locale}` : SITE
+  const availableLanguages = getLocaleSwitcherOptions(path)
+    .filter((o) => o.isTranslated)
+    .map((o) => o.label)
+    .join(', ')
 
   const topRate = residential.slabs[residential.slabs.length - 1].ratePerUnit
   const fcaIncluded = tariff.fuelCostAdjustment > 0
@@ -177,6 +182,7 @@ export default function DiscomCalculatorPage({
     ...(content.coverageQA ? [{ id: 'coverage', label: t.toc.coverage }] : []),
     ...(content.howToPay ? [{ id: 'how-to-pay', label: t.toc.howToPay }] : []),
     { id: 'why-use', label: t.toc.whyUse },
+    { id: 'languages', label: t.toc.languagesAvailable },
     { id: 'faq', label: t.toc.faq },
     { id: 'related', label: t.toc.related },
   ]
@@ -1094,6 +1100,29 @@ export default function DiscomCalculatorPage({
           </h2>
           <ul className="space-y-2">
             {t.whyUse.items.map((item, i) => (
+              <li key={i} className="flex gap-2 text-ash/80">
+                <span className="text-spark-teal" aria-hidden>
+                  ✓
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Available in multiple languages */}
+        <section aria-labelledby="languages" className="mb-10 scroll-mt-20">
+          <h2
+            id="languages"
+            className="mb-4 font-display text-2xl font-bold text-ink-navy"
+          >
+            {t.languagesAvailable.heading}
+          </h2>
+          <p className="text-ash/80">
+            {t.languagesAvailable.intro(availableLanguages)}
+          </p>
+          <ul className="mt-3 space-y-2">
+            {t.languagesAvailable.items.map((item, i) => (
               <li key={i} className="flex gap-2 text-ash/80">
                 <span className="text-spark-teal" aria-hidden>
                   ✓
