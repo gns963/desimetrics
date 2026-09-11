@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'How Water Bills Are Calculated in India: A City-Wise Guide',
+    tag: 'Water',
+    href: '/blog/how-water-bills-calculated-india',
+    live: true,
+  },
+  {
     title: 'PM Surya Ghar Muft Bijli Yojana: Full Subsidy Guide',
     tag: 'Solar',
     href: '/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide',
