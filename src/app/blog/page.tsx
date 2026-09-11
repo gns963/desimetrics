@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'PM Surya Ghar Muft Bijli Yojana: Full Subsidy Guide',
+    tag: 'Solar',
+    href: '/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide',
+    live: true,
+  },
+  {
     title: 'Fixed Charges vs FCA: Why Your Electricity Bill Changes',
     tag: 'Explainer',
     href: '/blog/fixed-charges-vs-fca-electricity-bill',
