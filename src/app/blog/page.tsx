@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Complete Guide to UPPCL Electricity Bill',
+    tag: 'Reference',
+    href: '/blog/uppcl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
     title: 'Complete Guide to MSEDCL (Mahavitaran) Electricity Bill',
     tag: 'Reference',
     href: '/blog/msedcl-complete-guide-electricity-bill',

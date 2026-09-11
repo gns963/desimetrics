@@ -423,7 +423,12 @@ export default function MsedclCompleteGuidePage() {
             and commercial connections, it&apos;s <strong>16% of the energy
             charge</strong> — among the highest domestic electricity duty rates of
             any Indian state, and typically the second-largest line on a Mahavitaran
-            bill after the energy charge itself.
+            bill after the energy charge itself. For comparison, Uttar Pradesh
+            charges just 5% on the same basis — see our{' '}
+            <Link href="/blog/uppcl-complete-guide-electricity-bill" className="text-brass underline">
+              UPPCL complete guide
+            </Link>
+            .
           </p>
           <p className={`mt-3 ${pCls}`}>
             For industrial connections, we don&apos;t have a reliably verified duty
