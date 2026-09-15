@@ -23,6 +23,7 @@ import {
   mlDiscomPageTexts,
   type DiscomPageTexts,
 } from '@/data/discom-page-texts'
+import { getWaterBoardByMatchingDiscomCode } from '@/data/water-boards'
 import { computeBill, getTariff } from '@/lib/calc/electricity'
 import { cycleLabel, fixedChargeLabel, formatINR, formatIsoDate } from '@/lib/format'
 import { getLocaleSwitcherOptions } from '@/lib/i18n-alternates'
@@ -153,6 +154,10 @@ export default function DiscomCalculatorPage({
   const neighbors = (config.neighboringDiscoms ?? [])
     .map((code) => CALCULATOR_PAGES.find((p) => p.discomCode === code))
     .filter((p): p is DiscomPageConfig => Boolean(p))
+
+  // City-level match only (e.g. WBSEDCL deliberately has none — it doesn't
+  // serve Kolkata, CESC does) — see matchingDiscomCode in water-boards.ts.
+  const matchingWaterBoard = getWaterBoardByMatchingDiscomCode(config.discomCode)
 
   const tocItems = [
     { id: 'calculator', label: t.toc.calculator },
@@ -1172,6 +1177,23 @@ export default function DiscomCalculatorPage({
                 label: getTariff(n.discomCode).state,
                 sub: `${n.discomCode} bill calculator`,
               })),
+              ...(matchingWaterBoard
+                ? [
+                    {
+                      href: `${neighborLocalePrefix}/water/${matchingWaterBoard.slug}`,
+                      icon: '💧',
+                      chip: 'bg-hub-water/15',
+                      accent: 'text-hub-water',
+                      border: 'hover:border-hub-water/50',
+                      label: hi
+                        ? `${tariff.state} पानी बिल (${matchingWaterBoard.code})`
+                        : `${tariff.state} water bill (${matchingWaterBoard.code})`,
+                      sub: hi
+                        ? `इसी शहर का पानी कैलकुलेटर, ${matchingWaterBoard.code} की असली दर पर।`
+                        : `This city's water calculator, priced at ${matchingWaterBoard.code}'s real tariff.`,
+                    },
+                  ]
+                : []),
               {
                 href: hi ? '/hi/electricity' : '/electricity',
                 icon: '🗺️',

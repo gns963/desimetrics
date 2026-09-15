@@ -13,6 +13,7 @@ import WaterFormulaBlock from '@/components/water/WaterFormulaBlock'
 import WaterHouseholdConsumptionTable from '@/components/water/WaterHouseholdConsumptionTable'
 import WaterNeighborDiagnostic from '@/components/water/WaterNeighborDiagnostic'
 import WaterSlabBand from '@/components/water/WaterSlabBand'
+import { CALCULATOR_PAGES } from '@/data/calculator-pages'
 import { getWaterBoardFacts } from '@/data/water-board-facts'
 import waterBoardsJson from '@/data/water-boards.json'
 import {
@@ -20,6 +21,7 @@ import {
   hiWaterBoardPageTexts,
   type WaterBoardPageTexts,
 } from '@/data/water-board-page-texts'
+import { getTariff } from '@/lib/calc/electricity'
 import { computeWaterBill, getConnectionTariff, getWaterTariff, waterTariffRegistry } from '@/lib/calc/water'
 import { formatINR, formatIsoDate } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
@@ -65,6 +67,13 @@ export default function WaterBoardPage({
 
   const facts = getWaterBoardFacts(boardCode)
   const otherBoards = waterBoardsJson.boards.filter((b) => b.slug !== slug).slice(0, 3)
+  // City-level match only (not just same-state) — see the matchingDiscomCode
+  // comment in water-boards.ts for why e.g. Kolkata deliberately has none.
+  const matchingDiscomCode = waterBoardsJson.boards.find((b) => b.slug === slug)?.matchingDiscomCode
+  const matchingDiscom = matchingDiscomCode
+    ? CALCULATOR_PAGES.find((p) => p.discomCode === matchingDiscomCode)
+    : undefined
+  const matchingDiscomState = matchingDiscom ? getTariff(matchingDiscom.discomCode).state : null
   const hasMultiBoardComparison = REAL_TARIFF_BOARD_CODES.length > 1
   const comparisonKl = 15
 
@@ -719,15 +728,29 @@ export default function WaterBoardPage({
               </p>
             </Link>
             <Link
-              href="/electricity"
+              href={
+                matchingDiscom
+                  ? `${hi ? '/hi' : ''}/electricity/${matchingDiscom.slug}`
+                  : hi
+                    ? '/hi/electricity'
+                    : '/electricity'
+              }
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
             >
               <span className="text-xl" aria-hidden>⚡</span>
               <p className="font-display mt-2 font-bold text-ink-navy">
-                {t.ecoElectricity.label}
+                {matchingDiscom
+                  ? hi
+                    ? `${matchingDiscomState} बिजली बिल (${matchingDiscom.discomCode})`
+                    : `${matchingDiscomState} electricity bill (${matchingDiscom.discomCode})`
+                  : t.ecoElectricity.label}
               </p>
               <p className="mt-1 text-xs text-ash/60">
-                {t.ecoElectricity.sub}
+                {matchingDiscom
+                  ? hi
+                    ? `इसी शहर का बिजली कैलकुलेटर, ${matchingDiscom.discomCode} की असली दर पर।`
+                    : `This city's electricity calculator, priced at ${matchingDiscom.discomCode}'s real tariff.`
+                  : t.ecoElectricity.sub}
               </p>
             </Link>
             <Link
