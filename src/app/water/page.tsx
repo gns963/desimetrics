@@ -6,6 +6,7 @@ import { DropletIcon } from '@/components/HubMotifIcon'
 import SplitHero from '@/components/SplitHero'
 import { CALCULATOR_PAGES } from '@/data/calculator-pages'
 import { getTariff } from '@/lib/calc/electricity'
+import { getConnectionTariff, getWaterTariff } from '@/lib/calc/water'
 import { slugify } from '@/lib/format'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
@@ -16,6 +17,21 @@ const states = CALCULATOR_PAGES.map((p) => getTariff(p.discomCode).state)
   .filter((state, i, arr) => arr.indexOf(state) === i)
   .sort((a, b) => a.localeCompare(b))
   .map((state) => ({ state, slug: slugify(state) }))
+
+// Live first-slab rates for the "1,000 litres" answer block below — pulled
+// directly from each board's own real tariff file, never hand-typed, so
+// this can't drift out of sync if a tariff is ever revised.
+const THOUSAND_LITRE_EXAMPLES = [
+  { boardCode: 'DJB', city: 'Delhi', slug: 'delhi' },
+  { boardCode: 'CMWSSB', city: 'Chennai', slug: 'chennai' },
+  { boardCode: 'HMWSSB', city: 'Hyderabad', slug: 'hyderabad' },
+].map(({ boardCode, city, slug }) => {
+  const tariff = getWaterTariff(boardCode)
+  const connection = getConnectionTariff(tariff, 'domestic')
+  return { boardCode, city, slug, ratePerKl: connection.slabs[0].ratePerKL }
+})
+const lowestRate = Math.min(...THOUSAND_LITRE_EXAMPLES.map((e) => e.ratePerKl))
+const highestRate = Math.max(...THOUSAND_LITRE_EXAMPLES.map((e) => e.ratePerKl))
 
 export const metadata: Metadata = {
   title: 'Water Bill Calculator (India) 2026 | DesiMetrics',
@@ -45,6 +61,10 @@ const webAppLd = {
 }
 
 const faqs = [
+  {
+    q: 'How much does 1,000 litres of water cost in India?',
+    a: `Typically between ₹${lowestRate.toFixed(2)} and ₹${highestRate.toFixed(2)} in the lowest tariff slab, depending on your board — for example ${THOUSAND_LITRE_EXAMPLES.map((e) => `₹${e.ratePerKl.toFixed(2)}/KL in ${e.city} (${e.boardCode})`).join(', ')}. Most boards also apply a free allowance or minimum bill that covers this amount, so it's rarely billed in isolation — use the board calculators above for an exact monthly figure.`,
+  },
   {
     q: 'Why doesn\'t DesiMetrics show my exact water board\'s tariff?',
     a: 'Unlike electricity DISCOMs, India\'s municipal water tariffs aren\'t centrally published in a form we can verify and keep current — billing basis varies by city (flat rate, metered, or tied to property tax). Rather than guess, we ask for your own rate from your bill, the same honest approach we use for generator fuel and net-metering rates.',
@@ -109,6 +129,38 @@ export default function WaterHubPage() {
       />
 
       <main className="mx-auto max-w-4xl px-4 py-8">
+      <section aria-labelledby="thousand-litres" className="mb-10 scroll-mt-20 rounded-xl border border-hairline border-l-4 border-l-hub-water bg-paper p-5">
+        <h2 id="thousand-litres" className="font-display mb-2 text-xl font-bold text-ink-navy">
+          How much does 1,000 litres of water cost in India?
+        </h2>
+        <p className="text-ash/90">
+          1,000 litres (1 KL) of piped municipal water typically costs between{' '}
+          <strong>₹{lowestRate.toFixed(2)} and ₹{highestRate.toFixed(2)}</strong> in the lowest
+          tariff slab, depending on your city&apos;s water board —{' '}
+          {THOUSAND_LITRE_EXAMPLES.map((e, i) => (
+            <span key={e.boardCode}>
+              {i > 0 && (i === THOUSAND_LITRE_EXAMPLES.length - 1 ? ', and ' : ', ')}
+              ₹{e.ratePerKl.toFixed(2)}/KL in {e.city} ({e.boardCode})
+            </span>
+          ))}
+          . In practice, most boards also apply a free monthly allowance or a minimum bill that
+          covers this amount entirely, so an isolated 1,000-litre charge is rarely paid on its
+          own — see your board&apos;s calculator below for what a full month&apos;s usage
+          actually costs.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {THOUSAND_LITRE_EXAMPLES.map((e) => (
+            <Link
+              key={e.boardCode}
+              href={`/water/${e.slug}`}
+              className="rounded-full border border-hub-water/30 bg-hub-water/5 px-3 py-1 text-xs font-semibold text-hub-water hover:border-hub-water/60"
+            >
+              {e.city} ({e.boardCode}) calculator →
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section aria-labelledby="calculator" className="mb-10 scroll-mt-20">
         <h2 id="calculator" className="font-display mb-4 text-2xl font-semibold">
           Calculate your water bill
