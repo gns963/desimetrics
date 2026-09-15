@@ -5,6 +5,7 @@ import HowWeVerify from '@/components/HowWeVerify'
 import SplitHero from '@/components/SplitHero'
 import BudgetToKlCalculator from '@/components/water/BudgetToKlCalculator'
 import PipedVsTankerComparison from '@/components/water/PipedVsTankerComparison'
+import PopularWaterBillCalculations from '@/components/water/PopularWaterBillCalculations'
 import WaterBillComponentAudit from '@/components/water/WaterBillComponentAudit'
 import WaterBoardComparisonTable from '@/components/water/WaterBoardComparisonTable'
 import WaterConsumptionReferenceTable from '@/components/water/WaterConsumptionReferenceTable'
@@ -254,6 +255,13 @@ export default function WaterBoardPage({
             {t.calculateHeading(tariff.boardCode)}
           </h2>
           <WaterBoardBillCalculator boardCode={tariff.boardCode} boardName={tariff.boardName} />
+        </section>
+
+        <section aria-labelledby="popular-calculations" className="mb-10 scroll-mt-20">
+          <h2 id="popular-calculations" className="font-display mb-4 text-2xl font-semibold">
+            Popular {tariff.boardCode} Water Bill Calculations
+          </h2>
+          <PopularWaterBillCalculations tariff={tariff} />
         </section>
 
         <section
