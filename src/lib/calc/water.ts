@@ -49,6 +49,8 @@ import { getConnectionTariff, parseWaterTariffFile } from '../../data/water-tari
 import djbJson from '../../data/water-tariffs/djb.json'
 import cmwssbJson from '../../data/water-tariffs/cmwssb.json'
 import pcmcJson from '../../data/water-tariffs/pcmc.json'
+import hmwssbJson from '../../data/water-tariffs/hmwssb.json'
+import kmcJson from '../../data/water-tariffs/kmc.json'
 
 export type { WaterConnectionType } from '../../data/water-tariffs/_schema'
 export { getConnectionTariff } from '../../data/water-tariffs/_schema'
@@ -108,6 +110,8 @@ export interface RealWaterBillBreakdown {
   sewerageCharge: number
   fixedCharge: number
   additionalFeesTotal: number
+  /** True when fixedChargeMode is 'minimumFloor' and that minimum (not the computed water+sewerage total) determined the bill. */
+  minimumApplied: boolean
 
   total: number
   monthlyEquivalent: { total: number; consumptionKl: number } | null
@@ -172,11 +176,50 @@ export function computeWaterBill(
     }
   }
 
+  if (connection.flatRateAboveKL && consumptionKl > connection.flatRateAboveKL.thresholdKL) {
+    // High-volume threshold crossed — the ENTIRE consumption is billed at one
+    // flat rate, overriding the telescoped result above (e.g. HMWSSB above
+    // 200 KL/month), not just the amount past the threshold.
+    const { ratePerKL } = connection.flatRateAboveKL
+    slab = {
+      lines: [
+        {
+          fromKL: 0,
+          toKL: null,
+          ratePerKL,
+          klInSlab: consumptionKl,
+          charge: consumptionKl * ratePerKL,
+        },
+      ],
+      subtotal: consumptionKl * ratePerKL,
+    }
+    notes.push(
+      `Consumption exceeded ${connection.flatRateAboveKL.thresholdKL} KL, so the ENTIRE consumption is billed at a flat ₹${ratePerKL}/KL rate — not telescoped through the lower slabs.`,
+    )
+  }
+
   const waterCharge = slab.subtotal
   const sewerageCharge = waterCharge * (connection.sewerageChargePercent / 100)
   const additionalFeesTotal = (connection.additionalFees ?? []).reduce((sum, f) => sum + f.amount, 0)
+  const computedCharge = waterCharge + sewerageCharge + additionalFeesTotal
 
-  const total = waterCharge + sewerageCharge + fixedCharge + additionalFeesTotal
+  let total: number
+  let minimumApplied = false
+  if (connection.fixedChargeMode === 'minimumFloor') {
+    // The board's figure is a MINIMUM BILL, not an add-on — the consumer
+    // pays whichever is higher, never both.
+    if (fixedCharge > computedCharge) {
+      total = fixedCharge
+      minimumApplied = true
+      notes.push(
+        `Consumption is low enough that the ₹${round2(fixedCharge)} minimum charge applies, rather than the computed water + sewerage total of ₹${round2(computedCharge)}.`,
+      )
+    } else {
+      total = computedCharge
+    }
+  } else {
+    total = computedCharge + fixedCharge
+  }
   const periodMonths = tariff.billingCycle === 'bimonthly' ? 2 : 1
 
   if (periodMonths > 1) {
@@ -202,6 +245,7 @@ export function computeWaterBill(
     sewerageCharge: round2(sewerageCharge),
     fixedCharge: round2(fixedCharge),
     additionalFeesTotal: round2(additionalFeesTotal),
+    minimumApplied,
 
     total: round2(total),
     monthlyEquivalent:
@@ -219,6 +263,8 @@ export const waterTariffRegistry: Record<string, WaterTariffFile> = {
   DJB: parseWaterTariffFile(djbJson),
   CMWSSB: parseWaterTariffFile(cmwssbJson),
   PCMC: parseWaterTariffFile(pcmcJson),
+  HMWSSB: parseWaterTariffFile(hmwssbJson),
+  KMC: parseWaterTariffFile(kmcJson),
 }
 
 export function getWaterTariff(boardCode: string): WaterTariffFile {

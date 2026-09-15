@@ -1,0 +1,35 @@
+{
+  "boardCode": "HMWSSB",
+  "boardName": "Hyderabad Metropolitan Water Supply and Sewerage Board",
+  "citiesServed": ["Hyderabad", "Secunderabad", "Greater Hyderabad"],
+  "billingCycle": "monthly",
+  "connectionTypes": [
+    {
+      "connectionType": "domestic",
+      "slabs": [
+        { "minKL": 0, "maxKL": 15, "ratePerKL": 10 },
+        { "minKL": 15.001, "maxKL": 30, "ratePerKL": 12 },
+        { "minKL": 30.001, "maxKL": 50, "ratePerKL": 22 },
+        { "minKL": 50.001, "maxKL": 100, "ratePerKL": 27 },
+        { "minKL": 100.001, "maxKL": 200, "ratePerKL": 35 },
+        { "minKL": 200.001, "maxKL": null, "ratePerKL": 40 }
+      ],
+      "flatRateAboveKL": { "thresholdKL": 200, "ratePerKL": 40 },
+      "sewerageChargePercent": 35,
+      "fixedChargeByMeterSize": {
+        "15mm": 150,
+        "20mm": 418,
+        "25mm": 905,
+        "40mm": 2120,
+        "50mm": 4500
+      },
+      "fixedChargeMode": "minimumFloor",
+      "additionalFees": [],
+      "verifiedByNote": "The slum-concession rate (₹7/KL on the 0-15 KL slab, with a lower ₹105 minimum on ½\" slum connections) is NOT modeled here — this file covers the standard (non-slum) domestic tariff only. A secondary source's claim of a '20 KL free' domestic scheme is NOT reflected here: the primary 2011 board order shows no such free allowance for standard domestic connections, only the slum concessional rate, so that claim is treated as unverified/likely incorrect rather than included."
+    }
+  ],
+  "effectiveFrom": "2011-12-01",
+  "sourceUrl": "https://hyderabadwater.gov.in/en/application/themes/hmwssb/images/Tariff_Content.pdf",
+  "lastVerified": "2026-09-15",
+  "verifiedBy": "SOURCED (primary, official) — HMWSSB Board Proceedings No. 136, dated 10.11.2011, effective 01.12.2011, fetched directly from the board's own official site (hyderabadwater.gov.in). This is the board's last COMPREHENSIVE tariff revision — old (2011) but confirmed still current: a September 2025 Telangana Today report on a proposed sewerage-cess hike describes it as coming 'after a 14-year gap', confirming no revision has actually been implemented since 2011 despite a pending unfinalized proposal. Above 200 KL/month, the entire consumption is billed at a flat ₹40/KL rather than telescoped (modeled via flatRateAboveKL, not approximated). 35% sewerage cess is added on top of water charges per the same order. The pipe-size figures are correctly modeled as a MINIMUM charge (fixedChargeMode: minimumFloor) — collected only when it exceeds the computed water+sewerage total, per the order's own wording ('minimum charge... in case monthly tariff/consumption... is less than minimum charges'), not added on top of it. Commercial/industrial tariffs not yet sourced — domestic only."
+}

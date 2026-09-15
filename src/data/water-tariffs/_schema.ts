@@ -87,10 +87,35 @@ export const WaterConnectionTariffSchema = z.object({
       type: z.enum(['trueAllowance', 'allOrNothing']),
     })
     .optional(),
+  /**
+   * A high-volume threshold rule distinct from `freeAllowance`: some boards
+   * (e.g. HMWSSB above 200 KL/month) stop telescoping once consumption
+   * crosses a threshold and instead bill the ENTIRE consumption at one flat
+   * rate. `freeAllowance.allOrNothing` flips a FREE threshold (all-or-
+   * nothing at the bottom); this flips a HIGH-volume threshold to a flat
+   * total rate (all-or-nothing at the top) — a separate real pattern, not a
+   * variant of the free-allowance one.
+   */
+  flatRateAboveKL: z
+    .object({
+      thresholdKL: NonNegative,
+      ratePerKL: NonNegative,
+    })
+    .optional(),
   /** Sewerage charge as a percentage of the water (volumetric) charge. */
   sewerageChargePercent: NonNegative,
   /** Flat fixed charge per billing cycle, keyed by meter size (e.g. "15mm"). */
   fixedChargeByMeterSize: z.record(z.string(), NonNegative),
+  /**
+   * How fixedChargeByMeterSize combines with the computed water+sewerage
+   * charge. 'additive' (the default, and every board modeled before this
+   * field existed) always adds it on top. 'minimumFloor' means the board's
+   * own figure is a MINIMUM BILL, collected only when it exceeds the
+   * computed water+sewerage charge — the consumer pays
+   * max(minimum, computed), never both. Real Indian water boards use both
+   * patterns; guess wrong and low-consumption bills are overstated.
+   */
+  fixedChargeMode: z.enum(['additive', 'minimumFloor']).optional(),
   additionalFees: z.array(AdditionalFeeSchema).optional(),
   /** Per-connection-type note on data confidence, e.g. when a commercial
    *  table is sourced from an older order than the domestic one in the

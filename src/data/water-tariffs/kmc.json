@@ -1,0 +1,31 @@
+{
+  "boardCode": "KMC",
+  "boardName": "Kolkata Municipal Corporation (Water Dept.) — Bulk/Housing-Complex Connections",
+  "citiesServed": ["Kolkata"],
+  "billingCycle": "monthly",
+  "connectionTypes": [
+    {
+      "connectionType": "domestic",
+      "slabs": [
+        { "minKL": 0, "maxKL": null, "ratePerKL": 6 }
+      ],
+      "sewerageChargePercent": 0,
+      "fixedChargeByMeterSize": {
+        "20mm": 150,
+        "32mm": 225,
+        "40mm": 250,
+        "50mm": 450,
+        "100mm": 550,
+        "150mm": 800,
+        "200mm": 1200,
+        "250mm": 1400
+      },
+      "additionalFees": [],
+      "verifiedByNote": "IMPORTANT SCOPE NOTE: this file models KMC's BULK/housing-complex domestic tariff (housing complexes, gated communities, and buildings owned by government/public bodies with under 25% non-residential use) — NOT an ordinary single-family house. KMC's own official schedule has no separate per-KL or slab tariff for an individual house at all; ordinary domestic water charges in Kolkata are understood to be bundled into property tax rather than billed volumetrically, which this site does not model. The ₹6/KL bulk rate is a genuine single flat rate (not telescopic/slabbed) regardless of volume. No sewerage/conservancy charge line item appears anywhere in KMC's water supply fee schedule — sewerageChargePercent is 0 here because none was found, not because a zero rate was confirmed; KMC likely collects conservancy charges separately through property tax. 'Fixed charge' here is genuine monthly meter rent by pipe diameter (always additive), not a minimum-bill floor. Commercial/industrial (Bulk ICI) and multi-storeyed-building rates are sourced but not yet modeled here."
+    }
+  ],
+  "effectiveFrom": "2026-04-01",
+  "sourceUrl": "https://www.kmcgov.in/KMCPortal/downloads/Water_Supply_RatesCharges_2026_2027.pdf",
+  "lastVerified": "2026-09-15",
+  "verifiedBy": "SOURCED (primary, official) — KMC's own official 'Rates, Taxes, Fees & Charges for the Year 2026-2027' schedule, Water Supply Department section, fetched directly from kmcgov.in and read in full. The document states the rates apply to FY 2026-2027 but does not cite a specific resolution number or a precise within-year effective date, so 2026-04-01 (fiscal-year start) is used as a reasonable estimate, not a confirmed date. The ₹6/KL bulk-domestic rate and the meter-rent-by-pipe-size table are both stated directly and unambiguously in the source; the absence of a sewerage charge and of any individual-house tariff were confirmed by reading the complete water-supply fee schedule, not inferred from a partial excerpt."
+}
