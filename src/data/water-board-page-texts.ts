@@ -164,6 +164,11 @@ export interface WaterBoardPageTexts {
     meterReadingQ: string
     meterReadingA: string
   }
+  /** Shown as a prominent banner at the very top of the page for boards
+   *  where the only real, sourced tariff is a bulk/housing-complex rate,
+   *  not an individual-house one (e.g. KMC) — so a visitor sees the scope
+   *  before any number on the page, not buried in a footnote. */
+  bulkScopeNotice: (boardName: string) => string
 }
 
 export const enWaterBoardPageTexts: WaterBoardPageTexts = {
@@ -338,6 +343,8 @@ export const enWaterBoardPageTexts: WaterBoardPageTexts = {
     meterReadingQ: 'Paani ka meter reading kaise padhein?',
     meterReadingA: "Your water meter shows a running total in KL (or cubic metres, the same unit) on a small digital or odometer-style display — note the current reading, subtract your previous bill's reading, and the difference is your billing period's consumption in KL.",
   },
+  bulkScopeNotice: (boardName) =>
+    `This calculator is for BULK connections — housing complexes, gated communities and similar multi-unit developments — not an individual house. ${boardName}'s own published rates have no separate per-house volumetric tariff; ordinary single-family homes are typically billed through property tax instead, which this calculator does not cover.`,
 }
 
 export const hiWaterBoardPageTexts: WaterBoardPageTexts = {
@@ -512,4 +519,6 @@ export const hiWaterBoardPageTexts: WaterBoardPageTexts = {
     meterReadingQ: 'पानी का मीटर रीडिंग कैसे पढ़ें?',
     meterReadingA: 'आपका पानी मीटर एक छोटे डिजिटल या ओडोमीटर-स्टाइल डिस्प्ले पर KL (या क्यूबिक मीटर, वही यूनिट) में कुल रीडिंग दिखाता है — मौजूदा रीडिंग नोट करें, अपने पिछले बिल की रीडिंग घटाएं, और अंतर आपकी बिलिंग अवधि की खपत है, KL में।',
   },
+  bulkScopeNotice: (boardName) =>
+    `यह कैलकुलेटर BULK कनेक्शन के लिए है — हाउसिंग कॉम्प्लेक्स, गेटेड कम्युनिटी और ऐसे ही मल्टी-यूनिट डेवलपमेंट — किसी एक घर के लिए नहीं। ${boardName} की खुद की प्रकाशित दरों में किसी एक घर के लिए अलग वॉल्यूमेट्रिक टैरिफ नहीं है; सामान्य एकल-परिवार घरों का बिल आमतौर पर प्रॉपर्टी टैक्स के ज़रिए बनता है, जिसे यह कैलकुलेटर कवर नहीं करता।`,
 }

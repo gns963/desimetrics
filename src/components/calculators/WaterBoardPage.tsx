@@ -236,6 +236,19 @@ export default function WaterBoardPage({
       />
 
       <main className="mx-auto max-w-4xl px-4 py-8">
+        {tariff.isBulkOnly && (
+          <div
+            role="alert"
+            className="mb-8 rounded-xl border border-l-4 border-caution-amber/40 border-l-caution-amber bg-caution-amber/5 p-5"
+          >
+            <p className="font-display font-bold text-ink-navy">
+              ⚠ {hi ? 'सिर्फ बल्क/हाउसिंग-कॉम्प्लेक्स कनेक्शन' : 'Bulk / housing-complex connections only'}
+            </p>
+            <p className="mt-1 text-sm text-ash/80">
+              {t.bulkScopeNotice(tariff.boardName)}
+            </p>
+          </div>
+        )}
         <section aria-labelledby="calculator" className="mb-10 scroll-mt-20">
           <h2 id="calculator" className="font-display mb-4 text-2xl font-semibold">
             {t.calculateHeading(tariff.boardCode)}

@@ -134,6 +134,10 @@ export const WaterTariffFileSchema = z.object({
    *  added only once independently verifiable, never guessed. */
   connectionTypes: z.array(WaterConnectionTariffSchema).min(1),
   effectiveFrom: IsoDate,
+  /** True when the only real, sourced tariff is a BULK/housing-complex rate,
+   *  not an individual-house one (e.g. KMC) — the page renders a prominent
+   *  scope notice instead of presenting bulk figures as a per-house bill. */
+  isBulkOnly: z.boolean().optional(),
   /** Link to the board's official tariff notification / gazette order. */
   sourceUrl: z.url(),
   lastVerified: IsoDate,
