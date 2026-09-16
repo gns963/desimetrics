@@ -20,6 +20,7 @@ const GUIDES: Record<string, string> = {
   UPPCL: '/blog/uppcl-complete-guide-electricity-bill',
   BESCOM: '/blog/bescom-complete-guide-electricity-bill',
   WBSEDCL: '/blog/wbsedcl-complete-guide-electricity-bill',
+  KSEB: '/blog/kseb-complete-guide-electricity-bill',
 }
 
 const directory = CALCULATOR_PAGES.map((p) => {

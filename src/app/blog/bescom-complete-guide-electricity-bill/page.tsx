@@ -648,6 +648,21 @@ export default function BescomCompleteGuidePage() {
               </p>
             </Link>
             <Link
+              href="/blog/kseb-complete-guide-electricity-bill"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📋
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                KSEB complete guide
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                Kerala&apos;s 250-unit non-telescopic cliff, a billing quirk
+                as distinctive as Karnataka&apos;s Gruha Jyothi scheme.
+              </p>
+            </Link>
+            <Link
               href="/blog/how-telescopic-electricity-slabs-work"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
             >

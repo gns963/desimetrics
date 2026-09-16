@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Complete Guide to KSEB Electricity Bill',
+    tag: 'Reference',
+    href: '/blog/kseb-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
     title: 'Complete Electricity Bill Guides, by State',
     tag: 'Reference',
     href: '/blog/electricity-bill-guides',
