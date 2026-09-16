@@ -36,7 +36,7 @@ export const ConnectionCategory = z.enum([
 ])
 export type ConnectionCategory = z.infer<typeof ConnectionCategory>
 
-export const DiscountType = z.enum(['free', 'percent', 'flat'])
+export const DiscountType = z.enum(['free', 'percent', 'flat', 'allOrNothingFree'])
 export type DiscountType = z.infer<typeof DiscountType>
 
 // ---------------------------------------------------------------------------
@@ -162,9 +162,19 @@ export const SubsidySchemeSchema = z.object({
   maxUnits: NonNegative,
   /**
    * Interpretation depends on discountType:
-   *  - "free"    → number of free units within [minUnits, maxUnits]
+   *  - "free"    → number of free units within [minUnits, maxUnits] — a
+   *                TRUE allowance: consumption above maxUnits still gets
+   *                this many units free, only the excess is billed.
    *  - "percent" → percentage off the energy charge for that range (0–100)
    *  - "flat"    → flat ₹ reduction on the bill
+   *  - "allOrNothingFree" → ALL-OR-NOTHING: if total consumption is at or
+   *                below maxUnits, the entire energy charge is waived;
+   *                cross maxUnits by even 1 unit and NONE of it is free —
+   *                the full consumption bills at standard slab rates. A
+   *                real, distinct pattern (e.g. Punjab's 300-unit scheme
+   *                for general domestic consumers) — do not model it with
+   *                "free", which would silently grant a partial allowance
+   *                the scheme doesn't actually give above the threshold.
    */
   discountType: DiscountType,
   discountValue: NonNegative,

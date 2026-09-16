@@ -59,7 +59,7 @@
       "schemeName": "200 free units/month scheme",
       "minUnits": 0,
       "maxUnits": 200,
-      "discountType": "free",
+      "discountType": "allOrNothingFree",
       "discountValue": 200,
       "eligibility": "domestic (200 free units scheme)"
     }

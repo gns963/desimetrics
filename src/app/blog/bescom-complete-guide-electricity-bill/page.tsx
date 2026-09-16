@@ -9,7 +9,7 @@ const PATH = '/blog/bescom-complete-guide-electricity-bill'
 const TITLE = 'Complete Guide to BESCOM Electricity Bill'
 const DESCRIPTION =
   "Every verified BESCOM tariff slab, the Gruha Jyothi free-units rule, the KERC surcharge and fixed charges in one reference page — domestic, commercial, industrial and agriculture tables, two worked examples, and how to check and pay your Bangalore electricity bill."
-const PROSE_LAST_REVIEWED = '11 September 2026'
+const PROSE_LAST_REVIEWED = '16 September 2026'
 const TARIFF_DATA_REFRESHED = '29 August 2026'
 
 export const metadata: Metadata = {
@@ -40,7 +40,7 @@ const articleLd = {
   },
   publisher: { '@type': 'Organization', name: 'DesiMetrics', url: SITE },
   datePublished: '2026-09-11',
-  dateModified: '2026-09-11',
+  dateModified: '2026-09-16',
   mainEntityOfPage: `${SITE}${PATH}`,
 }
 
@@ -145,13 +145,12 @@ const fixedChargeRows: [string, string, string][] = [
 ]
 
 const workedExampleWithin: [string, string][] = [
-  ['Units consumed', '250'],
+  ['Units consumed', '150'],
   ['Sanctioned load (assumed)', '2 kW'],
-  ['Gruha Jyothi free allowance applied', 'First 200 units (₹1,315.00 worth)'],
-  ['Remaining energy charge: 50 units (201–250) @ ₹8.60', '₹430.00'],
-  ['KERC surcharge (250 × ₹0.36)', '₹90.00'],
+  ['Gruha Jyothi', 'Entire energy charge waived (₹952.50 worth) — within the 200-unit cap'],
+  ['KERC surcharge (150 × ₹0.36)', '₹54.00'],
   ['Fixed charge (2 kW × ₹110)', '₹220.00'],
-  ['Estimated total', '₹740.00'],
+  ['Estimated total', '₹274.00'],
 ]
 
 const workedExampleExceeded: [string, string][] = [
@@ -511,15 +510,17 @@ export default function BescomCompleteGuidePage() {
 
         <section aria-labelledby="worked-example" className="mt-10 scroll-mt-20">
           <h2 id="worked-example" className={h2Cls}>
-            Worked Example: 250 Units, Two Ways
+            Worked Example: Within the Cap vs. Exceeding It
           </h2>
           <p className={pCls}>
-            The same 250 units of consumption on a 2kW connection produces two very
-            different bills, depending only on whether you&apos;re within your Gruha
-            Jyothi baseline that month:
+            Two consumption levels on the same 2kW connection show how sharp
+            Gruha Jyothi&apos;s cliff really is. Crucially, this isn&apos;t a
+            partial-allowance scheme — cross the 200-unit cap and{' '}
+            <strong>none</strong> of that month&apos;s units are free, not
+            just the units above 200:
           </p>
           <p className="mt-4 font-semibold text-ink-navy">
-            Scenario A — within your Gruha Jyothi baseline
+            Scenario A — 150 units, within the 200-unit cap
           </p>
           <div className="mt-2 overflow-x-auto rounded-xl border border-hairline">
             <table className="w-full text-left text-sm">
@@ -545,7 +546,7 @@ export default function BescomCompleteGuidePage() {
             </table>
           </div>
           <p className="mt-6 font-semibold text-ink-navy">
-            Scenario B — the same 250 units, baseline exceeded
+            Scenario B — 250 units, cap exceeded
           </p>
           <div className="mt-2 overflow-x-auto rounded-xl border border-hairline">
             <table className="w-full text-left text-sm">
@@ -571,9 +572,11 @@ export default function BescomCompleteGuidePage() {
             </table>
           </div>
           <p className={`mt-4 ${pCls}`}>
-            Same units, a <strong>₹1,315 difference</strong> — entirely down to
-            whether Gruha Jyothi applied that month. Neither scenario includes
-            electricity duty (unverified — see above) or account-specific items like
+            Just 100 more units pushes the bill up by{' '}
+            <strong>₹1,781</strong> — not because of the extra units
+            themselves, but because crossing 200 wipes out the entire
+            subsidy for the month. Neither scenario includes electricity
+            duty (unverified — see above) or account-specific items like
             arrears. Run your own units and sanctioned load on the{' '}
             <Link href="/electricity/bescom-bill-calculator" className="text-brass underline">
               BESCOM bill calculator
@@ -581,8 +584,9 @@ export default function BescomCompleteGuidePage() {
             .
           </p>
           <p className={takeawayCls}>
-            Takeaway: Gruha Jyothi isn&apos;t a rounding error — losing it for one
-            month roughly triples the bill in this example.
+            Takeaway: Gruha Jyothi isn&apos;t a rounding error — one month
+            over the 200-unit cap costs roughly 7.5× more than a month
+            comfortably under it, in this example.
           </p>
         </section>
 

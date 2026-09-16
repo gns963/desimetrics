@@ -275,6 +275,15 @@ export function applySubsidy(
         amount = scheme.discountValue
         break
       }
+      case 'allOrNothingFree': {
+        // Cross maxUnits by even 1 unit and NONE of it is free — the
+        // opposite failure mode from telescoping: a true allowance would
+        // silently under-bill anyone above the threshold.
+        if (unitsConsumed <= scheme.maxUnits) {
+          amount = chargeInRange(slab.lines, scheme.minUnits, unitsConsumed)
+        }
+        break
+      }
     }
 
     if (amount > 0) {

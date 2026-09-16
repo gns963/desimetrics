@@ -77,7 +77,7 @@
       "schemeName": "Gruha Jyothi (up to 200 free units)",
       "minUnits": 0,
       "maxUnits": 200,
-      "discountType": "free",
+      "discountType": "allOrNothingFree",
       "discountValue": 200,
       "eligibility": "domestic Gruha Jyothi (white ration card)"
     }
