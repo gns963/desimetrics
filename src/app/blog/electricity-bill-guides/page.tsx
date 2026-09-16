@@ -21,6 +21,7 @@ const GUIDES: Record<string, string> = {
   BESCOM: '/blog/bescom-complete-guide-electricity-bill',
   WBSEDCL: '/blog/wbsedcl-complete-guide-electricity-bill',
   KSEB: '/blog/kseb-complete-guide-electricity-bill',
+  JVVNL: '/blog/jvvnl-complete-guide-electricity-bill',
 }
 
 const directory = CALCULATOR_PAGES.map((p) => {

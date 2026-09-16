@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Complete Guide to JVVNL (Rajasthan) Electricity Bill',
+    tag: 'Reference',
+    href: '/blog/jvvnl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
     title: 'Complete Guide to KSEB Electricity Bill',
     tag: 'Reference',
     href: '/blog/kseb-complete-guide-electricity-bill',
