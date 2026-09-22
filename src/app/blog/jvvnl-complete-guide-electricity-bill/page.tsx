@@ -617,6 +617,21 @@ export default function JvvnlCompleteGuidePage() {
               </p>
             </Link>
             <Link
+              href="/blog/pspcl-complete-guide-electricity-bill"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📋
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                PSPCL (Punjab) complete guide
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                No steep fixed charge here, but a sharp all-or-nothing
+                300-unit free-power cliff instead.
+              </p>
+            </Link>
+            <Link
               href="/blog/wbsedcl-complete-guide-electricity-bill"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
             >
