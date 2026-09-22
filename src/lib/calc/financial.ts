@@ -261,3 +261,403 @@ export function calculateGratuity(
     capped: eligible && raw > 2000000,
   }
 }
+
+// ---------------------------------------------------------------------------
+// EMI (home / personal / car / any amortising loan)
+// ---------------------------------------------------------------------------
+
+export interface EmiYearPoint {
+  year: number
+  principalPaid: number
+  interestPaid: number
+  balance: number
+}
+
+export interface EmiResult {
+  emi: number
+  totalPayment: number
+  totalInterest: number
+  principal: number
+  yearly: EmiYearPoint[]
+}
+
+/** Standard reducing-balance EMI: E = P × r × (1+r)^n / ((1+r)^n − 1). */
+export function calculateEmi(
+  principal: number,
+  annualRatePercent: number,
+  years: number,
+): EmiResult {
+  if (principal < 0 || annualRatePercent < 0 || years <= 0)
+    throw new Error('inputs must be >= 0, years must be > 0')
+  const r = annualRatePercent / 100 / 12
+  const n = Math.round(years * 12)
+
+  const emi =
+    r === 0
+      ? principal / n
+      : (principal * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
+
+  // Walk the amortisation month by month, rolling up into yearly buckets.
+  let balance = principal
+  const yearly: EmiYearPoint[] = []
+  let yearPrincipal = 0
+  let yearInterest = 0
+  for (let m = 1; m <= n; m++) {
+    const interestPortion = balance * r
+    const principalPortion = Math.min(emi - interestPortion, balance)
+    balance = Math.max(0, balance - principalPortion)
+    yearPrincipal += principalPortion
+    yearInterest += interestPortion
+    if (m % 12 === 0 || m === n) {
+      yearly.push({
+        year: Math.ceil(m / 12),
+        principalPaid: round2(yearPrincipal),
+        interestPaid: round2(yearInterest),
+        balance: round2(balance),
+      })
+      yearPrincipal = 0
+      yearInterest = 0
+    }
+  }
+
+  const totalPayment = emi * n
+  return {
+    emi: round2(emi),
+    totalPayment: round2(totalPayment),
+    totalInterest: round2(totalPayment - principal),
+    principal,
+    yearly,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// PPF (Public Provident Fund) — 15-year lock-in, annual compounding
+// ---------------------------------------------------------------------------
+
+export interface PpfYearPoint {
+  year: number
+  invested: number
+  value: number
+}
+
+export interface PpfResult {
+  invested: number
+  maturityValue: number
+  interestEarned: number
+  yearly: PpfYearPoint[]
+}
+
+/**
+ * Simplified annual model: one deposit at the start of each financial year,
+ * compounding annually at the notified rate — the standard illustrative
+ * approach (actual PPF interest is computed monthly on the lowest balance
+ * between the 5th and last day of the month, then credited once a year, which
+ * this does not replicate exactly). `years` is typically 15 (statutory
+ * lock-in) or a multiple of 5 (post-maturity block extensions).
+ */
+export function calculatePpf(
+  annualInvestment: number,
+  ratePercent: number,
+  years: number,
+): PpfResult {
+  if (annualInvestment < 0 || ratePercent < 0 || years <= 0)
+    throw new Error('inputs must be >= 0, years must be > 0')
+  const r = ratePercent / 100
+  let balance = 0
+  const yearly: PpfYearPoint[] = []
+  for (let y = 1; y <= Math.floor(years); y++) {
+    balance = (balance + annualInvestment) * (1 + r)
+    yearly.push({
+      year: y,
+      invested: round2(annualInvestment * y),
+      value: round2(balance),
+    })
+  }
+  const invested = annualInvestment * Math.floor(years)
+  return {
+    invested: round2(invested),
+    maturityValue: round2(balance),
+    interestEarned: round2(balance - invested),
+    yearly,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Fixed Deposit (FD)
+// ---------------------------------------------------------------------------
+
+export interface FdYearPoint {
+  year: number
+  value: number
+}
+
+export interface FdResult {
+  principal: number
+  maturityValue: number
+  interestEarned: number
+  yearly: FdYearPoint[]
+}
+
+/** A = P(1 + r/n)^(n×t). `compoundingPerYear`: 1 (annually), 2 (half-yearly), 4 (quarterly — most Indian bank FDs), or 12 (monthly). */
+export function calculateFd(
+  principal: number,
+  ratePercent: number,
+  years: number,
+  compoundingPerYear: number,
+): FdResult {
+  if (principal < 0 || ratePercent < 0 || years <= 0 || compoundingPerYear <= 0)
+    throw new Error('inputs must be >= 0, years and compoundingPerYear must be > 0')
+  const r = ratePercent / 100
+  const valueAt = (t: number) => principal * Math.pow(1 + r / compoundingPerYear, compoundingPerYear * t)
+  const maturityValue = valueAt(years)
+  const yearly: FdYearPoint[] = []
+  for (let y = 1; y <= Math.floor(years); y++) {
+    yearly.push({ year: y, value: round2(valueAt(y)) })
+  }
+  return {
+    principal,
+    maturityValue: round2(maturityValue),
+    interestEarned: round2(maturityValue - principal),
+    yearly,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// HRA (House Rent Allowance) exemption — Section 10(13A), Rule 2A
+// ---------------------------------------------------------------------------
+
+export interface HraResult {
+  hraReceived: number
+  rentMinusTenPercentBasic: number
+  salaryPercentLimit: number
+  exemptAmount: number
+  taxableHra: number
+}
+
+/**
+ * Exemption is the LEAST of: (a) actual HRA received, (b) rent paid minus 10%
+ * of basic salary, (c) 50% of basic salary (metro) or 40% (non-metro). All
+ * figures should be for the same period (annual in, annual out here).
+ */
+export function calculateHraExemption(
+  basicSalary: number,
+  hraReceived: number,
+  rentPaid: number,
+  isMetro: boolean,
+): HraResult {
+  if (basicSalary < 0 || hraReceived < 0 || rentPaid < 0)
+    throw new Error('inputs must be >= 0')
+  const rentMinusTenPercentBasic = Math.max(0, rentPaid - 0.1 * basicSalary)
+  const salaryPercentLimit = (isMetro ? 0.5 : 0.4) * basicSalary
+  const exemptAmount = Math.min(hraReceived, rentMinusTenPercentBasic, salaryPercentLimit)
+  return {
+    hraReceived,
+    rentMinusTenPercentBasic: round2(rentMinusTenPercentBasic),
+    salaryPercentLimit: round2(salaryPercentLimit),
+    exemptAmount: round2(Math.max(0, exemptAmount)),
+    taxableHra: round2(Math.max(0, hraReceived - Math.max(0, exemptAmount))),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Capital gains tax — listed equity shares & equity-oriented mutual funds
+// (Section 111A/112A, as revised by Budget 2024 w.e.f. 23 July 2024)
+// ---------------------------------------------------------------------------
+
+export interface CapitalGainsResult {
+  gain: number
+  gainType: 'short-term' | 'long-term'
+  exemptionUsed: number
+  taxableGain: number
+  taxRatePercent: number
+  tax: number
+  netProceeds: number
+}
+
+const LTCG_EQUITY_EXEMPTION = 125000 // ₹1.25L/year, Section 112A, from Budget 2024
+const LTCG_EQUITY_RATE = 12.5 // %, from Budget 2024 (was 10%)
+const STCG_EQUITY_RATE = 20 // %, from Budget 2024 (was 15%)
+
+/**
+ * `holdingMonths` > 12 → long-term (Section 112A): 12.5% above the ₹1.25L/FY
+ * exemption. Otherwise → short-term (Section 111A): flat 20%, no exemption.
+ * Assumes STT was paid on both purchase and sale, as with normal exchange
+ * trades — the concessional rates don't apply otherwise.
+ */
+export function calculateEquityCapitalGainsTax(
+  purchaseValue: number,
+  saleValue: number,
+  holdingMonths: number,
+): CapitalGainsResult {
+  if (purchaseValue < 0 || saleValue < 0 || holdingMonths < 0)
+    throw new Error('inputs must be >= 0')
+  const gain = saleValue - purchaseValue
+  const isLongTerm = holdingMonths > 12
+  const positiveGain = Math.max(0, gain)
+
+  if (isLongTerm) {
+    const exemptionUsed = Math.min(positiveGain, LTCG_EQUITY_EXEMPTION)
+    const taxableGain = Math.max(0, positiveGain - LTCG_EQUITY_EXEMPTION)
+    const tax = (taxableGain * LTCG_EQUITY_RATE) / 100
+    return {
+      gain: round2(gain),
+      gainType: 'long-term',
+      exemptionUsed: round2(exemptionUsed),
+      taxableGain: round2(taxableGain),
+      taxRatePercent: LTCG_EQUITY_RATE,
+      tax: round2(tax),
+      netProceeds: round2(saleValue - tax),
+    }
+  }
+
+  const tax = (positiveGain * STCG_EQUITY_RATE) / 100
+  return {
+    gain: round2(gain),
+    gainType: 'short-term',
+    exemptionUsed: 0,
+    taxableGain: round2(positiveGain),
+    taxRatePercent: STCG_EQUITY_RATE,
+    tax: round2(tax),
+    netProceeds: round2(saleValue - tax),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// NPS (National Pension System) — accumulation + exit-rule withdrawal split
+// ---------------------------------------------------------------------------
+
+export interface NpsYearPoint {
+  year: number
+  invested: number
+  value: number
+}
+
+export interface NpsResult {
+  totalInvested: number
+  corpus: number
+  gains: number
+  lumpsumAmount: number
+  annuityAmount: number
+  taxFreeLumpsum: number
+  taxableLumpsum: number
+  estimatedMonthlyPension: number
+  yearly: NpsYearPoint[]
+}
+
+const ASSUMED_ANNUITY_RATE_PERCENT = 6.5 // illustrative — actual annuity rates vary by insurer/plan
+
+/**
+ * Accumulation uses the same future-value-of-monthly-annuity formula as SIP.
+ * The withdrawal split follows PFRDA's exit rules as amended (effective
+ * 2026): corpus ≤ ₹8L can be withdrawn fully as lump sum; ₹8L–₹12L allows up
+ * to ₹6L lump sum (remainder via phased withdrawal, approximated here as
+ * annuity-bound for simplicity); above ₹12L, non-government subscribers get
+ * 80% lump sum / 20% mandatory annuity, government subscribers 60%/40%. Only
+ * 60% of the total corpus is tax-free under Section 10(12A) regardless of how
+ * much is withdrawn as lump sum — any lump sum beyond that 60% is taxable at
+ * the subscriber's slab rate.
+ */
+export function calculateNps(
+  monthlyContribution: number,
+  annualRatePercent: number,
+  yearsToRetirement: number,
+  subscriberType: 'government' | 'other',
+): NpsResult {
+  if (monthlyContribution < 0 || annualRatePercent < 0 || yearsToRetirement <= 0)
+    throw new Error('inputs must be >= 0, yearsToRetirement must be > 0')
+  const i = annualRatePercent / 100 / 12
+  const totalMonths = Math.round(yearsToRetirement * 12)
+  const corpus = sipFutureValue(monthlyContribution, i, totalMonths)
+  const totalInvested = monthlyContribution * totalMonths
+
+  const yearly: NpsYearPoint[] = []
+  for (let y = 1; y <= Math.floor(yearsToRetirement); y++) {
+    const months = y * 12
+    yearly.push({
+      year: y,
+      invested: round2(monthlyContribution * months),
+      value: round2(sipFutureValue(monthlyContribution, i, months)),
+    })
+  }
+
+  let lumpsumPercent: number
+  if (corpus <= 800000) {
+    lumpsumPercent = 100
+  } else if (corpus <= 1200000) {
+    lumpsumPercent = (600000 / corpus) * 100
+  } else {
+    lumpsumPercent = subscriberType === 'government' ? 60 : 80
+  }
+
+  const lumpsumAmount = (corpus * lumpsumPercent) / 100
+  const annuityAmount = corpus - lumpsumAmount
+  const taxFreeLumpsum = Math.min(lumpsumAmount, corpus * 0.6)
+  const taxableLumpsum = Math.max(0, lumpsumAmount - taxFreeLumpsum)
+  const estimatedMonthlyPension = (annuityAmount * (ASSUMED_ANNUITY_RATE_PERCENT / 100)) / 12
+
+  return {
+    totalInvested: round2(totalInvested),
+    corpus: round2(corpus),
+    gains: round2(corpus - totalInvested),
+    lumpsumAmount: round2(lumpsumAmount),
+    annuityAmount: round2(annuityAmount),
+    taxFreeLumpsum: round2(taxFreeLumpsum),
+    taxableLumpsum: round2(taxableLumpsum),
+    estimatedMonthlyPension: round2(estimatedMonthlyPension),
+    yearly,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Human Life Value (HLV) — income-replacement method for life-cover sizing
+// ---------------------------------------------------------------------------
+
+export interface HlvResult {
+  netAnnualContribution: number
+  presentValueOfIncome: number
+  totalBeforeOffsets: number
+  recommendedCover: number
+}
+
+/**
+ * Standard income-replacement HLV method taught in Indian financial-planning
+ * practice: the present value of the income a family would lose, plus
+ * outstanding debts, minus cover/savings that already exist. This is a needs
+ * estimate, not a premium quote — actual policy pricing depends on the
+ * insurer, medicals and product chosen, none of which this models.
+ */
+export function calculateHumanLifeValue(
+  annualIncome: number,
+  annualSelfExpenses: number,
+  yearsToRetirement: number,
+  discountRatePercent: number,
+  outstandingLiabilities: number,
+  existingCoverAndSavings: number,
+): HlvResult {
+  if (
+    annualIncome < 0 ||
+    annualSelfExpenses < 0 ||
+    yearsToRetirement <= 0 ||
+    discountRatePercent <= 0 ||
+    outstandingLiabilities < 0 ||
+    existingCoverAndSavings < 0
+  )
+    throw new Error('inputs must be >= 0, yearsToRetirement and discountRatePercent must be > 0')
+
+  const netAnnualContribution = Math.max(0, annualIncome - annualSelfExpenses)
+  const r = discountRatePercent / 100
+  const n = yearsToRetirement
+  // Present value of an ordinary annuity (income received at year-end).
+  const presentValueOfIncome =
+    r === 0 ? netAnnualContribution * n : netAnnualContribution * ((1 - Math.pow(1 + r, -n)) / r)
+
+  const totalBeforeOffsets = presentValueOfIncome + outstandingLiabilities
+  const recommendedCover = Math.max(0, totalBeforeOffsets - existingCoverAndSavings)
+
+  return {
+    netAnnualContribution: round2(netAnnualContribution),
+    presentValueOfIncome: round2(presentValueOfIncome),
+    totalBeforeOffsets: round2(totalBeforeOffsets),
+    recommendedCover: round2(recommendedCover),
+  }
+}

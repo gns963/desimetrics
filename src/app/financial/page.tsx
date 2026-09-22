@@ -8,9 +8,9 @@ import { getAlternateLanguages } from '@/lib/i18n-alternates'
 const SITE = 'https://desimetrics.com'
 
 export const metadata: Metadata = {
-  title: 'Financial Calculators — GST, SIP, Income Tax & Gratuity (India)',
+  title: 'Financial Calculators — Loans, Investments, Tax & Insurance (India)',
   description:
-    'Free Indian personal-finance calculators: GST calculator, SIP returns, new vs old income tax regime for FY 2026-27, and gratuity — accurate, fast and mobile-friendly.',
+    'Free Indian personal-finance calculators: home & personal loan EMI, PPF, FD, NPS, HRA, capital gains tax, GST, SIP, income tax regime and more — accurate, fast and mobile-friendly.',
   alternates: {
     canonical: `${SITE}/financial`,
     languages: getAlternateLanguages('/financial'),
@@ -19,6 +19,62 @@ export const metadata: Metadata = {
 }
 
 const cards = [
+  {
+    href: '/financial/home-loan-emi-calculator',
+    emoji: '🏠',
+    title: 'Home Loan EMI Calculator',
+    body: 'Monthly EMI, total interest and a year-by-year principal-vs-interest breakdown.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/personal-loan-emi-calculator',
+    emoji: '💳',
+    title: 'Personal Loan EMI Calculator',
+    body: 'EMI and total interest on an unsecured personal loan.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/ppf-calculator',
+    emoji: '📮',
+    title: 'PPF Calculator',
+    body: 'Project your Public Provident Fund maturity value over the 15-year lock-in.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/fd-calculator',
+    emoji: '🏦',
+    title: 'FD Calculator',
+    body: 'Fixed deposit maturity value with quarterly, monthly or annual compounding.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/hra-calculator',
+    emoji: '🏠',
+    title: 'HRA Calculator',
+    body: 'Work out your tax-exempt House Rent Allowance under Section 10(13A).',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/capital-gains-tax-calculator',
+    emoji: '📉',
+    title: 'Capital Gains Tax Calculator',
+    body: 'LTCG/STCG tax on listed equity shares and equity mutual funds.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/nps-calculator',
+    emoji: '🏛️',
+    title: 'NPS Calculator',
+    body: 'Project your National Pension System corpus and 2026 exit-rule split.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/human-life-value-calculator',
+    emoji: '🛡️',
+    title: 'Human Life Value Calculator',
+    body: 'Estimate how much life insurance cover your family would need.',
+    cta: 'Open →',
+  },
   {
     href: '/financial/gst-calculator',
     emoji: '🧾',
@@ -58,7 +114,7 @@ const itemList = itemListLd(cards.map((c) => ({ name: c.title, path: c.href })))
 const faqs = [
   {
     q: 'Are these calculators updated for FY 2026-27?',
-    a: 'Yes — the tax regime calculator uses the current FY 2026-27 (AY 2027-28) slabs, standard deduction and 87A rebate. GST, SIP and gratuity are formula-based against current law (e.g. the ₹20,00,000 gratuity ceiling) and aren\'t tied to a specific financial year.',
+    a: 'Yes — the tax regime, capital gains tax and HRA calculators use current FY 2026-27 (AY 2027-28) rules, including the Budget 2024 LTCG/STCG rates and the 2026 NPS withdrawal-rule changes. GST, SIP, PPF, FD, EMI and gratuity calculators are formula-based against current law (e.g. the ₹20,00,000 gratuity ceiling, the current 7.1% PPF rate) and aren\'t tied to a specific financial year, though PPF\'s rate is reviewed quarterly.',
   },
   {
     q: 'Is this tax or investment advice?',
@@ -91,9 +147,9 @@ export default function FinancialHubPage() {
           </>
         }
         h1="Financial Calculators"
-        subtitle="Fast, accurate personal-finance tools for India — GST, mutual fund SIPs, income tax regime comparison and gratuity. Free and updated for the current financial year."
+        subtitle="Fast, accurate personal-finance tools for India — loan EMIs, PPF and FD growth, NPS, HRA, capital gains tax, GST, mutual fund SIPs, income tax regime comparison and gratuity. Free and updated for the current financial year."
         stats={[
-          { icon: '🧮', big: '4', small: 'Calculators', tone: 'hub' },
+          { icon: '🧮', big: '12', small: 'Calculators', tone: 'hub' },
           { icon: '📅', big: 'FY 2026-27', small: 'Current year', tone: 'hub' },
           { icon: '🔓', big: 'Free', small: 'No login', tone: 'hub' },
           { icon: '🇮🇳', big: 'India', small: 'Coverage', tone: 'hub' },
@@ -128,10 +184,12 @@ export default function FinancialHubPage() {
         </h2>
         <p className="text-ash/80">
           DesiMetrics started with electricity bills and now covers the everyday
-          numbers Indian households search for most — from what you owe in GST to
-          how much a SIP could grow, which tax regime saves you more, and the
-          gratuity you&apos;ve earned. Same clean, no-login tools, all in one
-          place.
+          numbers Indian households search for most — from what your home or
+          personal loan EMI will be, to how much your PPF or FD could grow, what
+          your NPS corpus and exit split look like under the 2026 rules, how much
+          HRA and capital gains tax you owe, which tax regime saves you more, and
+          how much life cover your family would actually need. Same clean,
+          no-login tools, all in one place.
         </p>
       </section>
 
@@ -142,7 +200,10 @@ export default function FinancialHubPage() {
         <p className="text-ash/80">
           Figures here are checked against the relevant official sources
           where applicable — GST slabs against GST Council/CBIC
-          notifications, income tax slabs against the Finance Act/CBDT, and
+          notifications, income tax and capital gains rules against the
+          Finance Act/CBDT (including the Budget 2024 LTCG/STCG revisions),
+          NPS withdrawal rules against PFRDA&apos;s 2026 amendments, PPF
+          against the current quarterly-notified small-savings rate, and
           gratuity against the Payment of Gratuity Act. Tax law and rates
           change periodically; for anything with real financial
           consequences (filing, invoicing, a major investment decision),

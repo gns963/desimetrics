@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
 import TaxRegimeCalculator from '@/components/calculators/TaxRegimeCalculator'
@@ -171,6 +172,29 @@ export default function TaxRegimePage() {
             </tbody>
           </table>
         </div>
+      </section>
+
+      <section aria-labelledby="old-regime-deductions" className="mb-10">
+        <h2 id="old-regime-deductions" className="font-display mb-2 text-2xl font-semibold">
+          Sizing your old-regime deductions
+        </h2>
+        <p className="text-ash/80">
+          The &ldquo;old-regime deductions&rdquo; field above is only as
+          accurate as the total you enter — if you&apos;re not sure what
+          that number should be, work it out from your actual deductions
+          first: our{' '}
+          <Link href="/financial/hra-calculator" className="text-brass underline">
+            HRA Calculator
+          </Link>{' '}
+          gives your exact exempt HRA amount, and our{' '}
+          <Link href="/financial/home-loan-emi-calculator" className="text-brass underline">
+            Home Loan EMI Calculator
+          </Link>{' '}
+          breaks out how much of your EMI is interest (Section 24) versus
+          principal (Section 80C) for a home loan. Add those to your other
+          80C/80D contributions — PPF, ELSS, insurance premiums — to get a
+          realistic old-regime deduction total rather than guessing.
+        </p>
       </section>
 
       <section aria-labelledby="faq" className="mb-10">

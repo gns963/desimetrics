@@ -25,6 +25,54 @@ const TOOLS = [
     title: 'Gratuity Calculator',
     body: 'Compute gratuity from salary and years of service.',
   },
+  {
+    slug: 'home-loan-emi-calculator',
+    emoji: '🏠',
+    title: 'Home Loan EMI Calculator',
+    body: 'Monthly EMI, total interest and a year-by-year breakdown.',
+  },
+  {
+    slug: 'personal-loan-emi-calculator',
+    emoji: '💳',
+    title: 'Personal Loan EMI Calculator',
+    body: 'EMI and total interest on an unsecured personal loan.',
+  },
+  {
+    slug: 'ppf-calculator',
+    emoji: '📮',
+    title: 'PPF Calculator',
+    body: 'Project your Public Provident Fund maturity value.',
+  },
+  {
+    slug: 'fd-calculator',
+    emoji: '🏦',
+    title: 'FD Calculator',
+    body: 'Fixed deposit maturity value with your choice of compounding.',
+  },
+  {
+    slug: 'hra-calculator',
+    emoji: '🏠',
+    title: 'HRA Calculator',
+    body: 'Work out your tax-exempt House Rent Allowance.',
+  },
+  {
+    slug: 'capital-gains-tax-calculator',
+    emoji: '📉',
+    title: 'Capital Gains Tax Calculator',
+    body: 'LTCG/STCG tax on listed equity shares and mutual funds.',
+  },
+  {
+    slug: 'nps-calculator',
+    emoji: '🏛️',
+    title: 'NPS Calculator',
+    body: 'Project your National Pension System corpus and exit split.',
+  },
+  {
+    slug: 'human-life-value-calculator',
+    emoji: '🛡️',
+    title: 'Human Life Value Calculator',
+    body: 'Estimate how much life insurance cover your family needs.',
+  },
 ] as const
 
 export default function FinancialCrossSell({ current }: { current: string }) {
