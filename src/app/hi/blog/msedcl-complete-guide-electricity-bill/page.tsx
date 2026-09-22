@@ -432,12 +432,16 @@ export default function MsedclCompleteGuidePageHi() {
             <Link href="/hi/blog/uppcl-complete-guide-electricity-bill" className="text-brass underline">
               UPPCL पूरी गाइड
             </Link>{' '}
-            देखें), और BESCOM की घरेलू ड्यूटी दर अभी तक बिल्कुल भरोसेमंद तरीके से
-            सत्यापित नहीं है — हमारी{' '}
+            देखें), जबकि BESCOM और WBSEDCL दोनों में एक जैसा अपुष्ट-ड्यूटी गैप
+            है — हमारी{' '}
             <Link href="/hi/blog/bescom-complete-guide-electricity-bill" className="text-brass underline">
-              BESCOM पूरी गाइड
+              BESCOM
             </Link>{' '}
-            देखें।
+            और{' '}
+            <Link href="/hi/blog/wbsedcl-complete-guide-electricity-bill" className="text-brass underline">
+              WBSEDCL
+            </Link>{' '}
+            पूरी गाइड देखें।
           </p>
           <p className={`mt-3 ${pCls}`}>
             इंडस्ट्रियल कनेक्शन के लिए, हमारे पास भरोसेमंद तरीके से सत्यापित

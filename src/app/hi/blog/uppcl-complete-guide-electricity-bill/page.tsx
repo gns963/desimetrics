@@ -456,12 +456,16 @@ export default function UppclCompleteGuidePageHi() {
             <Link href="/hi/blog/msedcl-complete-guide-electricity-bill" className="text-brass underline">
               MSEDCL पूरी गाइड
             </Link>{' '}
-            देखें — और इन दोनों राज्यों के उलट, हमारी{' '}
+            देखें — और इन दोनों राज्यों के उलट, BESCOM और WBSEDCL दोनों की
+            घरेलू ड्यूटी दर एक पुष्ट आंकड़े की बजाय अपुष्ट है, हमारी{' '}
             <Link href="/hi/blog/bescom-complete-guide-electricity-bill" className="text-brass underline">
-              BESCOM पूरी गाइड
+              BESCOM
             </Link>{' '}
-            के अनुसार BESCOM की घरेलू ड्यूटी दर अभी बिल्कुल भरोसेमंद तरीके से
-            सत्यापित नहीं है।
+            और{' '}
+            <Link href="/hi/blog/wbsedcl-complete-guide-electricity-bill" className="text-brass underline">
+              WBSEDCL
+            </Link>{' '}
+            पूरी गाइड के अनुसार।
           </p>
           <p className={takeawayCls}>
             निष्कर्ष: UP की 5% ड्यूटी भारतीय मानकों के हिसाब से वाकई हल्की है —

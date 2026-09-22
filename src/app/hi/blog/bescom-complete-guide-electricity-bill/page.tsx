@@ -9,7 +9,7 @@ const PATH = '/blog/bescom-complete-guide-electricity-bill'
 const TITLE = 'BESCOM बिजली बिल की पूरी गाइड'
 const DESCRIPTION =
   'हर सत्यापित BESCOM टैरिफ स्लैब, गृह ज्योति फ्री-यूनिट्स नियम, KERC सरचार्ज और फिक्स्ड चार्ज एक ही रेफरेंस पेज पर — घरेलू, कमर्शियल, इंडस्ट्रियल और कृषि टेबल, दो उदाहरण गणना, और अपना बैंगलोर बिजली बिल कैसे जांचें और चुकाएं।'
-const PROSE_LAST_REVIEWED = '11 सितंबर 2026'
+const PROSE_LAST_REVIEWED = '22 सितंबर 2026'
 const TARIFF_DATA_REFRESHED = '29 अगस्त 2026'
 
 export const metadata: Metadata = {
@@ -40,7 +40,7 @@ const articleLd = {
   },
   publisher: { '@type': 'Organization', name: 'DesiMetrics', url: SITE },
   datePublished: '2026-09-11',
-  dateModified: '2026-09-11',
+  dateModified: '2026-09-22',
   mainEntityOfPage: `${SITE}/hi${PATH}`,
 }
 
@@ -145,13 +145,12 @@ const fixedChargeRows: [string, string, string][] = [
 ]
 
 const workedExampleWithin: [string, string][] = [
-  ['इस्तेमाल की गई यूनिट्स', '250'],
+  ['इस्तेमाल की गई यूनिट्स', '150'],
   ['स्वीकृत लोड (माना गया)', '2 kW'],
-  ['गृह ज्योति फ्री भत्ता लागू', 'पहली 200 यूनिट (₹1,315.00 मूल्य)'],
-  ['बाकी एनर्जी चार्ज: 50 यूनिट (201–250) @ ₹8.60', '₹430.00'],
-  ['KERC सरचार्ज (250 × ₹0.36)', '₹90.00'],
+  ['गृह ज्योति', 'पूरा एनर्जी चार्ज माफ (₹952.50 मूल्य) — 200-यूनिट सीमा के भीतर'],
+  ['KERC सरचार्ज (150 × ₹0.36)', '₹54.00'],
   ['फिक्स्ड चार्ज (2 kW × ₹110)', '₹220.00'],
-  ['अनुमानित कुल', '₹740.00'],
+  ['अनुमानित कुल', '₹274.00'],
 ]
 
 const workedExampleExceeded: [string, string][] = [
@@ -470,9 +469,14 @@ export default function BescomCompleteGuidePageHi() {
             <Link href="/hi/blog/uppcl-complete-guide-electricity-bill" className="text-brass underline">
               UPPCL
             </Link>{' '}
-            पूरी गाइड देखें। जब तक हम किसी प्राइमरी KERC ऑर्डर के मुकाबले
-            कर्नाटक की असली दर की पुष्टि नहीं कर सकते, कैलकुलेटर के 0% को
-            तथ्य मानने की बजाय अपने बिल की ड्यूटी लाइन सीधे जांचें।
+            पूरी गाइड देखें। पश्चिम बंगाल के WBSEDCL में BESCOM जैसा ही
+            अपुष्ट-ड्यूटी गैप है — देखें हमारी{' '}
+            <Link href="/hi/blog/wbsedcl-complete-guide-electricity-bill" className="text-brass underline">
+              WBSEDCL पूरी गाइड
+            </Link>
+            । जब तक हम किसी प्राइमरी KERC ऑर्डर के मुकाबले कर्नाटक की असली
+            दर की पुष्टि नहीं कर सकते, कैलकुलेटर के 0% को तथ्य मानने की
+            बजाय अपने बिल की ड्यूटी लाइन सीधे जांचें।
           </p>
           <p className={takeawayCls}>
             निष्कर्ष: यह BESCOM बिल की वह एक लाइन है जिसे हमारा कैलकुलेटर
@@ -514,15 +518,16 @@ export default function BescomCompleteGuidePageHi() {
 
         <section aria-labelledby="worked-example" className="mt-10 scroll-mt-20">
           <h2 id="worked-example" className={h2Cls}>
-            उदाहरण गणना: 250 यूनिट, दो तरीके
+            उदाहरण गणना: सीमा के भीतर बनाम पार
           </h2>
           <p className={pCls}>
-            एक 2kW कनेक्शन पर इस्तेमाल की गई वही 250 यूनिट, सिर्फ इस बात पर
-            निर्भर करते हुए कि उस महीने आप अपनी गृह ज्योति बेसलाइन के भीतर हैं
-            या नहीं, दो बहुत अलग बिल बनाती हैं:
+            एक ही 2kW कनेक्शन पर इस्तेमाल के दो स्तर दिखाते हैं कि गृह ज्योति
+            की सीमा वाकई कितनी तीखी है। यह कोई आंशिक-भत्ता योजना नहीं है —
+            200-यूनिट सीमा पार करते ही, सिर्फ ऊपर की यूनिट्स नहीं, बल्कि उस
+            महीने की <strong>कोई भी</strong> यूनिट मुफ्त नहीं रहती:
           </p>
           <p className="mt-4 font-semibold text-ink-navy">
-            परिदृश्य A — अपनी गृह ज्योति बेसलाइन के भीतर
+            परिदृश्य A — 150 यूनिट, 200-यूनिट सीमा के भीतर
           </p>
           <div className="mt-2 overflow-x-auto rounded-xl border border-hairline">
             <table className="w-full text-left text-sm">
@@ -548,7 +553,7 @@ export default function BescomCompleteGuidePageHi() {
             </table>
           </div>
           <p className="mt-6 font-semibold text-ink-navy">
-            परिदृश्य B — वही 250 यूनिट, बेसलाइन पार
+            परिदृश्य B — 250 यूनिट, सीमा पार
           </p>
           <div className="mt-2 overflow-x-auto rounded-xl border border-hairline">
             <table className="w-full text-left text-sm">
@@ -574,9 +579,10 @@ export default function BescomCompleteGuidePageHi() {
             </table>
           </div>
           <p className={`mt-4 ${pCls}`}>
-            वही यूनिट्स, एक <strong>₹1,315 का अंतर</strong> — पूरी तरह इस बात
-            पर निर्भर कि उस महीने गृह ज्योति लागू हुई या नहीं। दोनों परिदृश्यों
-            में इलेक्ट्रिसिटी ड्यूटी (अपुष्ट — ऊपर देखें) या बकाया जैसी
+            सिर्फ 100 और यूनिट बिल को <strong>₹1,781</strong> बढ़ा देती हैं —
+            अतिरिक्त यूनिट्स की वजह से नहीं, बल्कि 200 पार करते ही उस महीने की
+            पूरी सब्सिडी खत्म हो जाने की वजह से। दोनों परिदृश्यों में
+            इलेक्ट्रिसिटी ड्यूटी (अपुष्ट — ऊपर देखें) या बकाया जैसी
             अकाउंट-विशिष्ट चीज़ें शामिल नहीं हैं। अपनी यूनिट्स और स्वीकृत लोड{' '}
             <Link href="/hi/electricity/bescom-bill-calculator" className="text-brass underline">
               BESCOM बिल कैलकुलेटर
@@ -584,8 +590,9 @@ export default function BescomCompleteGuidePageHi() {
             पर चलाएं।
           </p>
           <p className={takeawayCls}>
-            निष्कर्ष: गृह ज्योति कोई गोलाई की गलती नहीं है — इसे एक महीने के
-            लिए खोना इस उदाहरण में बिल को लगभग तीन गुना कर देता है।
+            निष्कर्ष: गृह ज्योति कोई गोलाई की गलती नहीं है — 200-यूनिट सीमा से
+            ऊपर का एक महीना इस उदाहरण में सीमा के भीतर वाले बिल से करीब 7.5
+            गुना ज़्यादा महंगा पड़ता है।
           </p>
         </section>
 
@@ -594,6 +601,20 @@ export default function BescomCompleteGuidePageHi() {
             जुड़े हुए टूल और गाइड
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
+            <Link
+              href="/blog/electricity-bill-guides"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📚
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                सभी बिजली बिल गाइड
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                पूरी कम्प्लीट गाइड डायरेक्टरी देखें, राज्य दर राज्य। (अंग्रेज़ी)
+              </p>
+            </Link>
             <Link
               href="/hi/electricity/bescom-bill-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
@@ -634,6 +655,51 @@ export default function BescomCompleteGuidePageHi() {
               </p>
               <p className="mt-1 text-xs text-ash/60">
                 उत्तर प्रदेश की सत्यापित 5% ड्यूटी से तुलना करें।
+              </p>
+            </Link>
+            <Link
+              href="/hi/blog/kseb-complete-guide-electricity-bill"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📋
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                KSEB पूरी गाइड
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                केरल का 250-यूनिट नॉन-टेलिस्कोपिक क्लिफ, कर्नाटक की गृह
+                ज्योति स्कीम जितना ही अलग एक बिलिंग क्वर्क।
+              </p>
+            </Link>
+            <Link
+              href="/hi/blog/pspcl-complete-guide-electricity-bill"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📋
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                PSPCL पूरी गाइड
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                पंजाब की अपनी ऑल-ऑर-नथिंग फ्री-पावर क्लिफ, 200 की बजाय 300
+                यूनिट पर।
+              </p>
+            </Link>
+            <Link
+              href="/hi/blog/tsspdcl-complete-guide-electricity-bill"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📋
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                TGSPDCL (तेलंगाना) पूरी गाइड
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                वही गृह ज्योति स्कीम नाम, वही 200-यूनिट क्लिफ, और वही
+                फ्री-कृषि पैटर्न।
               </p>
             </Link>
             <Link

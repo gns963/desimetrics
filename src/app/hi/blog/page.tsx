@@ -37,6 +37,36 @@ const posts = [
     live: true,
   },
   {
+    title: 'WBSEDCL बिजली बिल की पूरी गाइड',
+    tag: 'रेफरेंस',
+    href: '/hi/blog/wbsedcl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
+    title: 'KSEB बिजली बिल की पूरी गाइड',
+    tag: 'रेफरेंस',
+    href: '/hi/blog/kseb-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
+    title: 'JVVNL (राजस्थान) बिजली बिल की पूरी गाइड',
+    tag: 'रेफरेंस',
+    href: '/hi/blog/jvvnl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
+    title: 'PSPCL (पंजाब) बिजली बिल की पूरी गाइड',
+    tag: 'रेफरेंस',
+    href: '/hi/blog/pspcl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
+    title: 'TGSPDCL/TSSPDCL (तेलंगाना) बिजली बिल की पूरी गाइड',
+    tag: 'रेफरेंस',
+    href: '/hi/blog/tsspdcl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
     title: 'भारत में पानी का बिल कैसे बनता है: शहर-दर-शहर गाइड',
     tag: 'पानी',
     href: '/hi/blog/how-water-bills-calculated-india',
