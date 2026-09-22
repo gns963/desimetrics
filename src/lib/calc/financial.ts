@@ -443,6 +443,114 @@ export function calculateGratuity(
   }
 }
 
+export type GratuityScenario = 'retirement' | 'death' | 'fixedTerm'
+export type GratuityEmployerCoverage = 'covered' | 'nonCovered'
+export type GratuityEmployeeType = 'private' | 'government'
+
+const GRATUITY_CEILING_PRIVATE = 2000000
+const GRATUITY_CEILING_GOVERNMENT = 2500000 // CCS Pension Rules ceiling, raised from ₹20L to ₹25L effective 1 Jan 2024
+
+export interface GratuityInputV2 {
+  scenario: GratuityScenario
+  /** Last drawn monthly Basic + DA — also called "emoluments" in the CCS death-gratuity slab table. */
+  lastDrawnSalary: number
+  yearsOfService: number
+  /** 'covered': employer falls under the Payment of Gratuity Act (15-day/26-day formula). 'nonCovered': employer doesn't (15-day/30-day calendar-month formula) — not relevant for a government employee, whose gratuity always follows CCS Pension Rules regardless. */
+  employerCoverage: GratuityEmployerCoverage
+  employeeType: GratuityEmployeeType
+}
+
+export interface GratuityResultV2 {
+  eligible: boolean
+  ineligibilityReason: string | null
+  roundedYears: number
+  grossGratuity: number
+  gratuity: number
+  capped: boolean
+  ceilingApplied: number
+  isFullyTaxExempt: boolean
+}
+
+function roundGratuityServiceYears(years: number): number {
+  const whole = Math.floor(years)
+  return years - whole > 0.5 ? whole + 1 : whole
+}
+
+/**
+ * Extends `calculateGratuity` to three scenarios calcwise.finance's
+ * calculator covers, each with genuinely different eligibility and/or
+ * formula rules — not just relabeled versions of the same math:
+ *
+ * - `retirement`: the standard case, requiring 5+ years of continuous
+ *   service. Uses 15/26 (Act-covered employer) or 15/30 (non-covered) of
+ *   last drawn salary per year, capped at the employee type's ceiling.
+ * - `death`: the 5-year minimum is waived by law — gratuity is payable even
+ *   if the employee dies in their first year. For a GOVERNMENT employee,
+ *   this follows the CCS Pension Rules' service-linked slab table (2x
+ *   emoluments under 1 year, 6x for 1-5 years, 12x for 5-11 years, 20x for
+ *   11-20 years, then half a month's emoluments per completed 6-month period
+ *   beyond 20 years, capped at 33x) — a genuinely different formula from
+ *   private-sector gratuity, not a relabeling. For a PRIVATE-sector
+ *   employee, the same 15/26-or-30 formula as retirement applies, just
+ *   without the 5-year eligibility gate.
+ * - `fixedTerm`: under Section 53 of the Code on Social Security, 2020
+ *   (the four Labour Codes took effect 21 November 2025), fixed-term
+ *   employees get gratuity on the SAME 15/26-or-30 formula as retirement,
+ *   but the 5-year minimum drops to just 1 year of service.
+ *
+ * Government-employee gratuity (any scenario) is fully exempt from tax
+ * under Section 10(10)(i), regardless of amount — private-sector gratuity
+ * is exempt only up to the statutory ceiling under Section 10(10)(ii)/(iii).
+ */
+export function calculateGratuityV2(input: GratuityInputV2): GratuityResultV2 {
+  const { scenario, lastDrawnSalary, yearsOfService, employerCoverage, employeeType } = input
+  if (lastDrawnSalary < 0 || yearsOfService < 0) throw new Error('inputs must be >= 0')
+
+  const ceiling = employeeType === 'government' ? GRATUITY_CEILING_GOVERNMENT : GRATUITY_CEILING_PRIVATE
+  const divisor = employerCoverage === 'covered' ? 26 : 30
+
+  let eligible = true
+  let ineligibilityReason: string | null = null
+  if (scenario === 'retirement' && yearsOfService < 5) {
+    eligible = false
+    ineligibilityReason = 'Retirement/resignation gratuity requires at least 5 years of continuous service.'
+  } else if (scenario === 'fixedTerm' && yearsOfService < 1) {
+    eligible = false
+    ineligibilityReason = 'Fixed-term gratuity requires at least 1 year of service under the Code on Social Security, 2020.'
+  }
+  // scenario === 'death': no minimum service requirement — always eligible.
+
+  const roundedYears = eligible ? roundGratuityServiceYears(yearsOfService) : 0
+  let grossGratuity = 0
+
+  if (eligible) {
+    if (scenario === 'death' && employeeType === 'government') {
+      if (yearsOfService < 1) grossGratuity = 2 * lastDrawnSalary
+      else if (yearsOfService < 5) grossGratuity = 6 * lastDrawnSalary
+      else if (yearsOfService < 11) grossGratuity = 12 * lastDrawnSalary
+      else if (yearsOfService < 20) grossGratuity = 20 * lastDrawnSalary
+      else {
+        const halfYearPeriods = Math.floor(yearsOfService * 2)
+        grossGratuity = Math.min(halfYearPeriods * 0.5 * lastDrawnSalary, 33 * lastDrawnSalary)
+      }
+    } else {
+      grossGratuity = (15 / divisor) * lastDrawnSalary * roundedYears
+    }
+  }
+
+  const gratuity = eligible ? Math.min(grossGratuity, ceiling) : 0
+  return {
+    eligible,
+    ineligibilityReason,
+    roundedYears,
+    grossGratuity: round2(grossGratuity),
+    gratuity: round2(gratuity),
+    capped: eligible && grossGratuity > ceiling,
+    ceilingApplied: ceiling,
+    isFullyTaxExempt: employeeType === 'government',
+  }
+}
+
 // ---------------------------------------------------------------------------
 // EMI (home / personal / car / any amortising loan)
 // ---------------------------------------------------------------------------

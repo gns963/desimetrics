@@ -5,6 +5,7 @@ import {
   calculatePpf,
   calculateEmiWithPrepayment,
   calculateGratuity,
+  calculateGratuityV2,
   calculateGst,
   calculateLoanTrueCost,
   calculateSip,
@@ -185,6 +186,48 @@ describe('calculateGratuity', () => {
     const r = calculateGratuity(500000, 30)
     expect(r.gratuity).toBe(2000000)
     expect(r.capped).toBe(true)
+  })
+})
+
+describe('calculateGratuityV2', () => {
+  it('uses divisor 30 instead of 26 for a non-Act-covered employer', () => {
+    const covered = calculateGratuityV2({ scenario: 'retirement', lastDrawnSalary: 50000, yearsOfService: 10, employerCoverage: 'covered', employeeType: 'private' })
+    const nonCovered = calculateGratuityV2({ scenario: 'retirement', lastDrawnSalary: 50000, yearsOfService: 10, employerCoverage: 'nonCovered', employeeType: 'private' })
+    expect(nonCovered.gratuity).toBeLessThan(covered.gratuity)
+    expect(nonCovered.gratuity).toBe(round2((15 / 30) * 50000 * 10))
+  })
+  it('waives the 5-year minimum for death but not for retirement', () => {
+    const death = calculateGratuityV2({ scenario: 'death', lastDrawnSalary: 50000, yearsOfService: 2, employerCoverage: 'covered', employeeType: 'private' })
+    const retirement = calculateGratuityV2({ scenario: 'retirement', lastDrawnSalary: 50000, yearsOfService: 2, employerCoverage: 'covered', employeeType: 'private' })
+    expect(death.eligible).toBe(true)
+    expect(retirement.eligible).toBe(false)
+  })
+  it('requires only 1 year of service for the fixed-term scenario', () => {
+    const under1yr = calculateGratuityV2({ scenario: 'fixedTerm', lastDrawnSalary: 50000, yearsOfService: 0.5, employerCoverage: 'covered', employeeType: 'private' })
+    const over1yr = calculateGratuityV2({ scenario: 'fixedTerm', lastDrawnSalary: 50000, yearsOfService: 1.5, employerCoverage: 'covered', employeeType: 'private' })
+    expect(under1yr.eligible).toBe(false)
+    expect(over1yr.eligible).toBe(true)
+  })
+  it('applies the CCS death-gratuity slab table for government employees', () => {
+    expect(calculateGratuityV2({ scenario: 'death', lastDrawnSalary: 80000, yearsOfService: 0.5, employerCoverage: 'covered', employeeType: 'government' }).gratuity).toBe(160000) // 2x
+    expect(calculateGratuityV2({ scenario: 'death', lastDrawnSalary: 80000, yearsOfService: 3, employerCoverage: 'covered', employeeType: 'government' }).gratuity).toBe(480000) // 6x
+    expect(calculateGratuityV2({ scenario: 'death', lastDrawnSalary: 80000, yearsOfService: 8, employerCoverage: 'covered', employeeType: 'government' }).gratuity).toBe(960000) // 12x
+    expect(calculateGratuityV2({ scenario: 'death', lastDrawnSalary: 80000, yearsOfService: 15, employerCoverage: 'covered', employeeType: 'government' }).gratuity).toBe(1600000) // 20x
+  })
+  it('caps the 20+ years death-gratuity formula at 33x emoluments', () => {
+    const r = calculateGratuityV2({ scenario: 'death', lastDrawnSalary: 80000, yearsOfService: 40, employerCoverage: 'covered', employeeType: 'government' })
+    expect(r.grossGratuity).toBe(33 * 80000)
+  })
+  it('gives government employees a higher ceiling and full tax exemption', () => {
+    const r = calculateGratuityV2({ scenario: 'retirement', lastDrawnSalary: 200000, yearsOfService: 35, employerCoverage: 'covered', employeeType: 'government' })
+    expect(r.ceilingApplied).toBe(2500000)
+    expect(r.capped).toBe(true)
+    expect(r.gratuity).toBe(2500000)
+    expect(r.isFullyTaxExempt).toBe(true)
+  })
+  it('private-sector gratuity is not marked fully tax-exempt', () => {
+    const r = calculateGratuityV2({ scenario: 'retirement', lastDrawnSalary: 50000, yearsOfService: 10, employerCoverage: 'covered', employeeType: 'private' })
+    expect(r.isFullyTaxExempt).toBe(false)
   })
 })
 
