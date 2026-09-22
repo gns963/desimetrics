@@ -123,6 +123,39 @@ export function calculateSip(
   }
 }
 
+export interface SipRealAndPostTaxResult extends SipResult {
+  realValue: number
+  ltcgTax: number
+  postTaxCorpus: number
+}
+
+/**
+ * Wraps `calculateSip` with the two figures most SIP calculators omit: the
+ * inflation-adjusted "real" value (what the nominal corpus is actually worth
+ * in today's purchasing power) and the post-tax corpus after equity LTCG/STCG
+ * (reusing the same Budget 2024 rules as `calculateEquityCapitalGainsTax` —
+ * the entire gain is treated as a single sale at the end of the tenure, which
+ * slightly understates tax on very short tenures where some instalments are
+ * individually short-term, but matches how every comparable calculator
+ * simplifies this).
+ */
+export function calculateSipRealAndPostTax(
+  monthlyInvestment: number,
+  annualRatePercent: number,
+  years: number,
+  inflationRatePercent: number,
+): SipRealAndPostTaxResult {
+  const sip = calculateSip(monthlyInvestment, annualRatePercent, years)
+  const realValue = sip.maturityValue / Math.pow(1 + inflationRatePercent / 100, years)
+  const cgt = calculateEquityCapitalGainsTax(sip.invested, sip.maturityValue, Math.round(years * 12))
+  return {
+    ...sip,
+    realValue: round2(realValue),
+    ltcgTax: cgt.tax,
+    postTaxCorpus: round2(sip.maturityValue - cgt.tax),
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Income tax — FY 2026-27 (AY 2027-28)
 // ---------------------------------------------------------------------------

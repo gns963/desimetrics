@@ -3,6 +3,7 @@ import {
   calculateGratuity,
   calculateGst,
   calculateSip,
+  calculateSipRealAndPostTax,
   compareRegimes,
   computeRegimeTax,
 } from './financial'
@@ -37,6 +38,26 @@ describe('calculateSip', () => {
     const r = calculateSip(5000, 0, 2)
     expect(r.maturityValue).toBe(5000 * 24)
     expect(r.gains).toBe(0)
+  })
+})
+
+describe('calculateSipRealAndPostTax', () => {
+  it('matches known reference figures for 10k/mo @12% over 15y, 6% inflation', () => {
+    const r = calculateSipRealAndPostTax(10000, 12, 15, 6)
+    expect(r.maturityValue).toBeCloseTo(5045760, -1)
+    expect(r.realValue).toBeCloseTo(2105419, -1)
+    expect(r.postTaxCorpus).toBeCloseTo(4655665, -1)
+  })
+  it('real value equals nominal at 0% inflation', () => {
+    const r = calculateSipRealAndPostTax(10000, 12, 10, 0)
+    expect(r.realValue).toBe(r.maturityValue)
+  })
+  it('applies the ₹1.25L LTCG exemption before taxing gains', () => {
+    const r = calculateSipRealAndPostTax(1000, 12, 5, 6)
+    // Small SIP — gains should be well under the exemption, so no tax.
+    expect(r.gains).toBeLessThan(125000)
+    expect(r.ltcgTax).toBe(0)
+    expect(r.postTaxCorpus).toBe(r.maturityValue)
   })
 })
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { calculateSip } from '@/lib/calc/financial'
+import { calculateSipRealAndPostTax } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { CalculatorCard, CalculatorCta, CalculatorHeader, SliderField } from './CalculatorShell'
 
@@ -13,11 +13,16 @@ export interface SipCalculatorTexts {
   rateUnit: string
   durationLabel: string
   durationUnit: string
+  inflationLabel: string
+  inflationUnit: string
   ctaLabel: string
   disclaimer: string
   maturityValueLabel: string
   investedLabel: string
   gainsLabel: string
+  realValueLabel: string
+  ltcgTaxLabel: string
+  postTaxCorpusLabel: string
   /** Use {year} and {amount} placeholders. */
   yearTooltipTemplate: string
   investedLegend: string
@@ -32,11 +37,16 @@ const defaultTexts: SipCalculatorTexts = {
   rateUnit: '%',
   durationLabel: 'Duration',
   durationUnit: 'yrs',
+  inflationLabel: 'Expected inflation',
+  inflationUnit: '%',
   ctaLabel: 'Calculate SIP Returns',
   disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
-  maturityValueLabel: 'Maturity value',
+  maturityValueLabel: 'Nominal maturity value',
   investedLabel: 'Invested',
   gainsLabel: 'Gains',
+  realValueLabel: 'Real value (today\'s money)',
+  ltcgTaxLabel: 'Estimated LTCG tax',
+  postTaxCorpusLabel: 'Post-tax corpus',
   yearTooltipTemplate: 'Year {year}: {amount}',
   investedLegend: 'Invested',
   gainsLegend: 'Gains',
@@ -50,8 +60,12 @@ export default function SipCalculator({
   const [monthly, setMonthly] = useState(10000)
   const [rate, setRate] = useState(12)
   const [years, setYears] = useState(10)
+  const [inflation, setInflation] = useState(6)
 
-  const result = useMemo(() => calculateSip(monthly, rate, years), [monthly, rate, years])
+  const result = useMemo(
+    () => calculateSipRealAndPostTax(monthly, rate, years, inflation),
+    [monthly, rate, years, inflation],
+  )
 
   const maxValue = Math.max(...result.yearly.map((p) => p.value), 1)
 
@@ -99,6 +113,17 @@ export default function SipCalculator({
           min={1}
           max={40}
           unit={texts.durationUnit}
+        />
+
+        <SliderField
+          id="sip-inflation"
+          label={texts.inflationLabel}
+          value={inflation}
+          onChange={setInflation}
+          min={0}
+          max={10}
+          step={0.5}
+          unit={texts.inflationUnit}
         />
 
         <CalculatorCta label={texts.ctaLabel} tone="financial" disclaimer={texts.disclaimer} />
@@ -157,6 +182,25 @@ export default function SipCalculator({
               </span>
             </div>
           </div>
+
+          <table className="w-full text-sm">
+            <tbody className="divide-y divide-hairline">
+              <tr>
+                <td className="py-1.5 text-ash/70">{texts.realValueLabel}</td>
+                <td className="py-1.5 text-right tabular-nums">{formatINR(result.realValue)}</td>
+              </tr>
+              <tr>
+                <td className="py-1.5 text-ash/70">{texts.ltcgTaxLabel}</td>
+                <td className="py-1.5 text-right tabular-nums">{formatINR(result.ltcgTax)}</td>
+              </tr>
+              <tr className="text-base font-bold text-ink-navy">
+                <td className="py-2">{texts.postTaxCorpusLabel}</td>
+                <td className="py-2 text-right tabular-nums text-spark-teal">
+                  {formatINR(result.postTaxCorpus)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </CalculatorCard>
