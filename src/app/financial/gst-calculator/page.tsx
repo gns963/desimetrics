@@ -30,6 +30,10 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
+    q: 'When should I use the custom rate field instead of a preset?',
+    a: 'Use it for any rate not among the current GST 2.0 presets — a legacy rate like 12% or 28% still relevant on a transition invoice dated before 22 September 2025, or a special notified rate such as 0.25% on rough diamonds. The custom field applies the same correct add/remove formula and CGST/SGST/IGST split to whatever rate you enter, so you\'re not limited to the handful of common rates in the dropdown.',
+  },
+  {
     q: 'How do I add GST to a price?',
     a: 'Multiply the base price by the GST rate divided by 100 to get the GST amount, then add it to the base for the total. For a base of ₹1,000 at 18%, that\'s ₹180 GST for a total of ₹1,180. This "forward" calculation is what you use when you know the pre-tax price and need the final invoice amount — enter the base in exclusive mode, pick the rate and supply type, and the calculator shows the GST, the total, and the correct CGST/SGST or IGST split.',
   },

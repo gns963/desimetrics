@@ -12,6 +12,7 @@ import { CalculatorCard, CalculatorCta, CalculatorHeader, OptionCardGroup } from
 // notification, since item-to-slab mapping details are intricate and can
 // change further.
 const RATES = [0, 3, 5, 12, 18, 28, 40]
+const CUSTOM_RATE_VALUE = 'custom'
 
 export interface GstCalculatorTexts {
   title: string
@@ -25,6 +26,9 @@ export interface GstCalculatorTexts {
   supplyTypeLegend: string
   intraLabel: string
   interLabel: string
+  customRateOptionLabel: string
+  customRateLabel: string
+  customRateHint: string
   ctaLabel: string
   disclaimer: string
   totalInclLabel: string
@@ -49,6 +53,9 @@ const defaultTexts: GstCalculatorTexts = {
   supplyTypeLegend: 'Supply type',
   intraLabel: 'Intra-state (CGST + SGST)',
   interLabel: 'Inter-state (IGST)',
+  customRateOptionLabel: 'Custom',
+  customRateLabel: 'Custom rate (%)',
+  customRateHint: 'For a legacy rate (e.g. 12%, 28%) or a special rate like 0.25% on rough diamonds.',
   ctaLabel: 'Calculate GST',
   disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
   totalInclLabel: 'Total (incl. GST)',
@@ -71,13 +78,19 @@ export default function GstCalculator({
   texts?: GstCalculatorTexts
 } = {}) {
   const [amountStr, setAmountStr] = useState('1000')
-  const [rate, setRate] = useState(18)
+  const [rateSelection, setRateSelection] = useState<string>('18')
+  const [customRateStr, setCustomRateStr] = useState('12')
   const [mode, setMode] = useState<'exclusive' | 'inclusive'>('exclusive')
   const [supplyType, setSupplyType] = useState<'intra' | 'inter'>('intra')
+
+  const isCustomRate = rateSelection === CUSTOM_RATE_VALUE
+  const rate = isCustomRate ? Number(customRateStr) || 0 : Number(rateSelection)
 
   const { result, error } = useMemo(() => {
     const amount = Number(amountStr)
     if (!Number.isFinite(amount) || amount < 0)
+      return { result: null, error: texts.amountError }
+    if (!Number.isFinite(rate) || rate < 0)
       return { result: null, error: texts.amountError }
     return { result: calculateGst(amount, rate, mode, supplyType), error: null as string | null }
   }, [amountStr, rate, mode, supplyType, texts.amountError])
@@ -116,8 +129,8 @@ export default function GstCalculator({
           </label>
           <select
             id="gst-rate"
-            value={rate}
-            onChange={(e) => setRate(Number(e.target.value))}
+            value={rateSelection}
+            onChange={(e) => setRateSelection(e.target.value)}
             className={fieldCls}
           >
             {RATES.map((r) => (
@@ -125,7 +138,25 @@ export default function GstCalculator({
                 {r}%
               </option>
             ))}
+            <option value={CUSTOM_RATE_VALUE}>{texts.customRateOptionLabel}</option>
           </select>
+          {isCustomRate && (
+            <div className="mt-2">
+              <label htmlFor="gst-custom-rate" className="mb-1.5 block text-sm font-medium text-ash">
+                {texts.customRateLabel}
+              </label>
+              <input
+                id="gst-custom-rate"
+                type="number"
+                min={0}
+                step={0.01}
+                value={customRateStr}
+                onChange={(e) => setCustomRateStr(e.target.value)}
+                className={fieldCls}
+              />
+              <p className="mt-1 text-xs text-ash/50">{texts.customRateHint}</p>
+            </div>
+          )}
         </div>
 
         <fieldset>
