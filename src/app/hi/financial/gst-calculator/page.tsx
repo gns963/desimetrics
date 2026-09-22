@@ -100,6 +100,9 @@ const gstTextsHi: GstCalculatorTexts = {
   modeLegend: 'राशि है',
   exclusiveLabel: 'GST-एक्सक्लूसिव (GST जोड़ें)',
   inclusiveLabel: 'GST-इनक्लूसिव (GST हटाएं)',
+  supplyTypeLegend: 'सप्लाई का प्रकार',
+  intraLabel: 'इंट्रा-स्टेट (CGST + SGST)',
+  interLabel: 'इंटर-स्टेट (IGST)',
   ctaLabel: 'GST निकालें',
   disclaimer: 'नतीजे अनुमानित हैं। आपका असली बिल अलग हो सकता है।',
   totalInclLabel: 'कुल (GST सहित)',
@@ -108,6 +111,7 @@ const gstTextsHi: GstCalculatorTexts = {
   gstAtRateTemplate: 'GST @ {rate}%',
   cgstLabel: 'CGST',
   sgstLabel: 'SGST',
+  igstLabel: 'IGST',
 }
 
 export default function GstCalculatorPageHi() {

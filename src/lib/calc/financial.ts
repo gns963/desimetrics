@@ -19,18 +19,25 @@ export interface GstResult {
   gstAmount: number
   cgst: number
   sgst: number
+  igst: number
   total: number
   ratePercent: number
+  supplyType: 'intra' | 'inter'
 }
 
 /**
  * `exclusive`: `amount` is pre-GST, GST is added.
  * `inclusive`: `amount` already contains GST, it is backed out.
+ * `supplyType`: `intra` (same state) splits the GST equally into CGST+SGST;
+ * `inter` (across states) charges the full rate as a single IGST line
+ * instead — the total tax and total payable are identical either way, only
+ * which government/ledger the tax is attributed to changes.
  */
 export function calculateGst(
   amount: number,
   ratePercent: number,
   mode: 'inclusive' | 'exclusive',
+  supplyType: 'intra' | 'inter' = 'intra',
 ): GstResult {
   if (amount < 0 || ratePercent < 0) throw new Error('amount and rate must be >= 0')
   let base: number
@@ -43,13 +50,16 @@ export function calculateGst(
     base = (amount * 100) / (100 + ratePercent)
   }
   const gstAmount = total - base
+  const isInter = supplyType === 'inter'
   return {
     base: round2(base),
     gstAmount: round2(gstAmount),
-    cgst: round2(gstAmount / 2),
-    sgst: round2(gstAmount / 2),
+    cgst: isInter ? 0 : round2(gstAmount / 2),
+    sgst: isInter ? 0 : round2(gstAmount / 2),
+    igst: isInter ? round2(gstAmount) : 0,
     total: round2(total),
     ratePercent,
+    supplyType,
   }
 }
 

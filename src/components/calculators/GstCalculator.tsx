@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { calculateGst } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
-import { CalculatorCard, CalculatorCta, CalculatorHeader } from './CalculatorShell'
+import { CalculatorCard, CalculatorCta, CalculatorHeader, OptionCardGroup } from './CalculatorShell'
 
 // Includes the simplified 5% / 18% / 40% structure from the September 2025
 // "GST 2.0" rate rationalization, alongside the pre-reform slabs some goods
@@ -22,6 +22,9 @@ export interface GstCalculatorTexts {
   modeLegend: string
   exclusiveLabel: string
   inclusiveLabel: string
+  supplyTypeLegend: string
+  intraLabel: string
+  interLabel: string
   ctaLabel: string
   disclaimer: string
   totalInclLabel: string
@@ -31,6 +34,7 @@ export interface GstCalculatorTexts {
   gstAtRateTemplate: string
   cgstLabel: string
   sgstLabel: string
+  igstLabel: string
 }
 
 const defaultTexts: GstCalculatorTexts = {
@@ -42,6 +46,9 @@ const defaultTexts: GstCalculatorTexts = {
   modeLegend: 'Amount is',
   exclusiveLabel: 'GST-exclusive (add GST)',
   inclusiveLabel: 'GST-inclusive (remove GST)',
+  supplyTypeLegend: 'Supply type',
+  intraLabel: 'Intra-state (CGST + SGST)',
+  interLabel: 'Inter-state (IGST)',
   ctaLabel: 'Calculate GST',
   disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
   totalInclLabel: 'Total (incl. GST)',
@@ -50,7 +57,13 @@ const defaultTexts: GstCalculatorTexts = {
   gstAtRateTemplate: 'GST @ {rate}%',
   cgstLabel: 'CGST',
   sgstLabel: 'SGST',
+  igstLabel: 'IGST',
 }
+
+const SUPPLY_TYPE_OPTIONS: { value: 'intra' | 'inter'; label: string; icon: string }[] = [
+  { value: 'intra', label: 'Intra-state (CGST + SGST)', icon: '🏠' },
+  { value: 'inter', label: 'Inter-state (IGST)', icon: '🚚' },
+]
 
 export default function GstCalculator({
   texts = defaultTexts,
@@ -60,13 +73,14 @@ export default function GstCalculator({
   const [amountStr, setAmountStr] = useState('1000')
   const [rate, setRate] = useState(18)
   const [mode, setMode] = useState<'exclusive' | 'inclusive'>('exclusive')
+  const [supplyType, setSupplyType] = useState<'intra' | 'inter'>('intra')
 
   const { result, error } = useMemo(() => {
     const amount = Number(amountStr)
     if (!Number.isFinite(amount) || amount < 0)
       return { result: null, error: texts.amountError }
-    return { result: calculateGst(amount, rate, mode), error: null as string | null }
-  }, [amountStr, rate, mode, texts.amountError])
+    return { result: calculateGst(amount, rate, mode, supplyType), error: null as string | null }
+  }, [amountStr, rate, mode, supplyType, texts.amountError])
 
   const fieldCls =
     'w-full rounded-lg border border-hairline px-3 py-2.5 outline-none focus:border-hub-financial focus:ring-2 focus:ring-hub-financial/30'
@@ -142,6 +156,14 @@ export default function GstCalculator({
           </div>
         </fieldset>
 
+        <OptionCardGroup
+          legend={texts.supplyTypeLegend}
+          options={SUPPLY_TYPE_OPTIONS}
+          value={supplyType}
+          onChange={setSupplyType}
+          columns={2}
+        />
+
         <CalculatorCta label={texts.ctaLabel} tone="financial" disclaimer={texts.disclaimer} />
       </form>
 
@@ -172,10 +194,19 @@ export default function GstCalculator({
               <dd className="text-right tabular-nums">
                 {formatINR(result.gstAmount)}
               </dd>
-              <dt className="text-ash/60">{texts.cgstLabel}</dt>
-              <dd className="text-right tabular-nums">{formatINR(result.cgst)}</dd>
-              <dt className="text-ash/60">{texts.sgstLabel}</dt>
-              <dd className="text-right tabular-nums">{formatINR(result.sgst)}</dd>
+              {result.supplyType === 'inter' ? (
+                <>
+                  <dt className="text-ash/60">{texts.igstLabel}</dt>
+                  <dd className="text-right tabular-nums">{formatINR(result.igst)}</dd>
+                </>
+              ) : (
+                <>
+                  <dt className="text-ash/60">{texts.cgstLabel}</dt>
+                  <dd className="text-right tabular-nums">{formatINR(result.cgst)}</dd>
+                  <dt className="text-ash/60">{texts.sgstLabel}</dt>
+                  <dd className="text-right tabular-nums">{formatINR(result.sgst)}</dd>
+                </>
+              )}
             </dl>
           </div>
         )}
