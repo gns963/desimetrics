@@ -922,6 +922,116 @@ export function calculateFd(
   }
 }
 
+export type FdType = 'cumulative' | 'nonCumulative'
+
+const FD_TDS_THRESHOLD_REGULAR = 40000
+const FD_TDS_THRESHOLD_SENIOR = 50000
+const FD_TDS_RATE_WITH_PAN = 10
+const FD_TDS_RATE_WITHOUT_PAN = 20
+const FD_SENIOR_CITIZEN_RATE_BONUS = 0.5
+
+export interface FdSimulationInput {
+  principal: number
+  /** The bank's quoted rate, BEFORE any senior-citizen bonus. */
+  ratePercent: number
+  years: number
+  compoundingPerYear: number
+  fdType: FdType
+  isSeniorCitizen: boolean
+  /** TDS is deducted at 10% with PAN on file, 20% without. */
+  panRegistered: boolean
+}
+
+export interface FdSimulationYearPoint {
+  year: number
+  value: number
+  interestThisYear: number
+  tdsThisYear: number
+}
+
+export interface FdSimulationResult {
+  principal: number
+  effectiveRatePercent: number
+  maturityValue: number
+  totalInterestEarned: number
+  totalTds: number
+  netInterestAfterTds: number
+  /** Only set for non-cumulative FDs: the flat amount paid out each year. */
+  annualPayout: number | null
+  tdsThresholdApplied: number
+  yearly: FdSimulationYearPoint[]
+}
+
+/**
+ * Extends the plain compound-interest FD formula with the real-world details
+ * that change what a depositor actually receives: a senior-citizen rate
+ * bonus (+0.5% is the common convention, though it varies slightly by bank),
+ * TDS deducted annually on interest above ₹40,000/year (₹50,000 for senior
+ * citizens) at 10% with PAN on file or 20% without (Section 194A), and the
+ * cumulative-vs-non-cumulative choice — a non-cumulative FD pays interest out
+ * each year rather than reinvesting it, so it does NOT compound the way this
+ * calculator's plain `calculateFd` does.
+ */
+export function simulateFd(input: FdSimulationInput): FdSimulationResult {
+  const { principal, ratePercent, years, compoundingPerYear, fdType, isSeniorCitizen, panRegistered } = input
+  if (principal < 0 || ratePercent < 0 || years <= 0 || compoundingPerYear <= 0)
+    throw new Error('inputs must be >= 0, years and compoundingPerYear must be > 0')
+
+  const effectiveRate = ratePercent + (isSeniorCitizen ? FD_SENIOR_CITIZEN_RATE_BONUS : 0)
+  const tdsThreshold = isSeniorCitizen ? FD_TDS_THRESHOLD_SENIOR : FD_TDS_THRESHOLD_REGULAR
+  const tdsRate = panRegistered ? FD_TDS_RATE_WITH_PAN : FD_TDS_RATE_WITHOUT_PAN
+
+  const yearly: FdSimulationYearPoint[] = []
+  let totalInterest = 0
+  let totalTds = 0
+  const wholeYears = Math.floor(years)
+
+  if (fdType === 'cumulative') {
+    const cumulative = calculateFd(principal, effectiveRate, years, compoundingPerYear)
+    let previousValue = principal
+    for (const point of cumulative.yearly) {
+      const interestThisYear = round2(point.value - previousValue)
+      const tdsThisYear = interestThisYear > tdsThreshold ? round2((interestThisYear * tdsRate) / 100) : 0
+      totalInterest += interestThisYear
+      totalTds += tdsThisYear
+      yearly.push({ year: point.year, value: point.value, interestThisYear, tdsThisYear })
+      previousValue = point.value
+    }
+    return {
+      principal,
+      effectiveRatePercent: effectiveRate,
+      maturityValue: cumulative.maturityValue,
+      totalInterestEarned: round2(totalInterest),
+      totalTds: round2(totalTds),
+      netInterestAfterTds: round2(totalInterest - totalTds),
+      annualPayout: null,
+      tdsThresholdApplied: tdsThreshold,
+      yearly,
+    }
+  }
+
+  // Non-cumulative: a flat interest payout each year on the original
+  // principal, not reinvested — so the account value itself never grows.
+  const annualPayout = round2((principal * effectiveRate) / 100)
+  const tdsThisYear = annualPayout > tdsThreshold ? round2((annualPayout * tdsRate) / 100) : 0
+  for (let y = 1; y <= wholeYears; y++) {
+    totalInterest += annualPayout
+    totalTds += tdsThisYear
+    yearly.push({ year: y, value: principal, interestThisYear: annualPayout, tdsThisYear })
+  }
+  return {
+    principal,
+    effectiveRatePercent: effectiveRate,
+    maturityValue: principal,
+    totalInterestEarned: round2(totalInterest),
+    totalTds: round2(totalTds),
+    netInterestAfterTds: round2(totalInterest - totalTds),
+    annualPayout,
+    tdsThresholdApplied: tdsThreshold,
+    yearly,
+  }
+}
+
 // ---------------------------------------------------------------------------
 // HRA (House Rent Allowance) exemption — Section 10(13A), Rule 2A
 // ---------------------------------------------------------------------------

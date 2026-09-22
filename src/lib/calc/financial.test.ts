@@ -14,6 +14,7 @@ import {
   computeRegimeTax,
   findRegimeBreakEvenDeduction,
   monthsBetweenDates,
+  simulateFd,
   simulatePpf,
   totalOldRegimeDeductions,
 } from './financial'
@@ -246,6 +247,37 @@ describe('calculateLoanTrueCost', () => {
       principal: 500000, annualRatePercent: 14, years: 5, processingFeePercent: 0,
     })
     expect(r.effectiveAprPercent).toBeCloseTo(14, 0)
+  })
+})
+
+describe('simulateFd', () => {
+  it('adds the senior-citizen rate bonus to the effective rate', () => {
+    const regular = simulateFd({ principal: 500000, ratePercent: 7, years: 5, compoundingPerYear: 4, fdType: 'cumulative', isSeniorCitizen: false, panRegistered: true })
+    const senior = simulateFd({ principal: 500000, ratePercent: 7, years: 5, compoundingPerYear: 4, fdType: 'cumulative', isSeniorCitizen: true, panRegistered: true })
+    expect(senior.effectiveRatePercent).toBe(7.5)
+    expect(senior.maturityValue).toBeGreaterThan(regular.maturityValue)
+  })
+  it('doubles TDS when no PAN is on file', () => {
+    const withPan = simulateFd({ principal: 500000, ratePercent: 7, years: 5, compoundingPerYear: 4, fdType: 'cumulative', isSeniorCitizen: false, panRegistered: true })
+    const withoutPan = simulateFd({ principal: 500000, ratePercent: 7, years: 5, compoundingPerYear: 4, fdType: 'cumulative', isSeniorCitizen: false, panRegistered: false })
+    expect(withoutPan.totalTds).toBeCloseTo(withPan.totalTds * 2, 1)
+  })
+  it('only deducts TDS once yearly interest crosses the threshold', () => {
+    const r = simulateFd({ principal: 500000, ratePercent: 7, years: 5, compoundingPerYear: 4, fdType: 'cumulative', isSeniorCitizen: false, panRegistered: true })
+    expect(r.yearly[0].tdsThisYear).toBe(0) // year 1 interest is below ₹40,000
+    expect(r.yearly[4].tdsThisYear).toBeGreaterThan(0) // year 5 interest is above ₹40,000
+  })
+  it('gives senior citizens a higher TDS threshold', () => {
+    const regular = simulateFd({ principal: 1000000, ratePercent: 7, years: 1, compoundingPerYear: 4, fdType: 'nonCumulative', isSeniorCitizen: false, panRegistered: true })
+    const senior = simulateFd({ principal: 1000000, ratePercent: 7, years: 1, compoundingPerYear: 4, fdType: 'nonCumulative', isSeniorCitizen: true, panRegistered: true })
+    expect(regular.tdsThresholdApplied).toBe(40000)
+    expect(senior.tdsThresholdApplied).toBe(50000)
+  })
+  it('does not compound a non-cumulative FD — value stays at principal', () => {
+    const r = simulateFd({ principal: 500000, ratePercent: 7, years: 5, compoundingPerYear: 4, fdType: 'nonCumulative', isSeniorCitizen: false, panRegistered: true })
+    expect(r.maturityValue).toBe(500000)
+    expect(r.annualPayout).toBe(35000)
+    expect(r.yearly.every((y) => y.value === 500000)).toBe(true)
   })
 })
 
