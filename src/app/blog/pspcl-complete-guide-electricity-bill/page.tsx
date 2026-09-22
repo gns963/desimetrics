@@ -634,6 +634,21 @@ export default function PspclCompleteGuidePage() {
               </p>
             </Link>
             <Link
+              href="/blog/tsspdcl-complete-guide-electricity-bill"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📋
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                TGSPDCL (Telangana) complete guide
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                Telangana&apos;s own Gruha Jyothi cliff, at 200 units, plus
+                genuinely free agriculture power.
+              </p>
+            </Link>
+            <Link
               href="/blog/jvvnl-complete-guide-electricity-bill"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"
             >

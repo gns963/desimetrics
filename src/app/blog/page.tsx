@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Complete Guide to TGSPDCL/TSSPDCL (Telangana) Electricity Bill',
+    tag: 'Reference',
+    href: '/blog/tsspdcl-complete-guide-electricity-bill',
+    live: true,
+  },
+  {
     title: 'Complete Guide to PSPCL (Punjab) Electricity Bill',
     tag: 'Reference',
     href: '/blog/pspcl-complete-guide-electricity-bill',
