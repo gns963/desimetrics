@@ -175,12 +175,33 @@ const NEW_REGIME_SLABS: Slab[] = [
   { upTo: null, rate: 30 },
 ]
 
-const OLD_REGIME_SLABS: Slab[] = [
-  { upTo: 250000, rate: 0 },
-  { upTo: 500000, rate: 5 },
-  { upTo: 1000000, rate: 20 },
-  { upTo: null, rate: 30 },
-]
+export type AgeGroup = 'under60' | '60to79' | '80plus'
+
+/**
+ * Old-regime slabs vary only in the nil-rate band by age — resident
+ * individuals under 60 get ₹2.5L nil, senior citizens (60-79) get ₹3L nil,
+ * and super senior citizens (80+) get ₹5L nil. The new regime's slabs (above)
+ * do NOT vary by age — its flat ₹4L nil band and 87A rebate apply uniformly.
+ */
+const OLD_REGIME_SLABS: Record<AgeGroup, Slab[]> = {
+  under60: [
+    { upTo: 250000, rate: 0 },
+    { upTo: 500000, rate: 5 },
+    { upTo: 1000000, rate: 20 },
+    { upTo: null, rate: 30 },
+  ],
+  '60to79': [
+    { upTo: 300000, rate: 0 },
+    { upTo: 500000, rate: 5 },
+    { upTo: 1000000, rate: 20 },
+    { upTo: null, rate: 30 },
+  ],
+  '80plus': [
+    { upTo: 500000, rate: 0 },
+    { upTo: 1000000, rate: 20 },
+    { upTo: null, rate: 30 },
+  ],
+}
 
 function taxFromSlabs(taxable: number, slabs: Slab[]): number {
   let tax = 0
@@ -205,18 +226,49 @@ export interface RegimeTaxResult {
   taxableIncome: number
   taxBeforeRebate: number
   rebate87A: number
+  marginalRelief: number
   cess: number
   totalTax: number
+}
+
+/**
+ * Section 87A rebate for the new regime (₹60,000, threshold ₹12,00,000)
+ * includes marginal relief just above the threshold: tax payable is capped
+ * at the amount by which taxable income exceeds ₹12,00,000, so a taxpayer
+ * just over the line never owes more extra tax than their extra income. This
+ * self-terminates once slab tax alone drops below that excess (around
+ * ₹12,70,588 taxable income) — verified against official guidance; there is
+ * no separate upper bound to hardcode. The OLD regime's ₹5,00,000/₹12,500
+ * rebate has NO such marginal relief — crossing ₹5,00,000 by even ₹1 loses
+ * the full rebate as a hard cliff, confirmed via CBDT/official guidance
+ * (unlike the new regime, this is a real, deliberate asymmetry, not an
+ * oversight in this calculator).
+ */
+function newRegimeRebateAndRelief(
+  taxBeforeRebate: number,
+  taxableIncome: number,
+): { rebate: number; marginalRelief: number } {
+  const THRESHOLD = 1200000
+  const MAX_REBATE = 60000
+  if (taxableIncome <= THRESHOLD) {
+    return { rebate: Math.min(taxBeforeRebate, MAX_REBATE), marginalRelief: 0 }
+  }
+  const excess = taxableIncome - THRESHOLD
+  if (taxBeforeRebate <= excess) {
+    return { rebate: 0, marginalRelief: 0 }
+  }
+  return { rebate: 0, marginalRelief: taxBeforeRebate - excess }
 }
 
 export function computeRegimeTax(
   grossIncome: number,
   regime: 'new' | 'old',
   otherDeductions = 0,
+  ageGroup: AgeGroup = 'under60',
 ): RegimeTaxResult {
   const isNew = regime === 'new'
   const standardDeduction = isNew ? 75000 : 50000
-  const slabs = isNew ? NEW_REGIME_SLABS : OLD_REGIME_SLABS
+  const slabs = isNew ? NEW_REGIME_SLABS : OLD_REGIME_SLABS[ageGroup]
   const deductions = isNew ? 0 : otherDeductions // 80C etc. only in old regime
 
   const taxableIncome = Math.max(
@@ -225,16 +277,18 @@ export function computeRegimeTax(
   )
   const taxBeforeRebate = taxFromSlabs(taxableIncome, slabs)
 
-  // Section 87A rebate.
-  const rebate87A = isNew
-    ? taxableIncome <= 1200000
-      ? Math.min(taxBeforeRebate, 60000)
-      : 0
-    : taxableIncome <= 500000
-      ? Math.min(taxBeforeRebate, 12500)
-      : 0
+  let rebate87A = 0
+  let marginalRelief = 0
+  if (isNew) {
+    const r = newRegimeRebateAndRelief(taxBeforeRebate, taxableIncome)
+    rebate87A = r.rebate
+    marginalRelief = r.marginalRelief
+  } else {
+    // Old regime: hard cliff at ₹5,00,000, no marginal relief.
+    rebate87A = taxableIncome <= 500000 ? Math.min(taxBeforeRebate, 12500) : 0
+  }
 
-  const taxAfterRebate = Math.max(0, taxBeforeRebate - rebate87A)
+  const taxAfterRebate = Math.max(0, taxBeforeRebate - rebate87A - marginalRelief)
   const cess = taxAfterRebate * 0.04
 
   return {
@@ -245,6 +299,7 @@ export function computeRegimeTax(
     taxableIncome: round2(taxableIncome),
     taxBeforeRebate: round2(taxBeforeRebate),
     rebate87A: round2(rebate87A),
+    marginalRelief: round2(marginalRelief),
     cess: round2(cess),
     totalTax: round2(taxAfterRebate + cess),
   }
@@ -255,22 +310,62 @@ export interface RegimeComparison {
   oldRegime: RegimeTaxResult
   recommended: 'new' | 'old' | 'either'
   saving: number
+  breakEvenDeduction: number | null
+  deductionGap: number
 }
 
 export function compareRegimes(
   grossIncome: number,
   oldRegimeDeductions = 0,
+  ageGroup: AgeGroup = 'under60',
 ): RegimeComparison {
   const newRegime = computeRegimeTax(grossIncome, 'new')
-  const oldRegime = computeRegimeTax(grossIncome, 'old', oldRegimeDeductions)
+  const oldRegime = computeRegimeTax(grossIncome, 'old', oldRegimeDeductions, ageGroup)
   const diff = round2(oldRegime.totalTax - newRegime.totalTax)
+  const breakEvenDeduction = findRegimeBreakEvenDeduction(grossIncome, ageGroup)
+  const deductionGap =
+    breakEvenDeduction === null ? 0 : round2(Math.max(0, breakEvenDeduction - oldRegimeDeductions))
   return {
     newRegime,
     oldRegime,
     recommended:
       diff > 0 ? 'new' : diff < 0 ? 'old' : 'either',
     saving: Math.abs(diff),
+    breakEvenDeduction,
+    deductionGap,
   }
+}
+
+/**
+ * Solves (via binary search, since old-regime tax is non-increasing in
+ * deductions) the total old-regime deduction amount at which the old regime's
+ * tax equals the new regime's tax for the same gross income — the "break-even"
+ * point calcwise.finance's calculator is built around. Returns 0 if the old
+ * regime already wins with zero deductions, or null if even a deduction equal
+ * to the entire gross income can't close the gap (meaning the new regime wins
+ * unconditionally at this income level).
+ */
+export function findRegimeBreakEvenDeduction(
+  grossIncome: number,
+  ageGroup: AgeGroup = 'under60',
+): number | null {
+  const newTax = computeRegimeTax(grossIncome, 'new').totalTax
+  const oldTaxAtZero = computeRegimeTax(grossIncome, 'old', 0, ageGroup).totalTax
+  if (oldTaxAtZero <= newTax) return 0
+
+  const maxDeductions = grossIncome
+  const oldTaxAtMax = computeRegimeTax(grossIncome, 'old', maxDeductions, ageGroup).totalTax
+  if (oldTaxAtMax > newTax) return null
+
+  let lo = 0
+  let hi = maxDeductions
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2
+    const midTax = computeRegimeTax(grossIncome, 'old', mid, ageGroup).totalTax
+    if (midTax > newTax) lo = mid
+    else hi = mid
+  }
+  return round2(hi)
 }
 
 // ---------------------------------------------------------------------------

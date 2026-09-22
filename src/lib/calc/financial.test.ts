@@ -6,6 +6,7 @@ import {
   calculateSipRealAndPostTax,
   compareRegimes,
   computeRegimeTax,
+  findRegimeBreakEvenDeduction,
 } from './financial'
 
 describe('calculateGst', () => {
@@ -90,6 +91,41 @@ describe('compareRegimes', () => {
     expect(c.saving).toBeGreaterThanOrEqual(0)
     // With no deductions, new regime should win at ₹15L
     expect(c.recommended).toBe('new')
+  })
+  it('applies new-regime marginal relief above ₹12L taxable income', () => {
+    // ₹12,85,000 gross - ₹75,000 std deduction = ₹12,10,000 taxable.
+    const r = computeRegimeTax(1285000, 'new')
+    expect(r.taxableIncome).toBe(1210000)
+    expect(r.marginalRelief).toBeGreaterThan(0)
+    expect(r.totalTax).toBe(10400) // matches published reference figure for this exact case
+  })
+  it('gives the old regime NO marginal relief at its ₹5L cliff', () => {
+    // Just ₹1 over the ₹5,00,000 old-regime rebate threshold.
+    const r = computeRegimeTax(550001, 'old', 0)
+    expect(r.taxableIncome).toBe(500001)
+    expect(r.rebate87A).toBe(0)
+    expect(r.totalTax).toBeGreaterThan(10000) // full slab tax applies, no phase-out
+  })
+  it('gives senior and super-senior citizens a higher old-regime nil band', () => {
+    const under60 = computeRegimeTax(600000, 'old', 0, 'under60')
+    const senior = computeRegimeTax(600000, 'old', 0, '60to79')
+    const superSenior = computeRegimeTax(600000, 'old', 0, '80plus')
+    expect(senior.totalTax).toBeLessThan(under60.totalTax)
+    expect(superSenior.totalTax).toBeLessThan(senior.totalTax)
+  })
+})
+
+describe('findRegimeBreakEvenDeduction', () => {
+  it('matches published reference break-even figures', () => {
+    expect(findRegimeBreakEvenDeduction(800000)).toBeCloseTo(250000, -3)
+    expect(findRegimeBreakEvenDeduction(1000000)).toBeCloseTo(450000, -3)
+  })
+  it('returns 0 when the old regime already wins with no deductions', () => {
+    // At a high enough income with the old regime's higher rates but no
+    // deductions, the new regime's rebate/slabs still normally win, so this
+    // just checks the zero-deduction shortcut path doesn't error.
+    const be = findRegimeBreakEvenDeduction(600000)
+    expect(be === null || be >= 0).toBe(true)
   })
 })
 

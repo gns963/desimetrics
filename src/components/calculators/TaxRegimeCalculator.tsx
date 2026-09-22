@@ -1,9 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { compareRegimes } from '@/lib/calc/financial'
+import { compareRegimes, type AgeGroup } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
-import { CalculatorCard, CalculatorCta, CalculatorHeader } from './CalculatorShell'
+import { CalculatorCard, CalculatorCta, CalculatorHeader, OptionCardGroup } from './CalculatorShell'
 
 export interface TaxRegimeCalculatorTexts {
   title: string
@@ -11,6 +11,10 @@ export interface TaxRegimeCalculatorTexts {
   incomeLabel: string
   deductionsLabel: string
   deductionsHint: string
+  ageGroupLegend: string
+  ageUnder60Label: string
+  age60to79Label: string
+  age80plusLabel: string
   ctaLabel: string
   disclaimer: string
   eitherMessage: string
@@ -20,8 +24,15 @@ export interface TaxRegimeCalculatorTexts {
   oldRegimeLabel: string
   taxableIncomeLabel: string
   rebateLabel: string
+  marginalReliefLabel: string
   totalTaxLabel: string
   footnote: string
+  breakEvenLabel: string
+  /** Use {amount} placeholder. */
+  breakEvenAlreadyTemplate: string
+  /** Use {amount} placeholder. */
+  breakEvenGapTemplate: string
+  breakEvenNoneMessage: string
 }
 
 const defaultTexts: TaxRegimeCalculatorTexts = {
@@ -30,6 +41,10 @@ const defaultTexts: TaxRegimeCalculatorTexts = {
   incomeLabel: 'Gross annual income (₹)',
   deductionsLabel: 'Old-regime deductions (80C, 80D, HRA…)',
   deductionsHint: 'Only the old regime allows most deductions. Standard deduction is applied automatically for both.',
+  ageGroupLegend: 'Age group (affects old-regime exemption)',
+  ageUnder60Label: 'Under 60',
+  age60to79Label: '60–79 (senior)',
+  age80plusLabel: '80+ (super senior)',
   ctaLabel: 'Compare Tax Regimes',
   disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
   eitherMessage: 'Both regimes cost the same for you.',
@@ -38,9 +53,20 @@ const defaultTexts: TaxRegimeCalculatorTexts = {
   oldRegimeLabel: 'Old',
   taxableIncomeLabel: 'Taxable income',
   rebateLabel: 'Rebate 87A',
+  marginalReliefLabel: 'Marginal relief',
   totalTaxLabel: 'Total tax',
-  footnote: 'FY 2026-27 (AY 2027-28), incl. 4% cess. Surcharge (income > ₹50L) and marginal relief not included.',
+  footnote: 'FY 2026-27 (AY 2027-28), incl. 4% cess and new-regime marginal relief. Surcharge (income > ₹50L) is not modelled.',
+  breakEvenLabel: 'Your break-even (old-regime deductions)',
+  breakEvenAlreadyTemplate: 'You\'re already {amount} above your break-even.',
+  breakEvenGapTemplate: 'You need {amount} more in deductions to make the old regime win.',
+  breakEvenNoneMessage: 'No realistic deduction total flips this at your income — the new regime wins unconditionally.',
 }
+
+const AGE_OPTIONS: { value: AgeGroup; label: string; icon: string }[] = [
+  { value: 'under60', label: 'Under 60', icon: '🧑' },
+  { value: '60to79', label: '60–79 (senior)', icon: '👨‍🦳' },
+  { value: '80plus', label: '80+ (super senior)', icon: '👴' },
+]
 
 export default function TaxRegimeCalculator({
   texts = defaultTexts,
@@ -49,10 +75,11 @@ export default function TaxRegimeCalculator({
 } = {}) {
   const [income, setIncome] = useState(1500000)
   const [deductions, setDeductions] = useState(150000)
+  const [ageGroup, setAgeGroup] = useState<AgeGroup>('under60')
 
   const result = useMemo(
-    () => compareRegimes(Math.max(0, income), Math.max(0, deductions)),
-    [income, deductions],
+    () => compareRegimes(Math.max(0, income), Math.max(0, deductions), ageGroup),
+    [income, deductions, ageGroup],
   )
 
   const fieldCls =
@@ -102,6 +129,14 @@ export default function TaxRegimeCalculator({
             {texts.deductionsHint}
           </p>
         </div>
+
+        <OptionCardGroup
+          legend={texts.ageGroupLegend}
+          options={AGE_OPTIONS}
+          value={ageGroup}
+          onChange={setAgeGroup}
+          columns={3}
+        />
 
         <CalculatorCta label={texts.ctaLabel} tone="financial" disclaimer={texts.disclaimer} />
       </form>
@@ -153,6 +188,17 @@ export default function TaxRegimeCalculator({
                   {formatINR(result.oldRegime.rebate87A)}
                 </td>
               </tr>
+              {result.newRegime.marginalRelief > 0 && (
+                <tr>
+                  <td className="py-1.5 text-ash/70">
+                    {texts.marginalReliefLabel}
+                  </td>
+                  <td className="py-1.5 text-right tabular-nums">
+                    {formatINR(result.newRegime.marginalRelief)}
+                  </td>
+                  <td className="py-1.5 text-right tabular-nums">—</td>
+                </tr>
+              )}
               <tr className="text-base font-bold text-ink-navy">
                 <td className="py-2">{texts.totalTaxLabel}</td>
                 <td className="py-2 text-right tabular-nums">
@@ -164,6 +210,30 @@ export default function TaxRegimeCalculator({
               </tr>
             </tbody>
           </table>
+
+          <div className="rounded-lg border border-hairline bg-mist/60 px-3 py-2.5">
+            <p className="text-xs font-semibold tracking-wide text-ash/60 uppercase">
+              {texts.breakEvenLabel}
+            </p>
+            {result.breakEvenDeduction === null ? (
+              <p className="mt-1 text-sm text-ash/80">{texts.breakEvenNoneMessage}</p>
+            ) : (
+              <>
+                <p className="font-display text-2xl font-bold tabular-nums text-ink-navy">
+                  {formatINR(result.breakEvenDeduction)}
+                </p>
+                <p className="mt-1 text-sm text-ash/80">
+                  {result.deductionGap > 0
+                    ? texts.breakEvenGapTemplate.replace('{amount}', formatINR(result.deductionGap))
+                    : texts.breakEvenAlreadyTemplate.replace(
+                        '{amount}',
+                        formatINR(Math.max(0, deductions - result.breakEvenDeduction)),
+                      )}
+                </p>
+              </>
+            )}
+          </div>
+
           <p className="text-xs text-ash/40">
             {texts.footnote}
           </p>

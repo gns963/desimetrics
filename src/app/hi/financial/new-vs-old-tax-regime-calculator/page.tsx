@@ -89,6 +89,10 @@ const taxRegimeTextsHi: TaxRegimeCalculatorTexts = {
   incomeLabel: 'कुल सालाना आय (₹)',
   deductionsLabel: 'पुरानी-रेजीम डिडक्शन (80C, 80D, HRA…)',
   deductionsHint: 'सिर्फ पुरानी रेजीम में ज़्यादातर डिडक्शन की अनुमति है। स्टैंडर्ड डिडक्शन दोनों में अपने आप लागू होता है।',
+  ageGroupLegend: 'आयु वर्ग (पुरानी-रेजीम छूट को प्रभावित करता है)',
+  ageUnder60Label: '60 से कम',
+  age60to79Label: '60–79 (सीनियर)',
+  age80plusLabel: '80+ (सुपर सीनियर)',
   ctaLabel: 'टैक्स रेजीम की तुलना करें',
   disclaimer: 'नतीजे अनुमानित हैं। आपका असली बिल अलग हो सकता है।',
   eitherMessage: 'दोनों रेजीम में आपको बराबर खर्च आता है।',
@@ -97,8 +101,13 @@ const taxRegimeTextsHi: TaxRegimeCalculatorTexts = {
   oldRegimeLabel: 'पुरानी',
   taxableIncomeLabel: 'टैक्स योग्य आय',
   rebateLabel: 'रिबेट 87A',
+  marginalReliefLabel: 'मार्जिनल राहत',
   totalTaxLabel: 'कुल टैक्स',
-  footnote: 'FY 2026-27 (AY 2027-28), 4% सेस सहित। सरचार्ज (आय > ₹50L) और मार्जिनल राहत शामिल नहीं है।',
+  footnote: 'FY 2026-27 (AY 2027-28), 4% सेस और नई-रेजीम मार्जिनल राहत सहित। सरचार्ज (आय > ₹50L) शामिल नहीं है।',
+  breakEvenLabel: 'आपका ब्रेक-ईवन (पुरानी-रेजीम डिडक्शन)',
+  breakEvenAlreadyTemplate: 'आप अपने ब्रेक-ईवन से {amount} ऊपर पहले से हैं।',
+  breakEvenGapTemplate: 'पुरानी रेजीम को जीतने के लिए आपको {amount} और डिडक्शन चाहिए।',
+  breakEvenNoneMessage: 'आपकी आय पर कोई भी व्यावहारिक डिडक्शन राशि इसे नहीं बदल सकती — नई रेजीम बिना शर्त जीतती है।',
 }
 
 export default function TaxRegimePageHi() {
