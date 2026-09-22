@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  calculateCapitalGainsTax,
   calculateGratuity,
   calculateGst,
   calculateSip,
@@ -7,6 +8,8 @@ import {
   compareRegimes,
   computeRegimeTax,
   findRegimeBreakEvenDeduction,
+  monthsBetweenDates,
+  totalOldRegimeDeductions,
 } from './financial'
 
 describe('calculateGst', () => {
@@ -115,6 +118,36 @@ describe('compareRegimes', () => {
   })
 })
 
+describe('totalOldRegimeDeductions', () => {
+  it('caps each section at its statutory limit', () => {
+    const total = totalOldRegimeDeductions({
+      section80C: 300000, // capped at 1.5L
+      section80D: 100000, // capped at 25k (under60)
+      hraExemption: 200000, // uncapped
+      homeLoanInterest: 500000, // capped at 2L
+      nps80ccd1b: 200000, // capped at 50k
+      otherDeductions: 10000,
+    })
+    expect(total).toBe(150000 + 25000 + 200000 + 200000 + 50000 + 10000)
+  })
+  it('gives seniors a higher 80D cap', () => {
+    const under60 = totalOldRegimeDeductions({ section80C: 0, section80D: 50000, hraExemption: 0, homeLoanInterest: 0, nps80ccd1b: 0, otherDeductions: 0 }, 'under60')
+    const senior = totalOldRegimeDeductions({ section80C: 0, section80D: 50000, hraExemption: 0, homeLoanInterest: 0, nps80ccd1b: 0, otherDeductions: 0 }, '60to79')
+    expect(under60).toBe(25000)
+    expect(senior).toBe(50000)
+  })
+})
+
+describe('salaried/pensioner standard deduction toggle', () => {
+  it('applies no standard deduction for non-salaried, non-pension income', () => {
+    const salaried = computeRegimeTax(1000000, 'new', 0, 'under60', true)
+    const business = computeRegimeTax(1000000, 'new', 0, 'under60', false)
+    expect(salaried.standardDeduction).toBe(75000)
+    expect(business.standardDeduction).toBe(0)
+    expect(business.taxableIncome).toBe(1000000)
+  })
+})
+
 describe('findRegimeBreakEvenDeduction', () => {
   it('matches published reference break-even figures', () => {
     expect(findRegimeBreakEvenDeduction(800000)).toBeCloseTo(250000, -3)
@@ -145,6 +178,69 @@ describe('calculateGratuity', () => {
     const r = calculateGratuity(500000, 30)
     expect(r.gratuity).toBe(2000000)
     expect(r.capped).toBe(true)
+  })
+})
+
+describe('monthsBetweenDates', () => {
+  it('computes completed months between two dates', () => {
+    expect(monthsBetweenDates('2020-01-15', '2024-08-01')).toBe(54)
+    expect(monthsBetweenDates('2023-01-01', '2023-01-01')).toBe(0)
+    expect(monthsBetweenDates('2023-01-01', '2024-01-01')).toBe(12)
+  })
+})
+
+describe('calculateCapitalGainsTax', () => {
+  it('applies Section 112A grandfathering to equity bought before 31 Jan 2018', () => {
+    const r = calculateCapitalGainsTax({
+      assetType: 'equity',
+      purchaseValue: 400000,
+      saleValue: 900000,
+      holdingMonths: 96,
+      slabRatePercent: 30,
+      grandfatherEquityBeforeFeb2018: true,
+      grandfatherFmv: 600000,
+    })
+    // Effective cost = higher of actual (4L) or FMV capped at sale price (6L).
+    expect(r.effectiveCostOfAcquisition).toBe(600000)
+    expect(r.gain).toBe(300000)
+  })
+  it('taxes debt funds bought on/after 1 April 2023 at slab rate regardless of holding period', () => {
+    const short = calculateCapitalGainsTax({
+      assetType: 'debtFund', purchaseValue: 100000, saleValue: 120000,
+      holdingMonths: 5, purchaseDateISO: '2023-06-01', slabRatePercent: 30,
+    })
+    const long = calculateCapitalGainsTax({
+      assetType: 'debtFund', purchaseValue: 100000, saleValue: 120000,
+      holdingMonths: 30, purchaseDateISO: '2023-06-01', slabRatePercent: 30,
+    })
+    expect(short.taxRatePercent).toBe(30)
+    expect(long.taxRatePercent).toBe(30) // still slab-taxed despite 30 months held
+    expect(long.tax).toBe(short.tax)
+  })
+  it('grandfathers debt funds bought before 1 April 2023 into the standard 24-month LT split', () => {
+    const r = calculateCapitalGainsTax({
+      assetType: 'debtFund', purchaseValue: 100000, saleValue: 120000,
+      holdingMonths: 30, purchaseDateISO: '2022-01-01', slabRatePercent: 30,
+    })
+    expect(r.gainType).toBe('long-term')
+    expect(r.taxRatePercent).toBe(12.5) // LTCG rate, not the 30% slab rate
+  })
+  it('caps the Section 54/54EC/54F reinvestment exemption at the long-term gain', () => {
+    const r = calculateCapitalGainsTax({
+      assetType: 'other', purchaseValue: 3000000, saleValue: 6000000,
+      holdingMonths: 60, slabRatePercent: 30, reinvestmentExemption: 50000000,
+    })
+    expect(r.exemptionUsed).toBe(r.gain) // capped, not the full 5 crore entered
+    expect(r.taxableGain).toBe(0)
+    expect(r.tax).toBe(0)
+  })
+  it('taxes short-term "other" asset gains (property/gold) at the slab rate, not a flat rate', () => {
+    const r = calculateCapitalGainsTax({
+      assetType: 'other', purchaseValue: 200000, saleValue: 250000,
+      holdingMonths: 10, slabRatePercent: 20,
+    })
+    expect(r.gainType).toBe('short-term')
+    expect(r.taxRatePercent).toBe(20)
   })
 })
 

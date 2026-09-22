@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { compareRegimes, type AgeGroup } from '@/lib/calc/financial'
+import { compareRegimes, totalOldRegimeDeductions, type AgeGroup } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { CalculatorCard, CalculatorCta, CalculatorHeader, OptionCardGroup } from './CalculatorShell'
 
@@ -9,12 +9,22 @@ export interface TaxRegimeCalculatorTexts {
   title: string
   subtitle: string
   incomeLabel: string
-  deductionsLabel: string
-  deductionsHint: string
+  salariedLegend: string
+  salariedYesLabel: string
+  salariedNoLabel: string
+  salariedHint: string
   ageGroupLegend: string
   ageUnder60Label: string
   age60to79Label: string
   age80plusLabel: string
+  deductionsSectionLabel: string
+  deductionsHint: string
+  section80CLabel: string
+  section80DLabel: string
+  hraExemptionLabel: string
+  homeLoanInterestLabel: string
+  nps80ccd1bLabel: string
+  otherDeductionsLabel: string
   ctaLabel: string
   disclaimer: string
   eitherMessage: string
@@ -39,12 +49,22 @@ const defaultTexts: TaxRegimeCalculatorTexts = {
   title: 'New vs Old Tax Regime',
   subtitle: 'Compare your income tax for FY 2026-27',
   incomeLabel: 'Gross annual income (₹)',
-  deductionsLabel: 'Old-regime deductions (80C, 80D, HRA…)',
-  deductionsHint: 'Only the old regime allows most deductions. Standard deduction is applied automatically for both.',
+  salariedLegend: 'Salaried or pensioner?',
+  salariedYesLabel: 'Yes',
+  salariedNoLabel: 'No',
+  salariedHint: 'Applies the standard deduction (₹75,000 new / ₹50,000 old) — business/professional income doesn\'t get it.',
   ageGroupLegend: 'Age group (affects old-regime exemption)',
   ageUnder60Label: 'Under 60',
   age60to79Label: '60–79 (senior)',
   age80plusLabel: '80+ (super senior)',
+  deductionsSectionLabel: 'Old-regime deductions (leave 0 if not claimed)',
+  deductionsHint: 'Each section is capped at its statutory limit automatically.',
+  section80CLabel: 'Section 80C (max ₹1.5L)',
+  section80DLabel: 'Section 80D (health insurance)',
+  hraExemptionLabel: 'HRA exemption',
+  homeLoanInterestLabel: 'Home loan interest (24b, max ₹2L)',
+  nps80ccd1bLabel: 'NPS 80CCD(1B) (max ₹50k)',
+  otherDeductionsLabel: 'Other deductions (80TTA/80TTB etc.)',
   ctaLabel: 'Compare Tax Regimes',
   disclaimer: 'Results are approximate estimates. Your actual bill may vary.',
   eitherMessage: 'Both regimes cost the same for you.',
@@ -56,11 +76,16 @@ const defaultTexts: TaxRegimeCalculatorTexts = {
   marginalReliefLabel: 'Marginal relief',
   totalTaxLabel: 'Total tax',
   footnote: 'FY 2026-27 (AY 2027-28), incl. 4% cess and new-regime marginal relief. Surcharge (income > ₹50L) is not modelled.',
-  breakEvenLabel: 'Your break-even (old-regime deductions)',
+  breakEvenLabel: 'Your break-even (total old-regime deductions)',
   breakEvenAlreadyTemplate: 'You\'re already {amount} above your break-even.',
   breakEvenGapTemplate: 'You need {amount} more in deductions to make the old regime win.',
   breakEvenNoneMessage: 'No realistic deduction total flips this at your income — the new regime wins unconditionally.',
 }
+
+const SALARIED_OPTIONS: { value: 'yes' | 'no'; label: string; icon: string }[] = [
+  { value: 'yes', label: 'Yes', icon: '💼' },
+  { value: 'no', label: 'No', icon: '📊' },
+]
 
 const AGE_OPTIONS: { value: AgeGroup; label: string; icon: string }[] = [
   { value: 'under60', label: 'Under 60', icon: '🧑' },
@@ -74,12 +99,27 @@ export default function TaxRegimeCalculator({
   texts?: TaxRegimeCalculatorTexts
 } = {}) {
   const [income, setIncome] = useState(1500000)
-  const [deductions, setDeductions] = useState(150000)
+  const [salaried, setSalaried] = useState<'yes' | 'no'>('yes')
   const [ageGroup, setAgeGroup] = useState<AgeGroup>('under60')
+  const [section80C, setSection80C] = useState(150000)
+  const [section80D, setSection80D] = useState(25000)
+  const [hraExemption, setHraExemption] = useState(0)
+  const [homeLoanInterest, setHomeLoanInterest] = useState(0)
+  const [nps80ccd1b, setNps80ccd1b] = useState(0)
+  const [otherDeductions, setOtherDeductions] = useState(0)
+
+  const deductions = useMemo(
+    () =>
+      totalOldRegimeDeductions(
+        { section80C, section80D, hraExemption, homeLoanInterest, nps80ccd1b, otherDeductions },
+        ageGroup,
+      ),
+    [section80C, section80D, hraExemption, homeLoanInterest, nps80ccd1b, otherDeductions, ageGroup],
+  )
 
   const result = useMemo(
-    () => compareRegimes(Math.max(0, income), Math.max(0, deductions), ageGroup),
-    [income, deductions, ageGroup],
+    () => compareRegimes(Math.max(0, income), deductions, ageGroup, salaried === 'yes'),
+    [income, deductions, ageGroup, salaried],
   )
 
   const fieldCls =
@@ -110,33 +150,109 @@ export default function TaxRegimeCalculator({
             className={`${fieldCls} text-lg`}
           />
         </div>
-        <div>
-          <label
-            htmlFor="tax-deductions"
-            className="mb-1.5 block text-sm font-medium text-ash"
-          >
-            {texts.deductionsLabel}
-          </label>
-          <input
-            id="tax-deductions"
-            type="number"
-            min={0}
-            value={deductions}
-            onChange={(e) => setDeductions(Number(e.target.value) || 0)}
-            className={fieldCls}
-          />
-          <p className="mt-1 text-xs text-ash/50">
-            {texts.deductionsHint}
-          </p>
-        </div>
 
-        <OptionCardGroup
-          legend={texts.ageGroupLegend}
-          options={AGE_OPTIONS}
-          value={ageGroup}
-          onChange={setAgeGroup}
-          columns={3}
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <OptionCardGroup
+            legend={texts.salariedLegend}
+            options={SALARIED_OPTIONS}
+            value={salaried}
+            onChange={setSalaried}
+            columns={2}
+          />
+          <OptionCardGroup
+            legend={texts.ageGroupLegend}
+            options={AGE_OPTIONS}
+            value={ageGroup}
+            onChange={setAgeGroup}
+            columns={3}
+          />
+        </div>
+        <p className="-mt-3 text-xs text-ash/50">{texts.salariedHint}</p>
+
+        <div className="rounded-lg border border-hairline bg-mist/30 p-3">
+          <p className="mb-3 text-sm font-semibold text-ash">{texts.deductionsSectionLabel}</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="tax-80c" className="mb-1 block text-xs font-medium text-ash/80">
+                {texts.section80CLabel}
+              </label>
+              <input
+                id="tax-80c"
+                type="number"
+                min={0}
+                value={section80C}
+                onChange={(e) => setSection80C(Number(e.target.value) || 0)}
+                className={fieldCls}
+              />
+            </div>
+            <div>
+              <label htmlFor="tax-80d" className="mb-1 block text-xs font-medium text-ash/80">
+                {texts.section80DLabel}
+              </label>
+              <input
+                id="tax-80d"
+                type="number"
+                min={0}
+                value={section80D}
+                onChange={(e) => setSection80D(Number(e.target.value) || 0)}
+                className={fieldCls}
+              />
+            </div>
+            <div>
+              <label htmlFor="tax-hra" className="mb-1 block text-xs font-medium text-ash/80">
+                {texts.hraExemptionLabel}
+              </label>
+              <input
+                id="tax-hra"
+                type="number"
+                min={0}
+                value={hraExemption}
+                onChange={(e) => setHraExemption(Number(e.target.value) || 0)}
+                className={fieldCls}
+              />
+            </div>
+            <div>
+              <label htmlFor="tax-24b" className="mb-1 block text-xs font-medium text-ash/80">
+                {texts.homeLoanInterestLabel}
+              </label>
+              <input
+                id="tax-24b"
+                type="number"
+                min={0}
+                value={homeLoanInterest}
+                onChange={(e) => setHomeLoanInterest(Number(e.target.value) || 0)}
+                className={fieldCls}
+              />
+            </div>
+            <div>
+              <label htmlFor="tax-nps" className="mb-1 block text-xs font-medium text-ash/80">
+                {texts.nps80ccd1bLabel}
+              </label>
+              <input
+                id="tax-nps"
+                type="number"
+                min={0}
+                value={nps80ccd1b}
+                onChange={(e) => setNps80ccd1b(Number(e.target.value) || 0)}
+                className={fieldCls}
+              />
+            </div>
+            <div>
+              <label htmlFor="tax-other" className="mb-1 block text-xs font-medium text-ash/80">
+                {texts.otherDeductionsLabel}
+              </label>
+              <input
+                id="tax-other"
+                type="number"
+                min={0}
+                value={otherDeductions}
+                onChange={(e) => setOtherDeductions(Number(e.target.value) || 0)}
+                className={fieldCls}
+              />
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-ash/50">{texts.deductionsHint}</p>
+        </div>
 
         <CalculatorCta label={texts.ctaLabel} tone="financial" disclaimer={texts.disclaimer} />
       </form>
@@ -156,6 +272,11 @@ export default function TaxRegimeCalculator({
                   .replace('{regime}', result.recommended === 'new' ? texts.newRegimeLabel : texts.oldRegimeLabel)
                   .replace('{amount}', formatINR(result.saving))}
           </div>
+
+          <p className="text-xs text-ash/60">
+            Total old-regime deductions after caps:{' '}
+            <span className="font-semibold text-ink-navy">{formatINR(deductions)}</span>
+          </p>
 
           <table className="w-full text-sm">
             <thead>

@@ -30,6 +30,14 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
+    q: 'Does the standard deduction apply if I have business or freelance income?',
+    a: 'No — the standard deduction (₹75,000 new regime, ₹50,000 old regime) only applies to salary and pension income, not to business or professional income. If you\'re a freelancer or run a business, mark yourself as "No" for salaried/pensioner in the calculator so it correctly leaves the standard deduction out of both regimes\' calculations.',
+  },
+  {
+    q: 'Why does the calculator ask for each deduction separately instead of one total?',
+    a: 'Because each deduction category has its own statutory cap, and adding them up yourself risks overclaiming — Section 80C tops out at ₹1.5 lakh no matter how much you actually invest across EPF, PPF, ELSS and insurance combined; home loan interest under Section 24(b) is capped at ₹2 lakh for a self-occupied property; the NPS top-up under 80CCD(1B) is capped at ₹50,000; and Section 80D is capped at ₹25,000 (₹50,000 if you or the insured are a senior citizen). Entering each category separately means the calculator applies the correct cap automatically rather than trusting a single self-totaled number.',
+  },
+  {
     q: 'Is the new or old tax regime better?',
     a: 'For most salaried taxpayers, the new regime now wins, because its enhanced Section 87A rebate makes taxable income up to ₹12 lakh completely tax-free — a salaried person reaches ₹12.75 lakh tax-free after the ₹75,000 standard deduction. The old regime only wins once your genuine deductions clear your specific break-even point, which typically falls somewhere between ₹2.5 lakh and ₹5.5 lakh of deductions depending on income. There is no universal answer — only your own break-even, which this calculator solves for your exact numbers.',
   },
@@ -369,30 +377,37 @@ export default function TaxRegimePage() {
             Sizing Your Old-Regime Deductions
           </h2>
           <p className="text-ash/80">
-            The &ldquo;old-regime deductions&rdquo; field above is only as
-            accurate as the total you enter — if you&apos;re not sure
-            what that number should be, work it out from your actual
-            deductions first: our{' '}
+            The calculator above takes each deduction category separately —
+            80C, 80D, HRA exemption, home loan interest, the NPS top-up and a
+            catch-all &ldquo;other&rdquo; field — and caps each one at its
+            statutory limit automatically (₹1.5 lakh for 80C, ₹2 lakh for
+            home loan interest under Section 24(b), ₹50,000 for the NPS
+            80CCD(1B) top-up, and ₹25,000/₹50,000 for 80D depending on your
+            age group), so you don&apos;t need to pre-total anything or
+            worry about accidentally overclaiming a section&apos;s limit.
+          </p>
+          <p className="mt-3 text-ash/80">
+            If you&apos;re not sure what to enter for a specific category:
+            our{' '}
             <Link href="/financial/hra-calculator" className="text-brass underline">
               HRA Calculator
             </Link>{' '}
-            gives your exact exempt HRA amount, and our{' '}
+            gives your exact exempt HRA amount, our{' '}
             <Link href="/financial/home-loan-emi-calculator" className="text-brass underline">
               Home Loan EMI Calculator
             </Link>{' '}
-            breaks out how much of your EMI is interest (Section 24, capped
-            at ₹2 lakh) versus principal (Section 80C) for a home loan. Add
-            those to your other 80C contributions — PPF (see our{' '}
+            breaks out how much of your EMI is interest versus principal for
+            a home loan, our{' '}
             <Link href="/financial/ppf-calculator" className="text-brass underline">
               PPF Calculator
-            </Link>
-            ), ELSS, insurance premiums, capped at ₹1.5 lakh combined — plus
-            any NPS top-up under 80CCD(1B) (see our{' '}
+            </Link>{' '}
+            helps size your 80C contribution, and our{' '}
             <Link href="/financial/nps-calculator" className="text-brass underline">
               NPS Calculator
-            </Link>
-            , capped at ₹50,000) and your 80D health insurance premiums, to
-            get a realistic old-regime deduction total rather than guessing.
+            </Link>{' '}
+            helps with the 80CCD(1B) top-up — enter each figure directly
+            into its matching field above and let the calculator apply the
+            caps for you.
           </p>
         </section>
 

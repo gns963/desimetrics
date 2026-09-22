@@ -265,9 +265,12 @@ export function computeRegimeTax(
   regime: 'new' | 'old',
   otherDeductions = 0,
   ageGroup: AgeGroup = 'under60',
+  isSalariedOrPensioner = true,
 ): RegimeTaxResult {
   const isNew = regime === 'new'
-  const standardDeduction = isNew ? 75000 : 50000
+  // Standard deduction only applies to salary/pension income, not business or
+  // professional income.
+  const standardDeduction = isSalariedOrPensioner ? (isNew ? 75000 : 50000) : 0
   const slabs = isNew ? NEW_REGIME_SLABS : OLD_REGIME_SLABS[ageGroup]
   const deductions = isNew ? 0 : otherDeductions // 80C etc. only in old regime
 
@@ -318,11 +321,12 @@ export function compareRegimes(
   grossIncome: number,
   oldRegimeDeductions = 0,
   ageGroup: AgeGroup = 'under60',
+  isSalariedOrPensioner = true,
 ): RegimeComparison {
-  const newRegime = computeRegimeTax(grossIncome, 'new')
-  const oldRegime = computeRegimeTax(grossIncome, 'old', oldRegimeDeductions, ageGroup)
+  const newRegime = computeRegimeTax(grossIncome, 'new', 0, ageGroup, isSalariedOrPensioner)
+  const oldRegime = computeRegimeTax(grossIncome, 'old', oldRegimeDeductions, ageGroup, isSalariedOrPensioner)
   const diff = round2(oldRegime.totalTax - newRegime.totalTax)
-  const breakEvenDeduction = findRegimeBreakEvenDeduction(grossIncome, ageGroup)
+  const breakEvenDeduction = findRegimeBreakEvenDeduction(grossIncome, ageGroup, isSalariedOrPensioner)
   const deductionGap =
     breakEvenDeduction === null ? 0 : round2(Math.max(0, breakEvenDeduction - oldRegimeDeductions))
   return {
@@ -348,24 +352,63 @@ export function compareRegimes(
 export function findRegimeBreakEvenDeduction(
   grossIncome: number,
   ageGroup: AgeGroup = 'under60',
+  isSalariedOrPensioner = true,
 ): number | null {
-  const newTax = computeRegimeTax(grossIncome, 'new').totalTax
-  const oldTaxAtZero = computeRegimeTax(grossIncome, 'old', 0, ageGroup).totalTax
+  const newTax = computeRegimeTax(grossIncome, 'new', 0, ageGroup, isSalariedOrPensioner).totalTax
+  const oldTaxAtZero = computeRegimeTax(grossIncome, 'old', 0, ageGroup, isSalariedOrPensioner).totalTax
   if (oldTaxAtZero <= newTax) return 0
 
   const maxDeductions = grossIncome
-  const oldTaxAtMax = computeRegimeTax(grossIncome, 'old', maxDeductions, ageGroup).totalTax
+  const oldTaxAtMax = computeRegimeTax(grossIncome, 'old', maxDeductions, ageGroup, isSalariedOrPensioner).totalTax
   if (oldTaxAtMax > newTax) return null
 
   let lo = 0
   let hi = maxDeductions
   for (let i = 0; i < 60; i++) {
     const mid = (lo + hi) / 2
-    const midTax = computeRegimeTax(grossIncome, 'old', mid, ageGroup).totalTax
+    const midTax = computeRegimeTax(grossIncome, 'old', mid, ageGroup, isSalariedOrPensioner).totalTax
     if (midTax > newTax) lo = mid
     else hi = mid
   }
   return round2(hi)
+}
+
+export interface OldRegimeDeductionInputs {
+  section80C: number
+  section80D: number
+  hraExemption: number
+  homeLoanInterest: number
+  nps80ccd1b: number
+  otherDeductions: number
+}
+
+const SECTION_80C_CAP = 150000
+const SECTION_24B_HOME_LOAN_INTEREST_CAP = 200000
+const SECTION_80CCD_1B_NPS_CAP = 50000
+
+/**
+ * Totals old-regime deductions from itemized inputs, applying each section's
+ * statutory cap automatically — Section 80C at ₹1.5L, Section 80D at ₹25,000
+ * (₹50,000 for senior/super-senior citizens, self-insurance only — this does
+ * not model an additional cap for insuring senior-citizen parents), home loan
+ * interest under Section 24(b) at ₹2L for a self-occupied property, and the
+ * NPS top-up under Section 80CCD(1B) at ₹50,000. HRA exemption and "other
+ * deductions" (80TTA/80TTB etc.) are taken as entered, uncapped here, since
+ * HRA is itself already a computed exemption (see the HRA Calculator) rather
+ * than a raw contribution subject to a simple cap.
+ */
+export function totalOldRegimeDeductions(
+  inputs: OldRegimeDeductionInputs,
+  ageGroup: AgeGroup = 'under60',
+): number {
+  const section80D_CAP = ageGroup === 'under60' ? 25000 : 50000
+  const capped80C = Math.min(Math.max(0, inputs.section80C), SECTION_80C_CAP)
+  const capped80D = Math.min(Math.max(0, inputs.section80D), section80D_CAP)
+  const cappedHomeLoan = Math.min(Math.max(0, inputs.homeLoanInterest), SECTION_24B_HOME_LOAN_INTEREST_CAP)
+  const cappedNps = Math.min(Math.max(0, inputs.nps80ccd1b), SECTION_80CCD_1B_NPS_CAP)
+  const hra = Math.max(0, inputs.hraExemption)
+  const other = Math.max(0, inputs.otherDeductions)
+  return round2(capped80C + capped80D + hra + cappedHomeLoan + cappedNps + other)
 }
 
 // ---------------------------------------------------------------------------
@@ -655,6 +698,205 @@ export function calculateEquityCapitalGainsTax(
     exemptionUsed: 0,
     taxableGain: round2(positiveGain),
     taxRatePercent: STCG_EQUITY_RATE,
+    tax: round2(tax),
+    netProceeds: round2(saleValue - tax),
+  }
+}
+
+/** Whole completed calendar months between two ISO dates (purchase, then sale). */
+export function monthsBetweenDates(purchaseDateISO: string, saleDateISO: string): number {
+  const p = new Date(purchaseDateISO)
+  const s = new Date(saleDateISO)
+  if (Number.isNaN(p.getTime()) || Number.isNaN(s.getTime())) return 0
+  let months = (s.getFullYear() - p.getFullYear()) * 12 + (s.getMonth() - p.getMonth())
+  if (s.getDate() < p.getDate()) months -= 1
+  return Math.max(0, months)
+}
+
+export type CapitalAssetType = 'equity' | 'debtFund' | 'other'
+
+export interface GeneralCapitalGainsInput {
+  assetType: CapitalAssetType
+  purchaseValue: number
+  saleValue: number
+  holdingMonths: number
+  /** Required for `debtFund` only — units bought on or after 1 April 2023 are
+   * ALWAYS taxed at slab rate with no LTCG concession at all, regardless of
+   * holding period (2023 Finance Act amendment); units bought before that
+   * date still get the standard 24-month LT/ST split. Ignored for other
+   * asset types. */
+  purchaseDateISO?: string
+  /** Investor's income-tax slab rate — used for STCG on debt funds and
+   * "other" assets (property/gold/unlisted shares) held short-term, and for
+   * ALL debt-fund gains bought on/after 1 April 2023. Not used for equity,
+   * which has its own flat STCG rate. */
+  slabRatePercent: number
+  /** Equity only: apply Section 112A grandfathering for units acquired on or
+   * before 31 January 2018 — cost of acquisition becomes the higher of actual
+   * cost or the 31-Jan-2018 fair market value, capped at the sale price. */
+  grandfatherEquityBeforeFeb2018?: boolean
+  grandfatherFmv?: number
+  /** "Other" assets only: eligible reinvestment under Section 54/54EC/54F,
+   * which exempts long-term gains reinvested into a residential house or
+   * capital-gains bonds. Only ever reduces LONG-TERM gain, capped at the gain
+   * itself — these sections don't apply to short-term gains or to equity. */
+  reinvestmentExemption?: number
+}
+
+export interface GeneralCapitalGainsResult {
+  effectiveCostOfAcquisition: number
+  gain: number
+  gainType: 'short-term' | 'long-term'
+  ltThresholdMonths: number
+  exemptionUsed: number
+  taxableGain: number
+  taxRatePercent: number
+  tax: number
+  netProceeds: number
+}
+
+const OTHER_ASSET_LTCG_RATE = 12.5 // %, without indexation — Budget 2024 simplified rate
+const OTHER_ASSET_LT_THRESHOLD_MONTHS = 24 // property, gold, unlisted shares
+
+/**
+ * General capital gains calculator spanning three tax treatments:
+ * - `equity` (listed shares / equity mutual funds, STT paid): delegates to
+ *   `calculateEquityCapitalGainsTax`, with optional Section 112A grandfathering
+ *   for pre-2018 holdings applied to the cost of acquisition first.
+ * - `debtFund`: units bought on/after 1 April 2023 have NO LTCG concession at
+ *   all (2023 Finance Act) — taxed at slab rate regardless of holding period.
+ *   Units bought before that date still get the standard 24-month long-term
+ *   split, taxed like "other" assets below.
+ * - `other` (property, gold, unlisted shares): 24-month long-term threshold;
+ *   long-term gains taxed at 12.5% WITHOUT indexation (the Budget 2024
+ *   simplified default) after any Section 54/54EC/54F reinvestment exemption;
+ *   short-term gains taxed at the investor's slab rate. The pre-23-July-2024
+ *   option to instead use 20% WITH indexation is NOT modelled here — it
+ *   requires the year-by-year Cost Inflation Index table, which this
+ *   calculator does not have verified figures for; a property seller eligible
+ *   for that older option should compare both methods with a CA rather than
+ *   trust this figure alone.
+ */
+export function calculateCapitalGainsTax(
+  input: GeneralCapitalGainsInput,
+): GeneralCapitalGainsResult {
+  const {
+    assetType,
+    purchaseValue,
+    saleValue,
+    holdingMonths,
+    purchaseDateISO,
+    slabRatePercent,
+    grandfatherEquityBeforeFeb2018,
+    grandfatherFmv,
+    reinvestmentExemption,
+  } = input
+  if (purchaseValue < 0 || saleValue < 0 || holdingMonths < 0 || slabRatePercent < 0)
+    throw new Error('inputs must be >= 0')
+
+  if (assetType === 'equity') {
+    let effectiveCost = purchaseValue
+    if (grandfatherEquityBeforeFeb2018 && grandfatherFmv && grandfatherFmv > 0) {
+      effectiveCost = Math.max(purchaseValue, Math.min(grandfatherFmv, saleValue))
+    }
+    const r = calculateEquityCapitalGainsTax(effectiveCost, saleValue, holdingMonths)
+    return {
+      effectiveCostOfAcquisition: round2(effectiveCost),
+      gain: r.gain,
+      gainType: r.gainType,
+      ltThresholdMonths: 12,
+      exemptionUsed: r.exemptionUsed,
+      taxableGain: r.taxableGain,
+      taxRatePercent: r.taxRatePercent,
+      tax: r.tax,
+      netProceeds: r.netProceeds,
+    }
+  }
+
+  const gain = saleValue - purchaseValue
+  const positiveGain = Math.max(0, gain)
+
+  if (assetType === 'debtFund') {
+    const DEBT_FUND_SLAB_ONLY_CUTOFF = new Date('2023-04-01')
+    const purchasedOnOrAfterCutoff =
+      !purchaseDateISO || Number.isNaN(new Date(purchaseDateISO).getTime())
+        ? true // no date given — default to the current (post-2023) regime
+        : new Date(purchaseDateISO) >= DEBT_FUND_SLAB_ONLY_CUTOFF
+
+    if (purchasedOnOrAfterCutoff) {
+      // 2023 Finance Act: no LTCG concession at all — always slab rate.
+      const tax = (positiveGain * slabRatePercent) / 100
+      return {
+        effectiveCostOfAcquisition: round2(purchaseValue),
+        gain: round2(gain),
+        gainType: 'short-term', // taxed as if always short-term, regardless of holding period
+        ltThresholdMonths: OTHER_ASSET_LT_THRESHOLD_MONTHS,
+        exemptionUsed: 0,
+        taxableGain: round2(positiveGain),
+        taxRatePercent: slabRatePercent,
+        tax: round2(tax),
+        netProceeds: round2(saleValue - tax),
+      }
+    }
+    // Purchased before 1 April 2023: grandfathered into the standard
+    // 24-month long-term split, same treatment as "other" assets below.
+    const isLongTermDebt = holdingMonths > OTHER_ASSET_LT_THRESHOLD_MONTHS
+    if (isLongTermDebt) {
+      const tax = (positiveGain * OTHER_ASSET_LTCG_RATE) / 100
+      return {
+        effectiveCostOfAcquisition: round2(purchaseValue),
+        gain: round2(gain),
+        gainType: 'long-term',
+        ltThresholdMonths: OTHER_ASSET_LT_THRESHOLD_MONTHS,
+        exemptionUsed: 0,
+        taxableGain: round2(positiveGain),
+        taxRatePercent: OTHER_ASSET_LTCG_RATE,
+        tax: round2(tax),
+        netProceeds: round2(saleValue - tax),
+      }
+    }
+    const tax = (positiveGain * slabRatePercent) / 100
+    return {
+      effectiveCostOfAcquisition: round2(purchaseValue),
+      gain: round2(gain),
+      gainType: 'short-term',
+      ltThresholdMonths: OTHER_ASSET_LT_THRESHOLD_MONTHS,
+      exemptionUsed: 0,
+      taxableGain: round2(positiveGain),
+      taxRatePercent: slabRatePercent,
+      tax: round2(tax),
+      netProceeds: round2(saleValue - tax),
+    }
+  }
+
+  // assetType === 'other': property, gold, unlisted shares.
+  const isLongTerm = holdingMonths > OTHER_ASSET_LT_THRESHOLD_MONTHS
+  if (isLongTerm) {
+    const exemptionUsed = Math.min(positiveGain, Math.max(0, reinvestmentExemption ?? 0))
+    const taxableGain = Math.max(0, positiveGain - exemptionUsed)
+    const tax = (taxableGain * OTHER_ASSET_LTCG_RATE) / 100
+    return {
+      effectiveCostOfAcquisition: round2(purchaseValue),
+      gain: round2(gain),
+      gainType: 'long-term',
+      ltThresholdMonths: OTHER_ASSET_LT_THRESHOLD_MONTHS,
+      exemptionUsed: round2(exemptionUsed),
+      taxableGain: round2(taxableGain),
+      taxRatePercent: OTHER_ASSET_LTCG_RATE,
+      tax: round2(tax),
+      netProceeds: round2(saleValue - tax),
+    }
+  }
+
+  const tax = (positiveGain * slabRatePercent) / 100
+  return {
+    effectiveCostOfAcquisition: round2(purchaseValue),
+    gain: round2(gain),
+    gainType: 'short-term',
+    ltThresholdMonths: OTHER_ASSET_LT_THRESHOLD_MONTHS,
+    exemptionUsed: 0,
+    taxableGain: round2(positiveGain),
+    taxRatePercent: slabRatePercent,
     tax: round2(tax),
     netProceeds: round2(saleValue - tax),
   }
