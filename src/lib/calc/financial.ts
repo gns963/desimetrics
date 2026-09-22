@@ -756,6 +756,132 @@ export function calculatePpf(
   }
 }
 
+export type PpfDepositMode = 'monthly' | 'yearly'
+export type PpfDepositTiming = 'before5th' | 'after5th'
+export type PpfExtensionChoice = 'contribute' | 'stop'
+
+const PPF_ANNUAL_CAP = 150000
+const PPF_LOCK_IN_YEARS = 15
+const PPF_EXTENSION_BLOCK_YEARS = 5
+
+export interface PpfSimulationInput {
+  depositMode: PpfDepositMode
+  /** Monthly deposit if `depositMode` is 'monthly'; annual deposit if 'yearly'. */
+  depositAmount: number
+  ratePercent: number
+  /** Only relevant in monthly mode — a deposit made on/before the 5th earns
+   * interest for that same month; after the 5th, it only starts earning from
+   * the following month, per PPF's actual interest-computation rule (lowest
+   * balance between the 5th and month-end). */
+  depositTiming: PpfDepositTiming
+  /** Number of extra 5-year blocks after the initial 15-year lock-in (0-4). */
+  extensionBlocks: number
+  /** Only relevant if extensionBlocks > 0. */
+  extensionChoice: PpfExtensionChoice
+  /** For an illustrative 80C tax-saving estimate only — not part of the PPF maturity math itself. */
+  taxBracketPercent: number
+}
+
+export interface PpfSimulationYearPoint {
+  year: number
+  invested: number
+  value: number
+  taxSaved: number
+}
+
+export interface PpfSimulationResult {
+  invested: number
+  maturityValue: number
+  interestEarned: number
+  totalTaxSaved: number
+  yearly: PpfSimulationYearPoint[]
+}
+
+/**
+ * Month-by-month PPF simulation that captures two real mechanics the simple
+ * annual model above doesn't: (1) monthly deposits only earn interest from
+ * the month they're eligible for, based on the 5th-of-the-month cutoff, and
+ * (2) the post-15-year extension choice (keep contributing vs stop) changes
+ * whether further deposits happen at all. Interest itself is still credited
+ * annually (matching how PPF actually works — monthly interest is computed
+ * but only added to the balance at financial-year end, so it doesn't itself
+ * compound intra-year).
+ */
+export function simulatePpf(input: PpfSimulationInput): PpfSimulationResult {
+  const {
+    depositMode,
+    depositAmount,
+    ratePercent,
+    depositTiming,
+    extensionBlocks,
+    extensionChoice,
+    taxBracketPercent,
+  } = input
+  if (depositAmount < 0 || ratePercent < 0 || extensionBlocks < 0)
+    throw new Error('inputs must be >= 0')
+
+  const totalYears = PPF_LOCK_IN_YEARS + Math.floor(extensionBlocks) * PPF_EXTENSION_BLOCK_YEARS
+  const monthlyRate = ratePercent / 100 / 12
+
+  let balance = 0
+  let totalInvested = 0
+  let totalTaxSaved = 0
+  const yearly: PpfSimulationYearPoint[] = []
+
+  for (let y = 1; y <= totalYears; y++) {
+    const contributingThisYear = y <= PPF_LOCK_IN_YEARS || extensionChoice === 'contribute'
+    let yearInvested = 0
+    let yearInterest = 0
+
+    if (depositMode === 'yearly') {
+      const deposit = contributingThisYear ? Math.min(depositAmount, PPF_ANNUAL_CAP) : 0
+      balance += deposit
+      yearInvested = deposit
+      yearInterest = balance * (ratePercent / 100)
+    } else {
+      // Monthly mode: walk 12 months, respecting the annual cap and the
+      // before/after-5th interest-eligibility rule.
+      let yearDeposited = 0
+      for (let m = 1; m <= 12; m++) {
+        let deposit = contributingThisYear ? depositAmount : 0
+        if (yearDeposited + deposit > PPF_ANNUAL_CAP) {
+          deposit = Math.max(0, PPF_ANNUAL_CAP - yearDeposited)
+        }
+        yearDeposited += deposit
+
+        if (depositTiming === 'before5th') {
+          balance += deposit
+          yearInterest += balance * monthlyRate
+        } else {
+          yearInterest += balance * monthlyRate
+          balance += deposit
+        }
+      }
+      yearInvested = yearDeposited
+    }
+
+    balance += yearInterest
+    totalInvested += yearInvested
+    const taxSaved = (Math.min(yearInvested, PPF_ANNUAL_CAP) * taxBracketPercent) / 100
+    totalTaxSaved += taxSaved
+
+    yearly.push({
+      year: y,
+      invested: round2(totalInvested),
+      value: round2(balance),
+      taxSaved: round2(taxSaved),
+    })
+  }
+
+  return {
+    invested: round2(totalInvested),
+    maturityValue: round2(balance),
+    interestEarned: round2(balance - totalInvested),
+    totalTaxSaved: round2(totalTaxSaved),
+    yearly,
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Fixed Deposit (FD)
 // ---------------------------------------------------------------------------

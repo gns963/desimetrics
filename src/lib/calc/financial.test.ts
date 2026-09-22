@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   calculateCapitalGainsTax,
   calculateEmi,
+  calculatePpf,
   calculateEmiWithPrepayment,
   calculateGratuity,
   calculateGst,
@@ -13,6 +14,7 @@ import {
   computeRegimeTax,
   findRegimeBreakEvenDeduction,
   monthsBetweenDates,
+  simulatePpf,
   totalOldRegimeDeductions,
 } from './financial'
 
@@ -244,6 +246,56 @@ describe('calculateLoanTrueCost', () => {
       principal: 500000, annualRatePercent: 14, years: 5, processingFeePercent: 0,
     })
     expect(r.effectiveAprPercent).toBeCloseTo(14, 0)
+  })
+})
+
+describe('simulatePpf', () => {
+  it('matches the simple annual model in yearly deposit mode', () => {
+    const old = calculatePpf(150000, 7.1, 15)
+    const sim = simulatePpf({
+      depositMode: 'yearly', depositAmount: 150000, ratePercent: 7.1,
+      depositTiming: 'before5th', extensionBlocks: 0, extensionChoice: 'contribute', taxBracketPercent: 30,
+    })
+    expect(sim.maturityValue).toBe(old.maturityValue)
+  })
+  it('depositing after the 5th earns less interest than before the 5th', () => {
+    const before = simulatePpf({
+      depositMode: 'monthly', depositAmount: 12500, ratePercent: 7.1,
+      depositTiming: 'before5th', extensionBlocks: 0, extensionChoice: 'contribute', taxBracketPercent: 30,
+    })
+    const after = simulatePpf({
+      depositMode: 'monthly', depositAmount: 12500, ratePercent: 7.1,
+      depositTiming: 'after5th', extensionBlocks: 0, extensionChoice: 'contribute', taxBracketPercent: 30,
+    })
+    expect(after.maturityValue).toBeLessThan(before.maturityValue)
+  })
+  it('extending without contributing keeps the balance growing but invested unchanged', () => {
+    const r = simulatePpf({
+      depositMode: 'yearly', depositAmount: 150000, ratePercent: 7.1,
+      depositTiming: 'before5th', extensionBlocks: 1, extensionChoice: 'stop', taxBracketPercent: 30,
+    })
+    expect(r.yearly).toHaveLength(20)
+    expect(r.invested).toBe(150000 * 15) // no more deposits in the extension years
+    expect(r.maturityValue).toBeGreaterThan(r.invested)
+  })
+  it('extending while contributing adds more invested and a bigger maturity value', () => {
+    const stop = simulatePpf({
+      depositMode: 'yearly', depositAmount: 150000, ratePercent: 7.1,
+      depositTiming: 'before5th', extensionBlocks: 1, extensionChoice: 'stop', taxBracketPercent: 30,
+    })
+    const contribute = simulatePpf({
+      depositMode: 'yearly', depositAmount: 150000, ratePercent: 7.1,
+      depositTiming: 'before5th', extensionBlocks: 1, extensionChoice: 'contribute', taxBracketPercent: 30,
+    })
+    expect(contribute.invested).toBeGreaterThan(stop.invested)
+    expect(contribute.maturityValue).toBeGreaterThan(stop.maturityValue)
+  })
+  it('caps the 80C tax-saving estimate at the ₹1.5L annual deposit limit', () => {
+    const r = simulatePpf({
+      depositMode: 'yearly', depositAmount: 150000, ratePercent: 7.1,
+      depositTiming: 'before5th', extensionBlocks: 0, extensionChoice: 'contribute', taxBracketPercent: 30,
+    })
+    expect(r.totalTaxSaved).toBe(150000 * 15 * 0.3)
   })
 })
 

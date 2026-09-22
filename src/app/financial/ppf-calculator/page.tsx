@@ -3,7 +3,7 @@ import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
 import PpfCalculator from '@/components/calculators/PpfCalculator'
-import { calculatePpf } from '@/lib/calc/financial'
+import { calculatePpf, simulatePpf } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
@@ -12,11 +12,27 @@ const SITE = 'https://desimetrics.com'
 const PATH = '/financial/ppf-calculator'
 
 const example = calculatePpf(150000, 7.1, 15)
+const exampleBefore5th = simulatePpf({
+  depositMode: 'monthly', depositAmount: 12500, ratePercent: 7.1,
+  depositTiming: 'before5th', extensionBlocks: 0, extensionChoice: 'contribute', taxBracketPercent: 30,
+})
+const exampleAfter5th = simulatePpf({
+  depositMode: 'monthly', depositAmount: 12500, ratePercent: 7.1,
+  depositTiming: 'after5th', extensionBlocks: 0, extensionChoice: 'contribute', taxBracketPercent: 30,
+})
+const exampleExtendStop = simulatePpf({
+  depositMode: 'yearly', depositAmount: 150000, ratePercent: 7.1,
+  depositTiming: 'before5th', extensionBlocks: 1, extensionChoice: 'stop', taxBracketPercent: 30,
+})
+const exampleExtendContribute = simulatePpf({
+  depositMode: 'yearly', depositAmount: 150000, ratePercent: 7.1,
+  depositTiming: 'before5th', extensionBlocks: 1, extensionChoice: 'contribute', taxBracketPercent: 30,
+})
 
 export const metadata: Metadata = {
-  title: 'PPF Calculator 2026 — Public Provident Fund Maturity Value',
+  title: 'PPF Calculator 2026 — Maturity, Deposit Timing & 80C Savings',
   description:
-    'Free PPF calculator for India. Estimate your Public Provident Fund maturity value at the current 7.1% interest rate, with a year-by-year growth chart over the 15-year lock-in.',
+    'Free PPF calculator for India. Project your Public Provident Fund maturity at the current 7.1% rate, and see exactly how deposit timing, monthly vs yearly deposits, and 15-year extensions change your tax-free corpus.',
   alternates: {
     canonical: `${SITE}${PATH}`,
     languages: getAlternateLanguages(PATH),
@@ -27,7 +43,7 @@ export const metadata: Metadata = {
 const faqs = [
   {
     q: 'How is PPF maturity value calculated?',
-    a: 'PPF compounds annually — each financial year\'s deposit earns interest on itself from the next year onward, on top of the running balance. This calculator uses the standard simplified model of one deposit at the start of each year compounding annually at the notified rate; in practice, interest is computed monthly on the lowest balance between the 5th and last day of each month and credited once a year, so the exact figure on your passbook can differ slightly depending on when in the month you actually deposit.',
+    a: 'PPF compounds annually — each financial year\'s accumulated interest becomes part of the balance the following year. In yearly deposit mode, this calculator models a single deposit at the start of each year, compounding annually at the notified rate. In monthly deposit mode, it goes further and simulates each month individually, computing interest on the lowest balance between the 5th and month-end per PPF\'s actual rule, then crediting the year\'s accumulated interest to the balance at financial-year end — the same mechanic your actual PPF passbook follows.',
   },
   {
     q: 'What is the current PPF interest rate?',
@@ -52,6 +68,14 @@ const faqs = [
   {
     q: 'PPF vs FD vs ELSS — which is better for tax-saving under 80C?',
     a: 'It depends on your risk appetite and lock-in tolerance: PPF is government-backed, fully tax-free (EEE) and has a long 15-year lock-in; a tax-saving FD locks in for just 5 years but the interest is fully taxable at your slab rate; ELSS has the shortest lock-in (3 years) and historically the highest return potential, but it\'s market-linked equity risk and gains above ₹1.25 lakh/year are taxed under the capital-gains rules. If you want guaranteed, tax-free, low-risk long-term savings, PPF is usually the strongest single option among the three — run the numbers for ELSS-linked equity growth on our SIP calculator to compare.',
+  },
+  {
+    q: 'Does it actually matter if I deposit on the 3rd vs the 8th of the month?',
+    a: 'Yes, measurably — PPF interest for a month is computed on the lowest balance the account held between the 5th and the last day of that month. A deposit made on or before the 5th counts toward that window and earns interest starting that same month; the same deposit made on the 6th or later misses the window and only starts earning from next month. Over 15 years of monthly deposits, consistently depositing after the 5th instead of before can cost tens of thousands of rupees in lost interest — see the worked comparison above.',
+  },
+  {
+    q: 'Should I deposit monthly or as one lump sum at the start of the year?',
+    a: 'A lump sum deposited on or before 5 April (the start of the financial year) earns interest for the full year on the entire amount, which is mathematically the best outcome if you have the full ₹1,50,000 available upfront. Monthly deposits are more realistic for most salaried savers and still earn solid returns, but each instalment only earns interest from when it\'s deposited (and only from that month if made by the 5th), so the same total annual amount grows somewhat less than a single April lump sum would.',
   },
   {
     q: 'Can NRIs invest in PPF?',
@@ -99,12 +123,12 @@ export default function PpfCalculatorPage() {
           </>
         }
         h1="PPF Calculator"
-        subtitle="Estimate what your Public Provident Fund account could grow to over its 15-year lock-in. Enter your annual investment and duration to see the maturity value, interest earned and a year-by-year growth chart."
+        subtitle="Project your PPF maturity, then see how deposit timing, monthly vs yearly deposits, and extending past 15 years each change your tax-free corpus. Includes an 80C tax-saving estimate."
         stats={[
           { icon: '📈', big: '7.1%', small: 'Current rate (Jul–Sep 2026)', tone: 'hub' },
-          { icon: '🔒', big: '15 yrs', small: 'Statutory lock-in', tone: 'hub' },
+          { icon: '📅', big: 'Before/after 5th', small: 'Deposit-timing effect', tone: 'hub' },
           { icon: '🛡️', big: 'EEE', small: 'Fully tax-free at every stage', tone: 'hub' },
-          { icon: '💰', big: '₹1.5L', small: 'Max investment/year', tone: 'hub' },
+          { icon: '➕', big: '+5yr blocks', small: 'Extension modelling', tone: 'hub' },
         ]}
       />
 
@@ -147,7 +171,7 @@ export default function PpfCalculatorPage() {
           <ul className="mt-3 space-y-2">
             {[
               ['Annual compounding', 'the account balance (previous balance plus that year\'s deposit) earns interest for the year, and that interest itself starts earning interest from the following year — this is why the later years of a PPF account grow much faster in absolute terms than the early years.'],
-              ['Timing matters', 'PPF interest is actually computed monthly on the lowest balance between the 5th and last day of each month, so depositing your full annual amount on or before the 5th of April (the start of the financial year) earns a full year\'s interest on it — depositing later in the year means missing interest on those months.'],
+              ['Timing matters', 'PPF interest is computed monthly on the lowest balance between the 5th and last day of each month — depositing on or before the 5th earns interest a month earlier than depositing after. Switch to monthly deposit mode above to model this precisely for your own contribution schedule.'],
               ['Rate is reviewed quarterly', 'the government sets small-savings rates like PPF every quarter based on prevailing government-securities yields — 7.1% has held since April 2020, but it is not guaranteed to stay there, so long-term projections are indicative, not promised.'],
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-2">
@@ -158,6 +182,101 @@ export default function PpfCalculatorPage() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section aria-labelledby="deposit-timing" className="mb-10 scroll-mt-20">
+          <h2 id="deposit-timing" className="font-display mb-4 text-2xl font-semibold">
+            Before vs After the 5th — What It Actually Costs You
+          </h2>
+          <p className="text-ash/80">
+            For a monthly-deposit PPF account, the calculator above models
+            this precisely rather than just mentioning it in passing.
+            Depositing <strong>₹12,500/month for 15 years</strong> before
+            the 5th of each month reaches{' '}
+            <strong>{formatINR(exampleBefore5th.maturityValue)}</strong> —
+            depositing the same amount after the 5th every month instead
+            reaches only <strong>{formatINR(exampleAfter5th.maturityValue)}</strong>,
+            a difference of{' '}
+            <strong>{formatINR(exampleBefore5th.maturityValue - exampleAfter5th.maturityValue)}</strong>{' '}
+            purely from timing, on identical contributions.
+          </p>
+          <p className="mt-3 text-ash/80">
+            The mechanism: PPF interest for a given month is computed on
+            the lowest balance the account held between the 5th and the
+            last day of that month. A deposit made on or before the 5th is
+            already part of the balance when that window starts, so it
+            earns interest for the full month. The same deposit made on
+            the 6th or later misses that month&apos;s window entirely and
+            only starts earning from the following month.
+          </p>
+          <p className="mt-3 font-semibold text-ink-navy">
+            Takeaway: if you deposit monthly, set up a standing instruction
+            for the 1st-4th of the month rather than depositing casually
+            whenever — the gap compounds meaningfully over 15 years.
+          </p>
+        </section>
+
+        <section aria-labelledby="extension" className="mb-10 scroll-mt-20">
+          <h2 id="extension" className="font-display mb-4 text-2xl font-semibold">
+            Extending Past 15 Years: Contribute or Not?
+          </h2>
+          <p className="text-ash/80">
+            Once your account completes its 15-year lock-in, extending it
+            for a further 5-year block with continued contributions grows
+            the corpus meaningfully more than extending without
+            contributing — but both options keep earning interest, which
+            surprises people who assume an unextended account simply stops
+            growing:
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-hairline bg-mist text-ink-navy">
+                <tr>
+                  <th className="px-4 py-2 font-semibold">Extension choice (years 16-20)</th>
+                  <th className="px-4 py-2 text-right font-semibold">Total invested</th>
+                  <th className="px-4 py-2 text-right font-semibold">Maturity at year 20</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                <tr>
+                  <td className="px-4 py-2">Stop contributing</td>
+                  <td className="px-4 py-2 text-right tabular-nums">{formatINR(exampleExtendStop.invested)}</td>
+                  <td className="px-4 py-2 text-right tabular-nums">{formatINR(exampleExtendStop.maturityValue)}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2">Keep contributing ₹1.5L/year</td>
+                  <td className="px-4 py-2 text-right tabular-nums">{formatINR(exampleExtendContribute.invested)}</td>
+                  <td className="px-4 py-2 text-right tabular-nums">{formatINR(exampleExtendContribute.maturityValue)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 font-semibold text-ink-navy">
+            Takeaway: even &ldquo;stopping&rdquo; contributions doesn&apos;t stop growth — your existing balance keeps compounding tax-free either way; contributing further just adds more principal on top of that.
+          </p>
+        </section>
+
+        <section aria-labelledby="tax-saving" className="mb-10 scroll-mt-20">
+          <h2 id="tax-saving" className="font-display mb-2 text-2xl font-semibold">
+            Estimating your 80C tax saving
+          </h2>
+          <p className="text-ash/80">
+            Every rupee of PPF contribution — up to the ₹1,50,000/year cap
+            — reduces your taxable income under Section 80C if you&apos;re
+            on the old tax regime, so a 30% tax bracket taxpayer who fully
+            uses the PPF limit each year effectively saves{' '}
+            <strong>{formatINR(exampleBefore5th.totalTaxSaved)}</strong>{' '}
+            in tax over 15 years, on top of the tax-free interest and
+            maturity. This is illustrative only — PPF shares the ₹1.5 lakh
+            80C ceiling with other instruments like ELSS and life
+            insurance premiums, and the estimate assumes you&apos;re not
+            already using your full 80C limit elsewhere. Compare against
+            the old vs new regime directly on our{' '}
+            <Link href="/financial/new-vs-old-tax-regime-calculator" className="text-brass underline">
+              Tax Regime Calculator
+            </Link>{' '}
+            — this saving only applies if the old regime wins for you.
+          </p>
         </section>
 
         <section aria-labelledby="rules" className="mb-10 scroll-mt-20">
