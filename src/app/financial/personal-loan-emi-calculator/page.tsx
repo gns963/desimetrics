@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
-import EmiCalculator from '@/components/calculators/EmiCalculator'
-import { calculateEmi } from '@/lib/calc/financial'
+import PersonalLoanEmiCalculator from '@/components/calculators/PersonalLoanEmiCalculator'
+import { calculateEmi, calculateLoanTrueCost } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
@@ -13,11 +13,12 @@ const PATH = '/financial/personal-loan-emi-calculator'
 
 const example = calculateEmi(500000, 14, 5)
 const example3y = calculateEmi(500000, 14, 3)
+const exampleTrueCost = calculateLoanTrueCost({ principal: 500000, annualRatePercent: 14, years: 5, processingFeePercent: 2 })
 
 export const metadata: Metadata = {
-  title: 'Personal Loan EMI Calculator 2026 — Monthly Instalment & Interest',
+  title: 'Personal Loan EMI Calculator 2026 — EMI, Fees & Effective APR',
   description:
-    'Free personal loan EMI calculator for India. Enter loan amount, interest rate and tenure to see your monthly EMI, total interest and a year-by-year breakdown.',
+    'Free personal loan EMI calculator for India. See your EMI, but also the true cost with processing fee and GST, the effective APR to compare lenders honestly, and the net amount you actually receive.',
   alternates: {
     canonical: `${SITE}${PATH}`,
     languages: getAlternateLanguages(PATH),
@@ -55,6 +56,10 @@ const faqs = [
   {
     q: 'Do all lenders calculate personal loan interest on a reducing balance?',
     a: 'Most banks do, but some NBFCs and smaller lenders still quote or calculate on a flat rate, where interest is charged on the original principal for the full tenure regardless of repayment — a "12% flat rate" personal loan can have an effective reducing-balance rate of roughly double that, so always ask a lender to confirm the method and get the reducing-balance-equivalent (APR) figure before comparing offers.',
+  },
+  {
+    q: 'Why is the effective APR shown above higher than the interest rate I entered?',
+    a: 'Because the effective APR accounts for the processing fee (and GST on that fee) that most lenders deduct upfront from your loan amount — you repay EMIs calculated on the full sanctioned amount, but only actually receive the smaller net disbursal. The effective APR is the annualised rate that would produce your EMI schedule if it were calculated on that smaller net amount instead, which is why it\'s always at or above the quoted nominal rate whenever a fee applies, and is the fairer number to use when comparing two loan offers with different fee structures.',
   },
   {
     q: 'How quickly can I get a personal loan disbursed?',
@@ -106,12 +111,12 @@ export default function PersonalLoanEmiCalculatorPage() {
           </>
         }
         h1="Personal Loan EMI Calculator"
-        subtitle="Work out your monthly personal loan instalment, total interest and a year-by-year breakdown of principal versus interest. Enter your loan amount, interest rate and tenure — no login, no data stored."
+        subtitle="See your EMI, but also the true cost with processing fee and GST, the effective APR to compare lenders honestly, and the net amount you actually receive."
         stats={[
           { icon: '🏦', big: 'Reducing balance', small: 'Standard EMI method', tone: 'hub' },
-          { icon: '📅', big: '1–7 yrs', small: 'Typical tenure range', tone: 'hub' },
-          { icon: '📈', big: '10–24%', small: 'Typical rate range', tone: 'hub' },
-          { icon: '🔓', big: 'Unsecured', small: 'No collateral needed', tone: 'hub' },
+          { icon: '🧾', big: 'Fee + GST', small: 'Processing fee true cost', tone: 'hub' },
+          { icon: '📐', big: 'Effective APR', small: 'Compare lenders fairly', tone: 'hub' },
+          { icon: '💰', big: 'Net disbursal', small: 'What you actually receive', tone: 'hub' },
         ]}
       />
 
@@ -132,7 +137,10 @@ export default function PersonalLoanEmiCalculatorPage() {
             <strong>{formatINR(example.emi)}/month</strong>. Over the tenure you&apos;ll pay{' '}
             <strong>{formatINR(example.totalInterest)}</strong> in interest — about{' '}
             {Math.round((example.totalInterest / example.principal) * 100)}% of the amount
-            borrowed — for a total repayment of {formatINR(example.totalPayment)}.
+            borrowed. With a typical 2% processing fee plus 18% GST on that fee, you&apos;d
+            actually receive only <strong>{formatINR(exampleTrueCost.netDisbursal)}</strong> upfront
+            — pushing the effective APR to <strong>{exampleTrueCost.effectiveAprPercent}%</strong>,
+            higher than the quoted 14%.
           </p>
         </section>
 
@@ -140,32 +148,7 @@ export default function PersonalLoanEmiCalculatorPage() {
           <h2 id="calculator" className="font-display mb-4 text-2xl font-semibold">
             Calculate your personal loan EMI
           </h2>
-          <EmiCalculator
-            texts={{
-              title: 'Personal Loan EMI Calculator',
-              subtitle: 'Estimate your monthly instalment',
-              amountLabel: 'Loan amount (₹)',
-              rateLabel: 'Interest rate (annual)',
-              rateUnit: '%',
-              tenureLabel: 'Loan tenure',
-              tenureUnit: 'yrs',
-              ctaLabel: 'Calculate Personal Loan EMI',
-              disclaimer: 'Results are approximate estimates. Your actual EMI may vary by lender.',
-              emiLabel: 'Monthly EMI',
-              principalLabel: 'Principal',
-              interestLabel: 'Total interest',
-              totalLabel: 'Total payment',
-              yearTooltipTemplate: 'Year {year}: {amount} paid',
-              principalLegend: 'Principal',
-              interestLegend: 'Interest',
-            }}
-            defaultAmount={500000}
-            defaultRate={14}
-            defaultYears={5}
-            amountStep={10000}
-            rateRange={[9, 26]}
-            yearsRange={[1, 7]}
-          />
+          <PersonalLoanEmiCalculator />
         </section>
 
         <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
@@ -235,6 +218,39 @@ export default function PersonalLoanEmiCalculatorPage() {
             alternative — for example, borrowing against gold or a fixed
             deposit instead — compare the total interest cost, not just the
             monthly EMI.
+          </p>
+        </section>
+
+        <section aria-labelledby="true-cost" className="mb-10 scroll-mt-20">
+          <h2 id="true-cost" className="font-display mb-4 text-2xl font-semibold">
+            What a personal loan really costs beyond the EMI
+          </h2>
+          <p className="text-ash/80">
+            A personal loan&apos;s quoted interest rate is not its full
+            cost — a processing fee, plus GST on that fee, is typically
+            deducted upfront from the amount disbursed to you, even though
+            your EMI is calculated on the full sanctioned loan amount:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Processing fee', 'usually 1-3% of the loan amount, charged once at disbursal — on a ₹5 lakh loan at 2%, that\'s ₹10,000 before any tax.'],
+              ['GST on the fee', 'the processing fee itself attracts 18% GST, adding a further cost on top — ₹1,800 in the example above.'],
+              ['Net disbursal', 'the amount that actually lands in your account is the loan amount minus the fee and its GST — you repay EMIs on the full ₹5 lakh, but only received a smaller amount.'],
+              ['Effective APR', 'the annualised rate that reflects this true cost — always higher than the quoted rate whenever a fee is involved, and the right number to compare across lenders quoting different fee structures.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-ash/80">
+            Two lenders quoting the same headline rate can have meaningfully
+            different effective costs once fees differ — always compare the
+            effective APR, not just the advertised interest rate, when
+            shopping between offers.
           </p>
         </section>
 

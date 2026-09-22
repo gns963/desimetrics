@@ -511,6 +511,199 @@ export function calculateEmi(
   }
 }
 
+export type PrepaymentEffect = 'reduceTenure' | 'reduceEmi'
+
+export interface EmiPrepaymentInput {
+  principal: number
+  annualRatePercent: number
+  years: number
+  /** Applied once every 12 months, starting at month 12. */
+  yearlyExtraPayment?: number
+  /** Applied immediately, before the first instalment. */
+  oneTimePrepaymentNow?: number
+  /** 'reduceTenure' (default) keeps the EMI fixed at the original amount and
+   * pays off faster; 'reduceEmi' keeps the original tenure and recalculates
+   * a lower EMI each time a prepayment lands. */
+  prepaymentEffect?: PrepaymentEffect
+}
+
+export interface EmiPrepaymentResult {
+  originalEmi: number
+  originalTotalInterest: number
+  originalMonths: number
+  effectiveEmi: number
+  actualMonths: number
+  actualTotalInterest: number
+  totalPrepaid: number
+  interestSaved: number
+  monthsSaved: number
+}
+
+function emiFormula(balance: number, r: number, months: number): number {
+  if (months <= 0) return balance
+  return r === 0
+    ? balance / months
+    : (balance * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1)
+}
+
+/**
+ * Simulates a loan month by month with optional prepayments, since a lump
+ * sum injected mid-schedule has no closed-form solution the way a plain EMI
+ * does. Two prepayment types can combine: a one-time amount applied before
+ * the first instalment, and a recurring yearly amount applied every 12
+ * months. `prepaymentEffect` controls whether the borrower's benefit shows up
+ * as a shorter tenure (EMI unchanged) or a lower EMI (tenure unchanged).
+ */
+export function calculateEmiWithPrepayment(input: EmiPrepaymentInput): EmiPrepaymentResult {
+  const {
+    principal,
+    annualRatePercent,
+    years,
+    yearlyExtraPayment = 0,
+    oneTimePrepaymentNow = 0,
+    prepaymentEffect = 'reduceTenure',
+  } = input
+  if (principal < 0 || annualRatePercent < 0 || years <= 0)
+    throw new Error('inputs must be >= 0, years must be > 0')
+
+  const r = annualRatePercent / 100 / 12
+  const totalMonths = Math.round(years * 12)
+  const originalEmi = emiFormula(principal, r, totalMonths)
+  const originalTotalInterest = originalEmi * totalMonths - principal
+
+  let balance = Math.max(0, principal - Math.max(0, oneTimePrepaymentNow))
+  let currentEmi = originalEmi
+  let totalPrepaid = Math.min(Math.max(0, oneTimePrepaymentNow), principal)
+
+  if (prepaymentEffect === 'reduceEmi' && totalPrepaid > 0 && balance > 0) {
+    currentEmi = emiFormula(balance, r, totalMonths)
+  }
+
+  let totalInterestPaid = 0
+  let month = 0
+  const safetyCapMonths = totalMonths * 2 + 24
+  while (balance > 0.5 && month < safetyCapMonths) {
+    month++
+    const interestPortion = balance * r
+    const principalPortion = Math.min(currentEmi - interestPortion, balance)
+    totalInterestPaid += interestPortion
+    balance = Math.max(0, balance - principalPortion)
+
+    if (yearlyExtraPayment > 0 && month % 12 === 0 && balance > 0) {
+      const applied = Math.min(yearlyExtraPayment, balance)
+      balance -= applied
+      totalPrepaid += applied
+      const monthsRemaining = totalMonths - month
+      if (prepaymentEffect === 'reduceEmi' && balance > 0 && monthsRemaining > 0) {
+        currentEmi = emiFormula(balance, r, monthsRemaining)
+      }
+    }
+  }
+
+  return {
+    originalEmi: round2(originalEmi),
+    originalTotalInterest: round2(originalTotalInterest),
+    originalMonths: totalMonths,
+    effectiveEmi: round2(currentEmi),
+    actualMonths: month,
+    actualTotalInterest: round2(totalInterestPaid),
+    totalPrepaid: round2(totalPrepaid),
+    interestSaved: round2(originalTotalInterest - totalInterestPaid),
+    monthsSaved: totalMonths - month,
+  }
+}
+
+export interface EmiAffordability {
+  emiToIncomeRatioPercent: number
+  verdict: 'comfortable' | 'tight' | 'risky'
+}
+
+/**
+ * Compares an EMI against monthly income using the "Fixed Obligations to
+ * Income Ratio" (FOIR) rule of thumb most Indian lenders apply informally
+ * when assessing loan eligibility — roughly 40-50% of net monthly income
+ * across ALL EMIs combined is the usual ceiling. This is lender practice,
+ * not a legal cap, and varies by bank and borrower profile.
+ */
+export function checkEmiAffordability(emi: number, monthlyIncome: number): EmiAffordability {
+  if (monthlyIncome <= 0) return { emiToIncomeRatioPercent: 0, verdict: 'risky' }
+  const ratio = (emi / monthlyIncome) * 100
+  const verdict: EmiAffordability['verdict'] = ratio <= 40 ? 'comfortable' : ratio <= 50 ? 'tight' : 'risky'
+  return { emiToIncomeRatioPercent: round2(ratio), verdict }
+}
+
+export interface LoanTrueCostInput {
+  principal: number
+  annualRatePercent: number
+  years: number
+  processingFeePercent: number
+  processingFeeGstPercent?: number
+}
+
+export interface LoanTrueCostResult {
+  emi: number
+  totalInterest: number
+  totalPayment: number
+  processingFee: number
+  processingFeeGst: number
+  totalFeeWithGst: number
+  netDisbursal: number
+  effectiveAprPercent: number
+}
+
+/** Solves for the monthly rate r such that EMI paid for `months` has this present value, via bisection (PV is monotonically decreasing in r). */
+function solveMonthlyRateForPresentValue(emi: number, months: number, presentValue: number): number {
+  if (presentValue <= 0 || emi <= 0) return 0
+  let lo = 0.00001
+  let hi = 3 // 300%/month — far more than enough headroom for any realistic fee
+  const pvAtRate = (r: number) => (emi * (1 - Math.pow(1 + r, -months))) / r
+  for (let i = 0; i < 100; i++) {
+    const mid = (lo + hi) / 2
+    if (pvAtRate(mid) > presentValue) lo = mid
+    else hi = mid
+  }
+  return (lo + hi) / 2
+}
+
+/**
+ * A loan's quoted interest rate understates its true cost once a processing
+ * fee (plus GST on that fee, standard at 18%) is deducted upfront from the
+ * disbursed amount — you only ever receive the net disbursal, but you repay
+ * EMIs calculated on the full principal. The "effective APR" solves for the
+ * annualised rate that equates the EMI schedule to the smaller amount
+ * actually received, so two loans with different fee structures can be
+ * compared on a like-for-like basis rather than by quoted rate alone.
+ */
+export function calculateLoanTrueCost(input: LoanTrueCostInput): LoanTrueCostResult {
+  const { principal, annualRatePercent, years, processingFeePercent, processingFeeGstPercent = 18 } = input
+  if (principal < 0 || annualRatePercent < 0 || years <= 0 || processingFeePercent < 0)
+    throw new Error('inputs must be >= 0, years must be > 0')
+
+  const emiResult = calculateEmi(principal, annualRatePercent, years)
+  const processingFee = (principal * processingFeePercent) / 100
+  const processingFeeGst = (processingFee * processingFeeGstPercent) / 100
+  const totalFeeWithGst = processingFee + processingFeeGst
+  const netDisbursal = principal - totalFeeWithGst
+
+  const monthlyRate = solveMonthlyRateForPresentValue(
+    emiResult.emi,
+    Math.round(years * 12),
+    netDisbursal,
+  )
+  const effectiveAprPercent = monthlyRate * 12 * 100
+
+  return {
+    emi: emiResult.emi,
+    totalInterest: emiResult.totalInterest,
+    totalPayment: emiResult.totalPayment,
+    processingFee: round2(processingFee),
+    processingFeeGst: round2(processingFeeGst),
+    totalFeeWithGst: round2(totalFeeWithGst),
+    netDisbursal: round2(netDisbursal),
+    effectiveAprPercent: round2(effectiveAprPercent),
+  }
+}
+
 // ---------------------------------------------------------------------------
 // PPF (Public Provident Fund) — 15-year lock-in, annual compounding
 // ---------------------------------------------------------------------------

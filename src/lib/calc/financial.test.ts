@@ -1,10 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import {
   calculateCapitalGainsTax,
+  calculateEmi,
+  calculateEmiWithPrepayment,
   calculateGratuity,
   calculateGst,
+  calculateLoanTrueCost,
   calculateSip,
   calculateSipRealAndPostTax,
+  checkEmiAffordability,
   compareRegimes,
   computeRegimeTax,
   findRegimeBreakEvenDeduction,
@@ -178,6 +182,68 @@ describe('calculateGratuity', () => {
     const r = calculateGratuity(500000, 30)
     expect(r.gratuity).toBe(2000000)
     expect(r.capped).toBe(true)
+  })
+})
+
+describe('calculateEmiWithPrepayment', () => {
+  it('matches the plain EMI baseline when no prepayment is made', () => {
+    const base = calculateEmi(5000000, 8.5, 20)
+    const sim = calculateEmiWithPrepayment({ principal: 5000000, annualRatePercent: 8.5, years: 20 })
+    expect(sim.originalEmi).toBe(base.emi)
+    expect(sim.actualTotalInterest).toBe(base.totalInterest)
+    expect(sim.actualMonths).toBe(240)
+    expect(sim.monthsSaved).toBe(0)
+  })
+  it('reduceTenure keeps the EMI fixed and shortens the payoff', () => {
+    const r = calculateEmiWithPrepayment({
+      principal: 5000000, annualRatePercent: 8.5, years: 20,
+      yearlyExtraPayment: 50000, prepaymentEffect: 'reduceTenure',
+    })
+    expect(r.effectiveEmi).toBe(r.originalEmi)
+    expect(r.actualMonths).toBeLessThan(r.originalMonths)
+    expect(r.interestSaved).toBeGreaterThan(0)
+  })
+  it('reduceEmi keeps the tenure fixed and lowers the EMI', () => {
+    const r = calculateEmiWithPrepayment({
+      principal: 5000000, annualRatePercent: 8.5, years: 20,
+      yearlyExtraPayment: 50000, prepaymentEffect: 'reduceEmi',
+    })
+    expect(r.actualMonths).toBe(r.originalMonths)
+    expect(r.effectiveEmi).toBeLessThan(r.originalEmi)
+    expect(r.interestSaved).toBeGreaterThan(0)
+  })
+  it('a one-time prepayment reduces both interest and tenure (reduceTenure mode)', () => {
+    const r = calculateEmiWithPrepayment({
+      principal: 5000000, annualRatePercent: 8.5, years: 20, oneTimePrepaymentNow: 500000,
+    })
+    expect(r.totalPrepaid).toBe(500000)
+    expect(r.actualMonths).toBeLessThan(240)
+  })
+})
+
+describe('checkEmiAffordability', () => {
+  it('buckets the EMI-to-income ratio correctly', () => {
+    expect(checkEmiAffordability(30000, 100000).verdict).toBe('comfortable')
+    expect(checkEmiAffordability(45000, 100000).verdict).toBe('tight')
+    expect(checkEmiAffordability(60000, 100000).verdict).toBe('risky')
+  })
+})
+
+describe('calculateLoanTrueCost', () => {
+  it('produces an effective APR higher than the nominal rate once fees are included', () => {
+    const r = calculateLoanTrueCost({
+      principal: 500000, annualRatePercent: 14, years: 5, processingFeePercent: 2,
+    })
+    expect(r.processingFee).toBe(10000)
+    expect(r.processingFeeGst).toBe(1800)
+    expect(r.netDisbursal).toBe(488200)
+    expect(r.effectiveAprPercent).toBeGreaterThan(14)
+  })
+  it('effective APR equals the nominal rate when there is no fee', () => {
+    const r = calculateLoanTrueCost({
+      principal: 500000, annualRatePercent: 14, years: 5, processingFeePercent: 0,
+    })
+    expect(r.effectiveAprPercent).toBeCloseTo(14, 0)
   })
 })
 

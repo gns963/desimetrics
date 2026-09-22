@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
-import EmiCalculator from '@/components/calculators/EmiCalculator'
+import HomeLoanEmiCalculator from '@/components/calculators/HomeLoanEmiCalculator'
 import { calculateEmi } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
@@ -15,9 +15,9 @@ const example = calculateEmi(5000000, 8.5, 20)
 const example15 = calculateEmi(5000000, 8.5, 15)
 
 export const metadata: Metadata = {
-  title: 'Home Loan EMI Calculator 2026 — Monthly Instalment & Interest',
+  title: 'Home Loan EMI Calculator 2026 — EMI, Prepayment & Affordability',
   description:
-    'Free home loan EMI calculator for India. Enter loan amount, interest rate and tenure to see your monthly EMI, total interest and a year-by-year principal-vs-interest breakdown.',
+    'Free home loan EMI calculator for India. See your monthly EMI, model a one-time or yearly prepayment (reduce tenure or EMI), check affordability against your income, and estimate your first-year tax benefit.',
   alternates: {
     canonical: `${SITE}${PATH}`,
     languages: getAlternateLanguages(PATH),
@@ -54,15 +54,23 @@ const faqs = [
   },
   {
     q: 'Is it worth prepaying my home loan?',
-    a: 'Usually yes, especially early in the tenure when the interest component of your EMI is highest — prepaying reduces the outstanding principal on which future interest is calculated, so it saves the most when done early rather than in the final years. RBI rules require banks not to charge foreclosure/prepayment penalties on floating-rate home loans to individual borrowers, so there\'s typically no cost to weigh against the interest saved.',
+    a: 'Usually yes, especially early in the tenure when the interest component of your EMI is highest — prepaying reduces the outstanding principal on which future interest is calculated, so it saves the most when done early rather than in the final years. RBI rules require banks not to charge foreclosure/prepayment penalties on floating-rate home loans to individual borrowers, so there\'s typically no cost to weigh against the interest saved. Enter a one-time or yearly prepayment amount in the calculator above to see exactly how much interest and time it saves for your loan.',
+  },
+  {
+    q: 'Should I reduce my tenure or reduce my EMI when I prepay?',
+    a: 'Reducing tenure (keeping the EMI the same and paying the loan off sooner) almost always saves more total interest than reducing the EMI for the same prepayment amount, because more of your remaining payments go toward principal sooner. Reducing the EMI instead — keeping the original payoff date but lowering the monthly amount — trades away some of that interest saving for lower monthly cash outflow. Choose reduce-EMI only if you genuinely need the monthly relief; otherwise reduce-tenure is the more efficient choice.',
   },
   {
     q: 'What is the difference between a fixed and a floating interest rate?',
     a: 'A fixed rate stays constant for the loan tenure (or a fixed period), so your EMI never changes regardless of what happens to market rates — but fixed rates are usually priced higher than floating rates at the outset. A floating rate moves with the lender\'s benchmark (most home loans are now linked to the RBI repo rate via the External Benchmark Lending Rate, EBLR), so your EMI or tenure can change when the RBI changes rates. Most Indian home loans are floating-rate.',
   },
   {
+    q: 'How much EMI can I actually afford relative to my income?',
+    a: 'Most Indian lenders informally cap total EMI obligations (all loans combined, not just this one) at roughly 40-50% of net monthly income — a rule of thumb called the Fixed Obligations to Income Ratio (FOIR), not a legal limit, and it varies by lender and borrower profile. Enter your monthly income in the calculator above to see where your EMI falls on that scale — comfortable (under 40%), tight (40-50%) or risky (above 50%).',
+  },
+  {
     q: 'Does this calculator account for processing fees or insurance?',
-    a: 'No — this is a pure EMI calculation on the loan principal, rate and tenure you enter. Lenders typically charge a one-time processing fee (often 0.5-1% of the loan amount) and may bundle in loan-cover insurance premiums, both of which add to your actual upfront and effective cost but aren\'t part of the EMI formula itself. Check your loan sanction letter for these separately.',
+    a: 'The core EMI figure doesn\'t include processing fees — lenders typically charge a one-time fee (often 0.5-1% of the loan amount) plus GST on that fee, and may bundle in loan-cover insurance premiums, both of which add to your actual upfront cost. For a calculator that models processing fees and shows the resulting effective APR, see our Personal Loan EMI Calculator — the same true-cost mechanic applies to a home loan\'s fees, just usually at a smaller percentage.',
   },
 ]
 
@@ -106,12 +114,12 @@ export default function HomeLoanEmiCalculatorPage() {
           </>
         }
         h1="Home Loan EMI Calculator"
-        subtitle="Work out your monthly home loan instalment, total interest and a year-by-year breakdown of how much of each EMI goes toward principal versus interest. Enter your loan amount, interest rate and tenure — no login, no data stored."
+        subtitle="Work out your monthly home loan instalment, model a prepayment strategy, and check affordability against your income. Enter your loan amount, interest rate and tenure — no login, no data stored."
         stats={[
           { icon: '🏦', big: 'Reducing balance', small: 'Standard EMI method', tone: 'hub' },
-          { icon: '📅', big: '5–30 yrs', small: 'Typical tenure range', tone: 'hub' },
-          { icon: '📉', big: 'RBI-linked', small: 'Most rates are floating', tone: 'hub' },
-          { icon: '📊', big: 'Year-by-year', small: 'Principal vs interest', tone: 'hub' },
+          { icon: '⏱️', big: 'Prepayment', small: 'Reduce tenure or EMI', tone: 'hub' },
+          { icon: '📐', big: 'Affordability', small: 'EMI-to-income check', tone: 'hub' },
+          { icon: '🧾', big: 'Tax benefit', small: '24(b) + 80C estimate', tone: 'hub' },
         ]}
       />
 
@@ -139,32 +147,7 @@ export default function HomeLoanEmiCalculatorPage() {
           <h2 id="calculator" className="font-display mb-4 text-2xl font-semibold">
             Calculate your home loan EMI
           </h2>
-          <EmiCalculator
-            texts={{
-              title: 'Home Loan EMI Calculator',
-              subtitle: 'Estimate your monthly instalment',
-              amountLabel: 'Loan amount (₹)',
-              rateLabel: 'Interest rate (annual)',
-              rateUnit: '%',
-              tenureLabel: 'Loan tenure',
-              tenureUnit: 'yrs',
-              ctaLabel: 'Calculate Home Loan EMI',
-              disclaimer: 'Results are approximate estimates. Your actual EMI may vary by lender.',
-              emiLabel: 'Monthly EMI',
-              principalLabel: 'Principal',
-              interestLabel: 'Total interest',
-              totalLabel: 'Total payment',
-              yearTooltipTemplate: 'Year {year}: {amount} paid',
-              principalLegend: 'Principal',
-              interestLegend: 'Interest',
-            }}
-            defaultAmount={5000000}
-            defaultRate={8.5}
-            defaultYears={20}
-            amountStep={100000}
-            rateRange={[7, 14]}
-            yearsRange={[5, 30]}
-          />
+          <HomeLoanEmiCalculator />
         </section>
 
         <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
@@ -231,6 +214,39 @@ export default function HomeLoanEmiCalculatorPage() {
               personal loan
             </Link>
             , where prepayment penalties commonly still apply.
+          </p>
+        </section>
+
+        <section aria-labelledby="prepayment-strategy" className="mb-10 scroll-mt-20">
+          <h2 id="prepayment-strategy" className="font-display mb-4 text-2xl font-semibold">
+            Modelling a prepayment strategy
+          </h2>
+          <p className="text-ash/80">
+            The calculator above supports two kinds of prepayment,
+            individually or combined, and lets you choose how the benefit
+            shows up:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['One-time prepayment now', 'a lump sum (a bonus, maturing FD, or windfall) applied immediately to reduce the outstanding principal before your next EMI.'],
+              ['Extra payment once a year', 'a recurring yearly lump sum — commonly "one extra EMI a year" — applied automatically at each 12-month mark.'],
+              ['Reduce tenure', 'keeps your EMI exactly the same and finishes the loan sooner — this is the more interest-efficient choice for the same rupee amount prepaid, since it front-loads the principal reduction.'],
+              ['Reduce EMI', 'keeps your original payoff date and instead lowers your monthly instalment from that point on — better if what you actually need is monthly breathing room rather than a faster payoff.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-ash/80">
+            Because prepayment has no closed-form shortcut once a lump sum
+            lands mid-schedule, the calculator simulates the loan month by
+            month rather than using the plain EMI formula — this is also
+            why the &ldquo;interest saved&rdquo; figure only appears once
+            you enter a prepayment amount.
           </p>
         </section>
 
