@@ -1177,6 +1177,61 @@ export function calculateHraExemption(
   }
 }
 
+export type HraFinancialYear = 'FY2025-26' | 'FY2026-27'
+export type HraCity =
+  | 'Mumbai' | 'Delhi' | 'Kolkata' | 'Chennai'
+  | 'Bengaluru' | 'Hyderabad' | 'Pune' | 'Ahmedabad'
+  | 'Other'
+
+/**
+ * The Income-tax Rules, 2026 (operationalising the Income-tax Act, 2025,
+ * effective 1 April 2026) add Bengaluru, Hyderabad, Pune and Ahmedabad to the
+ * 50%-of-salary metro list alongside the original four — but only from FY
+ * 2026-27 onward. An FY 2025-26 return still uses the original four-city list
+ * with these newer four treated as non-metro (40%) — verified via current
+ * CBDT/tax-portal reporting before modelling, since this is a real, recent
+ * rule change easy to get backwards by date.
+ */
+const HRA_METRO_CITIES: Record<HraFinancialYear, ReadonlySet<HraCity>> = {
+  'FY2025-26': new Set(['Mumbai', 'Delhi', 'Kolkata', 'Chennai']),
+  'FY2026-27': new Set(['Mumbai', 'Delhi', 'Kolkata', 'Chennai', 'Bengaluru', 'Hyderabad', 'Pune', 'Ahmedabad']),
+}
+
+export function isHraMetroCity(city: HraCity, financialYear: HraFinancialYear): boolean {
+  if (city === 'Other') return false
+  return HRA_METRO_CITIES[financialYear].has(city)
+}
+
+export interface Section80GGResult {
+  monthlyCapAnnualised: number
+  twentyFivePercentOfIncome: number
+  rentMinusTenPercentIncome: number
+  deduction: number
+}
+
+const SECTION_80GG_MONTHLY_CAP = 5000
+
+/**
+ * Section 80GG is the fallback deduction for anyone paying rent whose salary
+ * has NO HRA component at all (or who is self-employed) — least of ₹5,000/
+ * month, 25% of total income, or rent paid minus 10% of total income. Filing
+ * Form 10BA is required, and the claimant (or spouse/minor child) must not
+ * own residential property in the city of employment/business.
+ */
+export function calculateSection80GG(totalIncome: number, rentPaid: number): Section80GGResult {
+  if (totalIncome < 0 || rentPaid < 0) throw new Error('inputs must be >= 0')
+  const monthlyCapAnnualised = SECTION_80GG_MONTHLY_CAP * 12
+  const twentyFivePercentOfIncome = 0.25 * totalIncome
+  const rentMinusTenPercentIncome = Math.max(0, rentPaid - 0.1 * totalIncome)
+  const deduction = Math.max(0, Math.min(monthlyCapAnnualised, twentyFivePercentOfIncome, rentMinusTenPercentIncome))
+  return {
+    monthlyCapAnnualised,
+    twentyFivePercentOfIncome: round2(twentyFivePercentOfIncome),
+    rentMinusTenPercentIncome: round2(rentMinusTenPercentIncome),
+    deduction: round2(deduction),
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Capital gains tax — listed equity shares & equity-oriented mutual funds
 // (Section 111A/112A, as revised by Budget 2024 w.e.f. 23 July 2024)

@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   calculateCapitalGainsTax,
   calculateEmi,
+  calculateSection80GG,
+  isHraMetroCity,
   calculatePpf,
   calculateEmiWithPrepayment,
   calculateGratuity,
@@ -371,6 +373,36 @@ describe('simulatePpf', () => {
       depositTiming: 'before5th', extensionBlocks: 0, extensionChoice: 'contribute', taxBracketPercent: 30,
     })
     expect(r.totalTaxSaved).toBe(150000 * 15 * 0.3)
+  })
+})
+
+describe('isHraMetroCity', () => {
+  it('treats the original four cities as metro in both financial years', () => {
+    for (const city of ['Mumbai', 'Delhi', 'Kolkata', 'Chennai'] as const) {
+      expect(isHraMetroCity(city, 'FY2025-26')).toBe(true)
+      expect(isHraMetroCity(city, 'FY2026-27')).toBe(true)
+    }
+  })
+  it('treats the four newly added cities as metro only from FY2026-27', () => {
+    for (const city of ['Bengaluru', 'Hyderabad', 'Pune', 'Ahmedabad'] as const) {
+      expect(isHraMetroCity(city, 'FY2025-26')).toBe(false)
+      expect(isHraMetroCity(city, 'FY2026-27')).toBe(true)
+    }
+  })
+  it('never treats "Other" as metro', () => {
+    expect(isHraMetroCity('Other', 'FY2026-27')).toBe(false)
+  })
+})
+
+describe('calculateSection80GG', () => {
+  it('caps the deduction at the lowest of the three limits', () => {
+    const r = calculateSection80GG(800000, 180000)
+    expect(r.monthlyCapAnnualised).toBe(60000)
+    expect(r.deduction).toBe(60000) // the ₹60,000/year cap binds here
+  })
+  it('lets rent-minus-10%-of-income bind when it is the smallest limit', () => {
+    const r = calculateSection80GG(2000000, 100000) // 10% of income = 200000, so rent-10% = 0
+    expect(r.deduction).toBe(0)
   })
 })
 

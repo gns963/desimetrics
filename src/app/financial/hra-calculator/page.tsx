@@ -14,9 +14,9 @@ const PATH = '/financial/hra-calculator'
 const example = calculateHraExemption(600000, 300000, 300000, true)
 
 export const metadata: Metadata = {
-  title: 'HRA Calculator 2026 — House Rent Allowance Tax Exemption',
+  title: 'HRA Calculator 2026-27 — 8-City Metro Expansion & Section 80GG',
   description:
-    'Free HRA calculator for India. Enter your basic salary, HRA received and rent paid to see your tax-exempt HRA amount under Section 10(13A), for metro and non-metro cities.',
+    'Free HRA calculator for India, updated for the FY 2026-27 metro expansion to 8 cities (Bengaluru, Hyderabad, Pune and Ahmedabad join the original four). See your exempt HRA under Section 10(13A), or your Section 80GG deduction if you get no HRA.',
   alternates: {
     canonical: `${SITE}${PATH}`,
     languages: getAlternateLanguages(PATH),
@@ -35,7 +35,11 @@ const faqs = [
   },
   {
     q: 'Which cities count as "metro" for the higher 50% HRA limit?',
-    a: 'Only four: Delhi, Mumbai, Kolkata and Chennai. Every other city in India — including large ones like Bengaluru, Hyderabad, Pune and Ahmedabad — falls under the 40%-of-basic non-metro limit for HRA purposes, even though cost of living in those cities can be comparable to the four official metros.',
+    a: 'This changed for FY 2026-27: the list expanded from four cities (Delhi, Mumbai, Kolkata, Chennai) to eight, adding Bengaluru, Hyderabad, Pune and Ahmedabad, under the Income-tax Rules, 2026 effective 1 April 2026. For FY 2025-26 returns, only the original four count — the newer four are still treated as non-metro (40% limit) for that year. Every other city in India remains non-metro regardless of financial year.',
+  },
+  {
+    q: 'I live in Noida/Gurugram/Ghaziabad — does the Delhi metro rate apply to me?',
+    a: 'No. Despite being part of the Delhi National Capital Region, Noida, Gurugram, Faridabad and Ghaziabad are separate cities/states and are not on the metro list — only Delhi itself qualifies for the 50% limit. If you live in one of these NCR satellite towns, your HRA exemption uses the 40% non-metro limit even though you may commute daily into Delhi for work.',
   },
   {
     q: 'Can I claim HRA exemption if I pay rent to my parents?',
@@ -47,7 +51,7 @@ const faqs = [
   },
   {
     q: "What if my salary doesn't include an HRA component but I pay rent?",
-    a: 'You can still claim a deduction under Section 80GG instead, capped at the lowest of: ₹5,000/month, 25% of total income, or rent paid minus 10% of total income — this is meant for self-employed individuals or salaried employees whose salary structure has no HRA component. It is a smaller benefit than a proper HRA exemption and has its own eligibility conditions (you, your spouse or minor child must not own residential property in the city you work in).',
+    a: 'You can still claim a deduction under Section 80GG instead, capped at the lowest of: ₹5,000/month, 25% of total income, or rent paid minus 10% of total income — this is meant for self-employed individuals or salaried employees whose salary structure has no HRA component. Tick the "I don\'t receive HRA" box in the calculator above to compute this directly. It is a smaller benefit than a proper HRA exemption and has its own eligibility conditions (you, your spouse or minor child must not own residential property in the city you work in, and Form 10BA must be filed).',
   },
   {
     q: 'Can I claim both HRA exemption and home loan interest deduction?',
@@ -99,12 +103,12 @@ export default function HraCalculatorPage() {
           </>
         }
         h1="HRA Calculator"
-        subtitle="Work out how much of your House Rent Allowance is tax-exempt under Section 10(13A). Enter your basic salary, HRA received and rent paid to see the exempt amount and the taxable balance."
+        subtitle="Work out how much of your House Rent Allowance is tax-exempt under Section 10(13A) — now updated for FY 2026-27's 8-city metro list. No HRA in your salary? Check your Section 80GG deduction instead."
         stats={[
-          { icon: '📜', big: 'Sec 10(13A)', small: 'Governing tax law', tone: 'hub' },
+          { icon: '🆕', big: '8 cities', small: 'Metro list from FY 2026-27', tone: 'hub' },
           { icon: '🏙️', big: '50% / 40%', small: 'Metro / non-metro limit', tone: 'hub' },
           { icon: '⚠️', big: 'Old regime only', small: 'Not available under new regime', tone: 'hub' },
-          { icon: '🧮', big: 'Least of 3', small: 'Exemption method', tone: 'hub' },
+          { icon: '🔀', big: 'Sec 80GG', small: 'Fallback with no HRA', tone: 'hub' },
         ]}
       />
 
@@ -148,7 +152,7 @@ export default function HraCalculatorPage() {
             {[
               ['Actual HRA received', 'the HRA component your employer actually pays you, as shown on your payslip and Form 16.'],
               ['Rent paid minus 10% of basic', 'the logic here is that the first 10% of your basic salary\'s worth of rent isn\'t considered a genuine burden — only rent above that threshold counts toward the exemption.'],
-              ['City-based percentage of basic', '50% of basic salary if you live in Delhi, Mumbai, Kolkata or Chennai; 40% for every other city, reflecting the (dated but still legally applied) assumption that housing costs more in the four original metros.'],
+              ['City-based percentage of basic', '50% of basic salary for the 8 metro cities (Delhi, Mumbai, Kolkata, Chennai, plus Bengaluru, Hyderabad, Pune and Ahmedabad from FY 2026-27); 40% for every other city.'],
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-2">
                 <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
@@ -165,6 +169,80 @@ export default function HraCalculatorPage() {
             component looks on paper. Renting more than your employer&apos;s
             HRA component covers doesn&apos;t help either, since rule (a)
             caps you at the HRA actually received.
+          </p>
+        </section>
+
+        <section aria-labelledby="metro-expansion" className="mb-10 scroll-mt-20">
+          <h2 id="metro-expansion" className="font-display mb-4 text-2xl font-semibold">
+            The FY 2026-27 Metro Expansion — 4 Cities Become 8
+          </h2>
+          <p className="text-ash/80">
+            The Income-tax Rules, 2026 (which operationalise the
+            Income-tax Act, 2025, effective <strong>1 April 2026</strong>)
+            add four cities to the 50%-of-basic metro list — a genuine,
+            recent change worth getting the effective year right on:
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-hairline bg-mist text-ink-navy">
+                <tr>
+                  <th className="px-4 py-2 font-semibold">Financial year</th>
+                  <th className="px-4 py-2 font-semibold">50%-limit (metro) cities</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                <tr>
+                  <td className="px-4 py-2 font-medium">FY 2025-26 (filed as AY 2026-27)</td>
+                  <td className="px-4 py-2">Mumbai, Delhi, Kolkata, Chennai</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">FY 2026-27 onward</td>
+                  <td className="px-4 py-2">Mumbai, Delhi, Kolkata, Chennai, Bengaluru, Hyderabad, Pune, Ahmedabad</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-ash/80">
+            If your salary and rent situation spans the transition — for
+            example, you&apos;re filing your FY 2025-26 return now but
+            planning ahead for FY 2026-27 — use the year selector in the
+            calculator above rather than assuming which list applies.
+            Getting this backwards either overstates or understates your
+            exemption. Two things this expansion does NOT change: the
+            surrounding NCR satellite towns (Noida, Gurugram, Faridabad,
+            Ghaziabad) still count as non-metro even though they&apos;re
+            part of the Delhi NCR region — only Delhi proper is on the
+            list; and the exemption is still unavailable under the new
+            tax regime regardless of which city you&apos;re in.
+          </p>
+          <p className="mt-3 font-semibold text-ink-navy">
+            Takeaway: if you moved to (or already live in) Bengaluru,
+            Hyderabad, Pune or Ahmedabad, your HRA exemption limit jumps
+            from 40% to 50% of basic salary starting FY 2026-27 — a real
+            increase in tax-free HRA for the same salary and rent, not
+            just a relabeling.
+          </p>
+        </section>
+
+        <section aria-labelledby="section-80gg" className="mb-10 scroll-mt-20">
+          <h2 id="section-80gg" className="font-display mb-2 text-2xl font-semibold">
+            No HRA in Your Salary? Section 80GG Is Your Fallback
+          </h2>
+          <p className="text-ash/80">
+            If your salary structure has no HRA component at all — common
+            for many self-employed professionals and some salary
+            structures — you can still deduct rent paid under Section
+            80GG instead, capped at the lowest of ₹5,000/month (₹60,000/
+            year), 25% of your total income, or rent paid minus 10% of
+            total income. Tick the box in the calculator above to switch
+            to this mode. Two conditions apply: you must file{' '}
+            <strong>Form 10BA</strong> declaring you don&apos;t receive
+            HRA, and neither you, your spouse nor a minor child can own
+            residential property in the city where you live or work.
+            It&apos;s a smaller benefit than a proper HRA exemption — the
+            hard ₹60,000/year ceiling binds for most salaried
+            professionals paying realistic city rent — but it&apos;s
+            better than no deduction at all.
           </p>
         </section>
 
