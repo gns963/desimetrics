@@ -52,13 +52,65 @@ export default function DisclaimerPage() {
         Financial calculators
       </h2>
       <p>
-        GST, SIP, income-tax and gratuity tools are for general guidance only and
-        are not tax, legal or investment advice. The income-tax calculator does
-        not model surcharge (income above ₹50 lakh) or marginal relief, and SIP
-        figures are gross of expense ratio and capital-gains tax. SIP returns are
-        market-linked and not guaranteed. Consult a qualified professional before
-        acting.
+        Our 12 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
+        GST, SIP, Home Loan EMI, Personal Loan EMI, PPF, FD, Gratuity, HRA, NPS
+        and Human Life Value) are for general guidance only and are not tax,
+        legal, investment or insurance advice. Each produces a needs or planning
+        estimate built from the inputs you provide and the rules verified at the
+        time we last checked them — not a filed return, a bank/insurer quote, or
+        a substitute for a qualified professional.
       </p>
+      <p>
+        Known limitations, current as of this page&apos;s last update:
+      </p>
+      <ul className="list-disc space-y-1 pl-5">
+        <li>
+          <strong>Tax Regime &amp; Capital Gains</strong> — surcharge (income
+          above ₹50 lakh) is not modelled in either calculator; the Capital
+          Gains calculator also does not model the pre-23-July-2024 property
+          indexation option.
+        </li>
+        <li>
+          <strong>SIP</strong> — you enter a net-of-expense-ratio return
+          assumption; returns are market-linked and not guaranteed. The
+          calculator does show an inflation-adjusted real value and a
+          post-tax (LTCG) estimate alongside the nominal figure.
+        </li>
+        <li>
+          <strong>GST</strong> — compensation cess, composition-scheme rates
+          and item-specific exemptions are not modelled; verify the exact
+          HSN/SAC rate on the official GST portal before filing.
+        </li>
+        <li>
+          <strong>Home Loan &amp; Personal Loan EMI</strong> — not a loan
+          offer; actual rate, fees and eligibility depend on the lender and
+          your credit profile.
+        </li>
+        <li>
+          <strong>PPF &amp; FD</strong> — PPF&apos;s interest rate is reviewed
+          quarterly by the government and is not guaranteed to hold; FD
+          figures are pre-tax (TDS is not your final tax liability).
+        </li>
+        <li>
+          <strong>Gratuity</strong> — eligibility, Payment of Gratuity Act
+          coverage, and the applicable exemption ceiling depend on your
+          specific employment terms; confirm with HR/payroll.
+        </li>
+        <li>
+          <strong>HRA</strong> — only available under the old tax regime;
+          confirm documentation requirements with your employer.
+        </li>
+        <li>
+          <strong>NPS</strong> — market-linked and not guaranteed; annuity
+          rates shown are illustrative and vary by the insurer and plan you
+          eventually choose.
+        </li>
+        <li>
+          <strong>Human Life Value</strong> — a needs estimate, not an
+          insurance premium quote or product recommendation.
+        </li>
+      </ul>
+      <p>Consult a qualified professional before acting on any of these figures.</p>
 
       <h2 className="font-display text-xl font-semibold text-ash">
         No affiliation

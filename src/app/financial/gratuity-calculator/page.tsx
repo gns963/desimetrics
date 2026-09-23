@@ -334,6 +334,9 @@ export default function GratuityCalculatorPage() {
             </details>
           ))}
         </div>
+        <p className="mt-4 text-xs text-ash/40">
+          This tool provides estimates for illustration only and is not legal or tax advice. Gratuity eligibility, the employer&apos;s Payment of Gratuity Act coverage status, and the applicable exemption ceiling depend on your specific employment terms — confirm with your employer&apos;s HR/payroll team or a professional before relying on these figures.
+        </p>
       </section>
 
       <script

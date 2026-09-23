@@ -81,7 +81,7 @@ export default function DataSourcesPage() {
         <li>
           <strong>Income tax slabs</strong> — Finance Act rates for FY 2026-27
           (AY 2027-28), including the ₹75,000/₹50,000 standard deductions and
-          Section 87A rebates.
+          Section 87A rebates, with marginal relief applied.
         </li>
         <li>
           <strong>AC efficiency</strong> — Bureau of Energy Efficiency (BEE)
@@ -89,7 +89,42 @@ export default function DataSourcesPage() {
         </li>
         <li>
           <strong>Gratuity</strong> — Payment of Gratuity Act, 1972 (15/26
-          formula, ₹20,00,000 ceiling).
+          formula, ₹20,00,000 private-sector ceiling under Section 10(10)(i));
+          Code on Social Security, 2020, Section 53 (fixed-term employee
+          gratuity after 1 year, in force since 21 November 2025).
+        </li>
+        <li>
+          <strong>Capital gains tax</strong> — Income-tax Act provisions for
+          equity (Section 112A grandfathering, 31 Jan 2018), debt funds (the 1
+          April 2023 cohort rule for LTCG eligibility), and property/gold/
+          unlisted shares (Sections 54/54EC/54F reinvestment exemptions).
+        </li>
+        <li>
+          <strong>GST rates</strong> — Central Board of Indirect Taxes and
+          Customs (CBIC), current GST 2.0 slab structure plus legacy 12%/28%
+          and special (0.25% rough diamonds) rates.
+        </li>
+        <li>
+          <strong>HRA exemption</strong> — Income-tax Rules 2026
+          (operationalizing the Income-tax Act 2025, effective 1 April 2026),
+          which adds Bengaluru, Hyderabad, Pune and Ahmedabad to the metro
+          list from FY 2026-27; FY 2025-26 uses only the original 4 metros.
+          Section 80GG fallback per the Income-tax Act.
+        </li>
+        <li>
+          <strong>NPS</strong> — PFRDA exit and withdrawal rules (2026
+          amendments): normal vs premature exit annuity minimums, Section
+          10(12A) lump-sum tax exemption, and Section 10(12B) partial
+          withdrawal.
+        </li>
+        <li>
+          <strong>PPF</strong> — Public Provident Fund Scheme rules; the
+          government-set interest rate is reviewed quarterly.
+        </li>
+        <li>
+          <strong>FD interest &amp; TDS</strong> — Section 194A TDS thresholds
+          (₹40,000 regular/₹50,000 senior citizens) and rates (10% with PAN,
+          20% without).
         </li>
       </ul>
     </LegalPageShell>
