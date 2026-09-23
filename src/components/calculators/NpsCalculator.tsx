@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { calculateNps } from '@/lib/calc/financial'
+import { calculateNps, npsMinimumAnnuityPercent, type NpsExitType } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { CalculatorCard, CalculatorCta, CalculatorHeader, OptionCardGroup, SliderField } from './CalculatorShell'
 
@@ -10,6 +10,11 @@ type SubscriberType = 'other' | 'government'
 const SUBSCRIBER_OPTIONS: { value: SubscriberType; label: string; icon: string }[] = [
   { value: 'other', label: 'Individual / private-sector / corporate', icon: '💼' },
   { value: 'government', label: 'Government subscriber', icon: '🏛️' },
+]
+
+const EXIT_OPTIONS: { value: NpsExitType; label: string; icon: string }[] = [
+  { value: 'normal', label: 'Normal exit (at/after age 60)', icon: '🎯' },
+  { value: 'premature', label: 'Premature exit (before 60)', icon: '⏳' },
 ]
 
 export interface NpsCalculatorTexts {
@@ -35,6 +40,11 @@ export interface NpsCalculatorTexts {
   yearTooltipTemplate: string
   investedLegend: string
   gainsLegend: string
+  exitLegend: string
+  annuityShareLabel: string
+  minAnnuityNote: string
+  partialWithdrawalTitle: string
+  partialWithdrawalBody: string
 }
 
 const defaultTexts: NpsCalculatorTexts = {
@@ -59,6 +69,12 @@ const defaultTexts: NpsCalculatorTexts = {
   yearTooltipTemplate: 'Year {year}: {amount}',
   investedLegend: 'Invested',
   gainsLegend: 'Gains',
+  exitLegend: 'Exit type',
+  annuityShareLabel: 'Annuity share of corpus',
+  minAnnuityNote: 'Statutory minimum for this corpus/subscriber/exit combination',
+  partialWithdrawalTitle: 'Partial withdrawal while still contributing (Section 10(12B))',
+  partialWithdrawalBody:
+    'Up to 25% of your own contributions (not employer contributions or returns), tax-free, after 3 years in NPS — maximum 4 withdrawals over your NPS lifetime, at least 4 years apart.',
 }
 
 export default function NpsCalculator({
@@ -70,10 +86,26 @@ export default function NpsCalculator({
   const [rate, setRate] = useState(10)
   const [years, setYears] = useState(25)
   const [subscriberType, setSubscriberType] = useState<SubscriberType>('other')
+  const [exitType, setExitType] = useState<NpsExitType>('normal')
+  const [annuityPercent, setAnnuityPercent] = useState<number | undefined>(undefined)
+
+  const projectedCorpus = useMemo(
+    () => calculateNps(Math.max(0, monthly), rate, Math.max(1, years), subscriberType, exitType).corpus,
+    [monthly, rate, years, subscriberType, exitType],
+  )
+  const minAnnuityPercent = npsMinimumAnnuityPercent(projectedCorpus, subscriberType, exitType)
 
   const result = useMemo(
-    () => calculateNps(Math.max(0, monthly), rate, Math.max(1, years), subscriberType),
-    [monthly, rate, years, subscriberType],
+    () =>
+      calculateNps(
+        Math.max(0, monthly),
+        rate,
+        Math.max(1, years),
+        subscriberType,
+        exitType,
+        annuityPercent,
+      ),
+    [monthly, rate, years, subscriberType, exitType, annuityPercent],
   )
 
   const maxValue = Math.max(...result.yearly.map((p) => p.value), 1)
@@ -125,6 +157,32 @@ export default function NpsCalculator({
           onChange={setSubscriberType}
           columns={2}
         />
+
+        <OptionCardGroup
+          legend={texts.exitLegend}
+          options={EXIT_OPTIONS}
+          value={exitType}
+          onChange={(v) => {
+            setExitType(v)
+            setAnnuityPercent(undefined)
+          }}
+          columns={2}
+        />
+
+        <div>
+          <SliderField
+            id="nps-annuity-percent"
+            label={texts.annuityShareLabel}
+            value={Math.max(annuityPercent ?? minAnnuityPercent, minAnnuityPercent)}
+            onChange={setAnnuityPercent}
+            min={minAnnuityPercent}
+            max={100}
+            unit="%"
+          />
+          <p className="mt-1 text-xs text-ash/50">
+            {texts.minAnnuityNote}: {minAnnuityPercent}%
+          </p>
+        </div>
 
         <CalculatorCta label={texts.ctaLabel} tone="financial" disclaimer={texts.disclaimer} />
       </form>
@@ -213,6 +271,16 @@ export default function NpsCalculator({
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-hairline bg-mist/30 p-4">
+        <p className="text-sm font-medium text-ash">{texts.partialWithdrawalTitle}</p>
+        <p className="mt-1 text-xs text-ash/60">{texts.partialWithdrawalBody}</p>
+        <p className="mt-2 text-sm tabular-nums text-ink-navy">
+          Up to <span className="font-bold">{formatINR(result.npsPartialWithdrawal.maxPerWithdrawal)}</span> per
+          withdrawal, max {result.npsPartialWithdrawal.maxWithdrawalsAllowed} times, at least{' '}
+          {result.npsPartialWithdrawal.minGapYears} years apart.
+        </p>
       </div>
     </CalculatorCard>
   )

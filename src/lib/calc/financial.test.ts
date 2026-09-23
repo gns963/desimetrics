@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   calculateCapitalGainsTax,
   calculateEmi,
+  calculateNps,
   calculateSection80GG,
   isHraMetroCity,
   calculatePpf,
@@ -17,6 +18,7 @@ import {
   computeRegimeTax,
   findRegimeBreakEvenDeduction,
   monthsBetweenDates,
+  npsMinimumAnnuityPercent,
   simulateFd,
   simulatePpf,
   totalOldRegimeDeductions,
@@ -373,6 +375,37 @@ describe('simulatePpf', () => {
       depositTiming: 'before5th', extensionBlocks: 0, extensionChoice: 'contribute', taxBracketPercent: 30,
     })
     expect(r.totalTaxSaved).toBe(150000 * 15 * 0.3)
+  })
+})
+
+describe('npsMinimumAnnuityPercent + calculateNps exit/annuity options', () => {
+  it('requires 20% minimum annuity for non-government, 40% for government, above ₹12L at normal exit', () => {
+    expect(npsMinimumAnnuityPercent(2000000, 'other', 'normal')).toBe(20)
+    expect(npsMinimumAnnuityPercent(2000000, 'government', 'normal')).toBe(40)
+  })
+  it('reverses the split for premature exit above ₹5L — 80% annuity mandatory', () => {
+    expect(npsMinimumAnnuityPercent(2000000, 'other', 'premature')).toBe(80)
+    expect(npsMinimumAnnuityPercent(400000, 'other', 'premature')).toBe(0) // small corpus, full withdrawal
+  })
+  it('premature exit produces a swapped lumpsum/annuity split vs normal exit for the same corpus', () => {
+    const normal = calculateNps(10000, 10, 25, 'other', 'normal')
+    const premature = calculateNps(10000, 10, 25, 'other', 'premature')
+    expect(premature.lumpsumAmount).toBeCloseTo(normal.annuityAmount, 2)
+    expect(premature.annuityAmount).toBeCloseTo(normal.lumpsumAmount, 2)
+  })
+  it('lets a subscriber voluntarily choose a higher annuity than the statutory minimum', () => {
+    const r = calculateNps(10000, 10, 25, 'other', 'normal', 50)
+    expect(r.lumpsumAmount).toBeCloseTo(r.annuityAmount, 2) // 50/50 split
+  })
+  it('clamps a voluntary choice below the statutory minimum back up to the minimum', () => {
+    const clamped = calculateNps(10000, 10, 25, 'other', 'normal', 5)
+    const defaultMin = calculateNps(10000, 10, 25, 'other', 'normal')
+    expect(clamped.lumpsumAmount).toBe(defaultMin.lumpsumAmount)
+  })
+  it('reports the Section 10(12B) partial-withdrawal allowance as 25% of own contributions', () => {
+    const r = calculateNps(10000, 10, 25, 'other')
+    expect(r.npsPartialWithdrawal.maxPerWithdrawal).toBe(round2(r.totalInvested * 0.25))
+    expect(r.npsPartialWithdrawal.maxWithdrawalsAllowed).toBe(4)
   })
 })
 

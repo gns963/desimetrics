@@ -54,6 +54,10 @@ const faqs = [
     a: 'This depends entirely on the annuity provider and plan you choose at retirement — annuity rates (roughly 6-7% per year in recent years, though not guaranteed) are set by insurance companies empanelled with PFRDA, not by NPS itself, and can vary by provider, your age at purchase, and whether you choose options like return of purchase price to nominees. This calculator uses an illustrative assumed rate to give a rough sense of scale — get an actual quote from an annuity provider closer to your retirement date for a real figure.',
   },
   {
+    q: 'Can I withdraw from NPS before retirement without fully exiting?',
+    a: 'Yes — Section 10(12B) allows a partial, tax-free withdrawal of up to 25% of your own contributions (not employer contributions or investment gains) after 3 years of membership, for specified purposes like a child\'s education or marriage, buying/building a house, or treatment of specified critical illnesses. You can do this a maximum of 4 times over your NPS lifetime, with at least 4 years between each withdrawal. This is separate from — and much more limited than — a full premature exit.',
+  },
+  {
     q: 'Is NPS mandatory, and who can join?',
     a: 'NPS is mandatory for most central government employees who joined service after 2004 (with the option to instead choose the newer Unified Pension Scheme, UPS, introduced separately). For everyone else — private-sector employees, the self-employed, and anyone aged 18-70 — it\'s entirely voluntary, opened through a bank, financial institution, or directly via the eNPS portal.',
   },
@@ -135,6 +139,12 @@ export default function NpsCalculatorPage() {
           <h2 id="calculator" className="font-display mb-4 text-2xl font-semibold">
             Calculate your NPS corpus
           </h2>
+          <p className="mb-4 text-ash/80">
+            Set your exit type — normal (age 60) or premature — and the calculator enforces the
+            correct statutory minimum annuity share for your corpus and subscriber type. You can
+            also voluntarily choose a higher annuity share than the minimum if you want more
+            guaranteed pension income.
+          </p>
           <NpsCalculator />
         </section>
 
@@ -182,6 +192,36 @@ export default function NpsCalculatorPage() {
             the higher withdrawal limit is real, but it isn&apos;t all
             tax-free just because it&apos;s now allowed as lump sum.
           </p>
+          <p className="mt-4 text-ash/80">
+            <strong>Exiting before age 60 flips this split.</strong> Premature exit is stricter:
+            above ₹5 lakh corpus, at least 80% must go into an annuity (only 20% lump sum) for every
+            subscriber type — the reverse of the normal-exit split above. This calculator&apos;s exit-type
+            toggle models both scenarios.
+          </p>
+        </section>
+
+        <section aria-labelledby="partial-withdrawal" className="mb-10 scroll-mt-20">
+          <h2 id="partial-withdrawal" className="font-display mb-4 text-2xl font-semibold">
+            Need money before retirement? Partial withdrawal under Section 10(12B)
+          </h2>
+          <p className="text-ash/80">
+            NPS allows limited access to your own contributions while you&apos;re still working, without
+            a full exit:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              'Up to 25% of your own contributions — not employer contributions or investment returns — can be withdrawn.',
+              'Available only after 3 years of NPS membership.',
+              'Tax-free under Section 10(12B).',
+              'Maximum 4 withdrawals allowed over your entire NPS tenure, with at least 4 years between each.',
+              'Permitted only for specified purposes: children\'s higher education or marriage, buying/building a house, or treatment of specified critical illnesses.',
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">{item}</span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section aria-labelledby="tax-benefits" className="mb-10 scroll-mt-20">

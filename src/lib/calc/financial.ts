@@ -1517,24 +1517,66 @@ export interface NpsResult {
 }
 
 const ASSUMED_ANNUITY_RATE_PERCENT = 6.5 // illustrative — actual annuity rates vary by insurer/plan
+const NPS_PARTIAL_WITHDRAWAL_PERCENT = 25 // of own contributions, Section 10(12B)
+const NPS_PARTIAL_WITHDRAWAL_MAX_COUNT = 4
+const NPS_PARTIAL_WITHDRAWAL_MIN_GAP_YEARS = 4
+const NPS_PARTIAL_WITHDRAWAL_MIN_TENURE_YEARS = 3
+
+export type NpsExitType = 'normal' | 'premature'
+
+/**
+ * The minimum MANDATORY annuity percentage for a given corpus, subscriber
+ * type and exit type — verified via current PFRDA guidance before coding.
+ * Normal (age-60) exit: corpus ≤ ₹8L can be taken fully as lump sum; ₹8L–₹12L
+ * allows up to ₹6L lump sum (the rest effectively annuity-bound here, a
+ * simplification of the phased-withdrawal option); above ₹12L, non-
+ * government subscribers need at least 20% annuity (up to 80% lump sum),
+ * government subscribers at least 40% (up to 60% lump sum). Premature exit
+ * (before 60) is stricter and reversed: corpus ≤ ₹5L can be taken fully as
+ * lump sum, but above that, at least 80% MUST go to annuity regardless of
+ * subscriber type — only 20% lump sum is allowed early.
+ */
+export function npsMinimumAnnuityPercent(
+  corpus: number,
+  subscriberType: 'government' | 'other',
+  exitType: NpsExitType,
+): number {
+  if (exitType === 'premature') {
+    return corpus <= 500000 ? 0 : 80
+  }
+  if (corpus <= 800000) return 0
+  if (corpus <= 1200000) return Math.max(0, 100 - (600000 / corpus) * 100)
+  return subscriberType === 'government' ? 40 : 20
+}
+
+export interface NpsPartialWithdrawalInfo {
+  maxPerWithdrawal: number
+  maxWithdrawalsAllowed: number
+  minGapYears: number
+  minTenureYears: number
+}
 
 /**
  * Accumulation uses the same future-value-of-monthly-annuity formula as SIP.
- * The withdrawal split follows PFRDA's exit rules as amended (effective
- * 2026): corpus ≤ ₹8L can be withdrawn fully as lump sum; ₹8L–₹12L allows up
- * to ₹6L lump sum (remainder via phased withdrawal, approximated here as
- * annuity-bound for simplicity); above ₹12L, non-government subscribers get
- * 80% lump sum / 20% mandatory annuity, government subscribers 60%/40%. Only
- * 60% of the total corpus is tax-free under Section 10(12A) regardless of how
- * much is withdrawn as lump sum — any lump sum beyond that 60% is taxable at
- * the subscriber's slab rate.
+ * `voluntaryAnnuityPercent`, if given, lets the subscriber choose to put MORE
+ * into the annuity than the statutory minimum (never less) — the withdrawal
+ * split is always clamped to at least the mandatory minimum for the given
+ * corpus/subscriber/exit combination. Only 60% of the total corpus is
+ * tax-free under Section 10(12A) regardless of how much is withdrawn as lump
+ * sum — any lump sum beyond that 60% is taxable at the subscriber's slab
+ * rate. `npsPartialWithdrawal` separately reports the Section 10(12B)
+ * partial-withdrawal allowance (25% of own contributions, tax-free, after 3
+ * years, max 4 times with a 4-year gap) — this is independent of the
+ * retirement/premature exit split above and available any time before then.
  */
 export function calculateNps(
   monthlyContribution: number,
   annualRatePercent: number,
   yearsToRetirement: number,
   subscriberType: 'government' | 'other',
-): NpsResult {
+  exitType: NpsExitType = 'normal',
+  voluntaryAnnuityPercent?: number,
+): NpsResult & { npsPartialWithdrawal: NpsPartialWithdrawalInfo } {
   if (monthlyContribution < 0 || annualRatePercent < 0 || yearsToRetirement <= 0)
     throw new Error('inputs must be >= 0, yearsToRetirement must be > 0')
   const i = annualRatePercent / 100 / 12
@@ -1552,14 +1594,12 @@ export function calculateNps(
     })
   }
 
-  let lumpsumPercent: number
-  if (corpus <= 800000) {
-    lumpsumPercent = 100
-  } else if (corpus <= 1200000) {
-    lumpsumPercent = (600000 / corpus) * 100
-  } else {
-    lumpsumPercent = subscriberType === 'government' ? 60 : 80
-  }
+  const minAnnuityPercent = npsMinimumAnnuityPercent(corpus, subscriberType, exitType)
+  const annuityPercent =
+    voluntaryAnnuityPercent !== undefined
+      ? Math.max(minAnnuityPercent, Math.min(100, voluntaryAnnuityPercent))
+      : minAnnuityPercent
+  const lumpsumPercent = 100 - annuityPercent
 
   const lumpsumAmount = (corpus * lumpsumPercent) / 100
   const annuityAmount = corpus - lumpsumAmount
@@ -1577,6 +1617,12 @@ export function calculateNps(
     taxableLumpsum: round2(taxableLumpsum),
     estimatedMonthlyPension: round2(estimatedMonthlyPension),
     yearly,
+    npsPartialWithdrawal: {
+      maxPerWithdrawal: round2((totalInvested * NPS_PARTIAL_WITHDRAWAL_PERCENT) / 100),
+      maxWithdrawalsAllowed: NPS_PARTIAL_WITHDRAWAL_MAX_COUNT,
+      minGapYears: NPS_PARTIAL_WITHDRAWAL_MIN_GAP_YEARS,
+      minTenureYears: NPS_PARTIAL_WITHDRAWAL_MIN_TENURE_YEARS,
+    },
   }
 }
 
