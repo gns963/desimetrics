@@ -80,8 +80,10 @@ export default function DataSourcesPage() {
         </li>
         <li>
           <strong>Income tax slabs</strong> — Finance Act rates for FY 2026-27
-          (AY 2027-28), including the ₹75,000/₹50,000 standard deductions and
-          Section 87A rebates, with marginal relief applied.
+          (AY 2027-28), including the ₹75,000/₹50,000 standard deductions,
+          Section 87A rebates with marginal relief, and income tax surcharge
+          (10%/15%/25%/37% slabs) with its own marginal relief at each
+          threshold.
         </li>
         <li>
           <strong>AC efficiency</strong> — Bureau of Energy Efficiency (BEE)
@@ -138,6 +140,26 @@ export default function DataSourcesPage() {
           methodologies rather than a single official source; age-based
           benchmarks are commonly cited industry rules of thumb, not
           government statistics.
+        </li>
+        <li>
+          <strong>EPF</strong> — the ₹15,000/month EPS wage ceiling and
+          8.33%/12% contribution split under the EPF &amp; MP Act, 1952; the
+          8.25% interest rate is government-notified annually and may change.
+        </li>
+        <li>
+          <strong>Sukanya Samriddhi Yojana</strong> — scheme rules
+          (₹250 min/₹1,50,000 max annual deposit, 15-year deposit + 21-year
+          maturity); the 8.2% interest rate is government-notified quarterly.
+        </li>
+        <li>
+          <strong>Section 80D</strong> — Income-tax Act limits (₹25,000
+          regular/₹50,000 senior citizen, ₹5,000 preventive-checkup sub-limit
+          included within the overall cap).
+        </li>
+        <li>
+          <strong>NCB &amp; IDV</strong> — IRDAI-standardised No-Claim Bonus
+          slabs and Insured Declared Value depreciation-by-age schedule,
+          cross-checked against the published IRDAI/GIC Council table.
         </li>
       </ul>
       <p className="text-sm text-ash/60">

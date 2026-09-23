@@ -91,7 +91,7 @@ const faqs = [
   },
   {
     q: 'Does this calculator include cess and surcharge?',
-    a: 'It includes the 4% health and education cess, applied on top of tax after rebate and marginal relief, under both regimes. It does NOT model surcharge, which applies once total income crosses ₹50 lakh and differs meaningfully between regimes (the old regime\'s top surcharge can reach 37% versus the new regime\'s capped 25%) — high earners above ₹50 lakh should add surcharge and its own marginal relief separately when comparing regimes.',
+    a: 'Yes to both. The 4% health and education cess is applied on top of tax after rebate, marginal relief AND surcharge, under both regimes. Surcharge applies once taxable income crosses ₹50 lakh and differs meaningfully between regimes — the old regime\'s top surcharge can reach 37% above ₹5 crore, while the new regime caps it at 25% — with its own marginal relief calculated separately at each ₹50L/1Cr/2Cr/5Cr threshold. See our dedicated Surcharge & Marginal Relief Calculator for a standalone breakdown of this mechanism.',
   },
   {
     q: 'What happens if I don\'t declare a regime choice to my employer?',
@@ -99,7 +99,7 @@ const faqs = [
   },
   {
     q: 'Is this calculator accurate enough to file my return with?',
-    a: 'It\'s an accurate planning-grade comparison for FY 2026-27 (AY 2027-28), including the correct slabs for both regimes, both standard deductions, the Section 87A rebate and marginal relief mechanics for each regime, and the senior/super-senior basic exemptions. It does not model surcharge above ₹50 lakh, capital gains taxed at their own special rates, or every niche deduction — treat the output as a strong planning estimate, and confirm the final figures with a chartered accountant for actual filing, especially at high incomes or with capital gains involved.',
+    a: 'It\'s an accurate planning-grade comparison for FY 2026-27 (AY 2027-28), including the correct slabs for both regimes, both standard deductions, the Section 87A rebate and marginal relief mechanics for each regime, surcharge and its own marginal relief above ₹50 lakh, and the senior/super-senior basic exemptions. It does not model capital gains taxed at their own special rates or every niche deduction — treat the output as a strong planning estimate, and confirm the final figures with a chartered accountant for actual filing, especially at high incomes or with capital gains involved.',
   },
 ]
 
@@ -594,7 +594,7 @@ export default function TaxRegimePage() {
                   ['Marginal relief', 'Yes, above ₹12L', 'No — hard cliff at ₹5L'],
                   ['80C, 80D, HRA, 24(b)', 'Not allowed', 'Allowed'],
                   ['Employer NPS 80CCD(2)', 'Allowed', 'Allowed'],
-                  ['Top surcharge (not modelled here)', '25%', '37%'],
+                  ['Top surcharge', '25% (capped)', '37%'],
                   ['Cess', '4%', '4%'],
                   ['Default regime', 'Yes', 'Opt-in'],
                 ].map(([p, n, o]) => (
@@ -626,7 +626,7 @@ export default function TaxRegimePage() {
             ))}
           </div>
           <p className="mt-4 text-xs text-ash/40">
-            For general guidance only, not tax advice. Surcharge (income &gt; ₹50L) and capital gains at special rates are not modelled; consult a chartered accountant before filing, especially at high incomes. See our{' '}
+            For general guidance only, not tax advice. Capital gains at their own special rates are not modelled here; consult a chartered accountant before filing, especially at high incomes. See our{' '}
             <Link href="/methodology" className="text-brass underline">
               methodology
             </Link>{' '}

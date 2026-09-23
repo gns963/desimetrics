@@ -203,7 +203,7 @@ const OLD_REGIME_SLABS: Record<AgeGroup, Slab[]> = {
   ],
 }
 
-function taxFromSlabs(taxable: number, slabs: Slab[]): number {
+export function taxFromSlabs(taxable: number, slabs: Slab[]): number {
   let tax = 0
   let lower = 0
   for (const slab of slabs) {
@@ -227,6 +227,8 @@ export interface RegimeTaxResult {
   taxBeforeRebate: number
   rebate87A: number
   marginalRelief: number
+  surcharge: number
+  surchargeMarginalRelief: number
   cess: number
   totalTax: number
 }
@@ -292,7 +294,9 @@ export function computeRegimeTax(
   }
 
   const taxAfterRebate = Math.max(0, taxBeforeRebate - rebate87A - marginalRelief)
-  const cess = taxAfterRebate * 0.04
+
+  const surchargeResult = calculateSurchargeAndMarginalRelief(taxableIncome, taxAfterRebate, regime, ageGroup)
+  const cess = surchargeResult.taxPlusSurcharge * 0.04
 
   return {
     regime,
@@ -303,8 +307,10 @@ export function computeRegimeTax(
     taxBeforeRebate: round2(taxBeforeRebate),
     rebate87A: round2(rebate87A),
     marginalRelief: round2(marginalRelief),
+    surcharge: surchargeResult.surchargeAfterRelief,
+    surchargeMarginalRelief: surchargeResult.marginalRelief,
     cess: round2(cess),
-    totalTax: round2(taxAfterRebate + cess),
+    totalTax: round2(surchargeResult.taxPlusSurcharge + cess),
   }
 }
 
@@ -2253,5 +2259,576 @@ export function calculateRetirementPlan(
     surplusOrShortfall: round2(surplusOrShortfall),
     requiredAdditionalMonthlySip: round2(requiredAdditionalMonthlySip),
     swrSanityCheckCorpus: round2(swrSanityCheckCorpus),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// EPF (Employees' Provident Fund) Calculator
+// ---------------------------------------------------------------------------
+
+export interface EpfYearPoint {
+  year: number
+  balance: number
+}
+
+export interface EpfResult {
+  employeeMonthlyContribution: number
+  employerEpfMonthlyContribution: number
+  employerEpsMonthlyContribution: number
+  totalInvested: number
+  corpus: number
+  interestEarned: number
+  yearly: EpfYearPoint[]
+}
+
+const EPF_EMPLOYEE_RATE_PERCENT = 12
+const EPF_EMPLOYER_RATE_PERCENT = 12
+const EPS_RATE_PERCENT = 8.33
+const EPS_WAGE_CEILING = 15000
+const EPS_MAX_MONTHLY = 1250 // EPFO's standard rounded cap (8.33% of the ₹15,000 wage ceiling)
+
+/**
+ * Employee contributes 12% of basic+DA to EPF. Employer's 12% splits: up to
+ * 8.33% of basic (capped at the ₹15,000/month wage ceiling, i.e. max ₹1,250)
+ * goes to EPS-95 (pension, tracked separately, NOT part of this corpus); the
+ * remainder of the employer's 12% goes to EPF alongside the employee's share.
+ * Interest is computed on the monthly running balance and credited once a
+ * year (EPFO's actual method), not compounded monthly — mirrors the existing
+ * simulatePpf() convention for the same reason.
+ */
+export function calculateEpf(
+  basicMonthly: number,
+  currentAge: number,
+  retirementAge: number,
+  currentBalance: number,
+  annualRatePercent: number,
+  annualBasicIncrementPercent = 0,
+): EpfResult {
+  if (basicMonthly < 0 || retirementAge <= currentAge || currentBalance < 0 || annualRatePercent < 0 || annualBasicIncrementPercent < 0)
+    throw new Error('invalid EPF inputs')
+
+  const years = retirementAge - currentAge
+  let balance = currentBalance
+  let basic = basicMonthly
+  let totalInvested = 0
+  const yearly: EpfYearPoint[] = []
+
+  const employeeMonthlyContribution = (basic * EPF_EMPLOYEE_RATE_PERCENT) / 100
+  const epsMonthlyContribution = Math.min(EPS_MAX_MONTHLY, (Math.min(basic, EPS_WAGE_CEILING) * EPS_RATE_PERCENT) / 100)
+  const employerEpfMonthlyContribution = (basic * EPF_EMPLOYER_RATE_PERCENT) / 100 - epsMonthlyContribution
+
+  for (let y = 1; y <= years; y++) {
+    const employeeMonthly = (basic * EPF_EMPLOYEE_RATE_PERCENT) / 100
+    const eps = Math.min(EPS_MAX_MONTHLY, (Math.min(basic, EPS_WAGE_CEILING) * EPS_RATE_PERCENT) / 100)
+    const employerMonthly = (basic * EPF_EMPLOYER_RATE_PERCENT) / 100 - eps
+    const combinedMonthly = employeeMonthly + employerMonthly
+
+    let yearInterest = 0
+    for (let m = 1; m <= 12; m++) {
+      balance += combinedMonthly
+      totalInvested += combinedMonthly
+      yearInterest += (balance * annualRatePercent) / 100 / 12
+    }
+    balance += yearInterest
+    yearly.push({ year: y, balance: round2(balance) })
+    basic *= 1 + annualBasicIncrementPercent / 100
+  }
+
+  return {
+    employeeMonthlyContribution: round2(employeeMonthlyContribution),
+    employerEpfMonthlyContribution: round2(employerEpfMonthlyContribution),
+    employerEpsMonthlyContribution: round2(epsMonthlyContribution),
+    totalInvested: round2(totalInvested),
+    corpus: round2(balance),
+    interestEarned: round2(balance - totalInvested - currentBalance),
+    yearly,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Sukanya Samriddhi Yojana (SSY) Calculator
+// ---------------------------------------------------------------------------
+
+export interface SsyYearPoint {
+  year: number
+  balance: number
+}
+
+export interface SsyResult {
+  totalDeposited: number
+  maturityValue: number
+  interestEarned: number
+  yearly: SsyYearPoint[]
+}
+
+export const SSY_MIN_ANNUAL_DEPOSIT = 250
+export const SSY_MAX_ANNUAL_DEPOSIT = 150000
+export const SSY_DEPOSIT_YEARS = 15
+export const SSY_MATURITY_YEARS = 21
+
+/**
+ * Deposits are made for 15 years from account opening; the account itself
+ * matures 21 years from opening (or on the girl's marriage after age 18, not
+ * modelled here). Interest is compounded annually, credited at year-end on
+ * the balance including that year's deposit — the standard convention used
+ * by official SSY calculators.
+ */
+export function calculateSsy(annualDeposit: number, annualRatePercent: number): SsyResult {
+  if (annualDeposit < 0 || annualRatePercent < 0) throw new Error('invalid SSY inputs')
+  const deposit = Math.min(SSY_MAX_ANNUAL_DEPOSIT, Math.max(0, annualDeposit))
+
+  let balance = 0
+  let totalDeposited = 0
+  const yearly: SsyYearPoint[] = []
+  for (let y = 1; y <= SSY_MATURITY_YEARS; y++) {
+    if (y <= SSY_DEPOSIT_YEARS) {
+      balance += deposit
+      totalDeposited += deposit
+    }
+    balance *= 1 + annualRatePercent / 100
+    yearly.push({ year: y, balance: round2(balance) })
+  }
+
+  return {
+    totalDeposited: round2(totalDeposited),
+    maturityValue: round2(balance),
+    interestEarned: round2(balance - totalDeposited),
+    yearly,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// CTC → In-Hand Salary Calculator
+// ---------------------------------------------------------------------------
+
+export interface CtcBreakdownResult {
+  basicAnnual: number
+  employerPfContribution: number
+  employerGratuityProvision: number
+  grossSalaryAnnual: number
+  employeePfContribution: number
+  professionalTaxAnnual: number
+  estimatedIncomeTax: number
+  annualInHand: number
+  monthlyInHand: number
+}
+
+const GRATUITY_PROVISION_PERCENT_OF_BASIC = 4.81 // 15/26 ÷ 12, the standard actuarial CTC-provisioning rate
+
+/**
+ * A CTC structuring model, not a payslip: employer PF (12% of basic) and a
+ * standard gratuity provision (4.81% of basic, the 15/26 formula spread
+ * monthly) are backed out of CTC first since they never reach the employee
+ * as cash, leaving the gross salary that's actually taxed and paid out.
+ * Employee PF (12% of basic) and professional tax (state-specific — left as
+ * a direct input rather than a hardcoded state table, unlike Road Tax) are
+ * then deducted, and income tax is estimated by reusing computeRegimeTax on
+ * the gross salary.
+ */
+export function calculateCtcBreakdown(
+  annualCtc: number,
+  basicPercentOfCtc: number,
+  professionalTaxAnnual: number,
+  regime: 'new' | 'old',
+  otherOldRegimeDeductions = 0,
+): CtcBreakdownResult {
+  if (annualCtc <= 0 || basicPercentOfCtc <= 0 || basicPercentOfCtc > 100 || professionalTaxAnnual < 0)
+    throw new Error('invalid CTC inputs')
+
+  const basicAnnual = (annualCtc * basicPercentOfCtc) / 100
+  const employerPfContribution = (basicAnnual * EPF_EMPLOYER_RATE_PERCENT) / 100
+  const employerGratuityProvision = (basicAnnual * GRATUITY_PROVISION_PERCENT_OF_BASIC) / 100
+  const grossSalaryAnnual = Math.max(0, annualCtc - employerPfContribution - employerGratuityProvision)
+  const employeePfContribution = (basicAnnual * EPF_EMPLOYEE_RATE_PERCENT) / 100
+
+  const taxResult = computeRegimeTax(grossSalaryAnnual, regime, otherOldRegimeDeductions)
+  const estimatedIncomeTax = taxResult.totalTax
+
+  const annualInHand = Math.max(
+    0,
+    grossSalaryAnnual - employeePfContribution - professionalTaxAnnual - estimatedIncomeTax,
+  )
+
+  return {
+    basicAnnual: round2(basicAnnual),
+    employerPfContribution: round2(employerPfContribution),
+    employerGratuityProvision: round2(employerGratuityProvision),
+    grossSalaryAnnual: round2(grossSalaryAnnual),
+    employeePfContribution: round2(employeePfContribution),
+    professionalTaxAnnual: round2(professionalTaxAnnual),
+    estimatedIncomeTax: round2(estimatedIncomeTax),
+    annualInHand: round2(annualInHand),
+    monthlyInHand: round2(annualInHand / 12),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Rent vs Buy Calculator
+// ---------------------------------------------------------------------------
+
+export interface RentVsBuyResult {
+  monthlyEmi: number
+  finalPropertyValue: number
+  outstandingLoanAtEnd: number
+  netBuyingWealth: number
+  investmentCorpusIfRenting: number
+  netRentingWealth: number
+  wealthDifference: number
+  betterOption: 'buy' | 'rent'
+}
+
+/**
+ * Opportunity-cost model: the renter invests the down payment they didn't
+ * spend, plus (buyer's EMI + maintenance − rent) every month whenever that's
+ * positive, at the assumed investment return. The buyer's wealth is the
+ * property's appreciated value minus any outstanding loan balance at the end
+ * of the comparison period. SIMPLIFICATION: if the buyer's monthly outflow
+ * ever drops below rent (e.g. after loan payoff, if still within the
+ * comparison window), the renter's monthly investment for that month is
+ * clamped to 0 rather than modelling a symmetric investment for the buyer —
+ * documented here since it slightly understates the renting case in that
+ * scenario.
+ */
+export function calculateRentVsBuy(
+  propertyPrice: number,
+  downPaymentPercent: number,
+  loanAnnualRatePercent: number,
+  loanTenureYears: number,
+  annualMaintenancePercentOfPrice: number,
+  currentMonthlyRent: number,
+  annualRentGrowthPercent: number,
+  annualPropertyAppreciationPercent: number,
+  annualInvestmentReturnPercent: number,
+  comparisonYears: number,
+): RentVsBuyResult {
+  if (
+    propertyPrice <= 0 ||
+    downPaymentPercent < 0 ||
+    downPaymentPercent > 100 ||
+    loanAnnualRatePercent < 0 ||
+    loanTenureYears <= 0 ||
+    annualMaintenancePercentOfPrice < 0 ||
+    currentMonthlyRent < 0 ||
+    annualRentGrowthPercent < 0 ||
+    annualPropertyAppreciationPercent < 0 ||
+    annualInvestmentReturnPercent < 0 ||
+    comparisonYears <= 0
+  )
+    throw new Error('invalid Rent vs Buy inputs')
+
+  const downPayment = (propertyPrice * downPaymentPercent) / 100
+  const loanPrincipal = propertyPrice - downPayment
+  const monthlyEmi = calculateEmi(loanPrincipal, loanAnnualRatePercent, loanTenureYears).emi
+  const monthlyLoanRate = loanAnnualRatePercent / 100 / 12
+  const monthlyMaintenance = (propertyPrice * annualMaintenancePercentOfPrice) / 100 / 12
+
+  let loanBalance = loanPrincipal
+  let propertyValue = propertyPrice
+  let rent = currentMonthlyRent
+  let investmentCorpus = downPayment
+  const monthlyInvReturn = annualInvestmentReturnPercent / 100 / 12
+  const totalMonths = Math.round(comparisonYears * 12)
+  const loanMonths = Math.round(loanTenureYears * 12)
+
+  for (let m = 1; m <= totalMonths; m++) {
+    const emiThisMonth = m <= loanMonths && loanBalance > 0 ? monthlyEmi : 0
+    if (emiThisMonth > 0) {
+      const interestPortion = loanBalance * monthlyLoanRate
+      const principalPortion = Math.min(loanBalance, emiThisMonth - interestPortion)
+      loanBalance = Math.max(0, loanBalance - principalPortion)
+    }
+
+    const buyerOutflow = emiThisMonth + monthlyMaintenance
+    const diff = buyerOutflow - rent
+    investmentCorpus = investmentCorpus * (1 + monthlyInvReturn) + Math.max(0, diff)
+
+    propertyValue *= 1 + annualPropertyAppreciationPercent / 100 / 12
+    if (m % 12 === 0) rent *= 1 + annualRentGrowthPercent / 100
+  }
+
+  const netBuyingWealth = propertyValue - loanBalance
+  const netRentingWealth = investmentCorpus
+  const wealthDifference = netBuyingWealth - netRentingWealth
+
+  return {
+    monthlyEmi: round2(monthlyEmi),
+    finalPropertyValue: round2(propertyValue),
+    outstandingLoanAtEnd: round2(loanBalance),
+    netBuyingWealth: round2(netBuyingWealth),
+    investmentCorpusIfRenting: round2(investmentCorpus),
+    netRentingWealth: round2(netRentingWealth),
+    wealthDifference: round2(wealthDifference),
+    betterOption: wealthDifference >= 0 ? 'buy' : 'rent',
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Section 80D — Health Insurance Tax Benefit Calculator
+// ---------------------------------------------------------------------------
+
+export interface Section80DResult {
+  selfFamilyDeduction: number
+  parentsDeduction: number
+  totalDeduction: number
+}
+
+const SECTION_80D_LIMIT_REGULAR = 25000
+const SECTION_80D_LIMIT_SENIOR = 50000
+const SECTION_80D_PREVENTIVE_CHECKUP_CAP = 5000
+
+/**
+ * Self+family and parents each get their own limit (₹25,000, or ₹50,000 if
+ * the insured person is a senior citizen), and preventive health checkup
+ * spending (capped at ₹5,000) is INCLUDED within the self+family limit, not
+ * an addition to it — a common point of confusion this models correctly.
+ * Old regime only; Section 80D is not available under the new regime.
+ */
+export function calculateSection80D(
+  selfFamilyPremium: number,
+  isSelfSenior: boolean,
+  parentsPremium: number,
+  isParentsSenior: boolean,
+  preventiveCheckupSpend: number,
+): Section80DResult {
+  if (selfFamilyPremium < 0 || parentsPremium < 0 || preventiveCheckupSpend < 0)
+    throw new Error('inputs must be >= 0')
+
+  const selfLimit = isSelfSenior ? SECTION_80D_LIMIT_SENIOR : SECTION_80D_LIMIT_REGULAR
+  const parentsLimit = isParentsSenior ? SECTION_80D_LIMIT_SENIOR : SECTION_80D_LIMIT_REGULAR
+  const checkup = Math.min(preventiveCheckupSpend, SECTION_80D_PREVENTIVE_CHECKUP_CAP)
+
+  const selfFamilyDeduction = Math.min(selfFamilyPremium + checkup, selfLimit)
+  const parentsDeduction = Math.min(parentsPremium, parentsLimit)
+
+  return {
+    selfFamilyDeduction: round2(selfFamilyDeduction),
+    parentsDeduction: round2(parentsDeduction),
+    totalDeduction: round2(selfFamilyDeduction + parentsDeduction),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Surcharge & Marginal Relief Calculator
+// ---------------------------------------------------------------------------
+
+export interface SurchargeResult {
+  surchargeRate: number
+  surchargeBeforeRelief: number
+  marginalRelief: number
+  surchargeAfterRelief: number
+  taxPlusSurcharge: number
+  totalTaxWithCess: number
+}
+
+interface SurchargeBreakpoint {
+  threshold: number
+  rate: number
+}
+
+// Rates verified via web search (ClearTax/Tax2Win/PolicyBazaar summaries,
+// cross-checked against each other): both regimes share the 10%/50L, 15%/1Cr
+// and 25%/2Cr breakpoints. The OLD regime alone adds a 37% breakpoint above
+// ₹5Cr; the NEW regime (Section 115BAC) caps surcharge at 25% even beyond
+// ₹5Cr — the single biggest old-vs-new difference at very high incomes,
+// lowering the effective peak rate from ~42.7% to 39%.
+const OLD_REGIME_SURCHARGE_BREAKPOINTS: SurchargeBreakpoint[] = [
+  { threshold: 5000000, rate: 10 },
+  { threshold: 10000000, rate: 15 },
+  { threshold: 20000000, rate: 25 },
+  { threshold: 50000000, rate: 37 },
+]
+const NEW_REGIME_SURCHARGE_BREAKPOINTS: SurchargeBreakpoint[] = [
+  { threshold: 5000000, rate: 10 },
+  { threshold: 10000000, rate: 15 },
+  { threshold: 20000000, rate: 25 },
+]
+
+/**
+ * Surcharge marginal relief ensures that crossing a surcharge threshold
+ * (₹50L/1Cr/2Cr/5Cr) never costs more in extra tax+surcharge than the extra
+ * income itself. Evaluated at the highest breakpoint the income has crossed:
+ * compares tax+surcharge on the ACTUAL income against [tax at the threshold
+ * (no surcharge yet) + the income actually in excess of that threshold] — if
+ * the former is bigger, relief caps it at the latter. This mirrors the
+ * mechanism used for the existing Section 87A marginal relief just above the
+ * new-regime rebate threshold, applied here to the separate surcharge bands.
+ */
+export function calculateSurchargeAndMarginalRelief(
+  taxableIncome: number,
+  taxBeforeSurcharge: number,
+  regime: 'new' | 'old',
+  ageGroup: AgeGroup = 'under60',
+): SurchargeResult {
+  if (taxableIncome < 0 || taxBeforeSurcharge < 0) throw new Error('inputs must be >= 0')
+
+  const breakpoints = regime === 'old' ? OLD_REGIME_SURCHARGE_BREAKPOINTS : NEW_REGIME_SURCHARGE_BREAKPOINTS
+  const crossed = breakpoints.filter((bp) => taxableIncome > bp.threshold)
+
+  if (crossed.length === 0) {
+    const totalTaxWithCess = taxBeforeSurcharge * 1.04
+    return {
+      surchargeRate: 0,
+      surchargeBeforeRelief: 0,
+      marginalRelief: 0,
+      surchargeAfterRelief: 0,
+      taxPlusSurcharge: round2(taxBeforeSurcharge),
+      totalTaxWithCess: round2(totalTaxWithCess),
+    }
+  }
+
+  const current = crossed[crossed.length - 1]
+  const previousRate = crossed.length > 1 ? crossed[crossed.length - 2].rate : 0
+
+  const surchargeBeforeRelief = (taxBeforeSurcharge * current.rate) / 100
+  const taxPlusSurchargeActual = taxBeforeSurcharge + surchargeBeforeRelief
+
+  const slabs = regime === 'new' ? NEW_REGIME_SLABS : OLD_REGIME_SLABS[ageGroup]
+  const taxAtThreshold = taxFromSlabs(current.threshold, slabs)
+  const capAtThreshold = taxAtThreshold * (1 + previousRate / 100) + (taxableIncome - current.threshold)
+
+  let surchargeAfterRelief = surchargeBeforeRelief
+  let marginalRelief = 0
+  let taxPlusSurcharge = taxPlusSurchargeActual
+  if (taxPlusSurchargeActual > capAtThreshold) {
+    marginalRelief = taxPlusSurchargeActual - capAtThreshold
+    taxPlusSurcharge = capAtThreshold
+    surchargeAfterRelief = Math.max(0, surchargeBeforeRelief - marginalRelief)
+  }
+
+  const totalTaxWithCess = taxPlusSurcharge * 1.04
+
+  return {
+    surchargeRate: current.rate,
+    surchargeBeforeRelief: round2(surchargeBeforeRelief),
+    marginalRelief: round2(marginalRelief),
+    surchargeAfterRelief: round2(surchargeAfterRelief),
+    taxPlusSurcharge: round2(taxPlusSurcharge),
+    totalTaxWithCess: round2(totalTaxWithCess),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Recurring Deposit (RD) Calculator
+// ---------------------------------------------------------------------------
+
+export interface RdResult {
+  totalDeposited: number
+  maturityValue: number
+  interestEarned: number
+  estimatedTds: number
+}
+
+/**
+ * Simulates typical bank RD crediting: a fixed deposit every month, with
+ * interest computed on the running balance and credited quarterly (the
+ * common bank convention) rather than via the closed-form RD formula, whose
+ * exact rounding/day-count conventions vary slightly bank to bank — a
+ * month-by-month simulation with quarterly crediting is the more defensible
+ * approximation, same reasoning as simulateFd's non-cumulative path.
+ */
+export function calculateRd(
+  monthlyDeposit: number,
+  annualRatePercent: number,
+  tenureMonths: number,
+  isSenior: boolean,
+  panProvided: boolean,
+): RdResult {
+  if (monthlyDeposit < 0 || annualRatePercent < 0 || tenureMonths <= 0)
+    throw new Error('invalid RD inputs')
+
+  const rate = annualRatePercent + (isSenior ? FD_SENIOR_CITIZEN_RATE_BONUS : 0)
+  const quarterlyRate = rate / 4 / 100
+
+  let balance = 0
+  let totalDeposited = 0
+  for (let m = 1; m <= tenureMonths; m++) {
+    balance += monthlyDeposit
+    totalDeposited += monthlyDeposit
+    if (m % 3 === 0) balance += balance * quarterlyRate
+  }
+
+  const interestEarned = balance - totalDeposited
+  const tdsThreshold = isSenior ? FD_TDS_THRESHOLD_SENIOR : FD_TDS_THRESHOLD_REGULAR
+  const tdsRate = panProvided ? FD_TDS_RATE_WITH_PAN : FD_TDS_RATE_WITHOUT_PAN
+  const estimatedTds = interestEarned > tdsThreshold ? (interestEarned * tdsRate) / 100 : 0
+
+  return {
+    totalDeposited: round2(totalDeposited),
+    maturityValue: round2(balance),
+    interestEarned: round2(interestEarned),
+    estimatedTds: round2(estimatedTds),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// NCB (No-Claim Bonus) + IDV Calculator — motor insurance
+// ---------------------------------------------------------------------------
+
+export interface NcbIdvResult {
+  ncbPercent: number
+  ncbDiscountAmount: number
+  odPremiumAfterNcb: number
+  idvDepreciationPercent: number
+  idv: number
+}
+
+const NCB_SLABS: { years: number; percent: number }[] = [
+  { years: 1, percent: 20 },
+  { years: 2, percent: 25 },
+  { years: 3, percent: 35 },
+  { years: 4, percent: 45 },
+  { years: 5, percent: 50 },
+]
+
+/** IRDAI-standardised NCB slab, verified via web search — applies to the
+ * own-damage (OD) premium only, not third-party. Caps at 50% from 5 years. */
+export function ncbPercent(consecutiveClaimFreeYears: number): number {
+  if (consecutiveClaimFreeYears <= 0) return 0
+  if (consecutiveClaimFreeYears >= 5) return 50
+  const applicable = [...NCB_SLABS].reverse().find((s) => consecutiveClaimFreeYears >= s.years)
+  return applicable?.percent ?? 0
+}
+
+const IDV_DEPRECIATION_SLABS: { maxMonths: number; percent: number }[] = [
+  { maxMonths: 6, percent: 5 },
+  { maxMonths: 12, percent: 15 },
+  { maxMonths: 24, percent: 20 },
+  { maxMonths: 36, percent: 30 },
+  { maxMonths: 48, percent: 40 },
+  { maxMonths: 60, percent: 50 },
+]
+
+/** IRDAI-standardised IDV depreciation-by-age schedule, verified via web
+ * search against the IRDAI/GIC Council-published table. Beyond 5 years the
+ * IDV is set by mutual agreement between insurer and insured — this
+ * function returns 50% (the schedule's last defined value) as an
+ * illustrative floor, not an authoritative figure past that point. */
+export function idvDepreciationPercent(vehicleAgeMonths: number): number {
+  for (const s of IDV_DEPRECIATION_SLABS) {
+    if (vehicleAgeMonths <= s.maxMonths) return s.percent
+  }
+  return 50
+}
+
+export function calculateNcbIdv(
+  manufacturerListedPrice: number,
+  vehicleAgeMonths: number,
+  odPremiumBeforeNcb: number,
+  consecutiveClaimFreeYears: number,
+): NcbIdvResult {
+  if (manufacturerListedPrice <= 0 || vehicleAgeMonths < 0 || odPremiumBeforeNcb < 0 || consecutiveClaimFreeYears < 0)
+    throw new Error('invalid NCB/IDV inputs')
+
+  const idvDepPercent = idvDepreciationPercent(vehicleAgeMonths)
+  const idv = manufacturerListedPrice * (1 - idvDepPercent / 100)
+  const ncb = ncbPercent(consecutiveClaimFreeYears)
+  const ncbDiscountAmount = (odPremiumBeforeNcb * ncb) / 100
+
+  return {
+    ncbPercent: ncb,
+    ncbDiscountAmount: round2(ncbDiscountAmount),
+    odPremiumAfterNcb: round2(odPremiumBeforeNcb - ncbDiscountAmount),
+    idvDepreciationPercent: idvDepPercent,
+    idv: round2(idv),
   }
 }

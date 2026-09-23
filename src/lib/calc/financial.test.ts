@@ -5,16 +5,26 @@ import {
   calculateBhSeriesTax,
   calculateCapitalGainsTax,
   calculateCrorepati,
+  calculateCtcBreakdown,
   calculateEmi,
+  calculateEpf,
   calculateEvBreakEven,
   calculateFire,
   calculateFuelCostComparison,
   calculateHumanLifeValue,
+  calculateNcbIdv,
   calculateNetWorth,
   calculateNps,
+  calculateRd,
+  calculateRentVsBuy,
   calculateRetirementPlan,
+  calculateSection80D,
   calculateSection80GG,
+  calculateSsy,
+  calculateSurchargeAndMarginalRelief,
+  idvDepreciationPercent,
   isHraMetroCity,
+  ncbPercent,
   calculatePpf,
   calculateEmiWithPrepayment,
   calculateGratuity,
@@ -538,6 +548,148 @@ describe('calculateCapitalGainsTax', () => {
 function round2(n: number) {
   return Math.round((n + Number.EPSILON) * 100) / 100
 }
+
+describe('calculateEpf', () => {
+  it('splits the employer 12% into EPS (capped at the wage ceiling) and EPF', () => {
+    const r = calculateEpf(20000, 30, 58, 500000, 8.25)
+    expect(r.employeeMonthlyContribution).toBe(2400) // 12% of 20000
+    expect(r.employerEpsMonthlyContribution).toBe(1249.5) // 8.33% of the ₹15,000 ceiling, not actual basic
+    expect(r.employerEpfMonthlyContribution).toBeCloseTo(2400 - 1249.5, 1)
+  })
+  it('grows the corpus beyond total contributions via credited interest', () => {
+    const r = calculateEpf(20000, 30, 58, 0, 8.25)
+    expect(r.corpus).toBeGreaterThan(r.totalInvested)
+    expect(r.interestEarned).toBeCloseTo(r.corpus - r.totalInvested, 1)
+  })
+})
+
+describe('calculateSsy', () => {
+  it('deposits for exactly 15 years and matures at 21 years', () => {
+    const r = calculateSsy(150000, 8.2)
+    expect(r.totalDeposited).toBe(150000 * 15)
+    expect(r.yearly).toHaveLength(21)
+    expect(r.yearly[14].balance).toBeLessThan(r.maturityValue) // still growing after deposits stop
+  })
+  it('caps an over-limit deposit at the statutory annual maximum', () => {
+    const r = calculateSsy(500000, 8.2)
+    expect(r.totalDeposited).toBe(150000 * 15)
+  })
+})
+
+describe('calculateCtcBreakdown', () => {
+  it('backs employer PF and gratuity provision out of CTC before computing take-home', () => {
+    const r = calculateCtcBreakdown(1200000, 40, 2400, 'new')
+    expect(r.basicAnnual).toBe(480000)
+    expect(r.employerPfContribution).toBe(57600) // 12% of basic
+    expect(r.grossSalaryAnnual).toBe(1200000 - 57600 - r.employerGratuityProvision)
+  })
+  it('reduces annual in-hand as professional tax increases, all else equal', () => {
+    const low = calculateCtcBreakdown(1200000, 40, 0, 'new')
+    const high = calculateCtcBreakdown(1200000, 40, 2400, 'new')
+    expect(high.annualInHand).toBeLessThan(low.annualInHand)
+  })
+})
+
+describe('calculateRentVsBuy', () => {
+  it('favours buying when property appreciation and investment return are equal and rent is high relative to EMI', () => {
+    const r = calculateRentVsBuy(8000000, 20, 8.5, 20, 1, 70000, 5, 8, 8, 20)
+    expect(r.betterOption).toBe('buy')
+  })
+  it('favours renting when the investment return well exceeds property appreciation', () => {
+    const r = calculateRentVsBuy(8000000, 20, 8.5, 20, 1, 25000, 5, 5, 12, 20)
+    expect(r.betterOption).toBe('rent')
+  })
+  it('pays off the loan fully when the comparison period matches the loan tenure', () => {
+    const r = calculateRentVsBuy(8000000, 20, 8.5, 20, 1, 25000, 5, 5, 10, 20)
+    expect(r.outstandingLoanAtEnd).toBe(0)
+  })
+})
+
+describe('calculateSection80D', () => {
+  it('includes the preventive checkup spend within the overall self+family cap, not on top of it', () => {
+    const r = calculateSection80D(20000, false, 30000, true, 6000)
+    expect(r.selfFamilyDeduction).toBe(25000) // min(20000 + min(6000,5000), 25000)
+    expect(r.parentsDeduction).toBe(30000) // senior parents, within 50000 limit
+    expect(r.totalDeduction).toBe(55000)
+  })
+  it('doubles the self+family limit when the insured person is a senior citizen', () => {
+    const regular = calculateSection80D(40000, false, 0, false, 0)
+    const senior = calculateSection80D(40000, true, 0, false, 0)
+    expect(senior.selfFamilyDeduction).toBeGreaterThan(regular.selfFamilyDeduction)
+  })
+})
+
+describe('calculateSurchargeAndMarginalRelief', () => {
+  it('applies no surcharge at or below ₹50 lakh taxable income', () => {
+    const r = calculateSurchargeAndMarginalRelief(5000000, 1080000, 'new')
+    expect(r.surchargeRate).toBe(0)
+    expect(r.surchargeAfterRelief).toBe(0)
+  })
+  it('caps the extra tax+surcharge at the extra income just above the ₹50L threshold', () => {
+    const taxAtThreshold = 1080000
+    const r = calculateSurchargeAndMarginalRelief(5001000, taxAtThreshold + 300, 'new')
+    expect(r.taxPlusSurcharge).toBeCloseTo(taxAtThreshold + 1000, 2)
+    expect(r.marginalRelief).toBeGreaterThan(0)
+  })
+  it('charges 37% only under the old regime above ₹5 crore; new regime caps at 25%', () => {
+    const old = calculateSurchargeAndMarginalRelief(60000000, 17500000, 'old')
+    const newRegime = calculateSurchargeAndMarginalRelief(60000000, 17500000, 'new')
+    expect(old.surchargeRate).toBe(37)
+    expect(newRegime.surchargeRate).toBe(25)
+  })
+})
+
+describe('computeRegimeTax surcharge integration', () => {
+  it('applies zero surcharge for a typical middle-income taxpayer', () => {
+    const r = computeRegimeTax(1500000, 'new')
+    expect(r.surcharge).toBe(0)
+  })
+  it('applies surcharge automatically once taxable income exceeds ₹50 lakh', () => {
+    const r = computeRegimeTax(6075000, 'new')
+    expect(r.taxableIncome).toBeGreaterThan(5000000)
+    expect(r.surcharge).toBeGreaterThan(0)
+  })
+  it('includes surcharge in the cess base, not just the pre-surcharge tax', () => {
+    const r = computeRegimeTax(6075000, 'new')
+    const taxPlusSurcharge = r.taxBeforeRebate - r.rebate87A - r.marginalRelief + r.surcharge
+    expect(r.cess).toBeCloseTo(taxPlusSurcharge * 0.04, 1)
+  })
+})
+
+describe('calculateRd', () => {
+  it('credits interest quarterly on the running balance', () => {
+    const r = calculateRd(10000, 7, 60, false, true)
+    expect(r.totalDeposited).toBe(600000)
+    expect(r.maturityValue).toBeGreaterThan(r.totalDeposited)
+  })
+  it('applies TDS only once interest crosses the threshold', () => {
+    const small = calculateRd(1000, 6, 12, false, true)
+    const large = calculateRd(50000, 7, 60, false, true)
+    expect(small.estimatedTds).toBe(0)
+    expect(large.estimatedTds).toBeGreaterThan(0)
+  })
+})
+
+describe('ncbPercent + idvDepreciationPercent + calculateNcbIdv', () => {
+  it('matches the IRDAI-standardised NCB slab table', () => {
+    expect(ncbPercent(0)).toBe(0)
+    expect(ncbPercent(1)).toBe(20)
+    expect(ncbPercent(3)).toBe(35)
+    expect(ncbPercent(5)).toBe(50)
+    expect(ncbPercent(10)).toBe(50) // capped
+  })
+  it('matches the IRDAI-standardised IDV depreciation-by-age table', () => {
+    expect(idvDepreciationPercent(3)).toBe(5)
+    expect(idvDepreciationPercent(9)).toBe(15)
+    expect(idvDepreciationPercent(18)).toBe(20)
+    expect(idvDepreciationPercent(30)).toBe(30)
+  })
+  it('applies the NCB discount only to the OD premium, and depreciation only to the IDV', () => {
+    const r = calculateNcbIdv(1000000, 18, 12000, 3)
+    expect(r.idv).toBe(800000) // 20% depreciation at 18 months
+    expect(r.odPremiumAfterNcb).toBe(12000 - r.ncbDiscountAmount)
+  })
+})
 
 describe('requiredMonthlySipForTarget', () => {
   it('matches calculateSip\'s forward maturity value when inverted', () => {

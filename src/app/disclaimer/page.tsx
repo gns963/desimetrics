@@ -52,23 +52,29 @@ export default function DisclaimerPage() {
         Financial calculators
       </h2>
       <p>
-        Our 18 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
+        Our 30 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
         GST, SIP, Home Loan EMI, Personal Loan EMI, PPF, FD, Gratuity, HRA, NPS,
-        Human Life Value, FIRE, Net Worth, Crorepati, BH Series, EV vs Fuel Cost
-        and the Retirement Planner) are for general guidance only and are not
-        tax, legal, investment or insurance advice. Each produces a needs or
-        planning estimate built from the inputs you provide and the rules
-        verified at the time we last checked them — not a filed return, a
-        bank/insurer quote, or a substitute for a qualified professional.
+        Human Life Value, FIRE, Net Worth, Crorepati, BH Series, EV vs Fuel Cost,
+        Retirement Planner, EPF, Sukanya Samriddhi Yojana, CTC to In-Hand Salary,
+        Rent vs Buy, Car/Two-Wheeler/Education Loan EMI, Health Insurance 80D,
+        Surcharge &amp; Marginal Relief, Recurring Deposit, and NCB &amp; IDV)
+        are for general guidance only and are not tax, legal, investment or
+        insurance advice. Each produces a needs or planning estimate built
+        from the inputs you provide and the rules verified at the time we
+        last checked them — not a filed return, a bank/insurer quote, or a
+        substitute for a qualified professional.
       </p>
       <p>
         Known limitations, current as of this page&apos;s last update:
       </p>
       <ul className="list-disc space-y-1 pl-5">
         <li>
-          <strong>Tax Regime &amp; Capital Gains</strong> — surcharge (income
-          above ₹50 lakh) is not modelled in either calculator; the Capital
-          Gains calculator also does not model the pre-23-July-2024 property
+          <strong>Tax Regime</strong> — surcharge (income above ₹50 lakh) and
+          its marginal relief ARE modelled, for both regimes.
+        </li>
+        <li>
+          <strong>Capital Gains</strong> — surcharge above ₹50 lakh is not
+          modelled here; it also does not model the pre-23-July-2024 property
           indexation option.
         </li>
         <li>
@@ -135,6 +141,51 @@ export default function DisclaimerPage() {
           <strong>EV vs Fuel Cost</strong> — running-cost estimates only; it
           does not model maintenance costs or resale value, which would
           shift a real EV-vs-petrol decision further in the EV&apos;s favour.
+        </li>
+        <li>
+          <strong>EPF</strong> — the interest rate is reviewed annually by
+          the government and is not guaranteed to hold for your full working
+          life; does not model early-withdrawal tax consequences.
+        </li>
+        <li>
+          <strong>Sukanya Samriddhi Yojana</strong> — the interest rate is
+          reviewed quarterly by the government; does not model early closure
+          on marriage or the partial-withdrawal-at-18 provision.
+        </li>
+        <li>
+          <strong>CTC to In-Hand Salary</strong> — does not model HRA
+          exemption or old-regime itemised deductions; professional tax is a
+          direct input since it varies by state.
+        </li>
+        <li>
+          <strong>Rent vs Buy</strong> — a scenario comparison built on your
+          own assumptions, not a prediction; if the buyer&apos;s monthly cost
+          drops below rent after loan payoff, the renter&apos;s further
+          monthly investment is clamped to zero as a documented
+          simplification.
+        </li>
+        <li>
+          <strong>Car / Two-Wheeler / Education Loan EMI</strong> — not a
+          loan offer; actual rate and eligibility depend on the lender and
+          your credit profile.
+        </li>
+        <li>
+          <strong>Health Insurance 80D</strong> — old tax regime only; not
+          available if you&apos;ve switched to the new regime.
+        </li>
+        <li>
+          <strong>Surcharge &amp; Marginal Relief</strong> — does not model
+          capital gains taxed at special rates within the same return.
+        </li>
+        <li>
+          <strong>Recurring Deposit</strong> — quarterly-crediting
+          approximation of typical bank practice; exact conventions vary
+          slightly by bank.
+        </li>
+        <li>
+          <strong>NCB &amp; IDV</strong> — IRDAI-standardised slabs, not an
+          insurance quote; beyond 5 years, IDV is set by mutual agreement
+          with your insurer, not a fixed schedule.
         </li>
       </ul>
       <p>Consult a qualified professional before acting on any of these figures.</p>

@@ -109,6 +109,72 @@ const TOOLS = [
     title: 'Retirement Planner',
     body: 'Inflation-adjusted corpus, with separate medical inflation.',
   },
+  {
+    slug: 'epf-calculator',
+    emoji: '🏢',
+    title: 'EPF Calculator',
+    body: "Project your Employees' Provident Fund corpus.",
+  },
+  {
+    slug: 'sukanya-samriddhi-calculator',
+    emoji: '👧',
+    title: 'Sukanya Samriddhi Yojana',
+    body: "Project your girl child's SSY maturity value.",
+  },
+  {
+    slug: 'ctc-in-hand-salary-calculator',
+    emoji: '💵',
+    title: 'CTC to In-Hand Salary',
+    body: 'What actually lands in your bank account from your CTC.',
+  },
+  {
+    slug: 'rent-vs-buy-calculator',
+    emoji: '🏘️',
+    title: 'Rent vs Buy Calculator',
+    body: 'Which builds more wealth — renting or buying?',
+  },
+  {
+    slug: 'car-loan-emi-calculator',
+    emoji: '🚙',
+    title: 'Car Loan EMI Calculator',
+    body: 'Monthly EMI for a new or used car loan.',
+  },
+  {
+    slug: 'two-wheeler-loan-emi-calculator',
+    emoji: '🏍️',
+    title: 'Two-Wheeler Loan EMI Calculator',
+    body: 'Monthly EMI for a bike or scooter loan.',
+  },
+  {
+    slug: 'education-loan-emi-calculator',
+    emoji: '🎓',
+    title: 'Education Loan EMI Calculator',
+    body: 'Monthly EMI plus the uncapped Section 80E benefit.',
+  },
+  {
+    slug: 'health-insurance-80d-calculator',
+    emoji: '🏥',
+    title: 'Health Insurance 80D Calculator',
+    body: 'Your tax deduction for health insurance premiums.',
+  },
+  {
+    slug: 'surcharge-marginal-relief-calculator',
+    emoji: '📊',
+    title: 'Surcharge & Marginal Relief',
+    body: 'Your exact surcharge above ₹50 lakh income.',
+  },
+  {
+    slug: 'rd-calculator',
+    emoji: '🏦',
+    title: 'Recurring Deposit Calculator',
+    body: 'RD maturity value with quarterly compounding.',
+  },
+  {
+    slug: 'ncb-idv-calculator',
+    emoji: '🚘',
+    title: 'NCB & IDV Calculator',
+    body: 'Motor insurance No-Claim Bonus and vehicle IDV.',
+  },
 ] as const
 
 export default function FinancialCrossSell({ current }: { current: string }) {

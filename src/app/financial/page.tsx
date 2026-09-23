@@ -145,6 +145,83 @@ const cards = [
     body: 'Inflation-adjusted corpus, with separate medical inflation.',
     cta: 'Open →',
   },
+  {
+    href: '/financial/epf-calculator',
+    emoji: '🏢',
+    title: 'EPF Calculator',
+    body: "Project your Employees' Provident Fund corpus.",
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/sukanya-samriddhi-calculator',
+    emoji: '👧',
+    title: 'Sukanya Samriddhi Yojana',
+    body: "Project your girl child's SSY maturity value.",
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/ctc-in-hand-salary-calculator',
+    emoji: '💵',
+    title: 'CTC to In-Hand Salary',
+    body: 'What actually lands in your bank account from your CTC.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/rent-vs-buy-calculator',
+    emoji: '🏘️',
+    title: 'Rent vs Buy Calculator',
+    body: 'Which builds more wealth — renting or buying?',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/car-loan-emi-calculator',
+    emoji: '🚙',
+    title: 'Car Loan EMI Calculator',
+    body: 'Monthly EMI for a new or used car loan.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/two-wheeler-loan-emi-calculator',
+    emoji: '🏍️',
+    title: 'Two-Wheeler Loan EMI Calculator',
+    body: 'Monthly EMI for a bike or scooter loan.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/education-loan-emi-calculator',
+    emoji: '🎓',
+    title: 'Education Loan EMI Calculator',
+    body: 'Monthly EMI plus the uncapped Section 80E benefit.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/health-insurance-80d-calculator',
+    emoji: '🏥',
+    title: 'Health Insurance 80D Calculator',
+    body: 'Your tax deduction for health insurance premiums.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/surcharge-marginal-relief-calculator',
+    emoji: '📊',
+    title: 'Surcharge & Marginal Relief',
+    body: 'Your exact surcharge above ₹50 lakh income.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/rd-calculator',
+    emoji: '🏦',
+    title: 'Recurring Deposit Calculator',
+    body: 'RD maturity value with quarterly compounding.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/ncb-idv-calculator',
+    emoji: '🚘',
+    title: 'NCB & IDV Calculator',
+    body: 'Motor insurance No-Claim Bonus and vehicle IDV.',
+    cta: 'Open →',
+  },
 ]
 
 const breadcrumb = breadcrumbLd([
@@ -191,7 +268,7 @@ export default function FinancialHubPage() {
         h1="Financial Calculators"
         subtitle="Fast, accurate personal-finance tools for India — loan EMIs, PPF and FD growth, NPS, HRA, capital gains tax, GST, mutual fund SIPs, income tax regime comparison, gratuity, FIRE, net worth, and more. Free and updated for the current financial year."
         stats={[
-          { icon: '🧮', big: '18', small: 'Calculators', tone: 'hub' },
+          { icon: '🧮', big: '30', small: 'Calculators', tone: 'hub' },
           { icon: '📅', big: 'FY 2026-27', small: 'Current year', tone: 'hub' },
           { icon: '🔓', big: 'Free', small: 'No login', tone: 'hub' },
           { icon: '🇮🇳', big: 'India', small: 'Coverage', tone: 'hub' },

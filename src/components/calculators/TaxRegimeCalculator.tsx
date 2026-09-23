@@ -35,6 +35,8 @@ export interface TaxRegimeCalculatorTexts {
   taxableIncomeLabel: string
   rebateLabel: string
   marginalReliefLabel: string
+  /** Optional: falls back to an English default if omitted (e.g. older texts objects). */
+  surchargeLabel?: string
   totalTaxLabel: string
   footnote: string
   breakEvenLabel: string
@@ -74,8 +76,9 @@ const defaultTexts: TaxRegimeCalculatorTexts = {
   taxableIncomeLabel: 'Taxable income',
   rebateLabel: 'Rebate 87A',
   marginalReliefLabel: 'Marginal relief',
+  surchargeLabel: 'Surcharge (income > ₹50L)',
   totalTaxLabel: 'Total tax',
-  footnote: 'FY 2026-27 (AY 2027-28), incl. 4% cess and new-regime marginal relief. Surcharge (income > ₹50L) is not modelled.',
+  footnote: 'FY 2026-27 (AY 2027-28), incl. 4% cess, marginal relief, and surcharge above ₹50L with its own marginal relief.',
   breakEvenLabel: 'Your break-even (total old-regime deductions)',
   breakEvenAlreadyTemplate: 'You\'re already {amount} above your break-even.',
   breakEvenGapTemplate: 'You need {amount} more in deductions to make the old regime win.',
@@ -318,6 +321,19 @@ export default function TaxRegimeCalculator({
                     {formatINR(result.newRegime.marginalRelief)}
                   </td>
                   <td className="py-1.5 text-right tabular-nums">—</td>
+                </tr>
+              )}
+              {(result.newRegime.surcharge > 0 || result.oldRegime.surcharge > 0) && (
+                <tr>
+                  <td className="py-1.5 text-ash/70">
+                    {texts.surchargeLabel ?? 'Surcharge'}
+                  </td>
+                  <td className="py-1.5 text-right tabular-nums">
+                    {formatINR(result.newRegime.surcharge)}
+                  </td>
+                  <td className="py-1.5 text-right tabular-nums">
+                    {formatINR(result.oldRegime.surcharge)}
+                  </td>
                 </tr>
               )}
               <tr className="text-base font-bold text-ink-navy">
