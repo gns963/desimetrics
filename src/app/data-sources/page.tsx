@@ -126,7 +126,27 @@ export default function DataSourcesPage() {
           (₹40,000 regular/₹50,000 senior citizens) and rates (10% with PAN,
           20% without).
         </li>
+        <li>
+          <strong>BH-series vehicle tax</strong> — MoRTH Rule 51B, Central
+          Motor Vehicles Rules 1989 (slab table, 2-year instalment formula,
+          eligibility criteria), cross-checked against two independent
+          secondary sources.
+        </li>
+        <li>
+          <strong>FIRE, Net Worth &amp; Retirement Planner</strong> — standard
+          safe-withdrawal-rate and present-value financial-planning
+          methodologies rather than a single official source; age-based
+          benchmarks are commonly cited industry rules of thumb, not
+          government statistics.
+        </li>
       </ul>
+      <p className="text-sm text-ash/60">
+        We do not publish a state-wise road tax calculator: reviewed
+        secondary sources gave inconsistent rates for the same state, and we
+        would rather exclude a figure than publish one we can&apos;t verify
+        against a primary state notification. Use the official Vahan portal
+        or your RTO for that figure.
+      </p>
     </LegalPageShell>
   )
 }

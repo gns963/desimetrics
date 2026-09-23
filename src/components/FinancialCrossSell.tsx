@@ -73,6 +73,42 @@ const TOOLS = [
     title: 'Human Life Value Calculator',
     body: 'Estimate how much life insurance cover your family needs.',
   },
+  {
+    slug: 'fire-calculator',
+    emoji: '🔥',
+    title: 'FIRE Calculator',
+    body: 'Find your Financial Independence, Retire Early number.',
+  },
+  {
+    slug: 'net-worth-calculator',
+    emoji: '💰',
+    title: 'Net Worth Calculator',
+    body: 'Add up your assets, subtract your liabilities.',
+  },
+  {
+    slug: 'crorepati-calculator',
+    emoji: '💎',
+    title: 'Crorepati Calculator',
+    body: 'The monthly SIP needed to hit ₹1 crore or any goal.',
+  },
+  {
+    slug: 'bh-series-calculator',
+    emoji: '🚗',
+    title: 'BH Series Calculator',
+    body: 'Bharat Series vehicle registration tax, by price and fuel.',
+  },
+  {
+    slug: 'ev-vs-fuel-cost-calculator',
+    emoji: '⛽',
+    title: 'EV vs Fuel Cost Calculator',
+    body: 'Compare petrol, diesel, CNG and EV running costs.',
+  },
+  {
+    slug: 'retirement-planner',
+    emoji: '🌅',
+    title: 'Retirement Planner',
+    body: 'Inflation-adjusted corpus, with separate medical inflation.',
+  },
 ] as const
 
 export default function FinancialCrossSell({ current }: { current: string }) {

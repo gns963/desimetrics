@@ -51,7 +51,7 @@ const faqs = [
   },
   {
     q: 'Does this work for CNG or electric vehicles?',
-    a: 'For CNG, enter the price per kg and your mileage in km/kg — the same division works. This calculator isn\'t suited to EVs, where cost depends on electricity tariff and charging efficiency rather than a fuel price per litre — see our EV charging cost calculator instead.',
+    a: 'For CNG, enter the price per kg and your mileage in km/kg — the same division works. This calculator isn\'t suited to EVs, where cost depends on electricity tariff and charging efficiency rather than a fuel price per litre — see our EV vs Petrol/Diesel/CNG Cost Calculator instead, which handles all four side by side and includes the EV break-even point.',
   },
   {
     q: 'Why does fuel price vary by city?',
@@ -234,15 +234,15 @@ export default function VehicleFuelCostPage() {
             </p>
           </Link>
           <Link
-            href="/financial"
+            href="/financial/ev-vs-fuel-cost-calculator"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-financial/50 hover:shadow-sm"
           >
-            <span className="text-xl" aria-hidden>🧮</span>
+            <span className="text-xl" aria-hidden>⛽</span>
             <p className="font-display mt-2 font-bold text-ink-navy">
-              Financial calculators
+              EV vs petrol/diesel/CNG cost
             </p>
             <p className="mt-1 text-xs text-ash/60">
-              GST, SIP, tax regime and gratuity — everyday money tools.
+              Compare all four side by side, plus the EV break-even point.
             </p>
           </Link>
         </div>

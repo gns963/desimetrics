@@ -4,8 +4,8 @@
  * PURE, framework-agnostic TypeScript. All money in ₹ (INR).
  *
  * Income-tax slabs are for FY 2026-27 (AY 2027-28). Budget 2026 left the FY
- * 2025-26 structure unchanged. Surcharge (income > ₹50L) and marginal relief
- * are NOT modelled — see notes.
+ * 2025-26 structure unchanged. Marginal relief on the Section 87A rebate IS
+ * modelled (see computeRegimeTax); surcharge (income > ₹50L) is NOT.
  */
 
 const round2 = (n: number): number => Math.round((n + Number.EPSILON) * 100) / 100
@@ -1703,5 +1703,555 @@ export function calculateHumanLifeValue(
     recommendedCover: round2(recommendedCover),
     incomeMultiplierEstimate: round2(annualIncome * incomeMultiplier),
     incomeMultiplier,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Shared helper: monthly SIP required to reach a future-value target
+// ---------------------------------------------------------------------------
+
+/**
+ * Inverts `sipFutureValue`: how much a monthly SIP must be, at the given
+ * annual return, to reach `targetFutureValue` in `years`, after crediting an
+ * `existingLumpSum` grown forward at the same rate over the same period.
+ * Used by both the FIRE and Crorepati calculators.
+ */
+export function requiredMonthlySipForTarget(
+  targetFutureValue: number,
+  annualRatePercent: number,
+  years: number,
+  existingLumpSum = 0,
+): number {
+  if (targetFutureValue < 0 || years <= 0 || existingLumpSum < 0)
+    throw new Error('targetFutureValue and existingLumpSum must be >= 0, years must be > 0')
+  const lumpSumFutureValue = existingLumpSum * Math.pow(1 + annualRatePercent / 100, years)
+  const netTarget = targetFutureValue - lumpSumFutureValue
+  if (netTarget <= 0) return 0
+
+  const i = annualRatePercent / 100 / 12
+  const months = Math.round(years * 12)
+  const factor = i === 0 ? months : ((Math.pow(1 + i, months) - 1) / i) * (1 + i)
+  return round2(netTarget / factor)
+}
+
+// ---------------------------------------------------------------------------
+// FIRE (Financial Independence, Retire Early) Calculator
+// ---------------------------------------------------------------------------
+
+export interface FireResult {
+  yearsToFire: number
+  futureAnnualExpenses: number
+  requiredCorpus: number
+  requiredCorpusUsRule: number
+  projectedPortfolioNoNewSip: number
+  isCoastFire: boolean
+  projectedPortfolioWithCurrentSip: number
+  shortfallOrSurplus: number
+  requiredAdditionalMonthlySip: number
+}
+
+const US_RULE_SWR_PERCENT = 4
+
+/**
+ * Standard safe-withdrawal-rate FIRE method: today's monthly expenses (net
+ * of any expected post-FIRE part-time/pension income) are inflated to the
+ * target FIRE age, then divided by the chosen safe withdrawal rate — 3.5% is
+ * commonly used for India (vs the US's 4% rule) since Indian equity/debt
+ * return and inflation assumptions differ; both are shown for comparison.
+ * `isCoastFire` flags whether the current portfolio alone, grown at the
+ * expected return with no further contributions, would already clear the
+ * required corpus by the FIRE age.
+ */
+export function calculateFire(
+  currentMonthlyExpenses: number,
+  currentAge: number,
+  fireAge: number,
+  currentPortfolio: number,
+  currentMonthlySip: number,
+  preRetirementReturnPercent: number,
+  inflationPercent: number,
+  swrPercent: number,
+  postFireMonthlyIncome = 0,
+): FireResult {
+  if (
+    currentMonthlyExpenses < 0 ||
+    fireAge <= currentAge ||
+    currentPortfolio < 0 ||
+    currentMonthlySip < 0 ||
+    preRetirementReturnPercent < 0 ||
+    inflationPercent < 0 ||
+    swrPercent <= 0 ||
+    postFireMonthlyIncome < 0
+  )
+    throw new Error('invalid FIRE inputs')
+
+  const yearsToFire = fireAge - currentAge
+  const netMonthlyExpenses = Math.max(0, currentMonthlyExpenses - postFireMonthlyIncome)
+  const futureAnnualExpenses =
+    netMonthlyExpenses * 12 * Math.pow(1 + inflationPercent / 100, yearsToFire)
+
+  const requiredCorpus = futureAnnualExpenses / (swrPercent / 100)
+  const requiredCorpusUsRule = futureAnnualExpenses / (US_RULE_SWR_PERCENT / 100)
+
+  const projectedPortfolioNoNewSip =
+    currentPortfolio * Math.pow(1 + preRetirementReturnPercent / 100, yearsToFire)
+  const i = preRetirementReturnPercent / 100 / 12
+  const projectedPortfolioWithCurrentSip =
+    projectedPortfolioNoNewSip + sipFutureValue(currentMonthlySip, i, Math.round(yearsToFire * 12))
+
+  const isCoastFire = projectedPortfolioNoNewSip >= requiredCorpus
+  const shortfallOrSurplus = requiredCorpus - projectedPortfolioWithCurrentSip
+
+  const requiredTotalMonthlySip = requiredMonthlySipForTarget(
+    requiredCorpus,
+    preRetirementReturnPercent,
+    yearsToFire,
+    currentPortfolio,
+  )
+  const requiredAdditionalMonthlySip = Math.max(0, requiredTotalMonthlySip - currentMonthlySip)
+
+  return {
+    yearsToFire,
+    futureAnnualExpenses: round2(futureAnnualExpenses),
+    requiredCorpus: round2(requiredCorpus),
+    requiredCorpusUsRule: round2(requiredCorpusUsRule),
+    projectedPortfolioNoNewSip: round2(projectedPortfolioNoNewSip),
+    isCoastFire,
+    projectedPortfolioWithCurrentSip: round2(projectedPortfolioWithCurrentSip),
+    shortfallOrSurplus: round2(shortfallOrSurplus),
+    requiredAdditionalMonthlySip: round2(requiredAdditionalMonthlySip),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Crorepati Calculator — reverse SIP, with optional annual step-up
+// ---------------------------------------------------------------------------
+
+export interface CrorepatiResult {
+  requiredMonthlySip: number
+  requiredMonthlySipWithStepUp: number
+  inflationAdjustedTargetToday: number
+  costOfDelayMonthlySip: number
+}
+
+/**
+ * How much you'd need to invest monthly to reach `targetCorpus` in `years`,
+ * netting off `existingCorpus` grown forward at the same assumed return.
+ * `stepUpPercent` (annual increase to the SIP amount) is solved by
+ * simulation rather than a closed form, since a growing-annuity future
+ * value with monthly compounding but annual step-ups has no simple inverse.
+ * `costOfDelayMonthlySip` shows the flat monthly SIP required for the same
+ * target if started 5 years later than `yearsAvailable` — a common
+ * motivational figure calcwise surfaces to discourage procrastination.
+ */
+export function calculateCrorepati(
+  targetCorpus: number,
+  yearsAvailable: number,
+  annualRatePercent: number,
+  inflationPercent: number,
+  existingCorpus = 0,
+  stepUpPercent = 0,
+): CrorepatiResult {
+  if (targetCorpus <= 0 || yearsAvailable <= 0 || annualRatePercent < 0 || existingCorpus < 0 || stepUpPercent < 0)
+    throw new Error('invalid Crorepati inputs')
+
+  const requiredMonthlySip = requiredMonthlySipForTarget(
+    targetCorpus,
+    annualRatePercent,
+    yearsAvailable,
+    existingCorpus,
+  )
+
+  const netTarget = Math.max(
+    0,
+    targetCorpus - existingCorpus * Math.pow(1 + annualRatePercent / 100, yearsAvailable),
+  )
+  const requiredMonthlySipWithStepUp =
+    stepUpPercent === 0
+      ? requiredMonthlySip
+      : round2(solveStepUpSip(netTarget, annualRatePercent, yearsAvailable, stepUpPercent))
+
+  const inflationAdjustedTargetToday =
+    targetCorpus / Math.pow(1 + inflationPercent / 100, yearsAvailable)
+
+  const delayedYears = Math.max(0.5, yearsAvailable - 5)
+  const costOfDelayMonthlySip = requiredMonthlySipForTarget(
+    targetCorpus,
+    annualRatePercent,
+    delayedYears,
+    existingCorpus,
+  )
+
+  return {
+    requiredMonthlySip,
+    requiredMonthlySipWithStepUp,
+    inflationAdjustedTargetToday: round2(inflationAdjustedTargetToday),
+    costOfDelayMonthlySip,
+  }
+}
+
+/** Month-by-month simulation solved via bisection on the starting SIP amount. */
+function solveStepUpSip(
+  netTarget: number,
+  annualRatePercent: number,
+  years: number,
+  stepUpPercent: number,
+): number {
+  if (netTarget <= 0) return 0
+  const futureValueForStartingSip = (startingMonthly: number): number => {
+    const i = annualRatePercent / 100 / 12
+    let balance = 0
+    let currentMonthly = startingMonthly
+    const totalMonths = Math.round(years * 12)
+    for (let m = 1; m <= totalMonths; m++) {
+      balance = balance * (1 + i) + currentMonthly
+      if (m % 12 === 0) currentMonthly *= 1 + stepUpPercent / 100
+    }
+    return balance
+  }
+  let lo = 0
+  let hi = netTarget // a generous upper bound: investing the whole target in month 1 alone exceeds any realistic requirement
+  for (let iter = 0; iter < 60; iter++) {
+    const mid = (lo + hi) / 2
+    if (futureValueForStartingSip(mid) < netTarget) lo = mid
+    else hi = mid
+  }
+  return (lo + hi) / 2
+}
+
+// ---------------------------------------------------------------------------
+// Net Worth Calculator
+// ---------------------------------------------------------------------------
+
+export interface NetWorthAssets {
+  cash: number
+  fixedDeposits: number
+  equityAndMutualFunds: number
+  epf: number
+  ppf: number
+  nps: number
+  gold: number
+  property: number
+  vehicle: number
+  otherAssets: number
+}
+
+export interface NetWorthLiabilities {
+  homeLoan: number
+  carLoan: number
+  personalLoan: number
+  educationLoan: number
+  creditCardDue: number
+  otherLiabilities: number
+}
+
+export interface NetWorthResult {
+  totalAssets: number
+  totalLiabilities: number
+  netWorth: number
+  liquidNetWorth: number
+  debtToAssetPercent: number
+  ageIncomeBenchmark: number
+  monthsToOneCrore: number | null
+}
+
+const ILLIQUID_ASSET_KEYS: (keyof NetWorthAssets)[] = ['epf', 'ppf', 'nps', 'property', 'vehicle']
+const ONE_CRORE = 10000000
+const ONE_CRORE_PROJECTION_RATE_PERCENT = 12
+
+/**
+ * `liquidNetWorth` excludes retirement-locked (EPF/PPF/NPS) and illiquid
+ * (property/vehicle) assets — money a family could actually access quickly.
+ * `ageIncomeBenchmark` (age × annual income ÷ 10) is a commonly cited rough
+ * target, not an authoritative or government-published figure — surfaced
+ * only as a rough cross-check, same spirit as the HLV income multiplier.
+ * `monthsToOneCrore` projects the current SIP (if any) plus existing
+ * investable assets forward at an illustrative 12%; null if a ₹1 crore
+ * net worth is already reached or no SIP is given with a shortfall.
+ */
+export function calculateNetWorth(
+  assets: NetWorthAssets,
+  liabilities: NetWorthLiabilities,
+  age: number,
+  annualIncome: number,
+  monthlySip = 0,
+): NetWorthResult {
+  const totalAssets = Object.values(assets).reduce((sum, v) => sum + Math.max(0, v), 0)
+  const totalLiabilities = Object.values(liabilities).reduce((sum, v) => sum + Math.max(0, v), 0)
+  const netWorth = totalAssets - totalLiabilities
+
+  const illiquidTotal = ILLIQUID_ASSET_KEYS.reduce((sum, k) => sum + Math.max(0, assets[k]), 0)
+  const liquidNetWorth = totalAssets - illiquidTotal - totalLiabilities
+
+  const debtToAssetPercent = totalAssets > 0 ? (totalLiabilities / totalAssets) * 100 : 0
+  const ageIncomeBenchmark = (Math.max(0, age) * Math.max(0, annualIncome)) / 10
+
+  let monthsToOneCrore: number | null = null
+  if (netWorth < ONE_CRORE) {
+    const investableAssets = totalAssets - illiquidTotal
+    const i = ONE_CRORE_PROJECTION_RATE_PERCENT / 100 / 12
+    if (monthlySip > 0 || investableAssets > 0) {
+      let balance = Math.max(0, investableAssets)
+      let months = 0
+      const maxMonths = 100 * 12
+      while (balance < ONE_CRORE - totalLiabilities && months < maxMonths) {
+        balance = balance * (1 + i) + monthlySip
+        months++
+      }
+      monthsToOneCrore = months < maxMonths ? months : null
+    }
+  }
+
+  return {
+    totalAssets: round2(totalAssets),
+    totalLiabilities: round2(totalLiabilities),
+    netWorth: round2(netWorth),
+    liquidNetWorth: round2(liquidNetWorth),
+    debtToAssetPercent: round2(debtToAssetPercent),
+    ageIncomeBenchmark: round2(ageIncomeBenchmark),
+    monthsToOneCrore,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// BH (Bharat) Series Vehicle Registration Tax Calculator
+// ---------------------------------------------------------------------------
+
+export type BhSeriesFuelType = 'petrol' | 'diesel' | 'electric'
+
+export interface BhSeriesResult {
+  slabPercent: number
+  biennialTax: number
+  totalPayments: number
+  totalTaxOverLifetime: number
+}
+
+/**
+ * MoRTH Rule 51B (Central Motor Vehicles Rules, 1989): BH-series one-time
+ * tax is paid in 2-year instalments for the vehicle's first 14 years (7
+ * payments), then annually thereafter at roughly half the biennial rate.
+ * Slabs are nationally uniform (not state-dependent, unlike normal
+ * registration) — verified via web search against MoRTH notification
+ * summaries before implementing. Electric vehicles get a flat rebate versus
+ * petrol/CNG at the same price band; diesel carries a surcharge.
+ */
+export function bhSeriesSlabPercent(invoicePriceExGst: number, fuelType: BhSeriesFuelType): number {
+  const band = invoicePriceExGst <= 1000000 ? 0 : invoicePriceExGst <= 2000000 ? 1 : 2
+  const table: Record<BhSeriesFuelType, number[]> = {
+    petrol: [8, 10, 12],
+    diesel: [10, 12, 14],
+    electric: [6, 8, 10],
+  }
+  return table[fuelType][band]
+}
+
+export function calculateBhSeriesTax(
+  invoicePriceExGst: number,
+  fuelType: BhSeriesFuelType,
+  yearsOfOwnership = 14,
+): BhSeriesResult {
+  if (invoicePriceExGst <= 0 || yearsOfOwnership <= 0) throw new Error('invalid BH-series inputs')
+
+  const slabPercent = bhSeriesSlabPercent(invoicePriceExGst, fuelType)
+  // (invoice price × slab% × 1.25 × 2) ÷ 15 — the ×1.25 uplift and ÷15
+  // (not ÷14) are the MoRTH-notified constants for the 2-year instalment.
+  const biennialTax = (invoicePriceExGst * (slabPercent / 100) * 1.25 * 2) / 15
+
+  const biennialPayments = Math.min(7, Math.ceil(yearsOfOwnership / 2))
+  const remainingAnnualYears = Math.max(0, yearsOfOwnership - biennialPayments * 2)
+  const annualTaxAfter14Years = biennialTax / 2
+  const totalTaxOverLifetime =
+    biennialPayments * biennialTax + remainingAnnualYears * annualTaxAfter14Years
+
+  return {
+    slabPercent,
+    biennialTax: round2(biennialTax),
+    totalPayments: biennialPayments + remainingAnnualYears,
+    totalTaxOverLifetime: round2(totalTaxOverLifetime),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Fuel Cost Comparison Calculator (petrol/diesel/CNG/EV + EV break-even)
+// ---------------------------------------------------------------------------
+
+export interface FuelOption {
+  label: string
+  pricePerUnit: number // ₹ per litre/kg for fuel, ₹ per kWh for EV
+  mileage: number // km per litre/kg for fuel, km per kWh for EV
+}
+
+export interface FuelCostComparisonResult {
+  costPerKm: number
+  dailyCost: number
+  monthlyCost: number
+  annualCost: number
+}
+
+export function calculateFuelCostComparison(
+  option: FuelOption,
+  dailyKm: number,
+): FuelCostComparisonResult {
+  if (option.pricePerUnit < 0 || option.mileage <= 0 || dailyKm < 0)
+    throw new Error('invalid fuel cost inputs')
+  const costPerKm = option.pricePerUnit / option.mileage
+  return {
+    costPerKm: round2(costPerKm),
+    dailyCost: round2(costPerKm * dailyKm),
+    monthlyCost: round2(costPerKm * dailyKm * 30),
+    annualCost: round2(costPerKm * dailyKm * 365),
+  }
+}
+
+export interface EvBreakEvenResult {
+  priceDifference: number
+  perKmSavings: number
+  breakEvenKm: number
+  breakEvenMonths: number | null
+}
+
+/**
+ * How many km (and, given a daily-driving assumption, how many months) of
+ * driving it takes for an EV's lower running cost to offset its price
+ * premium over a petrol/diesel alternative. Returns null months if the EV
+ * is not cheaper to run (no break-even exists) or daily distance is 0.
+ */
+export function calculateEvBreakEven(
+  evPrice: number,
+  petrolPrice: number,
+  evCostPerKm: number,
+  petrolCostPerKm: number,
+  dailyKm: number,
+): EvBreakEvenResult {
+  if (evPrice < 0 || petrolPrice < 0 || evCostPerKm < 0 || petrolCostPerKm < 0 || dailyKm < 0)
+    throw new Error('invalid EV break-even inputs')
+
+  const priceDifference = Math.max(0, evPrice - petrolPrice)
+  const perKmSavings = petrolCostPerKm - evCostPerKm
+  const breakEvenKm = perKmSavings > 0 ? priceDifference / perKmSavings : Infinity
+  const breakEvenMonths =
+    perKmSavings > 0 && dailyKm > 0 ? round2(breakEvenKm / (dailyKm * 30)) : null
+
+  return {
+    priceDifference: round2(priceDifference),
+    perKmSavings: round2(perKmSavings),
+    breakEvenKm: Number.isFinite(breakEvenKm) ? round2(breakEvenKm) : Infinity,
+    breakEvenMonths,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Inflation-Adjusted Retirement Planner
+// ---------------------------------------------------------------------------
+
+export interface RetirementPlanResult {
+  yearsToRetirement: number
+  retirementDurationYears: number
+  futureMonthlyExpenses: number
+  requiredCorpus: number
+  projectedCorpus: number
+  surplusOrShortfall: number
+  requiredAdditionalMonthlySip: number
+  swrSanityCheckCorpus: number
+}
+
+const RETIREMENT_SWR_SANITY_CHECK_PERCENT = 3.5
+
+/**
+ * More granular than the flat safe-withdrawal-rate FIRE method: projects
+ * post-retirement expenses forward with SEPARATE general and medical
+ * inflation rates (medical costs typically outpace general inflation in
+ * India), nets off any pension/rental income, then takes the present value
+ * of that rising expense stream over the retirement's actual expected
+ * duration, discounted at the assumed post-retirement return — rather than
+ * a flat multiple of one year's expenses. `swrSanityCheckCorpus` cross-
+ * checks against the simpler 3.5%-of-expenses FIRE-style figure.
+ */
+export function calculateRetirementPlan(
+  currentAge: number,
+  retirementAge: number,
+  lifeExpectancy: number,
+  currentMonthlyExpenses: number,
+  generalInflationPercent: number,
+  medicalInflationPercent: number,
+  medicalExpenseSharePercent: number,
+  preRetirementReturnPercent: number,
+  postRetirementReturnPercent: number,
+  existingRetirementSavings: number,
+  currentMonthlySip: number,
+  monthlyPensionOrRentalIncome = 0,
+): RetirementPlanResult {
+  if (
+    retirementAge <= currentAge ||
+    lifeExpectancy <= retirementAge ||
+    currentMonthlyExpenses < 0 ||
+    generalInflationPercent < 0 ||
+    medicalInflationPercent < 0 ||
+    medicalExpenseSharePercent < 0 ||
+    medicalExpenseSharePercent > 100 ||
+    preRetirementReturnPercent < 0 ||
+    postRetirementReturnPercent < 0 ||
+    existingRetirementSavings < 0 ||
+    currentMonthlySip < 0 ||
+    monthlyPensionOrRentalIncome < 0
+  )
+    throw new Error('invalid retirement-plan inputs')
+
+  const yearsToRetirement = retirementAge - currentAge
+  const retirementDurationYears = lifeExpectancy - retirementAge
+
+  const medicalShare = medicalExpenseSharePercent / 100
+  const generalMonthlyExpenses = currentMonthlyExpenses * (1 - medicalShare)
+  const medicalMonthlyExpenses = currentMonthlyExpenses * medicalShare
+
+  const futureGeneralExpenses =
+    generalMonthlyExpenses * Math.pow(1 + generalInflationPercent / 100, yearsToRetirement)
+  const futureMedicalExpenses =
+    medicalMonthlyExpenses * Math.pow(1 + medicalInflationPercent / 100, yearsToRetirement)
+  const futureMonthlyExpenses = futureGeneralExpenses + futureMedicalExpenses
+
+  const netFutureAnnualExpenses = Math.max(
+    0,
+    (futureMonthlyExpenses - monthlyPensionOrRentalIncome) * 12,
+  )
+
+  // Present value of a rising (post-retirement inflation-adjusted) annuity,
+  // discounted at the post-retirement return, blending the general/medical
+  // split's respective inflation rates via their expense-weighted average.
+  const blendedPostRetirementInflation =
+    generalInflationPercent * (1 - medicalShare) + medicalInflationPercent * medicalShare
+  const realReturn =
+    (1 + postRetirementReturnPercent / 100) / (1 + blendedPostRetirementInflation / 100) - 1
+  const n = retirementDurationYears
+  const requiredCorpus =
+    Math.abs(realReturn) < 1e-9
+      ? netFutureAnnualExpenses * n
+      : netFutureAnnualExpenses * ((1 - Math.pow(1 + realReturn, -n)) / realReturn) * (1 + realReturn)
+
+  const projectedCorpus =
+    existingRetirementSavings * Math.pow(1 + preRetirementReturnPercent / 100, yearsToRetirement) +
+    sipFutureValue(currentMonthlySip, preRetirementReturnPercent / 100 / 12, Math.round(yearsToRetirement * 12))
+
+  const surplusOrShortfall = projectedCorpus - requiredCorpus
+
+  const requiredTotalMonthlySip = requiredMonthlySipForTarget(
+    requiredCorpus,
+    preRetirementReturnPercent,
+    yearsToRetirement,
+    existingRetirementSavings,
+  )
+  const requiredAdditionalMonthlySip = Math.max(0, requiredTotalMonthlySip - currentMonthlySip)
+
+  const swrSanityCheckCorpus = futureMonthlyExpenses * 12 / (RETIREMENT_SWR_SANITY_CHECK_PERCENT / 100)
+
+  return {
+    yearsToRetirement,
+    retirementDurationYears,
+    futureMonthlyExpenses: round2(futureMonthlyExpenses),
+    requiredCorpus: round2(requiredCorpus),
+    projectedCorpus: round2(projectedCorpus),
+    surplusOrShortfall: round2(surplusOrShortfall),
+    requiredAdditionalMonthlySip: round2(requiredAdditionalMonthlySip),
+    swrSanityCheckCorpus: round2(swrSanityCheckCorpus),
   }
 }

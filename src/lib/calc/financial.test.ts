@@ -1,10 +1,18 @@
 import { describe, expect, it } from 'vitest'
 import {
   ageBasedIncomeMultiplier,
+  bhSeriesSlabPercent,
+  calculateBhSeriesTax,
   calculateCapitalGainsTax,
+  calculateCrorepati,
   calculateEmi,
+  calculateEvBreakEven,
+  calculateFire,
+  calculateFuelCostComparison,
   calculateHumanLifeValue,
+  calculateNetWorth,
   calculateNps,
+  calculateRetirementPlan,
   calculateSection80GG,
   isHraMetroCity,
   calculatePpf,
@@ -21,6 +29,7 @@ import {
   findRegimeBreakEvenDeduction,
   monthsBetweenDates,
   npsMinimumAnnuityPercent,
+  requiredMonthlySipForTarget,
   simulateFd,
   simulatePpf,
   totalOldRegimeDeductions,
@@ -529,3 +538,134 @@ describe('calculateCapitalGainsTax', () => {
 function round2(n: number) {
   return Math.round((n + Number.EPSILON) * 100) / 100
 }
+
+describe('requiredMonthlySipForTarget', () => {
+  it('matches calculateSip\'s forward maturity value when inverted', () => {
+    const forward = calculateSip(20000, 12, 15)
+    const monthly = requiredMonthlySipForTarget(forward.maturityValue, 12, 15)
+    expect(monthly).toBeCloseTo(20000, 0)
+  })
+  it('nets off an existing lump sum grown at the same rate', () => {
+    const withoutLumpSum = requiredMonthlySipForTarget(10000000, 12, 20, 0)
+    const withLumpSum = requiredMonthlySipForTarget(10000000, 12, 20, 2000000)
+    expect(withLumpSum).toBeLessThan(withoutLumpSum)
+  })
+  it('returns 0 once the existing lump sum alone clears the target', () => {
+    expect(requiredMonthlySipForTarget(1000000, 12, 10, 5000000)).toBe(0)
+  })
+})
+
+describe('calculateFire', () => {
+  it('flags coast FIRE when the existing portfolio alone clears the required corpus', () => {
+    const r = calculateFire(30000, 45, 60, 30000000, 0, 10, 6, 3.5)
+    expect(r.isCoastFire).toBe(true)
+    expect(r.requiredAdditionalMonthlySip).toBe(0)
+  })
+  it('requires a larger corpus at a lower safe withdrawal rate for the same expenses', () => {
+    const conservative = calculateFire(50000, 30, 45, 0, 0, 11, 6, 3)
+    const aggressive = calculateFire(50000, 30, 45, 0, 0, 11, 6, 4)
+    expect(conservative.requiredCorpus).toBeGreaterThan(aggressive.requiredCorpus)
+  })
+  it('reduces net expenses (and so required corpus) when post-FIRE income is provided', () => {
+    const noIncome = calculateFire(50000, 30, 45, 0, 0, 11, 6, 3.5)
+    const withIncome = calculateFire(50000, 30, 45, 0, 0, 11, 6, 3.5, 20000)
+    expect(withIncome.requiredCorpus).toBeLessThan(noIncome.requiredCorpus)
+  })
+})
+
+describe('calculateCrorepati', () => {
+  it('a step-up SIP requires a lower starting monthly amount than a flat SIP for the same target', () => {
+    const r = calculateCrorepati(10000000, 15, 12, 6, 0, 10)
+    expect(r.requiredMonthlySipWithStepUp).toBeLessThan(r.requiredMonthlySip)
+  })
+  it('shows a higher required SIP for a delayed start (cost of delay)', () => {
+    const r = calculateCrorepati(10000000, 20, 12, 6)
+    expect(r.costOfDelayMonthlySip).toBeGreaterThan(r.requiredMonthlySip)
+  })
+  it('discounts the nominal target by inflation for the "in today\'s money" figure', () => {
+    const r = calculateCrorepati(10000000, 15, 12, 6)
+    expect(r.inflationAdjustedTargetToday).toBeLessThan(10000000)
+  })
+})
+
+describe('calculateNetWorth', () => {
+  const assets = {
+    cash: 100000, fixedDeposits: 200000, equityAndMutualFunds: 500000,
+    epf: 300000, ppf: 200000, nps: 100000, gold: 100000,
+    property: 5000000, vehicle: 500000, otherAssets: 0,
+  }
+  const liabilities = {
+    homeLoan: 2000000, carLoan: 300000, personalLoan: 0,
+    educationLoan: 0, creditCardDue: 20000, otherLiabilities: 0,
+  }
+  it('nets total assets against total liabilities', () => {
+    const r = calculateNetWorth(assets, liabilities, 35, 1500000)
+    expect(r.totalAssets).toBe(7000000)
+    expect(r.totalLiabilities).toBe(2320000)
+    expect(r.netWorth).toBe(4680000)
+  })
+  it('excludes retirement-locked and illiquid assets from liquid net worth', () => {
+    const r = calculateNetWorth(assets, liabilities, 35, 1500000)
+    expect(r.liquidNetWorth).toBeLessThan(r.netWorth)
+  })
+  it('reports null months-to-1cr when neither SIP nor investable assets are given', () => {
+    const r = calculateNetWorth(
+      { cash: 0, fixedDeposits: 0, equityAndMutualFunds: 0, epf: 0, ppf: 0, nps: 0, gold: 0, property: 0, vehicle: 0, otherAssets: 0 },
+      liabilities, 35, 1500000, 0,
+    )
+    expect(r.monthsToOneCrore).toBeNull()
+  })
+})
+
+describe('bhSeriesSlabPercent + calculateBhSeriesTax', () => {
+  it('matches the MoRTH-notified slab table by price band and fuel type', () => {
+    expect(bhSeriesSlabPercent(900000, 'petrol')).toBe(8)
+    expect(bhSeriesSlabPercent(1500000, 'diesel')).toBe(12)
+    expect(bhSeriesSlabPercent(2500000, 'electric')).toBe(10)
+  })
+  it('gives electric a lower slab than petrol, and diesel a higher one, at the same price band', () => {
+    expect(bhSeriesSlabPercent(1500000, 'electric')).toBeLessThan(bhSeriesSlabPercent(1500000, 'petrol'))
+    expect(bhSeriesSlabPercent(1500000, 'diesel')).toBeGreaterThan(bhSeriesSlabPercent(1500000, 'petrol'))
+  })
+  it('computes the biennial tax via the MoRTH formula and totals 7 biennial payments over 14 years', () => {
+    const r = calculateBhSeriesTax(900000, 'petrol', 14)
+    expect(r.biennialTax).toBe(12000)
+    expect(r.totalPayments).toBe(7)
+    expect(r.totalTaxOverLifetime).toBe(84000)
+  })
+})
+
+describe('calculateFuelCostComparison + calculateEvBreakEven', () => {
+  it('computes cost per km as price divided by mileage', () => {
+    const r = calculateFuelCostComparison({ label: 'Petrol', pricePerUnit: 100, mileage: 20 }, 40)
+    expect(r.costPerKm).toBe(5)
+    expect(r.dailyCost).toBe(200)
+  })
+  it('finds a finite break-even distance when the cheaper-to-run option costs more upfront', () => {
+    const r = calculateEvBreakEven(1500000, 1000000, 1.5, 5.5, 40)
+    expect(r.breakEvenKm).toBeGreaterThan(0)
+    expect(r.breakEvenMonths).not.toBeNull()
+  })
+  it('returns no break-even (null months) when running costs are equal', () => {
+    const r = calculateEvBreakEven(1500000, 1000000, 5, 5, 40)
+    expect(r.breakEvenMonths).toBeNull()
+  })
+})
+
+describe('calculateRetirementPlan', () => {
+  it('produces a larger required corpus when medical inflation exceeds general inflation', () => {
+    const lowMedical = calculateRetirementPlan(30, 60, 85, 50000, 6, 6, 20, 11, 7, 0, 0)
+    const highMedical = calculateRetirementPlan(30, 60, 85, 50000, 6, 10, 20, 11, 7, 0, 0)
+    expect(highMedical.requiredCorpus).toBeGreaterThan(lowMedical.requiredCorpus)
+  })
+  it('reduces the required corpus when pension/rental income offsets expenses', () => {
+    const noIncome = calculateRetirementPlan(30, 60, 85, 50000, 6, 8, 20, 11, 7, 0, 0)
+    const withIncome = calculateRetirementPlan(30, 60, 85, 50000, 6, 8, 20, 11, 7, 0, 0, 20000)
+    expect(withIncome.requiredCorpus).toBeLessThan(noIncome.requiredCorpus)
+  })
+  it('reports a surplus once projected corpus exceeds the required corpus', () => {
+    const r = calculateRetirementPlan(50, 60, 75, 20000, 5, 6, 15, 8, 6, 20000000, 5000)
+    expect(r.surplusOrShortfall).toBeGreaterThan(0)
+    expect(r.requiredAdditionalMonthlySip).toBe(0)
+  })
+})

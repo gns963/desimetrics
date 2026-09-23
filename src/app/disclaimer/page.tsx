@@ -52,13 +52,14 @@ export default function DisclaimerPage() {
         Financial calculators
       </h2>
       <p>
-        Our 12 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
-        GST, SIP, Home Loan EMI, Personal Loan EMI, PPF, FD, Gratuity, HRA, NPS
-        and Human Life Value) are for general guidance only and are not tax,
-        legal, investment or insurance advice. Each produces a needs or planning
-        estimate built from the inputs you provide and the rules verified at the
-        time we last checked them — not a filed return, a bank/insurer quote, or
-        a substitute for a qualified professional.
+        Our 18 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
+        GST, SIP, Home Loan EMI, Personal Loan EMI, PPF, FD, Gratuity, HRA, NPS,
+        Human Life Value, FIRE, Net Worth, Crorepati, BH Series, EV vs Fuel Cost
+        and the Retirement Planner) are for general guidance only and are not
+        tax, legal, investment or insurance advice. Each produces a needs or
+        planning estimate built from the inputs you provide and the rules
+        verified at the time we last checked them — not a filed return, a
+        bank/insurer quote, or a substitute for a qualified professional.
       </p>
       <p>
         Known limitations, current as of this page&apos;s last update:
@@ -109,8 +110,43 @@ export default function DisclaimerPage() {
           <strong>Human Life Value</strong> — a needs estimate, not an
           insurance premium quote or product recommendation.
         </li>
+        <li>
+          <strong>FIRE &amp; Retirement Planner</strong> — planning aids built
+          on standard safe-withdrawal-rate and present-value methodologies,
+          not guarantees; expected returns and inflation are assumptions you
+          choose, not promised outcomes.
+        </li>
+        <li>
+          <strong>Net Worth</strong> — age-based benchmarks shown are
+          commonly cited rules of thumb, not government statistics or a
+          target you must hit.
+        </li>
+        <li>
+          <strong>Crorepati</strong> — the reverse-SIP calculation is exact
+          for the inputs you enter, but expected return and inflation are
+          assumptions; returns are market-linked and not guaranteed.
+        </li>
+        <li>
+          <strong>BH Series</strong> — figures are checked against MoRTH
+          Rule 51B but are not legal advice; confirm the exact amount and
+          your current eligibility with your RTO before applying or paying.
+        </li>
+        <li>
+          <strong>EV vs Fuel Cost</strong> — running-cost estimates only; it
+          does not model maintenance costs or resale value, which would
+          shift a real EV-vs-petrol decision further in the EV&apos;s favour.
+        </li>
       </ul>
       <p>Consult a qualified professional before acting on any of these figures.</p>
+      <p>
+        We deliberately do not offer a state-wise Road Tax / Motor Vehicle Tax
+        calculator: unlike BH-series tax, ordinary road tax varies by state
+        under India&apos;s constitutional division of powers, and published
+        state-wise rate tables we reviewed disagreed with each other on the
+        same state&apos;s rate — we would rather not publish a number than
+        publish one we can&apos;t stand behind. Use your state transport
+        department&apos;s official Vahan portal for that figure.
+      </p>
 
       <h2 className="font-display text-xl font-semibold text-ash">
         No affiliation

@@ -103,6 +103,48 @@ const cards = [
     body: 'Compute gratuity from salary and service years using the 15/26 formula.',
     cta: 'Open →',
   },
+  {
+    href: '/financial/fire-calculator',
+    emoji: '🔥',
+    title: 'FIRE Calculator',
+    body: 'Find your Financial Independence, Retire Early corpus and required SIP.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/net-worth-calculator',
+    emoji: '💰',
+    title: 'Net Worth Calculator',
+    body: 'Add up your assets, subtract your liabilities and loans.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/crorepati-calculator',
+    emoji: '💎',
+    title: 'Crorepati Calculator',
+    body: 'The monthly SIP needed to hit ₹1 crore — or any goal.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/bh-series-calculator',
+    emoji: '🚗',
+    title: 'BH Series Calculator',
+    body: 'Bharat Series vehicle registration tax, by price and fuel type.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/ev-vs-fuel-cost-calculator',
+    emoji: '⛽',
+    title: 'EV vs Fuel Cost Calculator',
+    body: 'Compare petrol, diesel, CNG and EV running costs side by side.',
+    cta: 'Open →',
+  },
+  {
+    href: '/financial/retirement-planner',
+    emoji: '🌅',
+    title: 'Retirement Planner',
+    body: 'Inflation-adjusted corpus, with separate medical inflation.',
+    cta: 'Open →',
+  },
 ]
 
 const breadcrumb = breadcrumbLd([
@@ -147,9 +189,9 @@ export default function FinancialHubPage() {
           </>
         }
         h1="Financial Calculators"
-        subtitle="Fast, accurate personal-finance tools for India — loan EMIs, PPF and FD growth, NPS, HRA, capital gains tax, GST, mutual fund SIPs, income tax regime comparison and gratuity. Free and updated for the current financial year."
+        subtitle="Fast, accurate personal-finance tools for India — loan EMIs, PPF and FD growth, NPS, HRA, capital gains tax, GST, mutual fund SIPs, income tax regime comparison, gratuity, FIRE, net worth, and more. Free and updated for the current financial year."
         stats={[
-          { icon: '🧮', big: '12', small: 'Calculators', tone: 'hub' },
+          { icon: '🧮', big: '18', small: 'Calculators', tone: 'hub' },
           { icon: '📅', big: 'FY 2026-27', small: 'Current year', tone: 'hub' },
           { icon: '🔓', big: 'Free', small: 'No login', tone: 'hub' },
           { icon: '🇮🇳', big: 'India', small: 'Coverage', tone: 'hub' },
@@ -187,9 +229,10 @@ export default function FinancialHubPage() {
           numbers Indian households search for most — from what your home or
           personal loan EMI will be, to how much your PPF or FD could grow, what
           your NPS corpus and exit split look like under the 2026 rules, how much
-          HRA and capital gains tax you owe, which tax regime saves you more, and
-          how much life cover your family would actually need. Same clean,
-          no-login tools, all in one place.
+          HRA and capital gains tax you owe, which tax regime saves you more, how
+          much life cover your family would actually need, your FIRE number and
+          total net worth, and even your Bharat-series vehicle registration tax.
+          Same clean, no-login tools, all in one place.
         </p>
       </section>
 
@@ -203,9 +246,14 @@ export default function FinancialHubPage() {
           notifications, income tax and capital gains rules against the
           Finance Act/CBDT (including the Budget 2024 LTCG/STCG revisions),
           NPS withdrawal rules against PFRDA&apos;s 2026 amendments, PPF
-          against the current quarterly-notified small-savings rate, and
-          gratuity against the Payment of Gratuity Act. Tax law and rates
-          change periodically; for anything with real financial
+          against the current quarterly-notified small-savings rate,
+          gratuity against the Payment of Gratuity Act, and BH-series vehicle
+          tax against MoRTH Rule 51B. FIRE, net worth and retirement-planning
+          figures use standard, widely-taught financial-planning
+          methodologies rather than a single official source — age-based
+          benchmarks shown alongside them are commonly cited rules of thumb,
+          not government statistics. Tax law and rates change periodically;
+          for anything with real financial
           consequences (filing, invoicing, a major investment decision),
           verify against the current official notification or a
           professional rather than relying solely on any calculator. See
