@@ -17,13 +17,20 @@ export interface HlvCalculatorTexts {
   discountUnit: string
   liabilitiesLabel: string
   existingCoverLabel: string
+  ageLabel: string
+  ageUnit: string
+  goalsLabel: string
+  goalsHint: string
   ctaLabel: string
   disclaimer: string
   coverLabel: string
   netContributionLabel: string
   presentValueLabel: string
   liabilitiesRowLabel: string
+  goalsRowLabel: string
   existingCoverRowLabel: string
+  multiplierTitle: string
+  multiplierBody: string
 }
 
 const defaultTexts: HlvCalculatorTexts = {
@@ -38,13 +45,20 @@ const defaultTexts: HlvCalculatorTexts = {
   discountUnit: '%',
   liabilitiesLabel: 'Outstanding loans (₹)',
   existingCoverLabel: 'Existing life cover + liquid savings (₹)',
+  ageLabel: 'Your current age',
+  ageUnit: 'yrs',
+  goalsLabel: "Children's education + marriage goals (₹)",
+  goalsHint: 'Future lump-sum costs your family would still need to fund, in today\'s money.',
   ctaLabel: 'Calculate Recommended Cover',
   disclaimer: 'This estimates life-cover need, not a premium quote — actual policy pricing depends on the insurer and product.',
   coverLabel: 'Recommended additional life cover',
   netContributionLabel: 'Net annual contribution to family',
   presentValueLabel: 'Present value of future income',
   liabilitiesRowLabel: 'Plus outstanding liabilities',
+  goalsRowLabel: "Plus education & marriage goals",
   existingCoverRowLabel: 'Minus existing cover & savings',
+  multiplierTitle: 'Sanity check: income-multiple method',
+  multiplierBody: 'A common rule of thumb used by insurer calculators — not a substitute for the needs-based figure above.',
 }
 
 export default function HlvCalculator({
@@ -58,6 +72,8 @@ export default function HlvCalculator({
   const [discountRate, setDiscountRate] = useState(6)
   const [liabilities, setLiabilities] = useState(2000000)
   const [existingCover, setExistingCover] = useState(500000)
+  const [age, setAge] = useState(35)
+  const [goals, setGoals] = useState(1500000)
 
   const result = useMemo(
     () =>
@@ -68,8 +84,10 @@ export default function HlvCalculator({
         Math.max(0.1, discountRate),
         Math.max(0, liabilities),
         Math.max(0, existingCover),
+        Math.max(0, goals),
+        Math.max(1, age),
       ),
-    [income, selfExpenses, years, discountRate, liabilities, existingCover],
+    [income, selfExpenses, years, discountRate, liabilities, existingCover, goals, age],
   )
 
   const fieldCls =
@@ -130,6 +148,34 @@ export default function HlvCalculator({
         />
 
         <div>
+          <label htmlFor="hlv-age" className="mb-1.5 block text-sm font-medium text-ash">
+            {texts.ageLabel}
+          </label>
+          <input
+            id="hlv-age"
+            type="number"
+            min={18}
+            max={70}
+            value={age}
+            onChange={(e) => setAge(Number(e.target.value) || 0)}
+            className={fieldCls}
+          />
+        </div>
+        <div>
+          <label htmlFor="hlv-goals" className="mb-1.5 block text-sm font-medium text-ash">
+            {texts.goalsLabel}
+          </label>
+          <input
+            id="hlv-goals"
+            type="number"
+            min={0}
+            value={goals}
+            onChange={(e) => setGoals(Number(e.target.value) || 0)}
+            className={fieldCls}
+          />
+          <p className="mt-1 text-xs text-ash/50">{texts.goalsHint}</p>
+        </div>
+        <div>
           <label htmlFor="hlv-liabilities" className="mb-1.5 block text-sm font-medium text-ash">
             {texts.liabilitiesLabel}
           </label>
@@ -187,12 +233,25 @@ export default function HlvCalculator({
                 <td className="py-1.5 text-right tabular-nums">+{formatINR(liabilities)}</td>
               </tr>
               <tr>
+                <td className="py-1.5 text-ash/70">{texts.goalsRowLabel}</td>
+                <td className="py-1.5 text-right tabular-nums">+{formatINR(goals)}</td>
+              </tr>
+              <tr>
                 <td className="py-1.5 text-ash/70">{texts.existingCoverRowLabel}</td>
                 <td className="py-1.5 text-right tabular-nums">-{formatINR(existingCover)}</td>
               </tr>
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-hairline bg-mist/30 p-4">
+        <p className="text-sm font-medium text-ash">{texts.multiplierTitle}</p>
+        <p className="mt-1 text-xs text-ash/60">{texts.multiplierBody}</p>
+        <p className="mt-2 text-sm tabular-nums text-ink-navy">
+          <span className="font-bold">{formatINR(result.incomeMultiplierEstimate)}</span> ({result.incomeMultiplier}x
+          annual income at age {age})
+        </p>
       </div>
     </CalculatorCard>
   )

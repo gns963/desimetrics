@@ -1633,16 +1633,35 @@ export function calculateNps(
 export interface HlvResult {
   netAnnualContribution: number
   presentValueOfIncome: number
+  lumpSumGoals: number
   totalBeforeOffsets: number
   recommendedCover: number
+  incomeMultiplierEstimate: number
+  incomeMultiplier: number
+}
+
+/**
+ * Common industry rule-of-thumb age band used by insurer HLV calculators
+ * (IndiaFirst Life, Axis Max Life, ICICI Prudential and others) for the
+ * income-multiple sanity check — not an IRDAI-mandated table, so it is
+ * surfaced only as a secondary cross-check, never the primary answer.
+ */
+export function ageBasedIncomeMultiplier(age: number): number {
+  if (age < 25) return 25
+  if (age <= 35) return 20
+  if (age <= 45) return 15
+  if (age <= 55) return 10
+  return 6
 }
 
 /**
  * Standard income-replacement HLV method taught in Indian financial-planning
  * practice: the present value of the income a family would lose, plus
- * outstanding debts, minus cover/savings that already exist. This is a needs
- * estimate, not a premium quote — actual policy pricing depends on the
- * insurer, medicals and product chosen, none of which this models.
+ * outstanding debts and lump-sum goals (children's education/marriage),
+ * minus cover/savings that already exist. This is a needs estimate, not a
+ * premium quote — actual policy pricing depends on the insurer, medicals and
+ * product chosen, none of which this models. `incomeMultiplierEstimate` is a
+ * secondary sanity-check figure, not the recommended cover itself.
  */
 export function calculateHumanLifeValue(
   annualIncome: number,
@@ -1651,6 +1670,8 @@ export function calculateHumanLifeValue(
   discountRatePercent: number,
   outstandingLiabilities: number,
   existingCoverAndSavings: number,
+  lumpSumGoals = 0,
+  age?: number,
 ): HlvResult {
   if (
     annualIncome < 0 ||
@@ -1658,7 +1679,8 @@ export function calculateHumanLifeValue(
     yearsToRetirement <= 0 ||
     discountRatePercent <= 0 ||
     outstandingLiabilities < 0 ||
-    existingCoverAndSavings < 0
+    existingCoverAndSavings < 0 ||
+    lumpSumGoals < 0
   )
     throw new Error('inputs must be >= 0, yearsToRetirement and discountRatePercent must be > 0')
 
@@ -1669,13 +1691,17 @@ export function calculateHumanLifeValue(
   const presentValueOfIncome =
     r === 0 ? netAnnualContribution * n : netAnnualContribution * ((1 - Math.pow(1 + r, -n)) / r)
 
-  const totalBeforeOffsets = presentValueOfIncome + outstandingLiabilities
+  const totalBeforeOffsets = presentValueOfIncome + outstandingLiabilities + lumpSumGoals
   const recommendedCover = Math.max(0, totalBeforeOffsets - existingCoverAndSavings)
+  const incomeMultiplier = ageBasedIncomeMultiplier(age ?? 35)
 
   return {
     netAnnualContribution: round2(netAnnualContribution),
     presentValueOfIncome: round2(presentValueOfIncome),
+    lumpSumGoals: round2(lumpSumGoals),
     totalBeforeOffsets: round2(totalBeforeOffsets),
     recommendedCover: round2(recommendedCover),
+    incomeMultiplierEstimate: round2(annualIncome * incomeMultiplier),
+    incomeMultiplier,
   }
 }

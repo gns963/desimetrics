@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
+  ageBasedIncomeMultiplier,
   calculateCapitalGainsTax,
   calculateEmi,
+  calculateHumanLifeValue,
   calculateNps,
   calculateSection80GG,
   isHraMetroCity,
@@ -406,6 +408,28 @@ describe('npsMinimumAnnuityPercent + calculateNps exit/annuity options', () => {
     const r = calculateNps(10000, 10, 25, 'other')
     expect(r.npsPartialWithdrawal.maxPerWithdrawal).toBe(round2(r.totalInvested * 0.25))
     expect(r.npsPartialWithdrawal.maxWithdrawalsAllowed).toBe(4)
+  })
+})
+
+describe('ageBasedIncomeMultiplier + calculateHumanLifeValue', () => {
+  it('follows the common insurer-calculator age bands', () => {
+    expect(ageBasedIncomeMultiplier(30)).toBe(20)
+    expect(ageBasedIncomeMultiplier(40)).toBe(15)
+    expect(ageBasedIncomeMultiplier(50)).toBe(10)
+    expect(ageBasedIncomeMultiplier(60)).toBe(6)
+  })
+  it('adds lump-sum goals into the needs-based total before offsetting existing cover', () => {
+    const withoutGoals = calculateHumanLifeValue(1200000, 300000, 20, 6, 2000000, 500000, 0, 35)
+    const withGoals = calculateHumanLifeValue(1200000, 300000, 20, 6, 2000000, 500000, 1500000, 35)
+    expect(withGoals.lumpSumGoals).toBe(1500000)
+    expect(withGoals.totalBeforeOffsets).toBeCloseTo(withoutGoals.totalBeforeOffsets + 1500000, 2)
+    expect(withGoals.recommendedCover).toBeCloseTo(withoutGoals.recommendedCover + 1500000, 2)
+  })
+  it('reports the income-multiplier estimate as a separate sanity-check figure, not the recommended cover', () => {
+    const r = calculateHumanLifeValue(1200000, 300000, 20, 6, 2000000, 500000, 0, 30)
+    expect(r.incomeMultiplier).toBe(20)
+    expect(r.incomeMultiplierEstimate).toBe(1200000 * 20)
+    expect(r.incomeMultiplierEstimate).not.toBe(r.recommendedCover)
   })
 })
 

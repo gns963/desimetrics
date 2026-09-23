@@ -3,7 +3,7 @@ import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
 import HlvCalculator from '@/components/calculators/HlvCalculator'
-import { calculateHumanLifeValue } from '@/lib/calc/financial'
+import { ageBasedIncomeMultiplier, calculateHumanLifeValue } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
@@ -11,7 +11,7 @@ import { getAlternateLanguages } from '@/lib/i18n-alternates'
 const SITE = 'https://desimetrics.com'
 const PATH = '/financial/human-life-value-calculator'
 
-const example = calculateHumanLifeValue(1200000, 300000, 20, 6, 2000000, 500000)
+const example = calculateHumanLifeValue(1200000, 300000, 20, 6, 2000000, 500000, 1500000, 35)
 
 export const metadata: Metadata = {
   title: 'Human Life Value Calculator 2026 — How Much Life Insurance Do You Need?',
@@ -39,7 +39,7 @@ const faqs = [
   },
   {
     q: 'Is the "10-15x annual income" rule of thumb accurate?',
-    a: 'It\'s a rough shortcut, not a real calculation — it ignores your specific age, years to retirement, existing liabilities and existing cover entirely. Two people with identical income but very different debt loads or years left to work would get wildly different actual insurance needs, but the same flat multiple under a rule of thumb. HLV is more accurate because it\'s built from your actual numbers rather than a single average multiplier.',
+    a: 'It\'s a rough shortcut, not a real calculation — it ignores your specific age, years to retirement, existing liabilities, existing cover and future goals entirely. Two people with identical income but very different debt loads or years left to work would get wildly different actual insurance needs, but the same flat multiple under a rule of thumb. This calculator shows that multiple too (as an age-banded 6x-25x sanity check, alongside the needs-based figure) but treats it only as a cross-check — the needs-based HLV number, built from your own numbers, is the one to act on.',
   },
   {
     q: 'Should I include my spouse\'s income or expenses in this calculation?',
@@ -51,7 +51,7 @@ const faqs = [
   },
   {
     q: 'Should HLV include future goals like a child\'s education or wedding?',
-    a: 'The version modelled here focuses on income replacement and existing liabilities — it does not separately add a rupee estimate for future one-time goals. Many financial planners recommend adding a further buffer on top of the HLV figure specifically earmarked for large future goals (a child\'s higher education or wedding, for example) if those aren\'t already covered by other dedicated savings or investments.',
+    a: 'Yes — this calculator has a dedicated field for it. Enter your best estimate, in today\'s money, of large future one-time costs (a child\'s higher education or wedding, for example) that aren\'t already covered by other dedicated savings or investments, and it\'s added directly into the required-cover total alongside your outstanding liabilities.',
   },
   {
     q: 'Does a higher HLV mean I should buy a more expensive insurance product?',
@@ -102,9 +102,9 @@ export default function HlvCalculatorPage() {
         subtitle="Work out how much life insurance cover your family would actually need, using the income-replacement method financial planners use — not a flat rule-of-thumb multiple of your salary."
         stats={[
           { icon: '📊', big: 'Income-replacement', small: 'Standard HLV method', tone: 'hub' },
-          { icon: '🎯', big: 'Needs estimate', small: 'Not a premium quote', tone: 'hub' },
+          { icon: '🎓', big: 'Goals included', small: 'Education & marriage', tone: 'hub' },
           { icon: '➖', big: 'Nets off', small: 'Existing cover & debts', tone: 'hub' },
-          { icon: '🧮', big: 'Present value', small: 'Discounts future income', tone: 'hub' },
+          { icon: '✅', big: '6x–25x', small: 'Age-based sanity check', tone: 'hub' },
         ]}
       />
 
@@ -120,12 +120,15 @@ export default function HlvCalculatorPage() {
             Worked example
           </h2>
           <p className="mt-2 text-ash/80">
-            Someone earning <strong>{formatINR(1200000)}/year</strong> with{' '}
+            A 35-year-old earning <strong>{formatINR(1200000)}/year</strong> with{' '}
             {formatINR(300000)} in personal expenses, 20 years left to retirement, a 6% discount
-            rate, {formatINR(2000000)} in outstanding loans and {formatINR(500000)} of existing
-            cover and savings would need about{' '}
+            rate, {formatINR(2000000)} in outstanding loans, {formatINR(1500000)} set aside for
+            children&apos;s education and marriage, and {formatINR(500000)} of existing cover and
+            savings would need about{' '}
             <strong>{formatINR(example.recommendedCover)}</strong> in additional life cover to
-            fully protect their family&apos;s finances.
+            fully protect their family&apos;s finances — compare that against the quick{' '}
+            {formatINR(example.incomeMultiplierEstimate)} ({ageBasedIncomeMultiplier(35)}x income)
+            sanity-check figure below.
           </p>
         </section>
 
@@ -142,13 +145,14 @@ export default function HlvCalculatorPage() {
           </h2>
           <p className="text-ash/80">
             The income-replacement method builds up the required cover in
-            four steps:
+            five steps:
           </p>
           <ul className="mt-3 space-y-2">
             {[
               ['Net annual contribution', 'your income minus the portion of expenses that benefit only you (not your family) — this is the actual amount your family would lose each year without you.'],
               ['Present value of future income', 'that annual amount, discounted over your remaining working years — a lump sum today, invested at a reasonable rate, needs to be smaller than the raw sum of all future years combined to replicate the same income stream.'],
               ['Add outstanding liabilities', 'loans your family would otherwise need to keep servicing, like a home or personal loan — if you\'re still repaying a home loan, check the current balance on our Home Loan EMI Calculator to get an accurate figure here.'],
+              ['Add lump-sum goals', 'future one-time costs like children\'s higher education or marriage, entered in today\'s money, so they\'re funded even after your income replacement runs out.'],
               ['Subtract existing cover and savings', 'any life insurance you already hold plus liquid savings genuinely available to your family, so this calculator gives you the ADDITIONAL cover needed, not your total lifetime insurance requirement.'],
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-2">
@@ -183,6 +187,55 @@ export default function HlvCalculatorPage() {
             benefit rather than embedded charges. Shop across a few
             insurers with your HLV figure as the sum assured you&apos;re
             requesting a quote for.
+          </p>
+        </section>
+
+        <section aria-labelledby="income-multiplier" className="mb-10 scroll-mt-20">
+          <h2 id="income-multiplier" className="font-display mb-4 text-2xl font-semibold">
+            The income-multiplier sanity check
+          </h2>
+          <p className="text-ash/80">
+            Alongside the needs-based HLV figure, the calculator shows a quick cross-check based
+            on an age-wise multiple of your annual income — a rule of thumb several insurer
+            calculators use for a fast estimate:
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-hairline bg-mist text-ink-navy">
+                <tr>
+                  <th className="px-4 py-2 font-semibold">Age band</th>
+                  <th className="px-4 py-2 font-semibold">Income multiple</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                <tr>
+                  <td className="px-4 py-2 font-medium">Up to 25</td>
+                  <td className="px-4 py-2">25x annual income</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">26–35</td>
+                  <td className="px-4 py-2">20x annual income</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">36–45</td>
+                  <td className="px-4 py-2">15x annual income</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">46–55</td>
+                  <td className="px-4 py-2">10x annual income</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Above 55</td>
+                  <td className="px-4 py-2">6x annual income</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 text-ash/80">
+            Treat this as a quick cross-check, not the answer — it ignores your actual liabilities,
+            existing cover, dependants and future goals entirely, so two people the same age and
+            income get the same number even if their real needs are completely different. The
+            needs-based figure above, built from your own numbers, is the one to act on.
           </p>
         </section>
 
