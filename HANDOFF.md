@@ -1,85 +1,113 @@
-# DesiMetrics — Tariff Directory Feature: Handoff
+# DesiMetrics — Financial Calculator Hub: Handoff
 
-_Last updated: 2026-09-09, mid-session. This file exists so work can be picked up cleanly by another session/person if needed. Update it as state changes; delete it once the feature is fully shipped and this becomes redundant with git history._
+_Last updated: 2026-09-25. This file exists so work can be picked up cleanly by another
+session/person. Update it as state changes; delete it once this thread is fully wrapped up and
+redundant with git history. Supersedes the previous version of this file, which covered the
+Tariff Directory feature — that work shipped (commit `076aa0f`) and is no longer active; see git
+log if you need its history._
 
 ## Goal
 
-Reference: **electricbill.in**, a competitor site, has a richer tariff-content section than we do. We're closing that gap. Two features, in priority order set by the user ("finish #1 first, then #2"):
+Bring DesiMetrics' financial hub to feature parity with **calcwise.finance**, a competitor
+finance-calculator site, then close any genuine gaps found along the way (including gaps in our
+own pre-existing calculators, not just missing tools). This started from user-shared screenshots
+of 9 calcwise tools, then expanded twice: once to the 3 financial calculators we hadn't compared
+yet (HRA/NPS/HLV), then to calcwise's full ~293-tool catalog once its homepage-only comparison
+turned out to undercount what they actually offer.
 
-1. **Multi-category Tariff Directory** — right now every DISCOM on desimetrics.com only has *residential* tariff data. electricbill.in shows every consumer category (Commercial, Industrial, Agriculture, Public Water Works, Public Services Govt/Pvt, EV Charging) per state, each with its own slab table + fixed charge/meter rent/duty breakdown. User decided (after scoping questions) to:
-   - Cover **all 36 DISCOMs** (not just the 8 "hero" states we'd already translated).
-   - Source data via **best-effort web research** (same standard as the earlier language-policy work — cite sources, never fabricate, skip and flag what can't be found).
-   - Use a **simplified category set**: just `commercial`, `industrial`, `agriculture` (the existing schema enum) — no load-bracket splits (0-20kW/>20-50kW/etc.) like electricbill.in has. No new categories like "Public Water Works" or "EV Charging" for now.
-2. **"Popular Bill Calculations" section** — a pre-computed worked-examples accordion (bills for 50/100/150/200/250/300/400/500/750/1000 units) per DISCOM, using our *existing* `computeBill()` engine and residential tariff data. Pure UI/presentation work, no new data needed. Good SEO play for long-tail "electricity bill for X units in Y" searches. **Not started yet** — can be built independently, in parallel with the tariff-directory work.
+## Current state — financial hub work is DONE and shipped
 
-Lower-priority, not-yet-scoped items from electricbill.in (deferred, not currently being worked): a generic "What Are Slabs in Electricity Billing?" educational card, per-state "Energy Saving Tips" cards, "How It Works"/"About the Calculator" text blocks, "Why Use This Calculator?" checklist, multi-language/theme marketing blurb.
+**29 financial calculators live**, up from 12 at the start of this thread. Everything is committed
+and pushed to `main` (`github.com/gns963/desimetrics`); `git status` is clean as of this writing.
 
-## Current state
+Full run order (see `~/Projects/semantic-seo-content-system/projects/bijlicalc/DECISION-LOG.md`
+D-35 through D-40 for the complete decision history):
 
-### ✅ Done — schema + calc engine extended
-- `src/data/tariffs/_schema.ts`: `ConnectionTypeSchema` gained optional `electricityDutyPercent`, `fuelCostAdjustment`, and `sourceNote` fields. **Why:** real tariff orders vary electricity duty by category (confirmed via the Maharashtra reference PDF: 16% on Domestic vs 21% on Commercial/Industrial) — without this, adding commercial/industrial data would silently compute wrong bills using the residential duty rate.
-- `src/lib/calc/electricity.ts`: `computeBill()` now resolves duty/FCA as `connectionType-level override ?? file-level default`.
-- Verified: `npx tsc --noEmit` clean, `npx tsx src/data/tariffs/_validate.ts` passes for all 36 files.
+- **D-35/D-36**: GST and SIP calculators expanded against calcwise (page-content pass).
+- **D-37**: 7-calculator batch from user screenshots — Capital Gains, Tax Regime, GST, Home Loan
+  EMI, Personal Loan EMI, PPF, FD, Gratuity.
+- **D-38**: HRA (FY2026-27 8-city metro expansion + Section 80GG), NPS (premature-exit reversal +
+  Section 10(12B) partial withdrawal), Human Life Value (lump-sum goals + income-multiplier check).
+- **D-39**: FIRE, Net Worth, Crorepati, BH Series, EV vs Fuel Cost, Retirement Planner — 6 net-new
+  calculators after discovering calcwise's homepage-linked tools weren't their full catalog. Road
+  Tax / Motor Vehicle Tax was **deliberately excluded** (state-wise sources disagreed with each
+  other; see disclaimer page for the stated reason). Also fixed a stale site-wide disclaimer/
+  data-sources pass in this same round (commit `990b1c9`) after the user flagged it as important —
+  do this kind of audit periodically, not just when told.
+- **D-40**: 12 more calculators (EPF, Sukanya Samriddhi Yojana, CTC to In-Hand Salary, Rent vs Buy,
+  Car/Two-Wheeler/Education Loan EMI, Health Insurance 80D, Surcharge & Marginal Relief, Recurring
+  Deposit, NCB & IDV) after a full-catalog research pass (calcwise has 293 tools across 8
+  categories: Investment/Tax/Loan/Government Schemes/Insurance/Business/Real Estate/Utility).
+  **This also fixed a real bug**: income tax surcharge (above ₹50L) and its own marginal relief are
+  now computed inside `computeRegimeTax()` itself, not just flagged as "not modelled" — this
+  transparently corrects `totalTax` for every existing caller.
+- **Post-D-40 cleanup**: fixed an off-by-one in the hub's calculator count (was showing 30, actual
+  is 29) — caught during this handoff audit, commit `7624765`.
 
-### ✅ Done — commercial/industrial/agriculture data population (all 36 DISCOMs)
-Dispatched as 6 parallel research batches (subagents), each researching + writing directly into its assigned DISCOM JSON files, self-validating before finishing. Several batches hit **transient infra failures** along the way (session rate limit, DNS errors, stream stalls — not data/quality problems) and were resumed via `SendMessage` rather than restarted from scratch, so partial progress was preserved each time. Final check: `npx tsx src/data/tariffs/_validate.ts` → all 36 valid; `npx tsc --noEmit` → clean.
+Deliberately declined, with reasoning (see disclaimer page + D-40 for full context):
+- **Road Tax / Motor Vehicle Tax** — state data too inconsistent to verify.
+- **Bank-branded EMI calculators** (Axis/SBI/HDFC/etc.) — implies endorsement we don't have, plus
+  ongoing rate-tracking burden with no methodological upside over a generic EMI calculator.
+- **Insurance premium calculators** (term/health/motor-OD) — insurer-specific actuarial pricing,
+  not a published formula (unlike NCB/IDV, which ARE IRDAI-standardised and thus buildable).
 
-**Caveats already flagged inline (in each file's own `sourceNote`) by the research agents — read before building UI on top of this data:**
-- Several DISCOMs' data is **secondary-sourced** (not the primary SERC/regulator order) — e.g. APSPDCL, BESCOM commercial, TNEB commercial, Manipur (MSPDCL), Haryana (UHBVN) industrial. Flagged per-file, not hidden.
-- Some categories were **explicitly skipped** rather than guessed — the honest outcome when no reliable source existed:
-  - Arunachal Pradesh (APDOP): agriculture
-  - MSEDCL (Maharashtra): agriculture
-  - Mizoram (PED-MZ): agriculture
-  - Sikkim (EPD-SK): agriculture — genuinely doesn't exist as a tariff category there
-  - Haryana (UHBVN): **commercial and agriculture both skipped** (only industrial was added) — no reliable per-unit rate found for either despite the search; UHBVN's own tariff PDFs are scanned images with no extractable text and herc.gov.in was unreachable during research. **This is the thinnest-covered DISCOM — worth a manual follow-up if Haryana traffic matters.**
-- Real-world load-based tiers or per-HP billing (Gujarat's agriculture tariff, J&K/Rajasthan/Ladakh/MP/UP HP-based fixed charges, several states' commercial tiers) got collapsed to a single representative tier since our schema models consumption slabs, not load bands. Where a source billed per-HP, agents converted to per-kW using 1 HP = 0.746 kW and noted it in `sourceNote`.
-- KSEB and TNEB commercial tariffs are non-telescopic in reality (whole bill re-priced at one slab's rate above a threshold) but our schema only supports telescopic slabs — same pre-existing limitation their residential entries already have, applied consistently to the new commercial entries.
-- MSEDCL industrial duty has conflicting secondary figures (7.5% vs 9.3%) — no override was set, flagged low-confidence.
-- Ladakh (LPDD)'s data is from a *proposed* tariff petition, not confirmed as the final approved order (their official PDF is a scanned image with no extractable text) — flagged in `sourceNote`.
-- Meghalaya (MePDCL)'s new categories are FY2026-27 data, a different vintage than the file's existing residential entry — flagged in `sourceNote`.
-- Uttar Pradesh (UPPCL) agriculture uses the pre-subsidy urban rate; most real UP tubewells are on a much cheaper subsidized rural schedule not modelled — flagged prominently in `sourceNote` as likely overstating typical agricultural bills.
-- Odisha (TPCODL) and Tripura (TSECL) agriculture/industrial figures are pre-subsidy or use one representative HP/kVA tier among several — documented per-file.
+## Not started — paused pending a decision, not abandoned
 
-### ✅ Done — Tariff Directory UI (#1 frontend)
-User decided (after the architectural question above): **separate page**, not a new section on the existing calculator page. Built as:
-- New route `src/app/electricity/[slug]/tariffs/page.tsx` — `generateStaticParams` over all 36 `allCalculatorSlugs`, `dynamicParams = false`, own metadata (title/description built from the tariff data, no hand-authored per-DISCOM copy needed).
-- New component `src/components/calculators/TariffDirectoryPage.tsx` — renders one card per `connectionType` actually present in that DISCOM's tariff file (residential/commercial/industrial/agriculture, in that order — only what exists, never a hardcoded 4), each with its slab table + fixed charge/meter rent/duty/FCA breakdown (using the new per-category overrides from the schema change above) and that category's `sourceNote` if present. Summary strip (State/Utility Board/1-Unit-Rate/Categories count), a data-driven explainer section, an "Applicable Electricity Board" info card, 4 generic FAQ entries, and a disclaimer footer — all generated from the tariff data, no per-DISCOM hand-authoring required (unlike the main calculator pages).
-- **Real bug caught and fixed during verification**: the hero intro and one FAQ answer originally hardcoded "Domestic, Commercial, Industrial[, Agriculture]" regardless of what data actually existed — so a thin-coverage DISCOM like Haryana (UHBVN, which only has Residential+Industrial) would have falsely implied it had Commercial data too. Fixed with a `joinCategoryLabels()` helper that only lists categories genuinely present. Verified live: MSEDCL (no agriculture) now correctly says "Domestic (Residential), Commercial and Industrial"; UHBVN correctly says "Domestic (Residential) and Industrial".
-- Extracted `fixedChargeLabel()` from `DiscomCalculatorPage.tsx` into `src/lib/format.ts` so both pages share it instead of duplicating.
-- Added a cross-link from the existing calculator page to the new tariffs page ("View Commercial, Industrial & Agriculture tariffs for {state} →"), gated to `locale === 'en'` only since the tariffs page is English-only for now.
-- `sitemap.ts` gained `electricityTariffDirectory` (all 36 `/electricity/[slug]/tariffs` URLs, priority 0.7).
-- Verified: `npx tsc --noEmit` clean, `npx eslint` clean on all changed files, and a full `npm run build` succeeded (555/555 static pages generated, including all 36 new tariff-directory pages) with no errors.
-- **Deliberately deferred, not done in this pass**: Hindi (or any other locale) translation of this new page type — ships English-only for now, consistent with how every other feature started English-first before its dedicated translation pass. When it's time to translate, follow the same "EN+HI mandatory" policy as everything else.
+A follow-up research pass (forked agent) looked for a competitor to benchmark DesiMetrics'
+**other 7 hubs** (electricity, water, gas, solar, AC, appliances, fuel-cost) against, since those
+haven't been touched this thread. Findings, not yet acted on:
 
-### ✅ Done — "Popular Bill Calculations" (#2)
-New component `src/components/calculators/PopularBillCalculations.tsx`, added as a section on the existing `DiscomCalculatorPage.tsx` (not the tariffs-directory page — this one's about the calculator's own worked examples, so it lives with the calculator), positioned right after the existing "Two Worked Examples" section.
-- Accordion (native `<details>`/`<summary>`, first row open by default) of 10 pre-computed unit levels (50/100/150/200/250/300/400/500/750/1000), each row computed live via the existing `computeBill()` — no new data. Expanded content shows the slab-wise energy-charge breakdown table and a detailed-charges summary (energy/subsidy/meter rent/fixed/duty/FCA) + total, mirroring the electricbill.in reference layout in our own visual language.
-- Gated to `locale === 'en'` only, same as the tariffs-directory cross-link — consistent "ship English first" approach for this session's new features.
-- Verified: `tsc`/`eslint` clean, section renders correctly and is fully absent on `/hi/...` pages, full production build succeeds.
+- **DesiUtility.com** is the closest multi-vertical competitor (69 tools spanning electricity/AC/
+  solar/appliances/fuel). Most DesiMetrics hubs are already competitive or ahead (appliances hub is
+  ahead at 10 tools vs their 7; AC and fuel-cost roughly at parity).
+- **Likely real gaps**: water-board and gas-board coverage counts — competitors (PANCalculator.com,
+  BillCalculator.in) claim 15-20+ boards each in water/gas; worth verifying DesiMetrics' actual
+  counts before treating this as confirmed. Also worth checking whether TheDiscomBill.com's claimed
+  65-66 DISCOMs (vs our 36) is real broader coverage or inflated by counting sub-divisions.
+- **Two things explicitly flagged as NOT quick gap-closes** — bigger strategic bets, not routine
+  calculator work: an **AI Bill Explainer** (upload a bill, OCR/parse it, LLM savings
+  recommendations — needs document parsing + LLM integration) and a **Government Scheme
+  Eligibility Checker** (profile-matching against 30+ central schemes + state programs across 28
+  states/8 UTs — a large structured-data content project, not a calculator).
 
-**Both #1 and #2 from the original priority list are now complete.**
-
-### ✅ Done — Tariff Directory hub page (added 2026-09-10)
-User later shared more electricbill.in screenshots (their `/en/tariffs` index page — a grid of one card per state, each with Regulator/category-count/last-updated + a "View Tariff" button linking to that state's own tariff page) and asked for the equivalent. We already had the per-DISCOM tariff pages and the calculator→tariff cross-link; the missing piece was the index/hub itself. Built:
-- `src/app/electricity/tariffs/page.tsx` — static route (coexists fine with the dynamic `src/app/electricity/[slug]/tariffs/page.tsx`; Next.js resolves the static segment first, confirmed no DISCOM slug is literally `"tariffs"`). Lists all 36 DISCOMs as cards (State, Verified badge, Utility Board = discomCode, category count, last-updated, "View Tariff →" linking to `/electricity/[slug]/tariffs`), sorted alphabetically by state. Deliberately did **not** add a separate "Regulator" field — we don't have one reliably in the data model (unlike electricbill.in) and didn't want to fabricate or mislabel it; `discomCode` covers the "which board" question.
-- Linked from the existing `/electricity` hub page (a prominent card right below the hero) for discoverability.
-- `sitemap.ts` gained the `/electricity/tariffs` entry.
-- Verified: `tsc`/`eslint` clean, all 36 cards render with correct links, full production build succeeds.
-- The individual Andaman & Nicobar screenshot the user shared also confirmed electricbill.in's per-state pages go deeper than ours (Public Utility, EV Charging, High Tension, Temporary categories, load-bracket splits) — this is the "simplified set" tradeoff the user explicitly chose earlier in this project; noted here again in case it's revisited later, but nothing was changed.
-
-Remaining backlog (not started, not requested yet): the lower-priority generic electricbill.in blocks (What Are Slabs explainer, Energy Saving Tips, How It Works/About, Why Use This, multi-language blurb), translating the tariff-related pages/sections (Tariff Directory hub + detail pages, Popular Bill Calculations) into Hindi and the other locales per the site's EN+HI-mandatory policy, and — if ever revisited — going deeper on categories/load-brackets to match electricbill.in's per-state depth.
-
-## Nothing has been committed
-
-Last commit on `main` is from **2026-09-06**. Everything since — this tariff-directory work, plus the entire earlier state-by-state translation rollout (Hindi mandatory policy, Maharashtra/TN/Telangana+AP/Karnataka/WB/Gujarat/Kerala-Malayalam translations, i18n manifest, SEO audit fixes) — is uncommitted in the working tree. See prior conversation for the full list; nothing here should be assumed safe until it's actually committed.
+User was asked which of these to prioritize and said "hold off" — **do not start any of this without
+checking with the user first**, it was consciously parked, not forgotten.
 
 ## Key files
 
-- Tariff data: `src/data/tariffs/*.json` (one per DISCOM) — schema in `src/data/tariffs/_schema.ts`, validator `npx tsx src/data/tariffs/_validate.ts`
-- Calc engine: `src/lib/calc/electricity.ts` (`computeBill`, `tariffRegistry`)
-- Per-DISCOM page content: `src/data/calculator-pages.tsx`, rendered by `src/components/calculators/DiscomCalculatorPage.tsx`
-- i18n manifest (unrelated to this feature, but touched heavily in recent sessions): `src/lib/i18n-alternates.ts`
+- Calc logic: `src/lib/calc/financial.ts` (all pure functions, extensively tested) and its test
+  suite `src/lib/calc/financial.test.ts` (207 tests as of the last run — always add tests for new
+  functions in this file, following the existing `describe()` pattern per function).
+- Calculator UI components: `src/components/calculators/*Calculator.tsx` — one per tool, built on
+  shared primitives in `src/components/calculators/CalculatorShell.tsx`
+  (`CalculatorCard`/`CalculatorHeader`/`CalculatorCta`/`OptionCardGroup`/`SliderField`).
+- Pages: `src/app/financial/<slug>/page.tsx` — each self-contained (metadata, worked example,
+  FAQ array + FAQPage JSON-LD, WebApplication JSON-LD, breadcrumb JSON-LD).
+- Hub listing + cross-linking: `src/app/financial/page.tsx` (card grid + hero stats) and
+  `src/components/FinancialCrossSell.tsx` (the "other calculators" block on every calculator page)
+  — **both must be updated whenever a calculator is added or removed**, or the count/links drift
+  (as just happened with the 30→29 fix above).
+- Site-wide legal pages that reference calculator specifics and need updating alongside new
+  calculators: `src/app/disclaimer/page.tsx`, `src/app/data-sources/page.tsx`.
+- `TaxRegimeCalculator.tsx`'s `texts` prop is shared with a live Hindi page
+  (`src/app/hi/financial/new-vs-old-tax-regime-calculator/page.tsx`) — any new field added to
+  `TaxRegimeCalculatorTexts` MUST be optional with an English fallback, or the Hindi page's typed
+  texts object will fail to compile. `GratuityCalculator.tsx` has the same Hindi-dependency
+  constraint (a separate `GratuityCalculatorAdvanced.tsx` exists for English so the simpler
+  Hindi-compatible one stays untouched).
 
-## Reference material
+## Verification pattern (follow this for any future calculator work)
 
-The competitor screenshots/PDF (electricbill.in's `/tariffs` and `/tariffs/maharashtra` pages) were reviewed in full during this session then deleted from the repo (they'd been dropped at the project root for review) — full descriptive notes are in the conversation history if the actual images are needed again. Ask the user for the originals if you need to re-inspect the reference design directly.
+For every new/changed calculator: `./node_modules/.bin/tsc --noEmit`, `./node_modules/.bin/eslint`
+on changed files (use the direct binary path — bare `npx tsc` intermittently fails in this repo's
+environment), `npm test -- --run`, `npm run build` (confirm new routes appear in the manifest), then
+a dev-server 200-check + rendered-content grep on each new/changed page. Any claim about tax law,
+government scheme rules, or regulated figures (IRDAI slabs, PFRDA rules, MoRTH formulas, etc.) gets
+verified via WebSearch BEFORE coding — never asserted from training-data memory. If a claim can't be
+verified to a defensible standard (see Road Tax), exclude it and say why on the disclaimer page
+rather than guessing.
+
+## Reference
+
+Full decision history with the "why" behind every choice: D-35 through D-40 in
+`~/Projects/semantic-seo-content-system/projects/bijlicalc/DECISION-LOG.md`.
