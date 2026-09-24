@@ -3,7 +3,7 @@ import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
 import SurchargeCalculator from '@/components/calculators/SurchargeCalculator'
-import { computeRegimeTax } from '@/lib/calc/financial'
+import { calculateSurchargeAndMarginalRelief, computeRegimeTax } from '@/lib/calc/financial'
 import { formatINR } from '@/lib/format'
 import { breadcrumbLd } from '@/lib/seo'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
@@ -13,6 +13,21 @@ const PATH = '/financial/surcharge-marginal-relief-calculator'
 
 const example = computeRegimeTax(6000000, 'new')
 const exampleJustOver = computeRegimeTax(5001000, 'new')
+
+// Worked example at exactly ₹1,00,00,100 taxable income — ₹100 over the ₹1Cr surcharge threshold.
+// At exactly ₹1,00,00,000 the 10% band still applies (the threshold check is strictly "greater
+// than"), so the tax-plus-surcharge AT the boundary already includes that 10% — only the STEP UP
+// to 15% just past it is what marginal relief caps.
+const oneCroreAtThreshold = computeRegimeTax(10000000 + 75000, 'new') // gross = taxable + 75k standard deduction
+const oneCroreAtThresholdTaxPlusSurcharge = oneCroreAtThreshold.taxBeforeRebate + oneCroreAtThreshold.surcharge
+const oneCroreJustOverGross = 10000100 + 75000
+const oneCroreJustOverTax = computeRegimeTax(oneCroreJustOverGross, 'new')
+const oneCroreJustOverSurcharge = calculateSurchargeAndMarginalRelief(
+  oneCroreJustOverTax.taxableIncome,
+  oneCroreJustOverTax.taxBeforeRebate,
+  'new',
+)
+const oneCroreJustOverUnadjusted = oneCroreJustOverTax.taxBeforeRebate + oneCroreJustOverSurcharge.surchargeBeforeRelief
 
 export const metadata: Metadata = {
   title: 'Surcharge & Marginal Relief Calculator 2026 — Income Tax India',
@@ -49,6 +64,22 @@ const faqs = [
   {
     q: 'How does this interact with the Tax Regime Calculator?',
     a: 'Our New vs Old Tax Regime Calculator now automatically includes surcharge and its marginal relief in both regimes\' totals — this standalone calculator exists for anyone who wants to see the surcharge mechanism in isolation, with the exact rate, pre-relief amount, and relief applied all broken out separately.',
+  },
+  {
+    q: 'Does surcharge apply before or after my deductions?',
+    a: 'After — surcharge is calculated on the tax computed on your TAXABLE income, which is already net of the standard deduction and (under the old regime) any 80C/80D/HRA and other deductions you\'ve claimed. Maximising your deductions can genuinely pull your taxable income below a surcharge threshold entirely, not just reduce the surcharge rate you pay above it.',
+  },
+  {
+    q: 'Why do very high earners sometimes restructure income around surcharge thresholds?',
+    a: 'Because crossing a threshold by a meaningful margin (not just the few rupees marginal relief protects) triggers a real, permanent step up in the surcharge rate on your entire tax bill — some high earners time capital-gains realisation or ESOP exercise across financial years specifically to manage which surcharge slab their total income falls into that year. This calculator computes the tax on the income you enter for a single year; it doesn\'t model multi-year income-timing strategies, which are a separate planning exercise.',
+  },
+  {
+    q: 'Does surcharge apply to capital gains income the same way as salary income?',
+    a: 'Surcharge applies to your total tax liability across all income heads combined, including capital gains, but capital gains taxed at special rates (like equity LTCG) have their OWN surcharge treatment with a different cap in some cases — a nuance this calculator, which models salary/business-style slab income, does not account for. See our Capital Gains Tax Calculator for the capital-gains-specific mechanics, and treat this tool\'s figure as accurate for slab-taxed income only.',
+  },
+  {
+    q: 'Is there a surcharge on GST or other taxes, or is this specific to income tax?',
+    a: 'This calculator, and the term "surcharge" as used here, refers only to INCOME TAX surcharge under Section 2(9) of the Finance Act framework — GST, customs duty and other taxes have entirely separate rate structures with no equivalent surcharge mechanism tied to income tax thresholds.',
   },
 ]
 
@@ -164,6 +195,44 @@ export default function SurchargeCalculatorPage() {
               </tbody>
             </table>
           </div>
+        </section>
+
+        <section aria-labelledby="worked-1cr" className="mb-10 scroll-mt-20">
+          <h2 id="worked-1cr" className="font-display mb-4 text-2xl font-semibold">
+            Marginal relief step by step, at the ₹1 crore threshold
+          </h2>
+          <p className="text-ash/80">
+            The ₹50 lakh example above shows relief wiping out surcharge almost entirely. At the
+            ₹1 crore threshold, the rate STEPS UP from 10% to 15% instead of starting from zero, so
+            the relief math looks slightly different:
+          </p>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-ash/80">
+            <li>
+              At exactly {formatINR(10000000)} taxable income, the 10% surcharge band still applies
+              (the threshold check is &quot;greater than&quot;, so the boundary itself stays in the lower
+              band) — tax plus that 10% surcharge comes to{' '}
+              <strong>{formatINR(oneCroreAtThresholdTaxPlusSurcharge)}</strong>.
+            </li>
+            <li>
+              Just ₹100 more — {formatINR(10000100)} taxable income — pushes the ENTIRE tax bill
+              into the 15% surcharge band. Unadjusted, that would mean tax plus a full 15%
+              surcharge: <strong>{formatINR(oneCroreJustOverUnadjusted)}</strong>, a jump of{' '}
+              {formatINR(oneCroreJustOverUnadjusted - oneCroreAtThresholdTaxPlusSurcharge)}{' '}
+              for ₹100 of extra income.
+            </li>
+            <li>
+              Marginal relief caps this at step 1&apos;s figure PLUS the ₹100 of extra income
+              itself — so the actual tax-plus-surcharge increase can never exceed ₹100, no matter
+              how large the jump from 10% to 15% would otherwise be.
+            </li>
+            <li>
+              Result: <strong>{formatINR(oneCroreJustOverSurcharge.marginalRelief)}</strong> of
+              relief is granted, bringing tax-plus-surcharge down to{' '}
+              <strong>{formatINR(oneCroreJustOverSurcharge.taxPlusSurcharge)}</strong> — exactly
+              {' '}{formatINR(oneCroreAtThresholdTaxPlusSurcharge)} plus ₹100, confirming the extra
+              income cost no more than itself in extra tax, before cess.
+            </li>
+          </ol>
         </section>
 
         <section aria-labelledby="related" className="mb-10 scroll-mt-20">

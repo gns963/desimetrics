@@ -56,6 +56,26 @@ const faqs = [
     q: 'How is the "time to ₹1 crore" figure calculated?',
     a: 'It projects your current investable assets (cash, FDs, equity/MF, gold, and other assets — excluding EPF/PPF/NPS/property/vehicle) plus your monthly SIP forward at an illustrative 12% annual return, and reports how many months until your net worth crosses ₹1 crore. It\'s a simplified, single-rate projection for orientation, not a market forecast.',
   },
+  {
+    q: 'How do I value an illiquid asset like a business I own or unlisted shares?',
+    a: 'Use the business\'s book value (net assets on its balance sheet) as a conservative estimate, or a professional valuation if one exists — never a hoped-for market price, since unlisted assets have no public quote to verify against. Enter this under "other assets" and treat the resulting net worth figure as approximate for that portion; it\'s the hardest category to value precisely by design, since there\'s no daily market pricing it for you.',
+  },
+  {
+    q: 'How often should I recalculate my net worth?',
+    a: 'Quarterly is a common cadence for most people — frequent enough to catch trends (a rising debt-to-asset ratio, stalled savings) without obsessing over month-to-month market noise in your equity/MF holdings. Annually is the minimum useful frequency; recalculating more often than monthly usually just reflects market volatility, not a real change in your financial position.',
+  },
+  {
+    q: 'What counts as a "good" debt-to-asset ratio at different life stages?',
+    a: 'Early career, with a fresh education loan or starter home loan, 40-60% is common and not alarming provided the trend is downward over time. By your 40s-50s, most financial planners consider anything above 30-40% worth actively addressing, and by retirement, ideally close to 0% — carrying large debt into retirement with reduced income is the specific pattern this ratio is meant to flag early.',
+  },
+  {
+    q: 'Should married couples calculate net worth jointly or separately?',
+    a: 'Either works, but be consistent: if you calculate jointly, include both spouses\' entire assets and liabilities together in one run of this calculator; if separately, exclude jointly-held property/loans from one spouse\'s individual figure to avoid double-counting. Many couples find a joint figure more useful for household financial planning, while individual figures matter more for questions like each person\'s own emergency-fund adequacy.',
+  },
+  {
+    q: 'Does net worth include the value of future income, like my expected salary?',
+    a: 'No — net worth is a snapshot of assets and liabilities you hold TODAY, not the present value of future earnings (which is closer to what our Human Life Value Calculator estimates for a different purpose: sizing life insurance). A high-earning young professional with few savings yet can have a low or negative net worth despite strong future earning potential — the two numbers answer different questions.',
+  },
 ]
 
 const faqLd = {
@@ -143,6 +163,27 @@ export default function NetWorthCalculatorPage() {
               ['It captures savings, not just earnings', 'two people with identical salaries can have very different net worths depending on how much they actually keep and invest versus spend.'],
               ['It flags illiquid-heavy positions', 'a high net worth trapped in property or retirement accounts can still leave you short of cash in an emergency — the liquid net worth figure surfaces this.'],
               ['It shows the trend, not just the snapshot', 'recalculating every few months shows whether you\'re moving in the right direction, which matters more than hitting any single benchmark on any given day.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="how-to-improve" className="mb-10 scroll-mt-20">
+          <h2 id="how-to-improve" className="font-display mb-4 text-2xl font-semibold">
+            How to actually increase your net worth
+          </h2>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Pay down high-interest debt first', 'a credit card or personal loan charging 15-40% interest shrinks your liabilities faster per rupee than almost any investment grows your assets — clear these before increasing investment contributions.'],
+              ['Automate your SIP investments', 'a fixed monthly transfer into equity/MF (see our SIP Calculator) grows the assets side of this calculator steadily, without relying on willpower each month.'],
+              ['Avoid lifestyle inflation as income grows', 'a raise that goes entirely into higher spending leaves this calculator\'s asset totals unchanged year over year — directing even half of each raise toward savings compounds into a materially different net worth over a decade.'],
+              ['Track the trend, not the snapshot', 'recalculate on the cadence above and watch whether liquid net worth specifically is improving, since that\'s the figure that protects you in an actual emergency.'],
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-2">
                 <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>

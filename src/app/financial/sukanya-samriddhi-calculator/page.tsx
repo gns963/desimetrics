@@ -49,6 +49,26 @@ const faqs = [
     q: 'How does SSY compare to PPF for a child\'s education or marriage goal?',
     a: 'Both are EEE, government-backed and offer similar interest rates, but SSY is restricted to girl children and has that 21-year lock-in tied to the child\'s age, while PPF is open to anyone and has a shorter, more flexible 15-year lock-in with extension options. If you have a daughter under 10, SSY\'s typically slightly higher rate makes it worth prioritising for that specific goal; see our PPF Calculator for the more general-purpose alternative.',
   },
+  {
+    q: 'What happens if I have twin or triplet daughters?',
+    a: 'The one-girl-per-additional-account limit (max 2 accounts per family) has a documented exception for multiple births: if your second delivery results in twins or triplets, or your first delivery itself is of twin/triplet girls, you can open an account for each of them, with a medical certificate confirming the multiple birth submitted at account opening.',
+  },
+  {
+    q: 'How is the SSY interest rate actually set?',
+    a: 'SSY, like PPF, is a small-savings scheme whose interest rate the government reviews and notifies quarterly, linked to the prevailing yield on government securities of comparable maturity. It isn\'t set arbitrarily each quarter — see our PPF Calculator for the same rate-setting mechanism, since both schemes are reviewed together each quarter alongside other small-savings instruments (NSC, KVP, post office deposits).',
+  },
+  {
+    q: 'Can I transfer my SSY account between banks or post offices?',
+    a: 'Yes — SSY accounts can be transferred anywhere in India between authorised banks and post offices, free of charge, typically needed when the family relocates. You\'ll need to submit a transfer application with the passbook and KYC documents at the current branch; the account number and accumulated balance carry over unchanged.',
+  },
+  {
+    q: 'Can the account be closed early for reasons other than marriage?',
+    a: 'Yes, premature closure is allowed on: the death of the account holder (girl child), a life-threatening medical condition of the account holder requiring the funds, or the death of the guardian operating the account — each requiring supporting documentation. Outside these specific circumstances, closing before the 21-year maturity (other than the post-18 marriage provision) isn\'t permitted.',
+  },
+  {
+    q: 'What if I can\'t continue depositing every year for 15 years?',
+    a: 'The account doesn\'t close — it becomes "irregular," and interest still accrues on the existing balance at the standard rate. To bring it back to regular status and resume contributing, you pay a small penalty (₹50 per year of default) alongside the minimum ₹250 shortfall for each missed year, at any time before the account matures.',
+  },
 ]
 
 const faqLd = {
@@ -127,16 +147,58 @@ export default function SsyCalculatorPage() {
         </section>
 
         <section aria-labelledby="related" className="mb-10 scroll-mt-20">
-          <h2 id="related" className="font-display mb-2 text-2xl font-semibold">
-            Comparing child-goal savings options?
+          <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
+            SSY vs PPF for a child-goal
           </h2>
           <p className="text-ash/80">
+            Both are EEE, government-backed small-savings schemes reviewed on the same quarterly
+            cycle — the real differences are eligibility and lock-in:
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-hairline bg-mist text-ink-navy">
+                <tr>
+                  <th className="px-4 py-2 font-semibold">Feature</th>
+                  <th className="px-4 py-2 font-semibold">Sukanya Samriddhi Yojana</th>
+                  <th className="px-4 py-2 font-semibold">PPF</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                <tr>
+                  <td className="px-4 py-2 font-medium">Who can open one</td>
+                  <td className="px-4 py-2">Girl child under 10 only</td>
+                  <td className="px-4 py-2">Anyone</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Current rate</td>
+                  <td className="px-4 py-2">8.2%</td>
+                  <td className="px-4 py-2">7.1%</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Deposit window</td>
+                  <td className="px-4 py-2">15 years</td>
+                  <td className="px-4 py-2">15 years, extendable in 5-year blocks</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Maturity</td>
+                  <td className="px-4 py-2">21 years from opening</td>
+                  <td className="px-4 py-2">15 years from opening</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Max annual deposit</td>
+                  <td className="px-4 py-2">{formatINR(150000)}</td>
+                  <td className="px-4 py-2">{formatINR(150000)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-ash/80">
             Our{' '}
             <Link href="/financial/ppf-calculator" className="text-brass underline">
               PPF Calculator
             </Link>{' '}
-            models the more general-purpose EEE alternative open to anyone, with a shorter 15-year
-            lock-in.
+            models the more general-purpose alternative open to anyone, with a shorter, more
+            flexible lock-in.
           </p>
         </section>
 

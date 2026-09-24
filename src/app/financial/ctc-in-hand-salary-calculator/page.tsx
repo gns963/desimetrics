@@ -48,6 +48,26 @@ const faqs = [
     q: 'Is the income tax figure here exact, or an estimate?',
     a: 'It\'s a reasonable estimate based on your selected regime\'s standard slabs and rebate, applied to your gross salary after only the standard deduction — it does not account for other deductions (80C, 80D, HRA exemption, home loan interest) you might separately claim under the old regime, which would lower your actual tax below what\'s shown here.',
   },
+  {
+    q: 'Does this calculator account for variable pay or an annual bonus?',
+    a: 'No — this tool assumes your entire CTC is fixed and paid out evenly across the year. Many offers actually split CTC into a fixed component (paid monthly) and a variable/bonus component (paid quarterly or annually, often tied to performance), so your ACTUAL monthly in-hand pay can be meaningfully lower than this calculator shows if a large share of your CTC is variable — enter only the fixed portion of your CTC here for an accurate monthly figure.',
+  },
+  {
+    q: 'I see a gratuity provision backed out of my CTC every month, but when do I actually get that money?',
+    a: 'Not monthly, and not automatically — gratuity is paid out as a lump sum only when you leave the company after completing 5+ years of continuous service (with exceptions for death or disablement), calculated using the 15/26 formula on your last-drawn salary and years of service. The monthly deduction from your CTC is purely an accounting provision your employer sets aside; see our Gratuity Calculator to estimate the actual payout you\'d eventually receive.',
+  },
+  {
+    q: 'What are "cost centres" like insurance or meal cards doing to my in-hand pay?',
+    a: 'Employer-paid group insurance premiums and reimbursement-style benefits (meal cards, fuel/LTA allowances structured as reimbursements) are part of your CTC but don\'t show up as cash in your monthly salary credit — they either get paid directly to a vendor (insurance) or require you to submit bills to claim them back (reimbursements). A CTC with a large share in these cost centres will show a lower "gross salary" in this calculator than one where the same CTC is paid mostly as basic and allowances.',
+  },
+  {
+    q: 'My employer offered a raise as CTC, not take-home — how do I actually evaluate it?',
+    a: 'Run both your old and new CTC through this calculator with the same basic-percentage assumption to see the real monthly in-hand difference, not just the headline CTC increase — a ₹1 lakh CTC hike delivered mostly through higher PF/gratuity provisioning and variable pay can translate to a much smaller actual take-home increase than a raise of the same size given as fixed basic/allowances.',
+  },
+  {
+    q: 'Does employer NPS contribution under Section 80CCD(2) change this calculation?',
+    a: 'If your CTC structure includes an employer NPS contribution (commonly up to 10% of basic, 14% for government employees), it reduces your gross salary the same way employer PF does, but it comes with a tax advantage this calculator doesn\'t model: 80CCD(2) is deductible with no rupee cap and is one of the few deductions still allowed under the NEW tax regime. If your offer includes this component, your actual take-home tax could be lower than this calculator\'s estimate.',
+  },
 ]
 
 const faqLd = {
@@ -124,6 +144,45 @@ export default function CtcCalculatorPage() {
             Calculate your in-hand salary
           </h2>
           <CtcCalculator />
+        </section>
+
+        <section aria-labelledby="basic-percent-impact" className="mb-10 scroll-mt-20">
+          <h2 id="basic-percent-impact" className="font-display mb-4 text-2xl font-semibold">
+            How your basic salary percentage changes take-home pay
+          </h2>
+          <p className="text-ash/80">
+            The same {formatINR(1200000)} CTC produces a different monthly in-hand figure depending
+            on what share of it is structured as basic salary, since basic drives PF and gratuity
+            provisioning:
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-hairline bg-mist text-ink-navy">
+                <tr>
+                  <th className="px-4 py-2 font-semibold">Basic as % of CTC</th>
+                  <th className="px-4 py-2 font-semibold">Gross salary</th>
+                  <th className="px-4 py-2 font-semibold">Monthly in-hand</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                {[30, 40, 50].map((pct) => {
+                  const r = calculateCtcBreakdown(1200000, pct, 2400, 'new')
+                  return (
+                    <tr key={pct}>
+                      <td className="px-4 py-2 font-medium">{pct}%</td>
+                      <td className="px-4 py-2 tabular-nums">{formatINR(r.grossSalaryAnnual)}</td>
+                      <td className="px-4 py-2 tabular-nums">{formatINR(r.monthlyInHand)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-ash/80">
+            A lower basic percentage raises take-home pay today at the cost of smaller PF and
+            gratuity accumulation over your career — the tradeoff most CTC structures are built
+            around.
+          </p>
         </section>
 
         <FinancialCrossSell current="ctc-in-hand-salary-calculator" />

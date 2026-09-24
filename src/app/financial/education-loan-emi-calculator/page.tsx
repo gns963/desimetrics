@@ -45,6 +45,30 @@ const faqs = [
     q: 'Can I prepay an education loan without penalty?',
     a: 'Most banks allow prepayment of education loans without a penalty once the moratorium period ends, though policies vary — check your specific loan agreement. Prepaying reduces the total interest paid over the loan\'s life, same principle as our Home Loan EMI Calculator\'s prepayment feature.',
   },
+  {
+    q: 'Does an education loan need collateral?',
+    a: 'It depends on the loan amount: many lenders offer education loans up to a threshold (commonly cited around ₹7.5-10 lakh, though this varies by lender and scheme) without collateral, relying instead on a co-applicant\'s income and a third-party guarantee. Above that threshold, lenders typically require collateral — property, fixed deposits, or other security — check your specific lender\'s policy rather than assuming either way.',
+  },
+  {
+    q: 'What happens if I don\'t pay the moratorium-period interest as it accrues?',
+    a: 'If simple interest is accruing during your moratorium (course period plus the grace period) and you don\'t pay it as it\'s billed, most lenders capitalise it — adding the accrued interest to your principal once repayment begins, so your EMI is calculated on a larger amount than you actually borrowed. Paying the moratorium interest as it accrues, if you can, avoids this compounding effect.',
+  },
+  {
+    q: 'Is there a government interest subsidy for education loans?',
+    a: 'Yes — the Central Sector Interest Subsidy (CSIS) scheme subsidises the moratorium-period interest for economically weaker students pursuing approved professional/technical courses in India, subject to an income-eligibility ceiling and lender participation in the scheme. It doesn\'t apply universally to every borrower or every loan, so check current eligibility with your lender or the scheme\'s official portal rather than assuming it applies.',
+  },
+  {
+    q: 'What happens to the loan if the student discontinues the course?',
+    a: 'Discontinuing a course partway through can trigger an earlier repayment obligation than originally planned, since the moratorium period is generally tied to the expected course duration plus a grace window — the exact consequence depends on the lender\'s specific terms, so this is worth clarifying with the lender directly if a course change or discontinuation becomes a real possibility.',
+  },
+  {
+    q: 'How does an education loan compare to a car or two-wheeler loan?',
+    a: 'An education loan typically runs much longer (10-15 years, sometimes more) than a car loan (3-7 years) or two-wheeler loan (1-4 years), reflects a moratorium period neither vehicle loan has, and — up to a threshold — can be unsecured where vehicle loans are always secured by the vehicle itself. See our Car Loan EMI Calculator and Two-Wheeler Loan EMI Calculator for those shorter-tenure, asset-backed cases.',
+  },
+  {
+    q: 'Should I use a bank or an NBFC for an education loan, especially for studying abroad?',
+    a: 'Banks generally offer lower rates and the CSIS subsidy where applicable, but can be slower and stricter on collateral for large foreign-education amounts. NBFCs and specialised education-loan lenders often move faster and are more flexible on collateral for study-abroad loans, typically at a higher rate — compare the total cost, not just the headline rate, before choosing.',
+  },
 ]
 
 const faqLd = {
@@ -134,6 +158,52 @@ export default function EducationLoanEmiCalculatorPage() {
             yearsMax={15}
             disclaimer="EMI shown is for the repayment phase, after any moratorium — actual rate and moratorium terms depend on the lender."
           />
+        </section>
+
+        <section aria-labelledby="scenarios" className="mb-10 scroll-mt-20">
+          <h2 id="scenarios" className="font-display mb-4 text-2xl font-semibold">
+            EMI across three common loan sizes
+          </h2>
+          <p className="text-ash/80">
+            Education loans span a wide range — a domestic professional course, a domestic
+            postgraduate degree, and a foreign master&apos;s program typically land in three quite
+            different brackets:
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-hairline bg-mist text-ink-navy">
+                <tr>
+                  <th className="px-4 py-2 font-semibold">Scenario</th>
+                  <th className="px-4 py-2 font-semibold">Loan / rate / tenure</th>
+                  <th className="px-4 py-2 font-semibold">Monthly EMI</th>
+                  <th className="px-4 py-2 font-semibold">Total interest</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                <tr>
+                  <td className="px-4 py-2 font-medium">Domestic professional course</td>
+                  <td className="px-4 py-2">{formatINR(1000000)} @ 9.5% / 7 yrs</td>
+                  <td className="px-4 py-2 tabular-nums">{formatINR(16344)}</td>
+                  <td className="px-4 py-2 tabular-nums">{formatINR(372894)}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Domestic postgraduate degree</td>
+                  <td className="px-4 py-2">{formatINR(2000000)} @ 9.5% / 10 yrs</td>
+                  <td className="px-4 py-2 tabular-nums">{formatINR(25880)}</td>
+                  <td className="px-4 py-2 tabular-nums">{formatINR(1105541)}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Foreign master&apos;s program</td>
+                  <td className="px-4 py-2">{formatINR(4000000)} @ 10% / 15 yrs</td>
+                  <td className="px-4 py-2 tabular-nums">{formatINR(42984)}</td>
+                  <td className="px-4 py-2 tabular-nums">{formatINR(3737157)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-xs text-ash/50">
+            Illustrative figures once repayment begins, after any moratorium — use the calculator above with your own loan amount, rate and tenure.
+          </p>
         </section>
 
         <section aria-labelledby="related" className="mb-10 scroll-mt-20">

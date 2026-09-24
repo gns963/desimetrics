@@ -45,6 +45,30 @@ const faqs = [
     q: 'Is a car loan tax-deductible like a home loan?',
     a: 'No, for personal use — car loan interest gets no income-tax deduction the way home loan interest does under Section 24(b). The only exception is if the vehicle is used for business/professional purposes, where the interest may be claimed as a business expense — a different context from a personal-use car loan.',
   },
+  {
+    q: 'Are there charges for prepaying or foreclosing a car loan early?',
+    a: 'RBI rules bar foreclosure charges on floating-rate loans to individual borrowers, but most car loans are fixed-rate, where lenders can and often do levy a foreclosure or part-prepayment charge (commonly a percentage of the outstanding principal). Check your specific loan agreement before assuming prepayment is free.',
+  },
+  {
+    q: 'What happens if I default on a car loan?',
+    a: 'A car loan is secured against the vehicle itself, so a sustained default lets the lender repossess and sell it to recover the outstanding amount — a materially faster and more direct consequence than defaulting on an unsecured personal loan. Repeated missed payments also damage your credit score well before repossession is triggered.',
+  },
+  {
+    q: 'Does adding a co-applicant improve my car loan approval or rate?',
+    a: 'A co-applicant with stable income and a strong credit history can improve both your approval odds and the rate you\'re offered, since the lender is underwriting the combined profile, not just yours alone. It\'s most useful for first-time borrowers, those with a thin credit file, or when the loan amount is large relative to the primary applicant\'s income.',
+  },
+  {
+    q: 'How much does my credit score actually affect the rate I get?',
+    a: 'A strong CIBIL score (750 and above) typically unlocks a lender\'s best-published rate tier, while scores in the 650-750 range often see a meaningfully higher rate offer, and sub-650 scores may struggle to get approved at all without a co-applicant. A single loan application causes a small, temporary dip from the credit inquiry itself — multiple applications in a short window compound that dip.',
+  },
+  {
+    q: 'How does a car loan compare to a two-wheeler or education loan?',
+    a: 'Car loans sit in the middle: larger principal and longer tenure (3-7 years) than a two-wheeler loan (1-4 years, smaller ticket size), but shorter tenure and a different collateral structure than an education loan (which can run 10-15 years and is often unsecured up to a threshold). See our Two-Wheeler Loan EMI Calculator and Education Loan EMI Calculator for those specific cases.',
+  },
+  {
+    q: 'Is the interest rate on a car loan fixed or floating?',
+    a: 'The large majority of car loans in India are fixed-rate for the entire tenure — unlike a home loan, where floating rates are far more common. Once you sign, your EMI typically doesn\'t change even if market rates move, which makes the number this calculator shows a reliable planning figure rather than an estimate that drifts.',
+  },
 ]
 
 const faqLd = {
@@ -133,6 +157,31 @@ export default function CarLoanEmiCalculatorPage() {
             yearsMax={8}
             disclaimer="Results are estimates. Actual rate and eligibility depend on the lender, vehicle and your credit profile — this is not a loan offer."
           />
+        </section>
+
+        <section aria-labelledby="rate-factors" className="mb-10 scroll-mt-20">
+          <h2 id="rate-factors" className="font-display mb-4 text-2xl font-semibold">
+            What actually changes your car loan rate
+          </h2>
+          <p className="text-ash/80">
+            Four factors drive most of the rate difference between borrowers on an otherwise
+            identical loan amount:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Credit score', 'a 750+ CIBIL score typically unlocks a lender\'s best rate tier; scores below 650 usually mean a higher rate offer or a co-applicant requirement.'],
+              ['New vs used', 'new-car loans carry lower rates than used-car loans, since a used vehicle\'s resale value and remaining life are less predictable for the lender.'],
+              ['Loan-to-value ratio', 'financing a smaller share of the on-road price (a bigger down payment) generally earns a better rate, since the lender\'s exposure per rupee of collateral is lower.'],
+              ['Tenure length', 'a shorter tenure sometimes carries a slightly lower rate, since the lender\'s risk window is shorter — though this varies more by lender than the other three factors.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section aria-labelledby="related" className="mb-10 scroll-mt-20">

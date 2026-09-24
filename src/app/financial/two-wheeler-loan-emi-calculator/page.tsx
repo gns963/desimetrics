@@ -41,6 +41,34 @@ const faqs = [
     q: 'How much down payment is usually required?',
     a: 'Many two-wheeler loans finance a high percentage (sometimes close to 90-100%) of the on-road price, especially for entry-level models, since the loan amount itself is relatively small — but the exact down payment required varies by lender, your credit profile, and the specific vehicle.',
   },
+  {
+    q: 'Are there charges for prepaying a two-wheeler loan early?',
+    a: 'RBI bars foreclosure charges on floating-rate loans to individual borrowers, but most two-wheeler loans are fixed-rate, where a prepayment or foreclosure charge (often a percentage of the outstanding balance) can still apply — check your loan agreement rather than assuming it\'s free.',
+  },
+  {
+    q: 'What happens if I default on a two-wheeler loan?',
+    a: 'The two-wheeler itself is the collateral, so a sustained default lets the lender repossess and sell it to recover the outstanding amount — a faster, more direct consequence than an unsecured loan default. Even before repossession, missed EMIs damage your credit score and make future borrowing harder.',
+  },
+  {
+    q: 'Does a co-applicant help with a two-wheeler loan?',
+    a: 'Yes, particularly for younger or first-time borrowers with a thin credit history — a co-applicant (often a parent) with stable income and an established credit record can improve both approval odds and the rate offered, since the lender underwrites the combined profile.',
+  },
+  {
+    q: 'How much does my credit score affect my two-wheeler loan rate?',
+    a: 'A CIBIL score of 750 or above typically gets you a lender\'s best rate tier; scores in the 650-750 range often see a noticeably higher rate, and sub-650 scores may need a co-applicant or a larger down payment to get approved at all.',
+  },
+  {
+    q: 'How does a two-wheeler loan compare to a car loan?',
+    a: 'A two-wheeler loan is smaller in principal, shorter in tenure (1-4 years vs. 3-7 years for a car), and typically carries a higher rate since fixed origination costs are spread over a smaller loan — see our Car Loan EMI Calculator if you\'re actually comparing the two vehicle types.',
+  },
+  {
+    q: 'Is dealer financing or a separate bank loan better for a two-wheeler?',
+    a: 'Dealer-tied financing is often faster to process (sometimes same-day) since the dealer has an existing arrangement with a lender, but it isn\'t always the cheapest — compare the dealer\'s offered rate and any bundled processing fees against a quote from your own bank or an NBFC before signing.',
+  },
+  {
+    q: 'Does buying a used two-wheeler change the loan terms?',
+    a: 'Yes — used two-wheeler loans typically come with a shorter maximum tenure, a lower loan-to-value ratio (a bigger down payment required), and a higher interest rate than a new-vehicle loan, reflecting the same higher-uncertainty pricing logic lenders apply to used cars.',
+  },
 ]
 
 const faqLd = {
@@ -129,6 +157,31 @@ export default function TwoWheelerLoanEmiCalculatorPage() {
             yearsMax={5}
             disclaimer="Results are estimates. Actual rate and eligibility depend on the lender, vehicle and your credit profile — this is not a loan offer."
           />
+        </section>
+
+        <section aria-labelledby="rate-factors" className="mb-10 scroll-mt-20">
+          <h2 id="rate-factors" className="font-display mb-4 text-2xl font-semibold">
+            What changes your two-wheeler loan rate
+          </h2>
+          <p className="text-ash/80">
+            Four factors explain most of the rate spread between borrowers financing the same
+            amount:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Credit score', 'a 750+ CIBIL score usually unlocks the best available rate; below 650 often means a higher rate or a required co-applicant.'],
+              ['New vs used vehicle', 'a new two-wheeler carries a lower rate than a used one, since resale value and remaining life are harder for the lender to price on a used vehicle.'],
+              ['Down payment size', 'financing a smaller share of the on-road price generally earns a better rate, since the lender\'s exposure per rupee of collateral is lower.'],
+              ['Model segment', 'entry-level commuter models are financed more readily and sometimes at a better rate than premium or performance models, which lenders may treat as higher-risk collateral.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section aria-labelledby="related" className="mb-10 scroll-mt-20">

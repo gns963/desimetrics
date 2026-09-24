@@ -48,6 +48,30 @@ const faqs = [
     q: 'What determines my IDV once the vehicle is more than 5 years old?',
     a: 'Beyond 5 years, there\'s no fixed IRDAI depreciation percentage — the IDV is set by mutual agreement between you and your insurer at renewal time, usually based on the vehicle\'s actual condition and prevailing market value for similar used vehicles.',
   },
+  {
+    q: 'What is an NCB protection add-on, and is it worth the extra cost?',
+    a: 'It\'s an optional rider that lets you make one or two claims in a policy year without your accumulated NCB resetting to zero, for an additional premium. It\'s worth considering once your NCB has built up to a high slab (35% or more) — the value of protecting several years of accumulated discount usually outweighs the add-on\'s modest annual cost, whereas it adds little in your first claim-free year when you have nothing to protect yet.',
+  },
+  {
+    q: 'What happens to my NCB if my policy lapses before I renew?',
+    a: 'Insurers give a grace period of up to 90 days after policy expiry during which your accumulated NCB stays intact if you renew within that window — though the vehicle itself is uninsured (and illegal to drive) during the gap. Renew after the 90-day window closes and your NCB is cancelled entirely, resetting you to 0% regardless of how many claim-free years you\'d built up.',
+  },
+  {
+    q: 'How does IDV affect a total-loss claim differently from a repair claim?',
+    a: 'For a repairable damage claim, the insurer pays for parts and labour up to the IDV as an overall ceiling, with depreciation deducted per part unless you hold a zero-depreciation add-on. For a total loss (theft, or damage beyond economical repair), the IDV IS the payout — a fixed, pre-agreed amount rather than a claim-by-claim calculation — which is why declaring an artificially low IDV to save on premium directly shrinks what you\'d receive in the worst-case scenario.',
+  },
+  {
+    q: 'Do NCB and IDV affect each other?',
+    a: 'No — they\'re independent inputs that both feed into your final premium separately. NCB is a percentage discount applied to your own-damage premium based on your claim history; IDV sets the base sum insured that premium is calculated against in the first place. A high NCB on a high-IDV vehicle and a high NCB on a low-IDV vehicle produce very different rupee discounts even at the identical NCB percentage.',
+  },
+  {
+    q: 'What is zero-depreciation cover, and how is it different from IDV depreciation?',
+    a: 'IDV depreciation (this calculator\'s second table) reduces the vehicle\'s OVERALL insured value as it ages. Zero-depreciation (or "bumper-to-bumper") cover is a separate add-on that stops the insurer deducting PART-WISE depreciation when settling an individual repair claim — without it, plastic and fibre parts can see 50%+ depreciation deducted from a claim payout even on a fairly new car. The two are unrelated: you can have zero-dep cover and still see your overall IDV decline every year.',
+  },
+  {
+    q: 'Can I declare a higher IDV than the standard depreciation schedule gives?',
+    a: 'Most insurers allow declaring an IDV within a band around the standard depreciated value (commonly ±5-10%), for a correspondingly adjusted premium — useful if you\'ve added expensive accessories or believe the standard schedule understates your vehicle\'s real condition. Declaring above the permitted band isn\'t accepted; insurers won\'t let IDV become a way to over-insure the vehicle.',
+  },
 ]
 
 const faqLd = {
@@ -169,6 +193,31 @@ export default function NcbIdvCalculatorPage() {
               </table>
             </div>
           </div>
+        </section>
+
+        <section aria-labelledby="protect-ncb" className="mb-10 scroll-mt-20">
+          <h2 id="protect-ncb" className="font-display mb-4 text-2xl font-semibold">
+            Four ways to protect your accumulated NCB
+          </h2>
+          <p className="text-ash/80">
+            A single claim wipes out every year of accumulated discount, so protecting it is worth
+            more the longer you&apos;ve gone claim-free:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Pay small repairs out of pocket', 'a minor dent or scratch repair often costs less than the NCB you\'d lose by filing a claim for it — do the maths before claiming on anything below a few thousand rupees.'],
+              ['Add NCB protection once your slab is high', 'the add-on costs the same whether your NCB is 20% or 50%, but protects far more value at the higher slabs — add it once you\'re past the 35-45% mark.'],
+              ['Renew before the 90-day grace window closes', 'a lapsed renewal outside this window cancels your NCB entirely, even if you never made a claim.'],
+              ['Carry your NCB certificate when switching insurers or vehicles', 'request it from your outgoing insurer at renewal time so your new policy starts at your true accumulated percentage, not zero.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <FinancialCrossSell current="ncb-idv-calculator" />

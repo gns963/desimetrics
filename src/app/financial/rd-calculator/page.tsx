@@ -45,6 +45,26 @@ const faqs = [
     q: 'Can I withdraw an RD before maturity?',
     a: 'Premature withdrawal is usually allowed but typically comes with a penalty (often a reduced interest rate for the period actually held) — check your specific bank\'s premature-withdrawal policy before committing to a long tenure if you might need the funds early.',
   },
+  {
+    q: 'How does an RD compare to a SIP into a debt mutual fund for the same monthly-saving goal?',
+    a: 'An RD gives a guaranteed, bank-fixed return known upfront, with interest fully taxable at your slab rate every year it\'s credited; a debt-fund SIP has a market-linked return (no guarantee, can occasionally be negative in a short window) but is taxed only on redemption at your slab rate as per the current debt-fund taxation rules, not annually. RDs suit savers who want certainty and simplicity; debt funds suit those comfortable with modest return variability in exchange for potentially better post-tax outcomes over longer holding periods.',
+  },
+  {
+    q: 'Should senior citizens prefer an RD or the Senior Citizen Savings Scheme (SCSS)?',
+    a: 'SCSS is specifically designed for senior citizens, typically offers a higher government-backed rate than bank RDs, and pays interest quarterly rather than compounding it — useful for someone who wants regular income rather than a lump sum at maturity. An RD suits a senior citizen building toward a specific future lump-sum goal instead of drawing regular income; the two serve different cash-flow needs even though both are low-risk.',
+  },
+  {
+    q: 'What is a "flexi RD," and how does it differ from what this calculator assumes?',
+    a: 'A flexi (or flexible) RD lets you vary your deposit amount each month between a minimum and a maximum, rather than committing to one fixed instalment for the entire tenure — useful for variable or seasonal income. This calculator assumes a FIXED monthly deposit throughout, matching a standard RD; a flexi RD\'s actual maturity value will differ from this calculator\'s projection based on how much you actually deposit each month.',
+  },
+  {
+    q: 'Can I open an RD for any tenure, or are there fixed options?',
+    a: 'Most banks offer RD tenures from 6 months up to 10 years, usually in increments of 3 months, though the exact available tenures vary by bank. Enter your specific planned tenure in months in this calculator rather than assuming only annual increments are available.',
+  },
+  {
+    q: 'Is there a minimum monthly deposit for an RD?',
+    a: 'Yes, though the exact minimum varies by bank — many banks accept RDs starting from as little as ₹100-500 per month, making it one of the more accessible regular-savings instruments, unlike a lump-sum FD which requires the full amount upfront.',
+  },
 ]
 
 const faqLd = {
@@ -133,6 +153,50 @@ export default function RdCalculatorPage() {
             </Link>{' '}
             models that scenario, including the senior-citizen rate bonus and TDS treatment.
           </p>
+        </section>
+
+        <section aria-labelledby="comparison" className="mb-10 scroll-mt-20">
+          <h2 id="comparison" className="font-display mb-4 text-2xl font-semibold">
+            RD vs FD vs SIP — which fits your goal?
+          </h2>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-hairline bg-mist text-ink-navy">
+                <tr>
+                  <th className="px-4 py-2 font-semibold">&nbsp;</th>
+                  <th className="px-4 py-2 font-semibold">Recurring Deposit</th>
+                  <th className="px-4 py-2 font-semibold">Fixed Deposit</th>
+                  <th className="px-4 py-2 font-semibold">Mutual Fund SIP</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                <tr>
+                  <td className="px-4 py-2 font-medium">Minimum commitment</td>
+                  <td className="px-4 py-2">Small monthly amount</td>
+                  <td className="px-4 py-2">One lump sum upfront</td>
+                  <td className="px-4 py-2">Small monthly amount</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Return type</td>
+                  <td className="px-4 py-2">Fixed, bank-guaranteed</td>
+                  <td className="px-4 py-2">Fixed, bank-guaranteed</td>
+                  <td className="px-4 py-2">Market-linked, not guaranteed</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Liquidity</td>
+                  <td className="px-4 py-2">Low — penalty on early exit</td>
+                  <td className="px-4 py-2">Low — penalty on early exit</td>
+                  <td className="px-4 py-2">High — redeem most funds anytime</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-medium">Ideal use case</td>
+                  <td className="px-4 py-2">Short-term goal from regular income, zero risk tolerance</td>
+                  <td className="px-4 py-2">Short-term goal with a lump sum already in hand</td>
+                  <td className="px-4 py-2">Long-term goal (5+ years), some risk tolerance for higher expected returns</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <FinancialCrossSell current="rd-calculator" />

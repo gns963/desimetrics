@@ -48,6 +48,26 @@ const faqs = [
     q: 'Can I switch my existing vehicle to a BH-series number?',
     a: 'Generally no — BH-series is assigned at the time of new vehicle registration, based on your eligibility (employer/government status) at that time. Converting an already-registered vehicle to BH-series after the fact isn\'t part of the standard process; check with your RTO for any exceptions.',
   },
+  {
+    q: 'What exactly does Form 60 need to contain for a private-sector applicant?',
+    a: 'Form 60 is a working certificate your employer issues declaring that you work for them and that the company has offices in 4 or more states/UTs. It states your employment start date, and lists the employer\'s office addresses and registration details in each of those states — the employer\'s signature and date make it valid; a generic employment letter without this specific multi-state declaration doesn\'t qualify.',
+  },
+  {
+    q: 'What if I sell the vehicle before the 14-year mark?',
+    a: 'The BH-series tax obligation transfers with the vehicle to the new owner for any remaining biennial periods — it isn\'t refunded to you on sale, since it was already paid for the block you owned it in. The new owner continues the same instalment schedule from where it stands; they don\'t restart the 14-year clock.',
+  },
+  {
+    q: 'Does a BH-series number affect resale value or buyer perception?',
+    a: 'Not materially — a BH-series mark doesn\'t carry any of the state-pride or "local registration" preference some buyers have for a specific state\'s regular plate, but it also doesn\'t signal anything negative about the vehicle\'s history or condition. Most buyers evaluate the vehicle itself; the registration series is a minor factor at most, and BH\'s cross-state portability is often seen as a genuine convenience for a buyer who might also relocate.',
+  },
+  {
+    q: 'Does my insurer care whether my vehicle has a BH-series registration?',
+    a: 'No — motor insurance premiums, NCB, and IDV (see our NCB & IDV Calculator) are calculated from the vehicle\'s make, model, age, location and claim history, not its registration series. A BH-series vehicle is insured exactly like any other vehicle of the same specification.',
+  },
+  {
+    q: 'How is the "4 or more states/UTs" threshold actually verified?',
+    a: 'The employer\'s Form 60 itself makes this declaration, listing office addresses and registration details in each state as evidence — the RTO doesn\'t independently audit the employer\'s national footprint beyond what\'s declared on the form. This is why the certificate must come from the employer directly, not be self-declared by the employee.',
+  },
 ]
 
 const faqLd = {
@@ -163,6 +183,35 @@ export default function BhSeriesCalculatorPage() {
           </div>
           <p className="mt-3 text-xs text-ash/50">
             Slabs are nationally uniform under MoRTH Rule 51B, unlike normal state road tax.
+          </p>
+        </section>
+
+        <section aria-labelledby="eligibility-docs" className="mb-10 scroll-mt-20">
+          <h2 id="eligibility-docs" className="font-display mb-4 text-2xl font-semibold">
+            Documents needed, by applicant type
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-hairline bg-paper p-5">
+              <p className="font-display mb-2 font-bold text-ink-navy">Private-sector employee</p>
+              <ul className="space-y-1.5 text-sm text-ash/80">
+                <li>• Form 60 from the employer, declaring offices in 4+ states/UTs</li>
+                <li>• Government photo ID (Aadhaar, PAN or passport)</li>
+                <li>• Proof of current residence</li>
+                <li>• Vehicle invoice, registration and insurance documents</li>
+              </ul>
+            </div>
+            <div className="rounded-xl border border-hairline bg-paper p-5">
+              <p className="font-display mb-2 font-bold text-ink-navy">Government / defence applicant</p>
+              <ul className="space-y-1.5 text-sm text-ash/80">
+                <li>• Government/defence service ID card</li>
+                <li>• Employment or posting certificate from the department</li>
+                <li>• Government photo ID (Aadhaar, PAN or passport)</li>
+                <li>• Vehicle invoice, registration and insurance documents</li>
+              </ul>
+            </div>
+          </div>
+          <p className="mt-3 text-xs text-ash/50">
+            Exact document lists can vary slightly by RTO — confirm the current checklist with your registering authority before applying.
           </p>
         </section>
 

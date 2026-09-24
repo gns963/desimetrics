@@ -52,6 +52,18 @@ const faqs = [
     q: 'Is FIRE realistic in India given typical inflation and returns?',
     a: 'It depends heavily on your income, savings rate and time horizon — someone saving 50%+ of a high income over 15-20 years in equity-heavy investments has historically had a real shot; someone saving 10-15% has a much longer runway. This calculator doesn\'t judge feasibility — it tells you the number and the monthly SIP required to reach it, so you can decide whether your current savings rate gets you there in the timeframe you want.',
   },
+  {
+    q: 'Where does the term "FIRE" come from?',
+    a: 'FIRE stands for Financial Independence, Retire Early, a personal-finance movement that emerged from the online community around the 1992 book "Your Money or Your Life," gaining wider popularity through blogs and forums in the 2010s. Its core idea — save aggressively, invest the surplus, and use a safe withdrawal rate to determine when you can stop working — is the same method this calculator applies, adapted with India-appropriate SWR and inflation assumptions.',
+  },
+  {
+    q: 'What tax do I pay when I start withdrawing from my FIRE corpus?',
+    a: 'If your corpus is in equity mutual funds, withdrawals trigger long-term capital gains tax (12.5% above a ₹1,25,000 exemption per financial year, for units held over 12 months) — see our Capital Gains Tax Calculator for the general mechanism. Since FIRE withdrawals are typically spread over many years rather than one lump sum, most retirees stay well within manageable tax territory each year, but it\'s worth planning WHICH accounts you draw from first (equity vs debt vs EPF) to manage the tax impact.',
+  },
+  {
+    q: 'How do I handle health insurance after leaving employer coverage?',
+    a: 'Once you\'re no longer employed, you lose any employer-provided group health cover, so budgeting for a personal family floater health insurance policy is essential BEFORE you FIRE, not an afterthought — premiums also rise with age, so locking in a policy while younger and healthier is generally cheaper than waiting. Many FIRE planners build this premium into their post-FIRE monthly expense figure explicitly, since it can be a meaningful, growing line item once employer coverage ends.',
+  },
 ]
 
 const faqLd = {
@@ -141,6 +153,32 @@ export default function FireCalculatorPage() {
               ['Divide by your safe withdrawal rate', 'a 3.5% SWR implies you can withdraw 3.5% of your corpus a year, adjusted for inflation, without running out — equivalent to a ~28.5x expense multiple.'],
               ['Check Coast FIRE', 'your existing portfolio alone, compounded to your FIRE age, is compared against the required corpus — if it already clears the bar, further contributions are optional.'],
               ['Solve for the required SIP', 'if there\'s a gap between your projected portfolio and the required corpus, the calculator works out the extra monthly investment needed to close it.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="fire-types" className="mb-10 scroll-mt-20">
+          <h2 id="fire-types" className="font-display mb-4 text-2xl font-semibold">
+            Lean, Fat, Coast and Barista FIRE — what the terms mean
+          </h2>
+          <p className="text-ash/80">
+            The FIRE community uses several named variants — this calculator models the core
+            safe-withdrawal-rate math behind all of them, and the two structurally different
+            variants (Coast, Barista) directly:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Lean FIRE', 'a smaller corpus targeting a frugal, minimal-expense retirement — modelled here simply by entering a lower monthly-expense figure.'],
+              ['Fat FIRE', 'a larger corpus supporting a more comfortable, higher-spending retirement — modelled by entering a higher monthly-expense figure.'],
+              ['Coast FIRE', 'you stop actively saving because your EXISTING portfolio, left to compound alone, will reach your number by your target age — this calculator checks this directly and flags it.'],
+              ['Barista FIRE', 'you leave your main career but keep part-time or freelance income to cover part of your costs, needing a smaller corpus than full FIRE — modelled via the optional post-FIRE income field.'],
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-2">
                 <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>

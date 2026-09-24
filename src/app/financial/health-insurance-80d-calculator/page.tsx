@@ -48,6 +48,26 @@ const faqs = [
     q: 'Does the mode of payment matter for claiming 80D?',
     a: 'Yes — the premium must be paid via a non-cash mode (cheque, card, net banking, UPI) to qualify for the deduction, EXCEPT for preventive health checkup payments, which can be made in cash and still count within the ₹5,000 sub-limit.',
   },
+  {
+    q: 'Can I claim 80D for a top-up or super top-up health insurance policy?',
+    a: 'Yes — a top-up or super top-up policy is still health insurance for 80D purposes, and its premium counts toward the same self+family or parents limit as your base policy, not a separate additional allowance. If you\'re already at your limit from a base policy\'s premium, an additional top-up premium adds nothing further to your deduction.',
+  },
+  {
+    q: 'What happens if I pay a multi-year health insurance premium in one lump sum?',
+    a: 'Section 80D(4A) specifically addresses this: a lump-sum premium covering more than one year is divided proportionately across the years the policy actually covers, and only that year\'s share is claimed as a deduction each year — not the full amount in the year you paid it. A ₹30,000 premium for 2 years of cover gives you ₹15,000 to claim in each of those two years, subject to your overall annual limit.',
+  },
+  {
+    q: 'How is Section 80D different from Section 80DDB?',
+    a: 'Section 80D covers your health insurance PREMIUM (the cost of maintaining a policy); Section 80DDB is a completely separate deduction for actual MEDICAL TREATMENT EXPENSES of specified critical illnesses (like cancer or chronic kidney failure) for yourself or a dependant, whether or not you have insurance, capped at ₹40,000 (₹1,00,000 for senior citizens) minus any insurance reimbursement received. The two aren\'t interchangeable and can both apply to the same taxpayer in the same year for different things.',
+  },
+  {
+    q: 'Can an NRI claim 80D for health insurance premiums paid for parents living in India?',
+    a: 'Yes — Section 80D doesn\'t require the taxpayer to be a resident, only that they\'re paying the premium for eligible family members (which includes resident Indian parents) out of income taxable in India, and that the payment is made through a non-cash mode. An NRI filing an Indian tax return can claim this the same way a resident taxpayer would.',
+  },
+  {
+    q: 'Can a Hindu Undivided Family (HUF) claim a Section 80D deduction?',
+    a: 'Yes — an HUF can claim up to ₹25,000 (₹50,000 if the insured member is a senior citizen) for health insurance premiums paid on behalf of any of its members, using the same limit structure as an individual\'s self+family claim. This is a separate, lesser-known category of 80D claimant beyond individual taxpayers.',
+  },
 ]
 
 const faqLd = {
@@ -124,6 +144,50 @@ export default function Section80DCalculatorPage() {
             Calculate your 80D deduction
           </h2>
           <Section80DCalculator />
+        </section>
+
+        <section aria-labelledby="family-scenarios" className="mb-10 scroll-mt-20">
+          <h2 id="family-scenarios" className="font-display mb-4 text-2xl font-semibold">
+            Total deduction by family composition
+          </h2>
+          <p className="text-ash/80">
+            The self+family and parents limits stack independently, so your total possible
+            deduction depends heavily on who you&apos;re insuring and whether they&apos;re senior citizens:
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-hairline bg-mist text-ink-navy">
+                <tr>
+                  <th className="px-4 py-2 font-semibold">Family situation</th>
+                  <th className="px-4 py-2 font-semibold">Self+family</th>
+                  <th className="px-4 py-2 font-semibold">Parents</th>
+                  <th className="px-4 py-2 font-semibold">Total</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-hairline">
+                {[
+                  { label: 'Self + spouse only (no seniors)', self: 20000, selfSenior: false, parents: 0, parentsSenior: false },
+                  { label: 'Self + spouse + kids + senior parents', self: 22000, selfSenior: false, parents: 40000, parentsSenior: true },
+                  { label: 'Senior self/spouse + senior parents', self: 35000, selfSenior: true, parents: 40000, parentsSenior: true },
+                ].map((s) => {
+                  const r = calculateSection80D(s.self, s.selfSenior, s.parents, s.parentsSenior, 0)
+                  return (
+                    <tr key={s.label}>
+                      <td className="px-4 py-2 font-medium">{s.label}</td>
+                      <td className="px-4 py-2 tabular-nums">{formatINR(r.selfFamilyDeduction)}</td>
+                      <td className="px-4 py-2 tabular-nums">{formatINR(r.parentsDeduction)}</td>
+                      <td className="px-4 py-2 tabular-nums font-semibold">{formatINR(r.totalDeduction)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-ash/80">
+            Insuring senior-citizen parents roughly doubles their share of the deduction versus
+            non-senior parents at the same premium — a real reason to check whether your parents&apos;
+            policy premium is being fully claimed.
+          </p>
         </section>
 
         <FinancialCrossSell current="health-insurance-80d-calculator" />

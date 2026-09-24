@@ -49,6 +49,22 @@ const faqs = [
     q: 'How is this different from the FIRE Calculator?',
     a: 'The FIRE Calculator uses a single flat safe-withdrawal-rate multiplier and is built for people targeting an EARLY retirement, often with a Coast/Barista FIRE angle. This planner is built for a more standard retirement-age scenario, with a genuine present-value calculation over your specific retirement duration, separate medical inflation, and an income-offset field for pension/rental income — more detailed, but requires more inputs.',
   },
+  {
+    q: 'What is sequence-of-returns risk, and why does it matter more right at retirement?',
+    a: 'It\'s the risk that a market downturn hits in your first few retirement years, right when you\'ve also started withdrawing — forcing you to sell a larger SHARE of a shrunken corpus than if the same downturn had hit years later. Two retirees with identical average returns over 25 years can end up with very different outcomes purely based on WHEN the bad years fell relative to when withdrawals began. This planner\'s single assumed return doesn\'t capture that timing risk; some retirees manage it with a "bucket strategy" (keeping 2-3 years of expenses in cash/short-term debt so a market downturn doesn\'t force selling equity at a low point) — a general technique, not a recommendation tailored to your situation.',
+  },
+  {
+    q: 'How often should I update this plan?',
+    a: 'Revisit it at least once a year, and whenever something material changes: a significant raise or job change, a new dependant, a large one-time expense or windfall, or a meaningful shift in your actual investment returns versus what you assumed. Retirement planning compounds small early corrections into a much smaller course-correction later than waiting a decade to notice you\'re off track.',
+  },
+  {
+    q: 'What Indian income sources typically supplement a retirement corpus?',
+    a: 'The most common are an EPF/EPS pension (see our EPF Calculator for the corpus side; EPS itself pays a modest defined monthly pension separately), an NPS annuity (the compulsory annuitised portion of an NPS exit — see our NPS Calculator), and rental income from owned property. Government employees under the older pension scheme may also have a defined-benefit pension distinct from EPS. Enter any of these you expect as the "pension/rental income" field to see how much they shrink your required corpus.',
+  },
+  {
+    q: 'Why does a higher post-retirement return assumption lower my required corpus?',
+    a: 'Because the corpus itself keeps earning a return even while you\'re withdrawing from it every year — a higher assumed post-retirement return means each rupee has to work harder for you today, and less needs to be set aside up front to fund the same withdrawal stream. Be realistic here: many retirees deliberately shift toward a more conservative, debt-heavy allocation after retiring, which caps how high this assumption should reasonably be set.',
+  },
 ]
 
 const faqLd = {
@@ -155,6 +171,28 @@ export default function RetirementPlannerPage() {
             uses a simpler safe-withdrawal-rate method better suited to that scenario, including a
             Coast FIRE check.
           </p>
+        </section>
+
+        <section aria-labelledby="mistakes" className="mb-10 scroll-mt-20">
+          <h2 id="mistakes" className="font-display mb-4 text-2xl font-semibold">
+            Common retirement-planning mistakes this model helps avoid
+          </h2>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Underestimating medical inflation', 'blending healthcare costs into a single general-inflation figure understates what you\'ll actually need in your later, higher-medical-need years.'],
+              ['Using a flat expense multiple', 'a generic "25x annual expenses" rule ignores your specific retirement duration — a 20-year retirement and a 35-year retirement need very different corpuses for the same monthly spend.'],
+              ['Setting the plan once and forgetting it', 'a plan built on a 10-year-old salary and cost-of-living assumption drifts further from reality every year it isn\'t revisited.'],
+              ['Relying only on EPF as the entire retirement plan', 'EPF is a strong, safe base, but its fixed, government-set return may not outpace inflation by enough on its own — see our EPF Calculator alongside this planner.'],
+              ['Ignoring sequence-of-returns risk near retirement', 'a market downturn in the first few withdrawal years does outsized damage compared to the same downturn later — see the FAQ above on bucket strategies.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <FinancialCrossSell current="retirement-planner" />
