@@ -52,7 +52,7 @@ export default function DisclaimerPage() {
         Financial calculators
       </h2>
       <p>
-        Our 30 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
+        Our 29 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
         GST, SIP, Home Loan EMI, Personal Loan EMI, PPF, FD, Gratuity, HRA, NPS,
         Human Life Value, FIRE, Net Worth, Crorepati, BH Series, EV vs Fuel Cost,
         Retirement Planner, EPF, Sukanya Samriddhi Yojana, CTC to In-Hand Salary,
