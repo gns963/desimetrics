@@ -401,13 +401,16 @@ export default function TaxRegimePage() {
             <Link href="/financial/ppf-calculator" className="text-brass underline">
               PPF Calculator
             </Link>{' '}
-            helps size your 80C contribution, and our{' '}
+            helps size your 80C contribution, our{' '}
             <Link href="/financial/nps-calculator" className="text-brass underline">
               NPS Calculator
             </Link>{' '}
-            helps with the 80CCD(1B) top-up — enter each figure directly
-            into its matching field above and let the calculator apply the
-            caps for you.
+            helps with the 80CCD(1B) top-up, and our{' '}
+            <Link href="/financial/health-insurance-80d-calculator" className="text-brass underline">
+              Health Insurance 80D Calculator
+            </Link>{' '}
+            works out your exact 80D figure across self, family and parents — enter each figure
+            directly into its matching field above and let the calculator apply the caps for you.
           </p>
         </section>
 

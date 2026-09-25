@@ -254,7 +254,14 @@ export default function NpsCalculatorPage() {
               SIP Calculator
             </Link>{' '}
             models pure equity mutual fund growth without NPS&apos;s
-            retirement-specific lock-in or annuity requirement.
+            retirement-specific lock-in or annuity requirement. If
+            you&apos;re salaried, your{' '}
+            <Link href="/financial/epf-calculator" className="text-brass underline">
+              EPF
+            </Link>{' '}
+            is likely your retirement-savings base layer already — NPS (especially via Section
+            80CCD(1B)&apos;s extra ₹50,000 deduction) is usually a market-linked addition on top of
+            it, not a replacement for it.
           </p>
         </section>
 

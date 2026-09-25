@@ -431,10 +431,13 @@ export default function SipCalculatorPage() {
             ))}
           </ul>
           <p className="mt-3 text-ash/80">
-            Want to model gradually increasing your contribution instead
-            of a flat monthly amount? See how a step-up affects the
-            maturity value, or compare against a guaranteed alternative
-            on our{' '}
+            Working backward from a target corpus (like ₹1 crore) instead of a fixed monthly
+            amount? Our{' '}
+            <Link href="/financial/crorepati-calculator" className="text-brass underline">
+              Crorepati Calculator
+            </Link>{' '}
+            solves for the required SIP — including a step-up option — to hit any goal by a target
+            date. Comparing against a guaranteed alternative instead? See our{' '}
             <Link href="/financial/fd-calculator" className="text-brass underline">
               FD Calculator
             </Link>{' '}

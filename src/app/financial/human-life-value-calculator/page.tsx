@@ -169,7 +169,12 @@ export default function HlvCalculatorPage() {
             <Link href="/financial/home-loan-emi-calculator" className="text-brass underline">
               Home Loan EMI Calculator
             </Link>
-            .
+            . Not sure what your existing cover and savings actually add up to? Our{' '}
+            <Link href="/financial/net-worth-calculator" className="text-brass underline">
+              Net Worth Calculator
+            </Link>{' '}
+            totals your liquid assets in one place, which feeds directly into this calculator&apos;s
+            existing-cover-and-savings field.
           </p>
         </section>
 

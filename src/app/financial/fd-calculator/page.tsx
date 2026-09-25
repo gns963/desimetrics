@@ -244,6 +244,14 @@ export default function FdCalculatorPage() {
             entirely by filing Form 15G (or 15H if you&apos;re a senior
             citizen) with your bank at the start of the financial year.
           </p>
+          <p className="mt-3 text-ash/80">
+            Investing from regular monthly income instead of a lump sum? Our{' '}
+            <Link href="/financial/rd-calculator" className="text-brass underline">
+              Recurring Deposit Calculator
+            </Link>{' '}
+            models the same guaranteed-return, quarterly-compounding mechanics for a monthly
+            savings habit.
+          </p>
         </section>
 
         <FinancialCrossSell current="fd-calculator" />

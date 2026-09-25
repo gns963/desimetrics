@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
 import GratuityCalculatorAdvanced from '@/components/calculators/GratuityCalculatorAdvanced'
@@ -315,6 +316,15 @@ export default function GratuityCalculatorPage() {
           gives only <strong>{formatINR(exampleNonCovered.gratuity)}</strong>.
           Check your own employment terms rather than assuming — this is
           a real, material difference, not a rounding effect.
+        </p>
+        <p className="mt-3 text-ash/80">
+          Many CTC structures set aside a monthly gratuity provision (commonly 4.81% of basic,
+          derived from this same 15/26 formula) even though it&apos;s only actually paid out after
+          5 years of service — see our{' '}
+          <Link href="/financial/ctc-in-hand-salary-calculator" className="text-brass underline">
+            CTC to In-Hand Salary Calculator
+          </Link>{' '}
+          to see how much of your CTC that provision represents.
         </p>
       </section>
 

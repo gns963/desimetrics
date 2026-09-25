@@ -217,7 +217,21 @@ export default function PersonalLoanEmiCalculatorPage() {
             you&apos;re weighing a personal loan against a secured
             alternative — for example, borrowing against gold or a fixed
             deposit instead — compare the total interest cost, not just the
-            monthly EMI.
+            monthly EMI. If your borrowing has a specific purpose, a
+            purpose-built loan is usually cheaper than a general personal
+            loan: see our{' '}
+            <Link href="/financial/car-loan-emi-calculator" className="text-brass underline">
+              Car
+            </Link>
+            ,{' '}
+            <Link href="/financial/two-wheeler-loan-emi-calculator" className="text-brass underline">
+              Two-Wheeler
+            </Link>{' '}
+            or{' '}
+            <Link href="/financial/education-loan-emi-calculator" className="text-brass underline">
+              Education Loan EMI Calculators
+            </Link>{' '}
+            for those specific cases.
           </p>
         </section>
 

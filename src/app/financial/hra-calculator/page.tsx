@@ -264,6 +264,15 @@ export default function HraCalculatorPage() {
             </Link>{' '}
             before choosing.
           </p>
+          <p className="mt-3 text-ash/80">
+            Wondering whether renting still makes sense compared to buying, beyond just the tax
+            exemption? Our{' '}
+            <Link href="/financial/rent-vs-buy-calculator" className="text-brass underline">
+              Rent vs Buy Calculator
+            </Link>{' '}
+            runs the full wealth comparison, including what your rent could otherwise be invested
+            for if you kept renting.
+          </p>
         </section>
 
         <FinancialCrossSell current="hra-calculator" />

@@ -250,6 +250,21 @@ export default function HomeLoanEmiCalculatorPage() {
           </p>
         </section>
 
+        <section aria-labelledby="rent-vs-buy" className="mb-10 scroll-mt-20">
+          <h2 id="rent-vs-buy" className="font-display mb-2 text-2xl font-semibold">
+            Should you even take this loan — or keep renting?
+          </h2>
+          <p className="text-ash/80">
+            This calculator answers what your EMI would be, not whether buying beats renting and
+            investing the difference over the same period — a separate, often bigger question. Our{' '}
+            <Link href="/financial/rent-vs-buy-calculator" className="text-brass underline">
+              Rent vs Buy Calculator
+            </Link>{' '}
+            runs that full wealth comparison using this same EMI math, plus your rent, property
+            appreciation and investment-return assumptions.
+          </p>
+        </section>
+
         <section aria-labelledby="tax-benefits" className="mb-10 scroll-mt-20">
           <h2 id="tax-benefits" className="font-display mb-4 text-2xl font-semibold">
             Tax benefits on a home loan

@@ -330,7 +330,11 @@ export default function CapitalGainsTaxCalculatorPage() {
             ))}
           </div>
           <p className="mt-4 text-xs text-ash/40">
-            This tool provides estimates for illustration only and is not tax advice. It assumes STT was paid on equity purchase and sale, does not model surcharge, and does not model the pre-23-July-2024 property indexation option — consult a tax professional for your specific transaction. See our{' '}
+            This tool provides estimates for illustration only and is not tax advice. It assumes STT was paid on equity purchase and sale, does not model the pre-23-July-2024 property indexation option, and does not model surcharge above ₹50 lakh — use our{' '}
+            <Link href="/financial/surcharge-marginal-relief-calculator" className="text-brass underline">
+              Surcharge &amp; Marginal Relief Calculator
+            </Link>{' '}
+            alongside this one if your total income including these gains crosses that threshold. Consult a tax professional for your specific transaction. See our{' '}
             <Link href="/methodology" className="text-brass underline">
               methodology
             </Link>{' '}

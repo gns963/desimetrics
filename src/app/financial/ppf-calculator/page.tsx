@@ -308,7 +308,16 @@ export default function PpfCalculatorPage() {
             <Link href="/financial/fd-calculator" className="text-brass underline">
               FD Calculator
             </Link>
-            .
+            . If you&apos;re salaried, your{' '}
+            <Link href="/financial/epf-calculator" className="text-brass underline">
+              EPF
+            </Link>{' '}
+            is likely already doing something similar with mandatory employer matching; if you have
+            a daughter under 10, our{' '}
+            <Link href="/financial/sukanya-samriddhi-calculator" className="text-brass underline">
+              Sukanya Samriddhi Yojana Calculator
+            </Link>{' '}
+            models a similarly tax-free scheme at a typically higher rate for that specific goal.
           </p>
         </section>
 
