@@ -25,6 +25,8 @@ export default function EpfCalculator() {
     )
   }, [basicMonthly, currentAge, retirementAge, currentBalance, rate, increment])
 
+  const maxBalance = Math.max(...(result?.yearly.map((y) => y.balance) ?? [1]), 1)
+
   const fieldCls =
     'w-full rounded-lg border border-hairline px-3 py-2.5 text-lg tabular-nums outline-none focus:border-hub-financial focus:ring-2 focus:ring-hub-financial/30'
 
@@ -80,6 +82,24 @@ export default function EpfCalculator() {
                 Invested {formatINR(result.totalInvested)} · Interest{' '}
                 <span className="text-spark-teal">{formatINR(result.interestEarned)}</span>
               </p>
+            </div>
+
+            <div>
+              <div className="flex h-40 items-end gap-1" aria-hidden>
+                {result.yearly.map((p) => {
+                  const h = (p.balance / maxBalance) * 100
+                  return (
+                    <div
+                      key={p.year}
+                      className="flex-1"
+                      title={`Year ${p.year}: ${formatINR(p.balance)}`}
+                    >
+                      <div className="w-full rounded-t bg-brass" style={{ height: `${h}%` }} />
+                    </div>
+                  )
+                })}
+              </div>
+              <p className="mt-2 text-xs text-ash/60">EPF balance by year, from now to retirement</p>
             </div>
 
             <table className="w-full text-sm">
