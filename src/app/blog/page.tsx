@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Piped Gas (PNG) Bill in India: How It’s Calculated, Why It Got Cheaper in 2026',
+    tag: 'Gas',
+    href: '/blog/png-piped-gas-bill-guide-india',
+    live: true,
+  },
+  {
     title: 'Complete Guide to TGSPDCL/TSSPDCL (Telangana) Electricity Bill',
     tag: 'Reference',
     href: '/blog/tsspdcl-complete-guide-electricity-bill',
