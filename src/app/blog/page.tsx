@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'How Much Does a Rooftop Solar System Actually Cost in India? (2026 Pricing Guide)',
+    tag: 'Solar',
+    href: '/blog/rooftop-solar-system-cost-india',
+    live: true,
+  },
+  {
     title: 'How Much Electricity Does a Refrigerator Actually Use? (India Guide)',
     tag: 'Appliances',
     href: '/blog/refrigerator-electricity-consumption-india',
