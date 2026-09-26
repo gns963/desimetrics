@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
 import Section80DCalculator from '@/components/calculators/Section80DCalculator'
@@ -34,7 +35,7 @@ const faqs = [
   },
   {
     q: 'Can I claim 80D under the new tax regime?',
-    a: 'No — Section 80D, like most Chapter VI-A deductions, is available only under the OLD tax regime. If you\'ve switched to the new regime for its lower slab rates, you lose this deduction entirely, which is one of the trade-offs worth weighing with our Tax Regime Calculator.',
+    a: 'No — Section 80D, like most Chapter VI-A deductions, is available only under the OLD tax regime. If you\'ve switched to the new regime for its lower slab rates, you lose this deduction entirely, which is one of the trade-offs worth weighing with our New vs Old Tax Regime Calculator.',
   },
   {
     q: 'Does 80D cover premiums paid for siblings or in-laws?',
@@ -144,6 +145,44 @@ export default function Section80DCalculatorPage() {
             Calculate your 80D deduction
           </h2>
           <Section80DCalculator />
+        </section>
+
+        <section aria-labelledby="two-buckets" className="mb-10 scroll-mt-20">
+          <h2 id="two-buckets" className="font-display mb-4 text-2xl font-semibold">
+            Why Section 80D Has Two Separate Limits
+          </h2>
+          <p className="text-ash/80">
+            Section 80D splits your deduction into two independent buckets — one
+            for your own family, one for your parents — rather than one
+            combined cap, which is exactly what trips up most taxpayers who
+            add every premium into a single number:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Self+family bucket', 'covers you, your spouse and dependent children under a ₹25,000 cap (₹50,000 if the eldest insured member is a senior citizen), with the preventive checkup allowance absorbed inside it, not added on top.'],
+              ['Parents bucket', 'covers your parents\' premium under its own separate cap — ₹25,000 regular or ₹50,000 if either parent is a senior citizen — independent of your self+family bucket.'],
+              ['Independent senior status', 'each bucket\'s limit depends only on the age of the people insured within that bucket, so a taxpayer under 60 can still unlock the ₹50,000 parents cap purely because a parent has turned 60.'],
+              ['Full stacking', 'because the two buckets never share space, a taxpayer insuring senior-citizen parents alongside a senior-citizen spouse can claim up to ₹1,00,000 total, not the ₹50,000 a single-bucket view would suggest.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 font-semibold text-ink-navy">
+            Takeaway: check both buckets separately rather than folding every
+            premium into one number — that&apos;s usually the difference between
+            an under-claimed deduction and the full amount you&apos;re entitled to.
+            Since 80D applies only under the old regime, it&apos;s also worth
+            running your numbers through our{' '}
+            <Link href="/financial/new-vs-old-tax-regime-calculator" className="text-brass underline">
+              New vs Old Tax Regime Calculator
+            </Link>{' '}
+            before assuming it tips the comparison.
+          </p>
         </section>
 
         <section aria-labelledby="family-scenarios" className="mb-10 scroll-mt-20">

@@ -66,6 +66,22 @@ const faqs = [
     q: 'What if I already have a lump sum invested — does that reduce my required SIP?',
     a: 'Yes — enter it in the "existing corpus" field. It grows forward at your assumed return before being netted off your target, so the calculator only asks your SIP to cover the remaining gap rather than the whole target from zero. Someone with a substantial head start needs a much smaller monthly SIP for the same goal than someone starting from nothing.',
   },
+  {
+    q: 'What return should I enter if my goal is split between equity and debt?',
+    a: 'Enter the single blended return that matches your actual allocation, since this calculator solves for one monthly SIP at one assumed rate rather than modelling multiple asset classes at once. A goal split 70:30 between equity (assume 12%) and debt (assume 7%) would use a blended figure around 10.5% — weighted by how much of the eventual corpus each asset class is expected to contribute, not a simple average of the two rates.',
+  },
+  {
+    q: 'How often should I recalculate my required SIP?',
+    a: 'At least once a year, and always after a real change — a step-up SIP\'s annual increase is a natural trigger to also re-check whether your target, timeline, or return assumption still hold. Recalculating regularly catches a goal that has drifted (a house budget that grew, a retirement date that moved) long before the shortfall becomes hard to close, rather than discovering it only near the goal date.',
+  },
+  {
+    q: 'Why is my required SIP so much higher than a friend\'s for the same ₹1 crore target?',
+    a: 'The three inputs — time to goal, assumed return, and any existing corpus — are highly sensitive, so two people with the same nominal target can need very different monthly amounts. Someone with 20 years left needs a fraction of what someone with 8 years left needs for the identical target, and an existing lump sum can shrink the gap further — compare inputs, not just the final target figure, before assuming either number is wrong.',
+  },
+  {
+    q: 'Should I round my target up to be safe?',
+    a: 'A small safety margin (rounding a ₹90 lakh goal to ₹1 crore, say) is a reasonable, simple buffer against underestimating costs or returns falling short. A large arbitrary buffer, though, just inflates the required SIP without a clear reason — better to size the buffer against a specific risk (a likely cost overrun, a conservative return assumption) than to add one purely out of caution.',
+  },
 ]
 
 const faqLd = {
@@ -144,6 +160,37 @@ export default function CrorepatiCalculatorPage() {
           <CrorepatiCalculator />
         </section>
 
+        <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
+          <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+            How the required monthly SIP is calculated
+          </h2>
+          <p className="text-ash/80">
+            The calculator solves the standard future-value-of-an-annuity formula backward — instead
+            of asking what a fixed monthly amount grows into, it fixes the destination (your target
+            corpus, by your goal year) and works out the one monthly amount that reaches it at your
+            assumed return. Three inputs drive that answer:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Target corpus', 'the amount you actually need — ₹1 crore is the calculator\'s namesake default, but any goal figure (a retirement number from our Retirement Planner or FIRE Calculator, a house down payment, a child\'s education fund) works the same way.'],
+              ['Time to goal', 'fewer years left means each remaining month has less time to compound, so the required monthly amount rises — often sharply — the closer your goal date already is.'],
+              ['Assumed return', 'a higher assumed return lowers the required SIP for the same target, which is exactly why an unrealistically optimistic return assumption is the most common way people under-save for a real goal.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-ash/80">
+            An existing lump sum, if you already have one, is grown forward at the same assumed
+            return and netted off the target first — so the calculator only asks your monthly SIP to
+            close the remaining gap, not fund the goal from zero.
+          </p>
+        </section>
+
         <section aria-labelledby="tenure-comparison" className="mb-10 scroll-mt-20">
           <h2 id="tenure-comparison" className="font-display mb-4 text-2xl font-semibold">
             Same ₹1 crore target, four different tenures
@@ -180,6 +227,55 @@ export default function CrorepatiCalculatorPage() {
           </p>
         </section>
 
+        <section aria-labelledby="reach-faster" className="mb-10 scroll-mt-20">
+          <h2 id="reach-faster" className="font-display mb-4 text-2xl font-semibold">
+            Four ways to reach your target with a smaller monthly commitment
+          </h2>
+          <p className="text-ash/80">
+            The tenure comparison above shows time as the biggest lever, but four other choices also
+            change how much you need to invest each month for the same eventual target:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Start now, even at a smaller amount', 'every year removed from the front of the timeline compounds for longer, so an early start at a modest SIP often beats a larger one begun a few years later — see the tenure table above for how steep that curve gets.'],
+              ['Layer in an annual step-up', 'raising your monthly SIP by a fixed percentage each year (matching expected salary growth) lowers the STARTING amount needed versus a flat SIP for the same target, since later, larger instalments pick up more of the load.'],
+              ['Set the target in real terms first', 'inflate today\'s goal amount forward using an assumed inflation rate before entering it as your target corpus — sizing a SIP against today\'s cost of a future goal, without adjusting for inflation, is a common way people under-save.'],
+              ['Net off tax if the goal is funded from equity', 'if the corpus will be withdrawn from equity mutual funds, remember LTCG tax applies at redemption — treat the ₹1 crore (or your chosen figure) as the amount you want IN HAND, and target a slightly higher gross corpus if the difference matters for your goal.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="common-mistakes" className="mb-10 scroll-mt-20">
+          <h2 id="common-mistakes" className="font-display mb-4 text-2xl font-semibold">
+            Three mistakes that quietly inflate the required SIP
+          </h2>
+          <p className="text-ash/80">
+            Beyond the four levers above, these are the assumptions most likely to leave you
+            investing far more — or far less — than your goal actually needs:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Anchoring the return assumption to a recent bull run', 'a few strong years of equity returns can tempt an unrealistically high input, which understates the required SIP — a conservative 10-12% range for equity protects against a market that reverts to its long-run average.'],
+              ['Treating the target as fixed instead of revisiting it', 'a house budget, education cost, or retirement lifestyle can change well before the goal date — recalculating at least yearly catches drift early, while a step-up SIP still has room to absorb a larger adjustment.'],
+              ['Ignoring the existing-corpus field entirely', 'someone who already holds savings, an old EPF balance, or a maturing FD often has a real head start that meaningfully lowers the monthly SIP needed — leaving it at zero overstates the true monthly commitment required.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section aria-labelledby="related-tools" className="mb-10 scroll-mt-20">
           <h2 id="related-tools" className="font-display mb-2 text-2xl font-semibold">
             Already investing a fixed amount instead?
@@ -190,7 +286,20 @@ export default function CrorepatiCalculatorPage() {
             <Link href="/financial/sip-calculator" className="text-brass underline">
               SIP Calculator
             </Link>{' '}
-            — it also shows the inflation-adjusted real value and post-tax corpus after LTCG.
+            — it also shows the inflation-adjusted real value and post-tax corpus after LTCG. If
+            your target itself is a retirement number rather than a round figure like ₹1 crore, our{' '}
+            <Link href="/financial/retirement-planner" className="text-brass underline">
+              Retirement Planner
+            </Link>{' '}
+            and{' '}
+            <Link href="/financial/fire-calculator" className="text-brass underline">
+              FIRE Calculator
+            </Link>{' '}
+            help you arrive at that target corpus first, and our{' '}
+            <Link href="/financial/net-worth-calculator" className="text-brass underline">
+              Net Worth Calculator
+            </Link>{' '}
+            shows how an existing lump sum — which this calculator can net off your target — fits into your wider finances.
           </p>
         </section>
 

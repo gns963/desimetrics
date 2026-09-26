@@ -69,6 +69,18 @@ const faqs = [
     q: 'Does buying a used two-wheeler change the loan terms?',
     a: 'Yes — used two-wheeler loans typically come with a shorter maximum tenure, a lower loan-to-value ratio (a bigger down payment required), and a higher interest rate than a new-vehicle loan, reflecting the same higher-uncertainty pricing logic lenders apply to used cars.',
   },
+  {
+    q: 'Does this calculator include the processing fee in the EMI shown?',
+    a: 'No — the EMI figure here is calculated on the principal amount alone, using the reducing-balance method. Lenders separately charge a processing fee upfront (a flat amount or a small percentage of the loan), which adds to your effective cost of borrowing but doesn\'t change the monthly EMI itself — factor it in separately when comparing offers.',
+  },
+  {
+    q: 'Is the interest rate on a two-wheeler loan fixed or floating?',
+    a: 'The large majority of two-wheeler loans in India are fixed-rate for the full tenure, similar to car loans — once you sign, your EMI typically stays the same regardless of how market rates move afterward, which is what makes the figure this calculator shows a reliable number to plan around rather than an estimate that can drift.',
+  },
+  {
+    q: 'Can I get a two-wheeler loan with no credit history at all?',
+    a: 'It\'s harder, but not impossible — first-time borrowers with no credit file often need a co-applicant with an established credit history, a larger down payment, or both, since the lender has no independent repayment track record to underwrite against. Building a short credit history first (even a small credit card used responsibly) can improve terms on a future loan application.',
+  },
 ]
 
 const faqLd = {
@@ -184,6 +196,58 @@ export default function TwoWheelerLoanEmiCalculatorPage() {
           </ul>
         </section>
 
+        <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
+          <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+            How the EMI is calculated
+          </h2>
+          <p className="text-ash/80">
+            This calculator uses the standard reducing-balance method — the same method
+            every regulated Indian lender uses for a two-wheeler loan:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Interest is charged only on the outstanding balance', 'not on the original loan amount, so as you pay down principal each month, the rupee interest portion of your EMI shrinks and the principal portion grows — even though the EMI itself stays fixed for the whole tenure.'],
+              ['Early EMIs are interest-heavy', 'in the first year of a 3-year loan, a large share of each EMI goes toward interest rather than principal — this flips only in the later months as the outstanding balance shrinks.'],
+              ['The EMI formula solves for a fixed monthly payment', 'given the principal, the monthly interest rate (annual rate ÷ 12), and the number of months, such that the loan is exactly paid off — principal and interest — by the final instalment.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-ash/80">
+            Because a two-wheeler loan&apos;s tenure is short (typically 1-4 years) compared to a
+            car or home loan, the interest-heavy early phase passes faster — a meaningful
+            prepayment even a few months in still saves real interest, since less of the
+            loan has amortised than it would have on a longer-tenure loan at the same point.
+          </p>
+        </section>
+
+        <section aria-labelledby="best-practices" className="mb-10 scroll-mt-20">
+          <h2 id="best-practices" className="font-display mb-4 text-2xl font-semibold">
+            Five two-wheeler loan best practices
+          </h2>
+          <ul className="mt-3 space-y-3">
+            {[
+              ['Compare the dealer\'s rate against your own bank or NBFC', 'dealer-tied financing is convenient and fast, but isn\'t automatically the cheapest — a quick quote from your existing bank can reveal a materially lower rate or fee.'],
+              ['Put down as large a down payment as you comfortably can', 'financing a smaller share of the on-road price both lowers your EMI and often earns a better rate, since the lender\'s exposure per rupee of collateral is lower.'],
+              ['Match the tenure to the vehicle\'s useful life, not just the lowest EMI', 'stretching the tenure lowers the monthly payment but increases total interest paid, and a two-wheeler depreciates quickly — a long tenure risks owing more than the vehicle is worth for a stretch of the loan.'],
+              ['Check for prepayment or foreclosure charges before signing', 'most two-wheeler loans are fixed-rate, where RBI\'s ban on foreclosure charges (which only covers floating-rate loans) doesn\'t apply — confirm the actual charge in your loan agreement.'],
+              ['Factor the processing fee into your real cost comparison', 'a lender advertising a lower rate but a higher processing fee can end up costing more than one with a marginally higher rate and a lower fee — compare the all-in cost, not the headline rate alone.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section aria-labelledby="related" className="mb-10 scroll-mt-20">
           <h2 id="related" className="font-display mb-2 text-2xl font-semibold">
             Related calculators
@@ -193,11 +257,20 @@ export default function TwoWheelerLoanEmiCalculatorPage() {
             <Link href="/financial/car-loan-emi-calculator" className="text-brass underline">
               Car Loan EMI Calculator
             </Link>
-            . Also comparing running costs — petrol vs an EV two-wheeler? Check our{' '}
+            . Comparing this against a personal loan for the same purchase? Check our{' '}
+            <Link href="/financial/personal-loan-emi-calculator" className="text-brass underline">
+              Personal Loan EMI Calculator
+            </Link>
+            . Weighing running costs — petrol vs an EV two-wheeler — over the ownership period?
+            See our{' '}
             <Link href="/financial/ev-vs-fuel-cost-calculator" className="text-brass underline">
               EV vs Fuel Cost Calculator
             </Link>
-            .
+            , and once you own the vehicle, our{' '}
+            <Link href="/financial/ncb-idv-calculator" className="text-brass underline">
+              NCB/IDV Calculator
+            </Link>{' '}
+            helps you check your insurance renewal quote.
           </p>
         </section>
 

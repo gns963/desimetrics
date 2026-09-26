@@ -65,6 +65,18 @@ const faqs = [
     q: 'Is there a minimum monthly deposit for an RD?',
     a: 'Yes, though the exact minimum varies by bank — many banks accept RDs starting from as little as ₹100-500 per month, making it one of the more accessible regular-savings instruments, unlike a lump-sum FD which requires the full amount upfront.',
   },
+  {
+    q: 'Does the RD interest rate change during my tenure?',
+    a: 'No — most banks fix the RD interest rate at the rate applicable on the day you open the account, for the entire tenure, even if the bank\'s published rates for new RDs change later. This calculator assumes a single fixed rate throughout, matching how a standard RD actually works; only a small number of banks offer a floating-rate RD product, which is uncommon enough that it isn\'t the default this calculator models.',
+  },
+  {
+    q: 'Can I take a loan against my RD instead of withdrawing it early?',
+    a: 'Many banks let you take a loan or overdraft against your RD balance — typically up to 80-90% of the accumulated value — at a rate slightly above your RD\'s own interest rate. This lets you access funds for a short-term need without breaking the RD and losing the compounding or triggering a premature-withdrawal penalty, which is often the better option if you only need the money briefly.',
+  },
+  {
+    q: 'Does an RD held jointly get taxed differently?',
+    a: 'No special treatment — interest on a joint RD is taxable in the hands of the primary (first) account holder by default, at their income-tax slab rate, the same as a joint FD. TDS is also deducted against the primary holder\'s PAN, so the ₹40,000/₹50,000 threshold and 10%/20% TDS rates discussed above apply to that person\'s total interest income from the bank, not split automatically between holders.',
+  },
 ]
 
 const faqLd = {
@@ -142,6 +154,69 @@ export default function RdCalculatorPage() {
           <RdCalculator />
         </section>
 
+        <section aria-labelledby="how-compounds" className="mb-10 scroll-mt-20">
+          <h2 id="how-compounds" className="font-display mb-4 text-2xl font-semibold">
+            How RD interest actually compounds
+          </h2>
+          <p className="text-ash/80">
+            An RD compounds interest quarterly, not monthly — the single biggest reason its
+            maturity value can&apos;t be estimated by simply multiplying your instalment by the
+            tenure and a flat rate. This calculator simulates the deposit-and-credit cycle
+            month by month:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Monthly deposits accumulate', 'every instalment adds to your running balance the moment it\'s made, whether or not interest has been credited yet.'],
+              ['Quarterly interest crediting', 'every third month, the calculator applies one quarter of the annual rate to the current balance and adds it back in, so the next quarter\'s interest is earned on a slightly larger base.'],
+              ['Compounding widens with tenure', 'because interest credited in an earlier quarter itself earns interest in every later quarter, a longer tenure widens the gap between what you deposit in total and what you actually receive at maturity.'],
+              ['Senior citizen bonus applies the same way', 'many banks add a flat 0.5 percentage point to the base rate for senior-citizen depositors, applied to the same quarterly-compounding structure this calculator models.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 font-semibold text-ink-navy">
+            Takeaway: an RD&apos;s stated annual rate is compounded quarterly, not simply divided
+            by 12 and multiplied by your tenure in months — which is exactly why this calculator
+            walks the deposit-and-credit cycle month by month instead of using a single flat
+            formula.
+          </p>
+        </section>
+
+        <section aria-labelledby="tds" className="mb-10 scroll-mt-20">
+          <h2 id="tds" className="font-display mb-4 text-2xl font-semibold">
+            TDS on your RD interest
+          </h2>
+          <p className="text-ash/80">
+            Banks deduct TDS on RD interest the same way they do on FD interest, once your total
+            interest from that one bank crosses a fixed threshold in a financial year:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['₹40,000 threshold for regular depositors', 'TDS applies only once your total RD plus FD interest from that one bank exceeds this amount in a financial year.'],
+              ['₹50,000 threshold for senior citizens', 'a higher threshold recognizes that many senior citizens rely on interest income, giving them more headroom before TDS kicks in.'],
+              ['10% TDS rate with PAN on file', 'the standard deduction rate once your interest crosses the threshold, provided your bank has your PAN registered against the account.'],
+              ['20% TDS rate without PAN', 'banks must deduct at double the standard rate if your PAN isn\'t linked to the account, so registering your PAN before opening an RD avoids this higher deduction.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 font-semibold text-ink-navy">
+            Takeaway: TDS is only an advance collection, not your final tax bill — you still
+            declare the full interest as income and settle the difference against your actual
+            slab rate when you file your return.
+          </p>
+        </section>
+
         <section aria-labelledby="related" className="mb-10 scroll-mt-20">
           <h2 id="related" className="font-display mb-2 text-2xl font-semibold">
             Have a lump sum instead?
@@ -152,7 +227,38 @@ export default function RdCalculatorPage() {
               FD Calculator
             </Link>{' '}
             models that scenario, including the senior-citizen rate bonus and TDS treatment.
+            Saving toward a long-term, tax-advantaged goal instead? Our{' '}
+            <Link href="/financial/ppf-calculator" className="text-brass underline">
+              PPF Calculator
+            </Link>{' '}
+            projects a 15-year government-backed alternative with tax-free interest, and our{' '}
+            <Link href="/financial/sip-calculator" className="text-brass underline">
+              SIP Calculator
+            </Link>{' '}
+            covers the same monthly-contribution habit through equity mutual funds if you&apos;re
+            comfortable with a market-linked return instead of a fixed one.
           </p>
+        </section>
+
+        <section aria-labelledby="best-practices" className="mb-10 scroll-mt-20">
+          <h2 id="best-practices" className="font-display mb-4 text-2xl font-semibold">
+            Four RD best practices
+          </h2>
+          <ul className="mt-3 space-y-3">
+            {[
+              ['Register your PAN with the bank before opening the account', 'this halves your TDS rate from 20% to 10% once your interest crosses the deduction threshold — a simple step that\'s easy to overlook when opening an RD online.'],
+              ['Match the tenure to when you actually need the money', 'premature withdrawal usually comes with a reduced-rate penalty, so a tenure that outlasts your actual savings goal risks giving up part of the return you were counting on.'],
+              ['Ladder multiple RDs instead of one large one, if your goal allows it', 'opening a fresh RD every few months as income allows spreads your maturity dates, giving you flexibility to redeploy or spend a portion without breaking your entire savings plan.'],
+              ['Compare the post-tax return against other fixed-income options', 'because RD interest is fully taxable at your slab rate every year it\'s credited, someone in a high tax bracket may find a comparable FD or a debt-fund SIP more tax-efficient for the same savings goal — see the comparison table above.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section aria-labelledby="comparison" className="mb-10 scroll-mt-20">

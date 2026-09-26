@@ -12,6 +12,7 @@ const SITE = 'https://desimetrics.com'
 const PATH = '/financial/sukanya-samriddhi-calculator'
 
 const example = calculateSsy(150000, 8.2)
+const exampleModest = calculateSsy(50000, 8.2)
 
 export const metadata: Metadata = {
   title: 'Sukanya Samriddhi Yojana Calculator 2026 — SSY Maturity Value (India)',
@@ -68,6 +69,22 @@ const faqs = [
   {
     q: 'What if I can\'t continue depositing every year for 15 years?',
     a: 'The account doesn\'t close — it becomes "irregular," and interest still accrues on the existing balance at the standard rate. To bring it back to regular status and resume contributing, you pay a small penalty (₹50 per year of default) alongside the minimum ₹250 shortfall for each missed year, at any time before the account matures.',
+  },
+  {
+    q: 'Is SSY interest compounded annually or monthly?',
+    a: 'Annually. Each year\'s deposit is added to the balance, and the full balance then earns that year\'s interest rate once, compounding year over year rather than month over month. This is why depositing early in a financial year — rather than waiting until March — lets that year\'s contribution earn a full year of interest instead of a partial one.',
+  },
+  {
+    q: 'If I deposit less than the maximum every year, does the account still mature at 21 years?',
+    a: 'Yes — the 15-year deposit window and 21-year maturity are fixed to the account\'s opening date, not to how much you deposit. Depositing the minimum ₹250 a year or the maximum ₹1,50,000 a year both follow the identical 15-plus-6-year timeline; only the maturity value scales with how much you actually put in.',
+  },
+  {
+    q: 'Does the Section 80C deduction apply every year I deposit, or only in the first year?',
+    a: 'Every year you deposit, not just the first — each financial year\'s SSY contribution is eligible for a fresh Section 80C deduction, up to that year\'s overall ₹1,50,000 80C ceiling shared with other instruments like PPF, ELSS and life insurance premiums. Stopping contributions in a later year simply means no fresh 80C claim for that year; it doesn\'t affect the deductions already claimed.',
+  },
+  {
+    q: 'Does a smaller, steady deposit still build a meaningful corpus?',
+    a: `Yes — depositing ${formatINR(50000)}/year at 8.2% for 15 years grows to about ${formatINR(exampleModest.maturityValue)} by maturity, of which ${formatINR(exampleModest.interestEarned)} is interest on ${formatINR(exampleModest.totalDeposited)} actually deposited. The scheme rewards consistency over the full 15-year window more than it rewards depositing the maximum in any single year — a smaller amount deposited every year without gaps outperforms a larger amount deposited irregularly.`,
   },
 ]
 
@@ -135,7 +152,11 @@ export default function SsyCalculatorPage() {
             Depositing the maximum {formatINR(150000)}/year for 15 years at the current 8.2% rate
             grows to about <strong>{formatINR(example.maturityValue)}</strong> by the time the
             account matures at 21 years — {formatINR(example.interestEarned)} of that is interest
-            on top of the {formatINR(example.totalDeposited)} actually deposited.
+            on top of the {formatINR(example.totalDeposited)} actually deposited. A more modest{' '}
+            {formatINR(50000)}/year still reaches about{' '}
+            <strong>{formatINR(exampleModest.maturityValue)}</strong> over the same timeline,
+            which is why consistency across all 15 deposit years matters more than maxing out the
+            annual limit in any single year.
           </p>
         </section>
 
@@ -144,6 +165,61 @@ export default function SsyCalculatorPage() {
             Calculate your SSY maturity value
           </h2>
           <SsyCalculator />
+        </section>
+
+        <section aria-labelledby="mechanics" className="mb-10 scroll-mt-20">
+          <h2 id="mechanics" className="font-display mb-4 text-2xl font-semibold">
+            How the 15+6 Year Structure Actually Works
+          </h2>
+          <p className="text-ash/80">
+            SSY splits into two distinct phases that together explain why the account matures at
+            21 years even though you only ever deposit for 15:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Deposit phase (years 1-15)', 'you contribute anywhere from ₹250 to ₹1,50,000 each financial year, and the running balance earns interest on top of every fresh deposit — this is when compounding and your own contributions both build the balance together.'],
+              ['Growth-only phase (years 16-21)', 'no further deposits are made or accepted, but the balance you\'ve already built keeps earning the prevailing interest rate for six more years — a meaningful stretch of pure compounding on money you\'ve stopped actively contributing to.'],
+              ['Interest compounds annually', 'each year\'s deposit joins the balance and the whole balance earns that year\'s rate once — depositing early in the financial year, rather than close to the March deadline, captures a fuller year of interest on that instalment.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 font-semibold text-ink-navy">
+            Takeaway: because the deposit window closes years before maturity, the account
+            rewards starting as early as possible — a girl child enrolled near birth gets a full
+            21-year runway, while one enrolled closer to the age-10 cutoff gets a materially
+            shorter one for the same deposit pattern.
+          </p>
+        </section>
+
+        <section aria-labelledby="priorities" className="mb-10 scroll-mt-20">
+          <h2 id="priorities" className="font-display mb-4 text-2xl font-semibold">
+            Who Should Prioritise Sukanya Samriddhi
+          </h2>
+          <p className="text-ash/80">
+            SSY is a narrow-eligibility scheme by design, and it suits some situations far more
+            than others:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['A daughter well under age 10', 'the earlier the account opens, the longer the 21-year runway from opening to maturity, and the more years of compounding on top of your own deposits.'],
+              ['A specific higher-education or marriage goal', 'the scheme\'s partial-withdrawal rule at 18 and full closure on marriage after 18 line up directly with those two life events, unlike a general-purpose instrument.'],
+              ['Someone who already exhausts other priorities under the ₹1,50,000 80C cap', 'since SSY deposits share that same annual ceiling with PPF, ELSS and insurance premiums, it\'s most valuable when it doesn\'t crowd out deductions you\'d otherwise claim elsewhere.'],
+              ['A saver who wants a fully tax-free, government-backed instrument', 'the EEE status means no tax drag at any of the three stages — contribution, accrual or withdrawal — which is rare among long-tenure savings products.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section aria-labelledby="related" className="mb-10 scroll-mt-20">
@@ -198,7 +274,18 @@ export default function SsyCalculatorPage() {
               PPF Calculator
             </Link>{' '}
             models the more general-purpose alternative open to anyone, with a shorter, more
-            flexible lock-in.
+            flexible lock-in. If the goal is specifically a daughter&apos;s education, our{' '}
+            <Link href="/financial/education-loan-emi-calculator" className="text-brass underline">
+              Education Loan EMI Calculator
+            </Link>{' '}
+            is worth checking alongside SSY — a maturing SSY corpus can reduce how much you need
+            to borrow, or replace the loan entirely if the timing and amount line up. For a
+            fixed-return alternative with no age or gender restriction and a shorter commitment,
+            see our{' '}
+            <Link href="/financial/fd-calculator" className="text-brass underline">
+              FD Calculator
+            </Link>
+            .
           </p>
         </section>
 

@@ -62,6 +62,14 @@ const faqs = [
     q: 'How does Gujarat\'s 6% rate compare to other states?',
     a: 'Reported rates elsewhere in India commonly range from roughly 6% to 15% of vehicle price, often rising in slabs for costlier vehicles — but we could not verify most other states\' exact current rates to our own standard (see above), so treat any specific comparison figure you see for another state with caution unless it cites an official source.',
   },
+  {
+    q: 'Do I pay the road tax myself, or does the dealer handle it?',
+    a: 'Both happen in practice. Most buyers going through a dealer have the tax amount collected upfront as part of the on-road price quote, with the dealer remitting it to the RTO during registration paperwork. If you\'re registering directly — an import, an inter-state transfer, or a private sale — you pay it yourself at the RTO.',
+  },
+  {
+    q: 'Is the 6% rate the same for a company-owned or commercial vehicle?',
+    a: 'This calculator and the verified 6% rate apply to private, personally owned petrol, diesel and CNG cars specifically. Commercial vehicles are typically taxed under a separate structure with different rules and periodic renewal requirements — check directly with the RTO for a commercial registration rather than assuming this flat rate applies.',
+  },
 ]
 
 const faqLd = {
@@ -145,20 +153,68 @@ export default function GujaratRoadTaxCalculatorPage() {
             Why only Gujarat? A note on verification
           </h2>
           <p className="text-ash/80">
-            We looked at road tax rates across 15 major states before publishing anything. Most
-            official rate documents turned out to be scanned images or embedded graphics with no
-            extractable text — a document-format problem, not a lack of effort — and secondary
-            sources routinely disagreed with each other on the same state&apos;s rate. Gujarat is
-            the one state where the actual rate is published in a clean, readable format directly on{' '}
+            We looked at road tax rates across 15 major states before publishing anything, and
+            Gujarat was the only one that cleared our own verification bar. Most official rate
+            documents turned out to be scanned images or embedded graphics with no extractable
+            text — a document-format problem, not a lack of effort — and secondary sources
+            routinely disagreed with each other on the same state&apos;s rate.
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['A primary source', 'the rate must appear on an official .gov.in transport-department domain, not just a dealer blog or aggregator page repeating a number without citing where it came from.'],
+              ['A machine-readable format', 'a scanned PDF or embedded image isn\'t enough — we need text we can actually read and quote, not a graphic we\'d be guessing at.'],
+              ['Cross-source agreement', 'when two or more independent, credible sources state the same figure, confidence goes up; when they conflict with no clear reason, the rate goes on hold rather than into a published calculator.'],
+              ['A named, checkable rule', 'a flat percentage or a defined slab structure we can state precisely — not a vague range like "6-10%" that leaves the reader unable to compute an exact figure.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-ash/80">
+            Gujarat is the one state where the current 6% rate is published in a clean, readable
+            format directly on{' '}
             <a href="https://cot.gujarat.gov.in" target="_blank" rel="noopener noreferrer" className="text-brass underline">
               the Commissionerate of Transport&apos;s own site
             </a>
-            . We would rather cover one state accurately than many states approximately — see our{' '}
+            , which is why it&apos;s the one state we publish a calculator for rather than guess
+            at. We would rather cover one state accurately than many states approximately — see
+            our{' '}
             <Link href="/methodology" className="text-brass underline">
               methodology
             </Link>{' '}
-            for how we make these calls generally.
+            for how we make these calls generally, and if you have a verified, machine-readable
+            primary source for another state&apos;s rate, we&apos;d genuinely like to hear about
+            it.
           </p>
+        </section>
+
+        <section aria-labelledby="what-covers" className="mb-10 scroll-mt-20">
+          <h2 id="what-covers" className="font-display mb-4 text-2xl font-semibold">
+            What the 6% Actually Covers
+          </h2>
+          <p className="text-ash/80">
+            Gujarat&apos;s road tax is a single flat-rate charge, but three practical details
+            decide what number you actually owe and when:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Taxable base', 'the 6% applies to the vehicle\'s declared registration price — generally the ex-showroom price — not the full on-road price that already bundles in insurance and registration fees, so don\'t apply 6% to your total on-road quote or you\'ll overstate the figure.'],
+              ['Who collects it', 'dealers commonly collect the tax amount upfront as part of the on-road price and remit it to the RTO during registration on your behalf, though you can also pay it directly at the RTO yourself if you\'re registering without a dealer intermediary.'],
+              ['When it\'s due', 'the tax is payable at the point of first registration, before the vehicle can legally be driven on Gujarat roads — it isn\'t an annual renewal like municipal property tax.'],
+              ['What happens if it\'s unpaid', 'an unregistered vehicle cannot legally be used on public roads, and enforcement checks (or an RTO transfer/re-registration later) will surface an unpaid or under-paid tax, so it isn\'t a cost that can simply be skipped.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section aria-labelledby="maharashtra-ev" className="mb-10 scroll-mt-20">

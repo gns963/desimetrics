@@ -81,6 +81,14 @@ const faqs = [
     q: 'Is there a surcharge on GST or other taxes, or is this specific to income tax?',
     a: 'This calculator, and the term "surcharge" as used here, refers only to INCOME TAX surcharge under Section 2(9) of the Finance Act framework — GST, customs duty and other taxes have entirely separate rate structures with no equivalent surcharge mechanism tied to income tax thresholds.',
   },
+  {
+    q: 'Which threshold does marginal relief actually check, if my income has crossed several?',
+    a: 'Only the threshold for the band your income currently sits in — relief is evaluated once, comparing your actual tax-plus-surcharge against the tax at that band\'s threshold plus the income you\'ve earned in excess of it. If you\'re in the 15% band (between ₹1-2 crore), the check runs against the ₹1 crore threshold, not separately against the ₹50 lakh threshold you passed earlier in the same income.',
+  },
+  {
+    q: 'Can marginal relief ever turn your surcharge negative?',
+    a: 'No — relief is capped so surcharge after relief never drops below zero. It can reduce your surcharge close to nothing right at a threshold, but it can\'t create a refund or push your effective surcharge below what someone earning exactly at the threshold (with no surcharge at all) would owe.',
+  },
 ]
 
 const faqLd = {
@@ -150,7 +158,9 @@ export default function SurchargeCalculatorPage() {
             cess. Someone earning just {formatINR(5001000)} — barely over the threshold — sees
             their surcharge almost entirely wiped out by marginal relief, paying only{' '}
             {formatINR(exampleJustOver.surchargeMarginalRelief)} less in relief than the
-            unadjusted 10% would otherwise cost.
+            unadjusted 10% would otherwise cost. Both figures come from the same slab-and-relief
+            mechanism below — enter your own income in the calculator to see your exact surcharge,
+            pre-relief amount, and rupees of relief applied.
           </p>
         </section>
 
@@ -195,6 +205,37 @@ export default function SurchargeCalculatorPage() {
               </tbody>
             </table>
           </div>
+        </section>
+
+        <section aria-labelledby="who-pays" className="mb-10 scroll-mt-20">
+          <h2 id="who-pays" className="font-display mb-4 text-2xl font-semibold">
+            Who Actually Hits These Thresholds
+          </h2>
+          <p className="text-ash/80">
+            Surcharge only starts at ₹50 lakh of taxable income, so most taxpayers never see it —
+            but a few common situations push otherwise-ordinary earners across a threshold in a
+            single year:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['A large annual bonus or RSU/ESOP vesting', 'a year-end payout on top of regular salary can lift taxable income past ₹50 lakh even when the base salary alone would not.'],
+              ['Selling a property or a large equity holding', 'a one-time capital gain stacks on top of regular income for the surcharge computation, even though some capital gains carry their own separate surcharge treatment (see the FAQ below).'],
+              ['A senior executive or promoter drawing salary plus dividends', 'combined income from multiple sources crosses ₹1 crore or ₹2 crore more often than any single income stream would on its own.'],
+              ['A business owner with a strong single year', 'profit that varies significantly year to year can push one year\'s taxable income into a higher surcharge band even if the multi-year average stays well below it.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-ash/80">
+            In each case, the same marginal relief mechanism explained below protects anyone whose
+            income lands just past a threshold — the surcharge cost never outruns the extra
+            income that caused it.
+          </p>
         </section>
 
         <section aria-labelledby="worked-1cr" className="mb-10 scroll-mt-20">
@@ -245,7 +286,18 @@ export default function SurchargeCalculatorPage() {
               New vs Old Tax Regime Calculator
             </Link>{' '}
             now includes this surcharge and marginal relief mechanism automatically in its
-            comparison.
+            comparison. If a large capital gain is what pushed you toward a surcharge threshold,
+            our{' '}
+            <Link href="/financial/capital-gains-tax-calculator" className="text-brass underline">
+              Capital Gains Tax Calculator
+            </Link>{' '}
+            breaks out that gain&apos;s own tax treatment separately. And if you want to see how a
+            bonus or salary hike affects your in-hand pay before surcharge even enters the
+            picture, start with our{' '}
+            <Link href="/financial/ctc-in-hand-salary-calculator" className="text-brass underline">
+              CTC to In-Hand Salary Calculator
+            </Link>
+            .
           </p>
         </section>
 

@@ -160,6 +160,62 @@ export default function EducationLoanEmiCalculatorPage() {
           />
         </section>
 
+        <section aria-labelledby="how-it-works" className="mb-10 scroll-mt-20">
+          <h2 id="how-it-works" className="font-display mb-4 text-2xl font-semibold">
+            How an Education Loan Actually Works
+          </h2>
+          <p className="text-ash/80">
+            An education loan differs from most other loans on this site in one
+            important way: the EMI doesn&apos;t start the day you borrow. Four
+            mechanics shape what you&apos;ll actually pay:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Moratorium period', 'no EMI is due during the course and typically for another 6-12 months after it ends — but simple interest can still accrue during this window depending on the lender, so "no EMI" doesn\'t always mean "no cost."'],
+              ['Interest capitalisation', 'if that moratorium-period interest isn\'t paid as it\'s billed, most lenders add it to the principal once repayment starts — your EMI then gets calculated on a larger amount than you originally borrowed, compounding the cost further.'],
+              ['Section 80E deduction', 'the entire interest portion of your EMI is deductible with no upper rupee cap, for up to 8 years from when repayment begins — but only under the old tax regime, and only for interest, never principal.'],
+              ['Co-applicant requirement', 'most lenders require a parent or guardian as co-borrower, since the student typically has no independent income or credit history at the time of borrowing — the co-applicant is usually jointly liable for the full loan.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 font-semibold text-ink-navy">
+            Takeaway: paying the moratorium-period interest as it accrues, if you
+            can afford to, avoids capitalisation and keeps your eventual EMI
+            calculated on the amount you actually borrowed — not a larger,
+            interest-inflated principal.
+          </p>
+        </section>
+
+        <section aria-labelledby="collateral" className="mb-10 scroll-mt-20">
+          <h2 id="collateral" className="font-display mb-4 text-2xl font-semibold">
+            Collateral, and Domestic vs. Foreign Study Loans
+          </h2>
+          <p className="text-ash/80">
+            Whether your loan needs collateral, and how it&apos;s priced, depends
+            heavily on the amount and where you plan to study:
+          </p>
+          <ul className="mt-3 space-y-2">
+            {[
+              ['Collateral threshold', 'many lenders offer education loans up to a commonly cited ₹7.5-10 lakh range without collateral, relying instead on the co-applicant\'s income and a third-party guarantee — above that, property, fixed deposits or other security is typically required, and the exact cutoff varies by lender.'],
+              ['Foreign education loans', 'often larger in absolute size and can carry a different rate structure than a domestic course, sometimes higher to reflect currency and country risk, though top-tier institutions and government-backed schemes sometimes get preferential pricing — check your specific lender\'s policy rather than assuming either direction.'],
+              ['Bank vs. NBFC', 'banks generally offer lower rates and access to the government\'s CSIS interest subsidy where eligible, but can be slower and stricter on collateral for large foreign-education amounts; NBFCs and specialised education-loan lenders often move faster and are more flexible on collateral, typically at a higher rate.'],
+            ].map(([t, d]) => (
+              <li key={t} className="flex items-start gap-2">
+                <span className="mt-0.5 text-hub-financial" aria-hidden>✓</span>
+                <span className="text-ash/80">
+                  <strong className="text-ink-navy">{t}</strong> — {d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section aria-labelledby="scenarios" className="mb-10 scroll-mt-20">
           <h2 id="scenarios" className="font-display mb-4 text-2xl font-semibold">
             EMI across three common loan sizes
@@ -215,7 +271,18 @@ export default function EducationLoanEmiCalculatorPage() {
             <Link href="/financial/new-vs-old-tax-regime-calculator" className="text-brass underline">
               New vs Old Tax Regime Calculator
             </Link>{' '}
-            — Section 80E is only available under the old regime.
+            — Section 80E is only available under the old regime. Comparing against
+            a shorter, asset-backed loan instead? Our{' '}
+            <Link href="/financial/car-loan-emi-calculator" className="text-brass underline">
+              Car Loan EMI Calculator
+            </Link>{' '}
+            and{' '}
+            <Link href="/financial/two-wheeler-loan-emi-calculator" className="text-brass underline">
+              Two-Wheeler Loan EMI Calculator
+            </Link>{' '}
+            cover the much shorter 1-7 year tenures typical of vehicle financing —
+            useful context for how unusually long and moratorium-bearing an
+            education loan is by comparison.
           </p>
         </section>
 
