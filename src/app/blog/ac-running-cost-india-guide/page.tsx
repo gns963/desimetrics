@@ -427,6 +427,18 @@ export default function AcRunningCostGuidePage() {
                 If your AC dominates your bill, this is the next number worth checking.
               </p>
             </Link>
+            <Link
+              href="/blog/geyser-water-heater-running-cost-india"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-ac/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>🚿</span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                How much does running a geyser actually cost?
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                The same wattage × hours × tariff logic for your other big power draw.
+              </p>
+            </Link>
           </div>
           <p className="mt-3 text-sm text-ash/60">
             If you&apos;re comparing specific AC brands, see our{' '}

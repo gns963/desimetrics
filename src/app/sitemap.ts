@@ -81,6 +81,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/appliances/room-cooling-time-calculator', 0.9),
     entry('/appliances/water-tank-filling-time-calculator', 0.9),
     entry('/blog', 0.7),
+    entry('/blog/geyser-water-heater-running-cost-india', 0.6),
     entry('/blog/net-metering-explained-india', 0.6),
     entry('/blog/png-piped-gas-bill-guide-india', 0.6),
     entry('/blog/how-telescopic-electricity-slabs-work', 0.6),

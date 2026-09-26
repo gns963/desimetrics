@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'How Much Does Running a Geyser Actually Cost in India?',
+    tag: 'Appliances',
+    href: '/blog/geyser-water-heater-running-cost-india',
+    live: true,
+  },
+  {
     title: 'Net Metering Explained: How Rooftop Solar Actually Reduces Your Bill',
     tag: 'Solar',
     href: '/blog/net-metering-explained-india',
