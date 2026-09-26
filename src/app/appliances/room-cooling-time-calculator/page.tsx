@@ -10,6 +10,18 @@ const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/room-cooling-time-calculator'
 
 const example = estimateCoolingTime({ areaSqFt: 150, ceilingHeightFt: 9, dropTempC: 6, acTon: 1.5 })
+const exampleBiggerRoom = estimateCoolingTime({ areaSqFt: 250, ceilingHeightFt: 9, dropTempC: 6, acTon: 1.5 })
+const exampleBiggerAc = estimateCoolingTime({ areaSqFt: 150, ceilingHeightFt: 9, dropTempC: 6, acTon: 2 })
+const comparisonRows = [
+  { areaSqFt: 100, acTon: 1 },
+  { areaSqFt: 150, acTon: 1.5 },
+  { areaSqFt: 200, acTon: 1.5 },
+  { areaSqFt: 200, acTon: 2 },
+  { areaSqFt: 300, acTon: 2 },
+].map((r) => ({
+  ...r,
+  result: estimateCoolingTime({ areaSqFt: r.areaSqFt, ceilingHeightFt: 9, dropTempC: 6, acTon: r.acTon }),
+}))
 
 export const metadata: Metadata = {
   title: 'Room Cooling Time Calculator 2026 — AC Pull-Down Time Estimate',
@@ -112,6 +124,14 @@ export default function RoomCoolingTimePage() {
           <strong>1.5 ton AC</strong> would take about{' '}
           <strong>{example.minutesToCoolAirOnly} minutes</strong> to drop{' '}
           {example.dropTempC}°C — for the air alone, with no ongoing heat gain.
+          Grow the same room to <strong>250 sq ft</strong> and the same AC takes{' '}
+          <strong>{exampleBiggerRoom.minutesToCoolAirOnly} minutes</strong> for the
+          identical drop — the extra air volume takes proportionally longer to
+          cool. Keep the room at 150 sq ft but size up to a{' '}
+          <strong>2 ton AC</strong> instead, and the time falls to{' '}
+          <strong>{exampleBiggerAc.minutesToCoolAirOnly} minutes</strong> — a
+          bigger AC removes heat faster because its rated capacity is directly
+          proportional to tonnage.
         </p>
       </section>
 
@@ -140,6 +160,15 @@ export default function RoomCoolingTimePage() {
             humidity rather than lowering temperature.
           </p>
           <p>
+            <strong>Time scales directly with tonnage.</strong> Because the
+            effective cooling rate is the AC&apos;s rated BTU/hr (tonnage ×
+            12,000) times the sensible heat ratio, doubling the AC&apos;s
+            tonnage roughly halves the minutes needed for the same room and the
+            same temperature drop — and doubling the room&apos;s volume roughly
+            doubles the minutes for the same AC, since twice the air holds
+            twice the heat to remove.
+          </p>
+          <p>
             <strong>What this deliberately leaves out.</strong> Walls, windows,
             the roof, sunlight and people all add heat to a real room
             continuously — this calculator only accounts for the air that&apos;s
@@ -147,6 +176,102 @@ export default function RoomCoolingTimePage() {
             minimum, not a promise of real-world performance.
           </p>
         </div>
+      </section>
+
+      <section aria-labelledby="comparison" className="mb-10 scroll-mt-20">
+        <h2 id="comparison" className="font-display mb-4 text-2xl font-semibold">
+          Cooling Time Across Common Room/AC Pairings
+        </h2>
+        <p className="text-ash/80">
+          The same 6°C drop and 9 ft ceiling, run across five common room sizes
+          and AC tonnages, shows how directly the theoretical minimum scales
+          with both variables:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Room size</th>
+                <th className="px-4 py-2 font-semibold">AC tonnage</th>
+                <th className="px-4 py-2 text-right font-semibold">Minutes to cool</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {comparisonRows.map((row) => (
+                <tr key={`${row.areaSqFt}-${row.acTon}`}>
+                  <td className="px-4 py-2 font-medium">{row.areaSqFt} sq ft</td>
+                  <td className="px-4 py-2">{row.acTon} ton</td>
+                  <td className="px-4 py-2 text-right tabular-nums">
+                    {row.result.minutesToCoolAirOnly} min
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: a 200 sq ft room cooled by a 1.5 ton AC takes noticeably
+          longer than the same room with a 2 ton unit — if a room in this size
+          range consistently feels slow to cool in real life, tonnage is one of
+          the first things worth double-checking, not just the thermostat
+          setting.
+        </p>
+      </section>
+
+      <section aria-labelledby="real-world-gap" className="mb-10">
+        <h2 id="real-world-gap" className="font-display mb-4 text-2xl font-semibold">
+          Why Real-World Cooling Always Takes Longer
+        </h2>
+        <p className="text-ash/80">
+          The gap between this theoretical minimum and what you actually feel
+          comes from continuous heat gain the formula deliberately excludes:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Walls and the roof', 'absorb heat from the outside air and radiate it inward all day, especially on a top-floor room or a west-facing wall that takes direct afternoon sun.'],
+            ['Windows and doors', 'let heat in through glass even when closed, and any gap around the frame lets warm outside air leak in continuously while the AC runs.'],
+            ['People and electronics', 'a running TV, computer, or lighting, and every person in the room, add their own heat output on top of what the AC has to remove.'],
+            ['Outdoor temperature', 'a hotter day means a bigger difference between inside and outside, which pushes more heat through the same walls and windows per minute.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: none of these sources of heat gain ever stop while the AC
+          runs, which is exactly why real pull-down time is always longer than
+          this air-only estimate — often by a wide margin on a hot afternoon in
+          a poorly insulated room.
+        </p>
+      </section>
+
+      <section aria-labelledby="using-the-estimate" className="mb-10">
+        <h2 id="using-the-estimate" className="font-display mb-4 text-2xl font-semibold">
+          How to Actually Use This Number
+        </h2>
+        <p className="text-ash/80">
+          Treat this calculator as a comparison tool between scenarios, not a
+          forecast of a specific real-world time:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Compare AC sizes for the same room', 'run the same area and temperature drop with two different tonnage values to see how much faster a bigger AC removes the same amount of heat.'],
+            ['Compare rooms for the same AC', 'run the same AC against a smaller and a larger room to see how much the extra air volume adds to the theoretical minimum.'],
+            ['Treat a much slower real room as a signal, not proof', 'if your real room consistently takes far longer than this estimate or never quite reaches the set temperature on a hot day, it\'s worth confirming the AC is actually sized correctly for the room with our AC tonnage calculator, rather than assuming the unit is faulty.'],
+            ['Close doors and windows before running the AC', 'this doesn\'t change the calculator\'s number, but it reduces the real-world heat gain this formula excludes, bringing actual performance closer to the theoretical floor.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

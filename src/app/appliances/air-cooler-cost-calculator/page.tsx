@@ -133,19 +133,25 @@ export default function AirCoolerCostPage() {
         <h2 id="how" className="font-display mb-4 text-2xl font-semibold">
           How this is calculated
         </h2>
-        <div className="space-y-3 text-ash/80">
-          <p>
-            <strong>Units = wattage × hours ÷ 1000.</strong> A cooler&apos;s
-            daily energy use in kWh is its wattage multiplied by daily
-            running hours, divided by 1000 to convert watts to kilowatts.
-          </p>
-          <p>
-            <strong>Priced at your top slab.</strong> Since a cooler adds to
-            your existing consumption, its units fall in your highest
-            tariff slab — we use that marginal rate (plus fuel cost
-            adjustment and electricity duty) for a realistic cost.
-          </p>
-        </div>
+        <p className="text-ash/80">
+          Two steps turn a cooler&apos;s wattage into a rupee figure — one
+          formula for the energy, one pricing rule for the rate it&apos;s
+          billed at:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Units = wattage × hours ÷ 1000', 'a cooler\'s daily energy use in kWh is its wattage multiplied by daily running hours, divided by 1000 to convert watts to kilowatts — a 230W desert cooler run for 8 hours uses 230 × 8 ÷ 1000 = 1.84 units that day.'],
+            ['Priced at your top slab, not an average rate', 'since a cooler adds to your existing household consumption, its units fall in your highest tariff slab — the calculator uses that marginal rate (plus fuel cost adjustment and electricity duty) rather than a flat, blended per-unit price.'],
+            ['Monthly and annual figures scale linearly', 'the daily-unit figure is simply multiplied by 30 for a monthly estimate and 365 for an annual one, assuming fairly consistent daily usage across the season — run the calculator again with a lower daily-hours figure for shoulder-season months when you use the cooler less.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
         <p className="mt-3 text-xs text-ash/50">
           *The &ldquo;~78% less power&rdquo; stat is computed from this
           site&apos;s own engines: a 230W desert cooler running 8 hours/day
@@ -154,6 +160,91 @@ export default function AirCoolerCostPage() {
           — a cooler works by evaporation and performs very differently
           from an AC depending on your climate&apos;s humidity.
         </p>
+      </section>
+
+      <section aria-labelledby="power-draw" className="mb-10">
+        <h2 id="power-draw" className="font-display mb-4 text-2xl font-semibold">
+          What Changes an Air Cooler&apos;s Power Draw
+        </h2>
+        <p className="text-ash/80">
+          An air cooler&apos;s rated wattage on the box is a ceiling figure,
+          not a constant — four things move actual draw below that number:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Fan speed setting', 'most coolers offer 2-4 fan speeds, and the motor draws less power on a lower speed — running on medium instead of high for a comfortably cool room reduces both noise and units consumed.'],
+            ['Pump on vs. pump off', 'the water pump that soaks the cooling pads is a separate small motor from the main fan — many coolers let you run fan-only (no cooling, just air movement) at a lower total wattage, useful on a mild evening.'],
+            ['Cooler type and size', 'a compact personal cooler draws less than a tower cooler, which draws less than a large desert/window cooler built for a bigger room — bigger tanks and pads generally mean a bigger fan motor to push air through them.'],
+            ['Ambient temperature and humidity', 'a cooler doesn\'t work harder in hotter weather the way an AC compressor does — its wattage stays roughly the same regardless of outside temperature, but it needs to run more hours per day to keep a room comfortable when it\'s hotter, which raises the daily-units figure rather than the wattage itself.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: use the calculator&apos;s exact wattage from your
+          cooler&apos;s rating label, not a generic &ldquo;desert cooler&rdquo;
+          assumption — the fan-speed setting you actually run it at matters
+          more to your real bill than the type of cooler you own.
+        </p>
+      </section>
+
+      <section aria-labelledby="cooler-vs-ac" className="mb-10">
+        <h2 id="cooler-vs-ac" className="font-display mb-4 text-2xl font-semibold">
+          Air Cooler vs. AC: More Than Just Wattage
+        </h2>
+        <p className="text-ash/80">
+          The wattage gap explains most of the cost difference, but three
+          other differences decide whether a cooler is actually the right
+          choice for your room:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Cooling mechanism', 'a cooler works by evaporation — pulling warm air across water-soaked pads, which cools it through evaporation, the same effect as sweat cooling skin — while an AC actively removes heat and moisture from the air via a refrigerant cycle.'],
+            ['Climate suitability', 'evaporative cooling is most effective in hot, dry climates where the air can absorb more moisture; in humid conditions, a cooler adds moisture to already-humid air and can feel less effective, where an AC\'s active dehumidifying keeps working regardless of outside humidity.'],
+            ['Ventilation requirement', 'a cooler needs a source of fresh air — a partly open window or door — to work well, since it\'s pushing humidified air into the room and relies on some airflow through it; an AC is a closed-loop system and cools a sealed room more effectively.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          Many households run both — a cooler for milder days and an AC for
+          peak summer heat or when the room needs to stay sealed. See our{' '}
+          <Link href="/ac/bill-calculator" className="text-brass underline">
+            AC running cost calculator
+          </Link>{' '}
+          to compare the two side by side for your own room and DISCOM.
+        </p>
+      </section>
+
+      <section aria-labelledby="reduce-cost" className="mb-10">
+        <h2 id="reduce-cost" className="font-display mb-4 text-2xl font-semibold">
+          Ways to Reduce Your Cooler&apos;s Running Cost
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Match cooler size to room size', 'an oversized cooler for a small room wastes power without extra comfort, while an undersized one for a large room runs longer hours (and less effectively) trying to cool a space it wasn\'t built for.'],
+            ['Keep the cooling pads and pump clean', 'mineral deposits and dust on the pads reduce evaporation efficiency over a season, making the cooler work longer to deliver the same cooling — periodic cleaning keeps it running closer to its rated performance.'],
+            ['Use fan-only mode when just circulating air', 'skip the water pump on cooler evenings when you only need air movement, not active cooling — this cuts the pump\'s share of the total wattage.'],
+            ['Position it near a fresh-air source', 'placing the cooler near a partly open window or door lets it draw in and push out air efficiently, rather than recirculating the same humid room air, which keeps cooling effective at lower fan speeds.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

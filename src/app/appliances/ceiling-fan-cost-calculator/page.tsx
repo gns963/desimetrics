@@ -16,6 +16,8 @@ const liveDiscoms = discomsJson.states.flatMap((s) =>
 )
 
 const example = simpleApplianceCost({ discomCode: 'TNEB', wattage: 75, hoursPerDay: 10 })
+const exampleStar5 = simpleApplianceCost({ discomCode: 'TNEB', wattage: 50, hoursPerDay: 10 })
+const exampleBldc = simpleApplianceCost({ discomCode: 'TNEB', wattage: 30, hoursPerDay: 10 })
 
 export const metadata: Metadata = {
   title: 'Ceiling Fan Electricity Cost Calculator 2026 — Monthly & Yearly',
@@ -118,7 +120,12 @@ export default function CeilingFanCostPage() {
           uses about <strong>{example.dailyUnits} units/day</strong> and costs
           roughly <strong>{formatINR(example.monthlyCost)}/month</strong> (
           {formatINR(example.annualCost)}/year) at {formatINR(example.effectiveRatePerUnit)}
-          /unit.
+          /unit. Swap in a 50W BEE 5-star fan for the same 10 hours/day and the
+          cost drops to about <strong>{formatINR(exampleStar5.monthlyCost)}/month</strong>;
+          a 30W BLDC fan brings it down further to roughly{' '}
+          <strong>{formatINR(exampleBldc.monthlyCost)}/month</strong> — the same
+          10 daily hours, priced at the same tariff, with only the wattage
+          changing.
         </p>
       </section>
 
@@ -145,7 +152,159 @@ export default function CeilingFanCostPage() {
             we use that marginal rate (plus fuel cost adjustment and
             electricity duty) for a realistic cost.
           </p>
+          <p>
+            <strong>The same math multiplies across every fan you run.</strong>{' '}
+            A typical Indian home has more than one ceiling fan running at
+            once — a bedroom fan overnight, a living-room fan through the
+            evening, sometimes a kitchen fan too. Each one is priced
+            independently at your top slab, so the household total is simply
+            this calculator&apos;s per-fan figure added up across however
+            many fans are actually switched on.
+          </p>
         </div>
+      </section>
+
+      <section aria-labelledby="efficiency" className="mb-10">
+        <h2 id="efficiency" className="font-display mb-4 text-2xl font-semibold">
+          Fan Efficiency: Standard vs. BEE 5-Star vs. BLDC
+        </h2>
+        <p className="text-ash/80">
+          Three fan types cover almost every ceiling fan sold in India today,
+          and the wattage gap between them is the single biggest lever on
+          running cost:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Fan type</th>
+                <th className="px-4 py-2 font-semibold">Typical wattage</th>
+                <th className="px-4 py-2 text-right font-semibold">Cost at 10 hrs/day</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              <tr>
+                <td className="px-4 py-2 font-medium">Standard</td>
+                <td className="px-4 py-2">~75W</td>
+                <td className="px-4 py-2 text-right tabular-nums">{formatINR(example.monthlyCost)}/mo</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">BEE 5-star</td>
+                <td className="px-4 py-2">~50W</td>
+                <td className="px-4 py-2 text-right tabular-nums">{formatINR(exampleStar5.monthlyCost)}/mo</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">BLDC (brushless DC)</td>
+                <td className="px-4 py-2">28-35W</td>
+                <td className="px-4 py-2 text-right tabular-nums">{formatINR(exampleBldc.monthlyCost)}/mo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul className="mt-4 space-y-2">
+          {[
+            ['Standard fans', 'the most common type already installed in most Indian homes, drawing around 75W with a basic induction motor — the least efficient of the three, but also the cheapest fan to buy upfront.'],
+            ['BEE 5-star fans', 'carry the Bureau of Energy Efficiency\'s highest star rating for ceiling fans and use roughly a third less power than a standard fan for similar airflow, at a moderate price premium.'],
+            ['BLDC fans', 'use a brushless DC motor and electronic control instead of a basic induction motor, cutting wattage by roughly 60% versus a standard fan — the highest upfront cost of the three, but the lowest running cost by a wide margin.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: the fan itself is a one-time purchase, but its wattage is
+          a recurring cost you pay every single hour it runs — over a fan&apos;s
+          typical multi-year lifespan, a BLDC or 5-star model usually earns
+          back its price premium purely from the lower electricity bill.
+        </p>
+      </section>
+
+      <section aria-labelledby="cut-cost" className="mb-10">
+        <h2 id="cut-cost" className="font-display mb-4 text-2xl font-semibold">
+          How to Cut Your Ceiling Fan&apos;s Running Cost
+        </h2>
+        <p className="text-ash/80">
+          Four practical changes lower a fan&apos;s bill without touching your
+          comfort on a hot day:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Enter your real daily hours', 'the calculator above is only as accurate as the hours you give it — a fan left running overnight and through a working day adds up very differently from one used only in the evening.'],
+            ['Upgrade an old standard fan', 'a BEE 5-star or BLDC replacement cuts the wattage on every single hour that follows, as the comparison table above shows.'],
+            ['Run at the lowest comfortable regulator speed', 'a fan motor draws less power at a lower speed setting, so matching the speed to what&apos;s actually needed — rather than defaulting to maximum — reduces the wattage side of the calculation directly.'],
+            ['Switch off fans in empty rooms', 'because every unit is priced at your top tariff slab, an idle fan is billed at your costliest marginal rate, not some lower average rate — there\'s no "cheap" hour to leave one running unnecessarily.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          For the rest of your household&apos;s appliances, our{' '}
+          <Link href="/appliances" className="text-brass underline">
+            full appliance hub
+          </Link>{' '}
+          covers fridges, ACs, inverters and more using this same top-slab
+          pricing logic.
+        </p>
+      </section>
+
+      <section aria-labelledby="regulator" className="mb-10">
+        <h2 id="regulator" className="font-display mb-4 text-2xl font-semibold">
+          Why Regulator Type Changes the Real Saving
+        </h2>
+        <p className="text-ash/80">
+          Two fans with the identical rated wattage can still cost differently
+          to run, because of how their speed regulator works:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Old resistor-type regulators', 'reduce a fan\'s speed by burning off the excess electricity as heat inside the regulator itself — the fan draws less airflow, but the motor still pulls close to its full rated wattage even at a low speed setting.'],
+            ['Electronic/capacitor regulators', 'actually reduce the power delivered to the motor as you turn the speed down, so a lower setting genuinely lowers the wattage — closer to what most people assume "running at low speed" already does.'],
+            ['BLDC fans\' built-in electronic control', 'is a version of the same idea baked into the motor design itself, which is part of why a BLDC fan\'s wattage scales down more efficiently across its speed range than a standard induction-motor fan\'s.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: if you have an older resistor-type regulator, running the
+          fan at a lower speed saves less than it feels like it should — an
+          electronic regulator or a BLDC fan is what actually delivers the
+          wattage saving a lower speed setting implies.
+        </p>
+      </section>
+
+      <section aria-labelledby="mistakes" className="mb-10">
+        <h2 id="mistakes" className="font-display mb-4 text-2xl font-semibold">
+          Common Mistakes When Estimating Fan Cost
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Assuming one blended rate for all electricity', 'a fan\'s units are priced at your top tariff slab because they add to your existing usage, not at some lower average rate across your whole bill — the calculator above already accounts for this, but it\'s worth understanding why the figure looks higher than a naive wattage × unit-rate guess.'],
+            ['Guessing wattage instead of checking the label', 'standard, 5-star and BLDC fans can look identical from the outside — the BEE label sticker on the motor housing or box is the only reliable way to know which one you actually have.'],
+            ['Ignoring how many fans run at once', 'a single-fan estimate understates a real household\'s fan-related electricity cost once every bedroom, the living room and the kitchen fan are counted together.'],
+            ['Not re-checking after an upgrade', 'switching from a standard to a BLDC fan changes the wattage input for every future calculation — rerun the calculator with the new fan\'s rated wattage rather than reusing an old estimate.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

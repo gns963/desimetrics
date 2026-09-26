@@ -10,6 +10,9 @@ const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/water-tank-filling-time-calculator'
 
 const example = estimateTankFillTime({ capacityLiters: 1000, flowRateLpm: 50 })
+const exampleSmallTank = estimateTankFillTime({ capacityLiters: 500, flowRateLpm: 40 })
+const exampleLargeTank = estimateTankFillTime({ capacityLiters: 2000, flowRateLpm: 100 })
+const exampleWeakPump = estimateTankFillTime({ capacityLiters: 1000, flowRateLpm: 25 })
 
 export const metadata: Metadata = {
   title: 'Water Tank Filling Time Calculator 2026 — By Capacity & Pump Flow',
@@ -100,7 +103,11 @@ export default function WaterTankFillPage() {
         <p className="mt-2 text-ash/80">
           A <strong>1,000-litre tank</strong> filled by a pump delivering{' '}
           <strong>50 LPM</strong> takes about{' '}
-          <strong>{example.minutes} minutes</strong> ({example.hours} hours).
+          <strong>{example.minutes} minutes</strong> ({example.hours} hours). That
+          figure assumes the pump actually delivers its rated 50 LPM — in
+          practice, lifting water to an overhead or rooftop tank usually pulls
+          real flow below the nameplate number, so treat this as a best-case
+          estimate rather than a guarantee.
         </p>
       </section>
 
@@ -122,6 +129,142 @@ export default function WaterTankFillPage() {
           since lift height and pipe size both reduce flow below a pump&apos;s
           rated (zero-head) figure.
         </p>
+      </section>
+
+      <section aria-labelledby="why-longer" className="mb-10">
+        <h2 id="why-longer" className="font-display mb-4 text-2xl font-semibold">
+          Why Your Real Fill Time Often Runs Longer Than the Nameplate Figure
+        </h2>
+        <p className="text-ash/80">
+          A pump&apos;s LPM rating is a best-case number measured at or near
+          zero head — three everyday parts of a real household setup quietly
+          pull flow below it:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Lift height (head)', 'pumping water up to an overhead or rooftop tank makes the pump work against gravity, and flow drops as the vertical lift increases — a pump rated for ground-level use will move noticeably less water per minute once it has to climb several floors.'],
+            ['Pipe diameter and length', 'narrow or unusually long pipework adds friction the water has to push through, which reduces flow versus the pump\'s rated figure — the effect gets worse the longer and narrower the run.'],
+            ['Partially closed or old valves', 'a valve that isn\'t fully open, or one that has narrowed with age and mineral buildup, restricts flow the same way a kinked hose does.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: if your tank consistently takes noticeably longer to fill
+          than this calculator estimates, check lift height, pipe size and
+          valve position before assuming the pump itself is faulty.
+        </p>
+      </section>
+
+      <section aria-labelledby="cost" className="mb-10">
+        <h2 id="cost" className="font-display mb-4 text-2xl font-semibold">
+          Estimating the Electricity Cost of Filling Your Tank
+        </h2>
+        <p className="text-ash/80">
+          Once you know the fill time, converting it to a running cost uses
+          the same units-based method as every other appliance calculator on
+          this site:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Convert the motor rating to watts', 'a pump\'s power is usually rated in HP — 1 HP is approximately 746 watts, so a 0.5 HP pump draws roughly 373W and a 1 HP pump roughly 746W while running.'],
+            ['Multiply by fill time, divide by 1,000', 'wattage × running hours ÷ 1,000 gives the units (kWh) consumed for that one fill — the identical formula our fan, cooler and induction-cooktop calculators use for their running cost.'],
+            ['Price those units at your DISCOM\'s top slab', 'like every appliance on this site, the pump\'s units sit on top of your existing household consumption, so they\'re priced at your highest tariff slab (plus fuel cost adjustment and duty) rather than a flat average rate.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          A single fill is usually a small cost — the real expense shows up
+          from repeated overflow or unnecessarily long fill times, both of
+          which the fixes below directly address.
+        </p>
+      </section>
+
+      <section aria-labelledby="scenarios" className="mb-10">
+        <h2 id="scenarios" className="font-display mb-4 text-2xl font-semibold">
+          Fill Time Across Common Tank and Pump Combinations
+        </h2>
+        <p className="text-ash/80">
+          The same volume-over-flow-rate arithmetic, run across four everyday
+          household combinations, shows how directly fill time responds to
+          both tank size and pump strength:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Setup</th>
+                <th className="px-4 py-2 font-semibold">Tank / pump</th>
+                <th className="px-4 py-2 text-right font-semibold">Fill time</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              <tr>
+                <td className="px-4 py-2 font-medium">Small tank, modest pump</td>
+                <td className="px-4 py-2">500 L @ 40 LPM</td>
+                <td className="px-4 py-2 text-right tabular-nums">{exampleSmallTank.minutes} min</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">Typical household setup</td>
+                <td className="px-4 py-2">1,000 L @ 50 LPM</td>
+                <td className="px-4 py-2 text-right tabular-nums">{example.minutes} min</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">Same tank, weaker pump</td>
+                <td className="px-4 py-2">1,000 L @ 25 LPM</td>
+                <td className="px-4 py-2 text-right tabular-nums">{exampleWeakPump.minutes} min</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">Large tank, strong pump</td>
+                <td className="px-4 py-2">2,000 L @ 100 LPM</td>
+                <td className="px-4 py-2 text-right tabular-nums">{exampleLargeTank.minutes} min</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: halving the pump&apos;s flow rate for the same tank exactly
+          doubles the fill time, and doubling both tank size and flow rate
+          together leaves fill time unchanged — it&apos;s the ratio of volume
+          to flow rate that matters, not either number in isolation.
+        </p>
+      </section>
+
+      <section aria-labelledby="mistakes" className="mb-10">
+        <h2 id="mistakes" className="font-display mb-4 text-2xl font-semibold">
+          Common Setup Mistakes That Waste Time and Water
+        </h2>
+        <p className="text-ash/80">
+          Four avoidable setup issues account for most of the gap between a
+          pump&apos;s rated performance and what a household actually
+          experiences:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Undersized pipework', 'a pipe diameter too narrow for the pump\'s rated flow bottlenecks output no matter how powerful the motor is — match pipe size to the pump\'s specification, not just whatever was already fitted.'],
+            ['No float valve or auto-cutoff', 'without one, an unattended pump keeps running after the tank is full, wasting both water and the electricity spent pumping it — a low-cost float valve pays for itself quickly.'],
+            ['Running the pump dry', 'starting the pump with an empty suction line or a dry source risks damaging the motor and seals — always confirm water is available at the source first.'],
+            ['Ignoring the zero-head assumption', 'planning a schedule (like an early-morning fill window) around the nameplate flow rate rather than the real, lift-adjusted flow rate is a common reason a fill runs later than expected.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

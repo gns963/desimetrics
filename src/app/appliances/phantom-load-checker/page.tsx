@@ -171,14 +171,77 @@ export default function PhantomLoadPage() {
         </ol>
       </section>
 
+      <section aria-labelledby="why-adds-up" className="mb-10 scroll-mt-20">
+        <h2 id="why-adds-up" className="font-display mb-4 text-2xl font-semibold">
+          Why Phantom Load Adds Up More Than People Expect
+        </h2>
+        <p className="text-ash/80">
+          A single standby device drawing a few watts sounds trivial — the
+          reason it&apos;s still worth checking comes down to three things
+          working against you at once:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['It never switches off', 'unlike a fan or an AC that runs for a few hours a day, a device in standby mode draws its small load for all 24 hours, every single day of the year — there\'s no "off" period to offset the cost.'],
+            ['The draw is mostly hidden', 'a router\'s internal transformer stays energised to power its always-on LED and Wi-Fi radio, a set-top box keeps a chip listening for scheduled recordings or a remote signal, and an inverter left connected but not charging still runs its control circuitry — none of this shows up as "usage" the way switching on a light does.'],
+            ['It\'s priced at your most expensive rate', 'like every other appliance on this site, standby draw sits on top of whatever else your household already uses in a month, so it lands in your DISCOM\'s top (marginal) tariff slab — the same slab logic used across every calculator here — rather than some cheaper average rate.'],
+            ['It multiplies across devices', 'few homes have just one always-on device — a router, a set-top box, an inverter and a couple of forgotten chargers together can end up drawing more, continuously, than a single appliance most people actively budget for.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: it&apos;s the combination of running continuously and being
+          priced at your top slab — not any single device&apos;s wattage — that
+          makes phantom load worth checking at all.
+        </p>
+      </section>
+
+      <section aria-labelledby="reduce-it" className="mb-10 scroll-mt-20">
+        <h2 id="reduce-it" className="font-display mb-4 text-2xl font-semibold">
+          How to Actually Reduce It
+        </h2>
+        <p className="text-ash/80">
+          Not every always-on device is worth unplugging — the goal is
+          targeting the ones where the convenience trade-off is genuinely
+          small:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Use a switched power strip for entertainment/office clusters', 'a TV, set-top box and speakers plugged into one strip with a physical switch can be cut off together at night with a single flick, instead of unplugging each device separately.'],
+            ['Unplug chargers with nothing attached', 'a phone or laptop charger left in the socket after the device is disconnected still draws a small standby load for no benefit at all — this is the easiest, zero-trade-off fix on the list.'],
+            ['Leave routers and set-top boxes running if you actually need them', 'a router you rely on for work, or a set-top box mid-scheduled-recording, isn\'t worth the daily hassle of reconnecting for the modest saving involved — this is exactly the kind of case where the convenience is worth the standby cost.'],
+            ['Check older inverters/UPS units specifically', 'these tend to draw more in standby than most other devices on this page\'s reference list, so if you have an older unit sitting connected but not actively charging, it\'s often the single biggest easy win on this list.'],
+            ['Use the calculator, not guesswork, to prioritise', 'tick only the devices that actually apply to your home and let the real annual figure — priced at your own DISCOM\'s rate — tell you whether a given device is worth the behavioural change, rather than assuming based on the device\'s size or price.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="reference" className="mb-10 scroll-mt-20">
         <h2 id="reference" className="font-display mb-4 text-2xl font-semibold">
           Typical standby wattage by device
         </h2>
         <p className="text-ash/80">
           The calculator above uses these commonly-cited planning estimates —
-          your exact device may draw more or less, so a plug-in power meter
-          gives a precise reading if you want one:
+          your exact device may draw more or less depending on its age, brand
+          and internal design, so a plug-in power meter gives a precise reading
+          if you want one. As a rough pattern across device categories: units
+          with a heavier internal transformer or a chip that has to stay
+          listening for a signal (set-top boxes, older inverters/UPS units)
+          tend to sit toward the higher end of this range, while a simple
+          charger with nothing connected sits at the low end:
         </p>
         <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
           <table className="w-full text-left text-sm">

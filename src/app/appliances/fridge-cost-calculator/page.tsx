@@ -16,6 +16,7 @@ const liveDiscoms = discomsJson.states.flatMap((s) =>
 )
 
 const example = fridgeCost({ discomCode: 'TNEB', annualUnitsFromLabel: 200 })
+const exampleOlder = fridgeCost({ discomCode: 'BESCOM', annualUnitsFromLabel: 400 })
 
 export const metadata: Metadata = {
   title: 'Fridge Electricity Cost Calculator 2026 — From Your BEE Label',
@@ -117,7 +118,14 @@ export default function FridgeCostPage() {
           A fridge rated at <strong>200 units/year</strong> on its BEE label
           costs about <strong>{formatINR(example.monthlyCost)}/month</strong> (
           {formatINR(example.annualCost)}/year) to run in Tamil Nadu, at{' '}
-          {formatINR(example.effectiveRatePerUnit)}/unit.
+          {formatINR(example.effectiveRatePerUnit)}/unit. An older or larger
+          fridge rated at <strong>400 units/year</strong> — double the label
+          figure — costs about{' '}
+          <strong>{formatINR(exampleOlder.monthlyCost)}/month</strong> (
+          {formatINR(exampleOlder.annualCost)}/year) in Bengaluru, at{' '}
+          {formatINR(exampleOlder.effectiveRatePerUnit)}/unit — the cost
+          scales exactly with the label figure, since that number is the
+          entire input to this calculator.
         </p>
       </section>
 
@@ -146,6 +154,106 @@ export default function FridgeCostPage() {
             and electricity duty).
           </p>
         </div>
+      </section>
+
+      <section aria-labelledby="why-not-wattage" className="mb-10">
+        <h2 id="why-not-wattage" className="font-display mb-4 text-2xl font-semibold">
+          Why a Fridge Doesn&apos;t Fit a Simple Wattage × Hours Formula
+        </h2>
+        <p className="text-ash/80">
+          Every other appliance on this site — a fan, a cooler, an induction
+          cooktop — draws its rated wattage for as long as it&apos;s switched
+          on, so wattage × hours gives a reliable estimate. A fridge breaks
+          that assumption in one specific way:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['The compressor cycles, not runs', 'it switches on to pull the interior down to the set temperature, then switches off until the temperature drifts back up, repeating all day — so it only draws its running wattage for part of each hour, never the full 60 minutes.'],
+            ['Cycle rate isn\'t fixed', 'how often and how long the compressor runs depends on ambient kitchen temperature, how frequently the door is opened, and the unit\'s insulation and seal condition — none of which a generic formula can know in advance.'],
+            ['"Wattage × 24 hours" overstates cost', 'treating a fridge like a device that draws its full rated wattage around the clock produces a cost estimate well above what the unit actually consumes, since real compressors spend a meaningful share of each hour switched off.'],
+            ['The BEE label already solves this', 'its "Annual Energy Consumption" figure is measured under standard test conditions across a full cycling pattern, not a wattage assumption — so it\'s the one real, tested, model-specific number available, and this calculator uses it directly instead of guessing.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: the annual kWh figure on your fridge&apos;s BEE label is
+          more accurate than any wattage-based estimate you could build
+          yourself — always use it over a guessed running-wattage figure.
+        </p>
+      </section>
+
+      <section aria-labelledby="real-world-factors" className="mb-10">
+        <h2 id="real-world-factors" className="font-display mb-4 text-2xl font-semibold">
+          What Makes Real-World Consumption Differ From the Label
+        </h2>
+        <p className="text-ash/80">
+          The BEE figure is measured under controlled lab conditions, so your
+          actual bill can run a bit above or below it depending on how and
+          where the fridge is used:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Ambient kitchen temperature', 'a hotter room means the compressor has to work harder and cycle more often to maintain the same internal temperature, pushing real consumption above the label figure.'],
+            ['Door seal condition', 'a worn or damaged seal lets cold air leak out continuously, forcing more frequent cycling — an inexpensive fix that\'s easy to overlook.'],
+            ['How full the fridge is', 'both significantly overfilling it (blocking internal airflow) and running it nearly empty can make the compressor work less efficiently — a reasonably, not excessively, full fridge is the sweet spot.'],
+            ['Frost-free vs. direct-cool', 'frost-free models include an automatic defrost-cycle heating element that direct-cool (manual-defrost) models don\'t have, which generally adds to consumption for the convenience of not manually defrosting.'],
+            ['Age of the unit', 'compressor technology and insulation have improved over time, and BEE efficiency thresholds are periodically revised upward — so an older fridge, even one rated highly when purchased, often uses meaningfully more energy than a current model carrying the same star rating today.'],
+            ['Positioning', 'placing the fridge away from a stove, direct sunlight, or a wall gap needed for ventilation lets the compressor run less to hold its set temperature.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          Door-opening frequency is a real factor too — each opening lets
+          warm air in, making the compressor work to recover the set
+          temperature — but it&apos;s secondary next to the model&apos;s
+          star rating, age and seal condition. None of these factors change
+          what you should enter into the calculator above; they explain why
+          your actual electricity bill might land a little above or below
+          the estimate it produces.
+        </p>
+      </section>
+
+      <section aria-labelledby="star-rating-savings" className="mb-10">
+        <h2 id="star-rating-savings" className="font-display mb-4 text-2xl font-semibold">
+          Does a Higher Star Rating Actually Save Meaningful Money?
+        </h2>
+        <p className="text-ash/80">
+          Yes, and the gap compounds because a fridge runs every single day
+          of the year, unlike a fan or cooler that&apos;s only on for part
+          of the day:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['The efficiency gap is large', 'some industry sources cite a gap as large as roughly 50% between a comparable 1-star and 5-star model of similar size — treat this as illustrative rather than a guarantee for any two specific models, since the real difference depends on the units actually being compared and their rating-cycle year.'],
+            ['It runs 365 days a year', 'unlike a seasonal appliance like an AC or a cooler, a fridge is switched on every day, so even a modest per-day saving in units adds up to a much larger annual figure than the same percentage saved on an appliance used for a few months a year.'],
+            ['Compare using the label, not the sticker\'s star count alone', 'two 5-star fridges of different sizes or brands can carry different annual kWh figures — the actual "Annual Energy Consumption" number on the label is the reliable comparison point, not the star count by itself.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: when replacing an old fridge, a higher star-rated model of
+          the same size is one of the few appliance upgrades that keeps
+          paying back every single day of the year, not just during a
+          particular season.
+        </p>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

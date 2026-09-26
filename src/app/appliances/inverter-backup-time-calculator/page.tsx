@@ -10,6 +10,8 @@ const SITE = 'https://desimetrics.com'
 const PATH = '/appliances/inverter-backup-time-calculator'
 
 const example = estimateBackupTime({ batteryAh: 150, batteryVoltage: 12, loadWatts: 400 })
+const exampleSmall = estimateBackupTime({ batteryAh: 100, batteryVoltage: 12, loadWatts: 200 })
+const exampleLarge = estimateBackupTime({ batteryAh: 200, batteryVoltage: 24, loadWatts: 1000 })
 
 export const metadata: Metadata = {
   title: 'Inverter Battery Backup Time Calculator 2026 — How Long It Lasts',
@@ -106,7 +108,9 @@ export default function InverterBackupPage() {
           <strong>400W load</strong> lasts about{' '}
           <strong>{example.safeCapacityHours} hours</strong> at a safe 50%
           depth of discharge, or up to {example.fullCapacityHours} hours if
-          fully drained.
+          fully drained. The gap between those two numbers is 80% round-trip
+          efficiency and the 50% depth-of-discharge limit applied on top of it
+          — both explained below.
         </p>
       </section>
 
@@ -121,18 +125,158 @@ export default function InverterBackupPage() {
         <h2 id="how" className="font-display mb-4 text-2xl font-semibold">
           How this is calculated
         </h2>
-        <div className="space-y-3 text-ash/80">
-          <p>
-            <strong>Watt-hours available.</strong> Battery Ah × voltage × 80%
-            round-trip efficiency gives the usable watt-hours, accounting for
-            inverter conversion and battery losses.
-          </p>
-          <p>
-            <strong>Divide by load.</strong> Backup hours = usable watt-hours ÷
-            connected load in watts. The safe figure applies a 50% depth-of-
-            discharge limit on top of that.
-          </p>
+        <p className="text-ash/80">
+          Backup hours come from two steps: convert the battery&apos;s rated Ah
+          into usable watt-hours, then divide by the connected load.
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Usable watt-hours', 'battery Ah × battery voltage × 80% round-trip efficiency — the efficiency factor accounts for inverter conversion losses and battery charge/discharge losses combined, so it always returns less than the raw Ah × voltage figure.'],
+            ['Full-capacity hours', 'usable watt-hours ÷ connected load in watts — the theoretical maximum runtime if the battery drains completely, which this calculator reports but does not recommend relying on.'],
+            ['Safe-capacity hours', 'full-capacity hours × 50% depth of discharge — a commonly recommended limit for longer lead-acid battery life, and the more realistic number to plan a power cut around.'],
+            ['Battery voltage', '12V, 24V or 48V battery banks change the watt-hours available for the same Ah rating, since voltage is a direct multiplier in the watt-hour formula.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: plan around the safe-capacity figure, not the full-capacity
+          one — it costs roughly half the runway but protects the battery from
+          the deep discharge cycles that shorten its usable life.
+        </p>
+      </section>
+
+      <section aria-labelledby="why-less" className="mb-10">
+        <h2 id="why-less" className="font-display mb-4 text-2xl font-semibold">
+          Why Real-World Backup Often Falls Short of the Estimate
+        </h2>
+        <p className="text-ash/80">
+          Four factors this calculator can&apos;t see in advance all push actual
+          backup time below the full-capacity figure, sometimes well below it:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Round-trip efficiency loss', 'converting DC battery power to AC through the inverter, and charging/discharging the battery itself, together consume about 20% of the stored energy as heat and conversion loss — already built into the 80% efficiency figure used here.'],
+            ['Battery aging', 'this calculator uses the battery\'s nameplate Ah rating, which reflects a new, fully healthy cell — usable capacity degrades with age and charge cycles, so a battery a few years old can deliver noticeably less than its rated Ah.'],
+            ['Deep-discharge history', 'a battery that has been repeatedly drained past the safe 50% depth of discharge loses capacity faster than one that hasn\'t, compounding the aging effect above over the battery\'s service life.'],
+            ['Surge loads at switch-on', 'motor-based appliances (a fridge compressor, a water pump) draw a brief surge of 2-3× their running wattage on startup — if several such appliances are on the load list, that surge can matter even though it barely affects total backup hours.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="battery-chemistry" className="mb-10">
+        <h2 id="battery-chemistry" className="font-display mb-4 text-2xl font-semibold">
+          Why the 50% Depth-of-Discharge Assumption Is Battery-Specific
+        </h2>
+        <p className="text-ash/80">
+          The 50% safe-discharge limit used above is a lead-acid convention —
+          still the most common battery type in Indian home inverter setups —
+          not a universal physical rule:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Lead-acid (flooded or tubular)', 'discharging much below 50% repeatedly shortens the battery\'s usable life over its charge-cycle count, which is why 50% is the conventional planning limit this calculator applies by default.'],
+            ['Lithium (LiFePO4)', 'tolerates a much deeper regular discharge than lead-acid without the same rate of capacity loss, which is why lithium battery banks are increasingly marketed on a higher usable-capacity claim for the same rated Ah — check your specific battery\'s datasheet rather than assuming this calculator\'s 50% figure applies to it.'],
+            ['Whichever chemistry you have', 'the underlying watt-hours ÷ load arithmetic this calculator uses stays the same — only the safe depth-of-discharge percentage you should plan around changes.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: if you&apos;ve moved to a lithium battery bank, treat this
+          calculator&apos;s safe-capacity figure as a conservative floor, not
+          the true usable runtime — your actual battery datasheet is the
+          authority on what depth of discharge is safe for your specific unit.
+        </p>
+      </section>
+
+      <section aria-labelledby="scenarios" className="mb-10">
+        <h2 id="scenarios" className="font-display mb-4 text-2xl font-semibold">
+          Backup Time Across Three Load Sizes
+        </h2>
+        <p className="text-ash/80">
+          The same 80% efficiency and 50% depth-of-discharge assumptions apply
+          regardless of battery size — only the Ah, voltage and load change
+          across a small, medium and large household setup:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Setup</th>
+                <th className="px-4 py-2 font-semibold">Battery / load</th>
+                <th className="px-4 py-2 text-right font-semibold">Safe hours</th>
+                <th className="px-4 py-2 text-right font-semibold">Full hours</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              <tr>
+                <td className="px-4 py-2 font-medium">Small (fans + lights)</td>
+                <td className="px-4 py-2">100 Ah, 12V @ 200W</td>
+                <td className="px-4 py-2 text-right tabular-nums">{exampleSmall.safeCapacityHours}h</td>
+                <td className="px-4 py-2 text-right tabular-nums">{exampleSmall.fullCapacityHours}h</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">Medium (fans, TV, fridge)</td>
+                <td className="px-4 py-2">150 Ah, 12V @ 400W</td>
+                <td className="px-4 py-2 text-right tabular-nums">{example.safeCapacityHours}h</td>
+                <td className="px-4 py-2 text-right tabular-nums">{example.fullCapacityHours}h</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2 font-medium">Large (multi-room + pump)</td>
+                <td className="px-4 py-2">200 Ah, 24V @ 1000W</td>
+                <td className="px-4 py-2 text-right tabular-nums">{exampleLarge.safeCapacityHours}h</td>
+                <td className="px-4 py-2 text-right tabular-nums">{exampleLarge.fullCapacityHours}h</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: doubling the battery bank size and load together roughly
+          preserves backup time — it&apos;s the ratio between watt-hours
+          available and load drawn that determines duration, not either
+          number alone.
+        </p>
+      </section>
+
+      <section aria-labelledby="mistakes" className="mb-10">
+        <h2 id="mistakes" className="font-display mb-4 text-2xl font-semibold">
+          Common Mistakes When Estimating Backup Time
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {(
+            [
+              ['Entering the inverter\'s VA rating as the load', 'the load figure should be the actual connected wattage of appliances running during the cut, not the inverter\'s maximum VA capacity — those are two different numbers.'],
+              ['Planning around the full-capacity figure', 'treating the theoretical maximum as the expected runtime overstates real backup time and encourages deep discharges that shorten battery life.'],
+              ['Ignoring battery age', 'a 3-4 year old lead-acid battery can deliver meaningfully less than its nameplate Ah — if backup time has visibly dropped over time, ageing capacity loss, not a wiring fault, is the more likely explanation.'],
+              ['Forgetting standby loads in the appliance mix', <>routers, set-top boxes and chargers left plugged in draw power continuously even when &quot;off&quot; — see our <Link href="/appliances/phantom-load-checker" className="text-brass underline">Phantom Load Checker</Link> to size that into the total load.</>],
+            ] as [string, React.ReactNode][]
+          ).map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-appliance" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="related" className="mb-10">
