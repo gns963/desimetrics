@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'How to Actually Reduce Your Electricity Bill in India',
+    tag: 'Electricity',
+    href: '/blog/how-to-reduce-electricity-bill-india',
+    live: true,
+  },
+  {
     title: 'How Much Does Running a Geyser Actually Cost in India?',
     tag: 'Appliances',
     href: '/blog/geyser-water-heater-running-cost-india',
