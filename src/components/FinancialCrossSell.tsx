@@ -175,6 +175,12 @@ const TOOLS = [
     title: 'NCB & IDV Calculator',
     body: 'Motor insurance No-Claim Bonus and vehicle IDV.',
   },
+  {
+    slug: 'gujarat-road-tax-calculator',
+    emoji: '🚗',
+    title: 'Gujarat Road Tax Calculator',
+    body: 'Flat 6% vehicle registration tax, verified.',
+  },
 ] as const
 
 export default function FinancialCrossSell({ current }: { current: string }) {

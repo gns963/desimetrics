@@ -161,13 +161,21 @@ export default function DataSourcesPage() {
           slabs and Insured Declared Value depreciation-by-age schedule,
           cross-checked against the published IRDAI/GIC Council table.
         </li>
+        <li>
+          <strong>Gujarat Road Tax</strong> — flat 6% rate verified directly
+          against a machine-readable page on cot.gujarat.gov.in
+          (Commissionerate of Transport, Government of Gujarat); the prior 1%
+          EV rate concession is confirmed to have expired 31 March 2026 via
+          multiple independent sources.
+        </li>
       </ul>
       <p className="text-sm text-ash/60">
-        We do not publish a state-wise road tax calculator: reviewed
-        secondary sources gave inconsistent rates for the same state, and we
-        would rather exclude a figure than publish one we can&apos;t verify
-        against a primary state notification. Use the official Vahan portal
-        or your RTO for that figure.
+        We only publish a road tax calculator for Gujarat: a 2026 re-attempt
+        across 15 major states found every other state&apos;s official rate
+        document was a scanned image or embedded graphic with no extractable
+        text, or contradicted by other secondary sources — a document-format
+        and verification problem, not a lack of effort. Use the official
+        Vahan portal or your RTO for any state we don&apos;t cover.
       </p>
     </LegalPageShell>
   )

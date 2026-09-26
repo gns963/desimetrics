@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import FinancialCrossSell from '@/components/FinancialCrossSell'
 import PageHero from '@/components/PageHero'
 import BhSeriesCalculator from '@/components/calculators/BhSeriesCalculator'
@@ -212,6 +213,21 @@ export default function BhSeriesCalculatorPage() {
           </div>
           <p className="mt-3 text-xs text-ash/50">
             Exact document lists can vary slightly by RTO — confirm the current checklist with your registering authority before applying.
+          </p>
+        </section>
+
+        <section aria-labelledby="related" className="mb-10 scroll-mt-20">
+          <h2 id="related" className="font-display mb-2 text-2xl font-semibold">
+            Not eligible for BH-series, or registering in Gujarat?
+          </h2>
+          <p className="text-ash/80">
+            If you don&apos;t qualify for BH-series, you&apos;ll register normally in your state
+            instead — our{' '}
+            <Link href="/financial/gujarat-road-tax-calculator" className="text-brass underline">
+              Gujarat Road Tax Calculator
+            </Link>{' '}
+            covers the one state whose rate we could verify to a primary source, with the same
+            BH-series comparison built in.
           </p>
         </section>
 

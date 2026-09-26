@@ -222,6 +222,13 @@ const cards = [
     body: 'Motor insurance No-Claim Bonus and vehicle IDV.',
     cta: 'Open →',
   },
+  {
+    href: '/financial/gujarat-road-tax-calculator',
+    emoji: '🚗',
+    title: 'Gujarat Road Tax Calculator',
+    body: 'Flat 6% vehicle registration tax, verified, plus a BH-series comparison.',
+    cta: 'Open →',
+  },
 ]
 
 const breadcrumb = breadcrumbLd([
@@ -268,7 +275,7 @@ export default function FinancialHubPage() {
         h1="Financial Calculators"
         subtitle="Fast, accurate personal-finance tools for India — loan EMIs, PPF and FD growth, NPS, HRA, capital gains tax, GST, mutual fund SIPs, income tax regime comparison, gratuity, FIRE, net worth, and more. Free and updated for the current financial year."
         stats={[
-          { icon: '🧮', big: '29', small: 'Calculators', tone: 'hub' },
+          { icon: '🧮', big: '30', small: 'Calculators', tone: 'hub' },
           { icon: '📅', big: 'FY 2026-27', small: 'Current year', tone: 'hub' },
           { icon: '🔓', big: 'Free', small: 'No login', tone: 'hub' },
           { icon: '🇮🇳', big: 'India', small: 'Coverage', tone: 'hub' },

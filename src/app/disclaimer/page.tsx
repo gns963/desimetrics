@@ -52,13 +52,13 @@ export default function DisclaimerPage() {
         Financial calculators
       </h2>
       <p>
-        Our 29 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
+        Our 30 financial calculators (Capital Gains Tax, New vs Old Tax Regime,
         GST, SIP, Home Loan EMI, Personal Loan EMI, PPF, FD, Gratuity, HRA, NPS,
         Human Life Value, FIRE, Net Worth, Crorepati, BH Series, EV vs Fuel Cost,
         Retirement Planner, EPF, Sukanya Samriddhi Yojana, CTC to In-Hand Salary,
         Rent vs Buy, Car/Two-Wheeler/Education Loan EMI, Health Insurance 80D,
-        Surcharge &amp; Marginal Relief, Recurring Deposit, and NCB &amp; IDV)
-        are for general guidance only and are not tax, legal, investment or
+        Surcharge &amp; Marginal Relief, Recurring Deposit, NCB &amp; IDV, and
+        Gujarat Road Tax) are for general guidance only and are not tax, legal, investment or
         insurance advice. Each produces a needs or planning estimate built
         from the inputs you provide and the rules verified at the time we
         last checked them — not a filed return, a bank/insurer quote, or a
@@ -187,16 +187,24 @@ export default function DisclaimerPage() {
           insurance quote; beyond 5 years, IDV is set by mutual agreement
           with your insurer, not a fixed schedule.
         </li>
+        <li>
+          <strong>Gujarat Road Tax</strong> — covers Gujarat only; its EV
+          rate is not currently confirmed (the prior 1% concession expired
+          31 March 2026, no replacement notified as of this writing).
+        </li>
       </ul>
       <p>Consult a qualified professional before acting on any of these figures.</p>
       <p>
         We deliberately do not offer a state-wise Road Tax / Motor Vehicle Tax
-        calculator: unlike BH-series tax, ordinary road tax varies by state
-        under India&apos;s constitutional division of powers, and published
-        state-wise rate tables we reviewed disagreed with each other on the
-        same state&apos;s rate — we would rather not publish a number than
-        publish one we can&apos;t stand behind. Use your state transport
-        department&apos;s official Vahan portal for that figure.
+        calculator beyond Gujarat: unlike BH-series tax, ordinary road tax
+        varies by state under India&apos;s constitutional division of powers,
+        and we specifically re-attempted primary-source verification across
+        15 major states in 2026 — Gujarat was the only one whose official
+        rate document was actually machine-readable rather than a scanned
+        image or embedded graphic. We would rather cover one state accurately
+        than many states approximately. Use your state transport
+        department&apos;s official Vahan portal for any state we don&apos;t
+        cover.
       </p>
 
       <h2 className="font-display text-xl font-semibold text-ash">

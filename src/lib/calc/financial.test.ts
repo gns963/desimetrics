@@ -11,6 +11,7 @@ import {
   calculateEvBreakEven,
   calculateFire,
   calculateFuelCostComparison,
+  calculateGujaratRoadTax,
   calculateHumanLifeValue,
   calculateNcbIdv,
   calculateNetWorth,
@@ -653,6 +654,30 @@ describe('computeRegimeTax surcharge integration', () => {
     const r = computeRegimeTax(6075000, 'new')
     const taxPlusSurcharge = r.taxBeforeRebate - r.rebate87A - r.marginalRelief + r.surcharge
     expect(r.cess).toBeCloseTo(taxPlusSurcharge * 0.04, 1)
+  })
+})
+
+describe('calculateGujaratRoadTax', () => {
+  it('charges a flat 6% for petrol, diesel and CNG with no price-band slabs', () => {
+    const petrol = calculateGujaratRoadTax(1200000, 'petrol')
+    const diesel = calculateGujaratRoadTax(1200000, 'diesel')
+    const cng = calculateGujaratRoadTax(1200000, 'cng')
+    expect(petrol.taxPercent).toBe(6)
+    expect(petrol.roadTax).toBe(72000)
+    expect(diesel.roadTax).toBe(72000)
+    expect(cng.roadTax).toBe(72000)
+    expect(petrol.rateConfirmed).toBe(true)
+  })
+  it('scales linearly with vehicle price (no slabs)', () => {
+    const cheap = calculateGujaratRoadTax(600000, 'petrol')
+    const expensive = calculateGujaratRoadTax(1800000, 'petrol')
+    expect(expensive.roadTax).toBeCloseTo((cheap.roadTax ?? 0) * 3, 2)
+  })
+  it('returns no confirmed rate for electric, since the 1% concession expired 31 March 2026', () => {
+    const ev = calculateGujaratRoadTax(1500000, 'electric')
+    expect(ev.rateConfirmed).toBe(false)
+    expect(ev.taxPercent).toBeNull()
+    expect(ev.roadTax).toBeNull()
   })
 })
 

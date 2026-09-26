@@ -2832,3 +2832,44 @@ export function calculateNcbIdv(
     idv: round2(idv),
   }
 }
+
+// ---------------------------------------------------------------------------
+// Gujarat Road Tax Calculator (the one state that cleared primary-source
+// verification — see D-39/D-43 for why every other state was excluded)
+// ---------------------------------------------------------------------------
+
+export type GujaratRoadTaxFuelType = 'petrol' | 'diesel' | 'cng' | 'electric'
+
+export interface GujaratRoadTaxResult {
+  taxPercent: number | null
+  roadTax: number | null
+  rateConfirmed: boolean
+}
+
+const GUJARAT_ROAD_TAX_PERCENT = 6
+
+/**
+ * Gujarat charges a flat 6% one-time road tax on the vehicle price for
+ * private petrol/diesel/CNG cars — no price-band slabs, verified directly
+ * against a machine-readable page on cot.gujarat.gov.in (Commissionerate of
+ * Transport, Government of Gujarat), the only state whose primary source
+ * held up to this project's verification standard (see D-43's 15-state
+ * research pass). Gujarat's EV rate was cut to 1% but that concession
+ * EXPIRED 31 March 2026; no replacement rate has been confirmed as of this
+ * writing, so `taxPercent`/`roadTax` return null for electric rather than
+ * guessing at 1%, 6%, or an unconfirmed "zero tax" proposal reported in the
+ * press but not yet formally notified.
+ */
+export function calculateGujaratRoadTax(
+  vehiclePrice: number,
+  fuelType: GujaratRoadTaxFuelType,
+): GujaratRoadTaxResult {
+  if (vehiclePrice <= 0) throw new Error('vehiclePrice must be > 0')
+
+  if (fuelType === 'electric') {
+    return { taxPercent: null, roadTax: null, rateConfirmed: false }
+  }
+
+  const roadTax = (vehiclePrice * GUJARAT_ROAD_TAX_PERCENT) / 100
+  return { taxPercent: GUJARAT_ROAD_TAX_PERCENT, roadTax: round2(roadTax), rateConfirmed: true }
+}
