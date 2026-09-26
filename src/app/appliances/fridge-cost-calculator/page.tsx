@@ -189,6 +189,18 @@ export default function FridgeCostPage() {
               See your complete monthly bill, not just this one appliance.
             </p>
           </Link>
+          <Link
+            href="/blog/refrigerator-electricity-consumption-india"
+            className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-appliance/50 hover:shadow-sm"
+          >
+            <span className="text-xl" aria-hidden>🧊</span>
+            <p className="font-display mt-2 font-bold text-ink-navy">
+              Why fridges don&apos;t run 24/7 at full wattage
+            </p>
+            <p className="mt-1 text-xs text-ash/60">
+              The compressor-cycling explanation behind this calculator&apos;s method.
+            </p>
+          </Link>
         </div>
       </section>
 

@@ -150,7 +150,7 @@ export default function ReduceElectricityBillPage() {
             {[
               ['Air conditioning', 'typically the single largest load when present, especially run 6+ hours a day — see our AC running cost guide.'],
               ['Water heating (geyser)', 'very high wattage even for brief use, and easy to underestimate — see our geyser running cost guide.'],
-              ['Refrigeration', 'lower wattage than AC or a geyser, but runs 24/7, so it adds up steadily rather than spiking any single bill.'],
+              ['Refrigeration', 'lower wattage than AC or a geyser, but runs 24/7 so it adds up steadily — see our refrigerator electricity guide for why the compressor cycling matters.'],
               ['Your slab position', 'telescopic tariffs mean your LAST units in a cycle often cost more per unit than your first — see how telescopic slabs work.'],
             ].map(([t, d]) => (
               <li key={t} className="flex items-start gap-2">
@@ -197,6 +197,14 @@ export default function ReduceElectricityBillPage() {
                   <td className="px-4 py-2">Your geyser/water heater usage jumped (e.g. winter) and your bill followed</td>
                   <td className="px-4 py-2">
                     <Link href="/blog/geyser-water-heater-running-cost-india" className="text-brass underline">Geyser running cost guide</Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2">You suspect your fridge is a bigger cost than you think, since it runs all day</td>
+                  <td className="px-4 py-2">
+                    <Link href="/blog/refrigerator-electricity-consumption-india" className="text-brass underline">Refrigerator electricity guide</Link>
+                    {' + '}
+                    <Link href="/appliances/fridge-cost-calculator" className="text-brass underline">Fridge cost calculator</Link>
                   </td>
                 </tr>
                 <tr>
@@ -386,6 +394,7 @@ export default function ReduceElectricityBillPage() {
             {[
               ['/blog/ac-running-cost-india-guide', '❄️', 'AC running cost guide', 'Tonnage, hours and tariff — not just star rating.'],
               ['/blog/geyser-water-heater-running-cost-india', '🚿', 'Geyser running cost guide', 'Why tank size isn\'t the real cost driver.'],
+              ['/blog/refrigerator-electricity-consumption-india', '🧊', 'Refrigerator electricity guide', 'Why the compressor cycling, not 24-hour wattage, matters.'],
               ['/blog/how-telescopic-electricity-slabs-work', '📘', 'How telescopic slabs work', 'Why your last units cost the most.'],
               ['/blog/fixed-charges-vs-fca-electricity-bill', '📄', 'Fixed Charges vs FCA', 'The parts of your bill usage-reduction can\'t touch.'],
               ['/blog/smart-meters-in-india-guide', '📟', 'Smart meters in India', 'Prepaid billing and what visibility actually changes.'],

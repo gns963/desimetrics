@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'How Much Electricity Does a Refrigerator Actually Use? (India Guide)',
+    tag: 'Appliances',
+    href: '/blog/refrigerator-electricity-consumption-india',
+    live: true,
+  },
+  {
     title: 'How to Actually Reduce Your Electricity Bill in India',
     tag: 'Electricity',
     href: '/blog/how-to-reduce-electricity-bill-india',
