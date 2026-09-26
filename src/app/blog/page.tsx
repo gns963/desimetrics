@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Net Metering Explained: How Rooftop Solar Actually Reduces Your Bill',
+    tag: 'Solar',
+    href: '/blog/net-metering-explained-india',
+    live: true,
+  },
+  {
     title: 'Piped Gas (PNG) Bill in India: How It’s Calculated, Why It Got Cheaper in 2026',
     tag: 'Gas',
     href: '/blog/png-piped-gas-bill-guide-india',

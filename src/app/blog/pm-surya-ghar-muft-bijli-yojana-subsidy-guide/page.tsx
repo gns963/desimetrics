@@ -535,6 +535,20 @@ export default function PmSuryaGharArticlePage() {
                 Why solar offsets your most expensive units first.
               </p>
             </Link>
+            <Link
+              href="/blog/net-metering-explained-india"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-solar/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                🔌
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                Net metering explained
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                How exported solar units actually get credited to your bill.
+              </p>
+            </Link>
           </div>
         </section>
 
