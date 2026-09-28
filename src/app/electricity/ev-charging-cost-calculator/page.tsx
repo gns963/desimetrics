@@ -145,6 +145,77 @@ export default function EvChargingCostPage() {
         <EvChargingCostCalculator discoms={liveDiscoms} />
       </section>
 
+      <section aria-labelledby="how-calculated" className="mb-10">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          How This Is Calculated
+        </h2>
+        <p className="text-ash/80">
+          The cost comes from your battery capacity, a charging-efficiency
+          loss, and your DISCOM&apos;s real tariff:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Units actually drawn from the grid', 'battery capacity (kWh) ÷ 90% charging efficiency — you draw more units from the wall than the battery actually stores, because some energy is lost as heat during AC-to-DC conversion inside the car\'s onboard charger.'],
+            ['Cost to fully charge', 'units drawn × your DISCOM\'s top-slab rate — home charging adds substantially to your existing household consumption, so it\'s priced like any other large appliance, at your highest marginal tariff slab.'],
+            ['Cost per km', 'cost to fully charge ÷ your EV\'s full-charge range — this is the number that makes a direct, apples-to-apples comparison with a petrol, diesel or CNG vehicle\'s cost per km meaningful.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-electricity" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: the 10% efficiency loss means a 30 kWh battery actually
+          draws about 33.3 units from the grid to fully charge — always budget
+          for the units drawn, not just the battery&apos;s rated capacity.
+        </p>
+      </section>
+
+      <section aria-labelledby="real-world" className="mb-10">
+        <h2 id="real-world" className="font-display mb-4 text-2xl font-semibold">
+          Why Your Real Charging Cost May Differ
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Charger type and speed', 'this calculator models typical home AC (Level 1/2) charging efficiency — DC fast charging has different loss characteristics and is usually billed at a separate, higher public-charger rate rather than your home tariff.'],
+            ['Battery age and temperature', 'a battery\'s usable capacity and charging efficiency can both decline somewhat with age, and charging in very hot or cold weather is generally less efficient than in moderate conditions — real-world consumption can drift from the spec-sheet figures over a vehicle\'s life.'],
+            ['Your DISCOM\'s tariff structure', 'if your state or DISCOM uses time-of-day (ToD) tariffs, charging during an off-peak window can cost meaningfully less per unit than the top-slab daytime rate this calculator assumes by default.'],
+            ['Partial charging habits', 'topping up from 40% to 80% daily draws fewer units per session than always charging from empty to full — your actual monthly cost depends on your real charging pattern, not just the full-charge figure shown here.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-electricity" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="reduce-cost" className="mb-10">
+        <h2 id="reduce-cost" className="font-display mb-4 text-2xl font-semibold">
+          Ways to Reduce Your EV Charging Cost
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Check for a time-of-day tariff', 'some DISCOMs offer a lower rate during specific off-peak hours — scheduling charging overnight or during that window, if your state offers it, can meaningfully cut the top-slab cost this calculator assumes.'],
+            ['Avoid unnecessary full-to-empty cycles', 'charging little and often, rather than always draining to empty first, doesn\'t change your cost per unit but keeps each individual charging session smaller and easier to schedule around off-peak windows.'],
+            ['Pair home charging with rooftop solar', 'daytime solar generation can offset a meaningful share of home EV charging if your charging schedule overlaps with sunlight hours — see our Solar ROI Calculator to estimate whether that combination pays off for your usage.'],
+            ['Compare public fast-charger pricing before relying on it', 'public DC fast chargers typically charge a per-unit rate above residential tariffs, sometimes with an added service fee — home charging is usually the cheaper default wherever it\'s practical.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-electricity" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="ev-vs-fuel" className="mb-10">
         <h2 id="ev-vs-fuel" className="font-display mb-2 text-2xl font-semibold">
           EV vs Petrol vs Diesel vs CNG — cost per km
