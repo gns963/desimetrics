@@ -190,6 +190,80 @@ export default function LpgUsagePage() {
         </p>
       </section>
 
+      <section aria-labelledby="real-world" className="mb-10">
+        <h2 id="real-world" className="font-display mb-4 text-2xl font-semibold">
+          Why Your Real Cylinder Life May Differ From the Estimate
+        </h2>
+        <p className="text-ash/80">
+          The 0.25 kg/hour assumption is a reasonable planning average, but
+          four everyday factors push real consumption above or below it:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Flame quality and burner condition', 'a clogged or poorly maintained burner burns yellow/orange instead of a clean blue flame, wasting gas as unburnt fuel and soot rather than converting it fully to heat.'],
+            ['Pot size vs. flame size', 'a small vessel on a large burner lets most of the flame escape around the sides instead of heating the pot, so matching cookware size to burner size meaningfully improves real-world efficiency.'],
+            ['Flame setting after boiling', 'many dishes only need a low simmer once boiling starts — leaving the flame on high throughout burns noticeably more gas than turning it down once the initial boil is reached.'],
+            ['Regulator and pipe leaks', 'a worn regulator or a hairline leak in the rubber tubing wastes gas continuously, independent of actual cooking time — this shows up as a cylinder running out faster than your burner-hours would predict.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: if your cylinder consistently runs out faster than this
+          calculator predicts for your burner-hours, check the flame color and
+          the regulator/tubing for a leak before assuming your cooking habits
+          are the only variable.
+        </p>
+      </section>
+
+      <section aria-labelledby="stretch-life" className="mb-10">
+        <h2 id="stretch-life" className="font-display mb-4 text-2xl font-semibold">
+          Practical Ways to Stretch a Cylinder&apos;s Life
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Use a pressure cooker where possible', 'sealed cooking traps heat and steam instead of losing it to the air, cutting the burner-hours needed for dals, rice and similar dishes versus an open pan.'],
+            ['Keep a lid on the pot', 'a covered pot retains heat and reaches a boil faster than an uncovered one, directly reducing the active flame time for the same dish.'],
+            ['Lower the flame once boiling starts', 'most dishes only need a gentle simmer after the initial boil — a high flame past that point heats the kitchen more than the food.'],
+            ['Match vessel size to the burner', 'a flat-bottomed pot that fully covers the flame transfers heat more efficiently than a small vessel on a large burner, where much of the flame escapes around the sides.'],
+            ['Get the burner and regulator serviced periodically', 'a clean, properly adjusted burner and a leak-free regulator both directly reduce wasted gas that doesn\'t show up as "cooking" at all.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="mistakes" className="mb-10">
+        <h2 id="mistakes" className="font-display mb-4 text-2xl font-semibold">
+          Common Mistakes When Estimating Cylinder Life
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Confusing burner-hours with meal count', 'two meals cooked back-to-back on the same burner for 30 minutes each is 1 burner-hour total, not "2 meals worth" of some separate unit — always add up actual flame-on time.'],
+            ['Forgetting simultaneous burners', 'running two burners at once for 20 minutes each is 40 minutes of total burner-hours (0.67 burner-hours), not 20 minutes — each active flame counts independently.'],
+            ['Assuming every household burns gas at the same rate', 'the 0.25 kg/hour figure is a medium-to-full-flame average — a household that cooks mostly on low flame, or one that runs a large industrial-style burner, will see real usage diverge from this estimate in either direction.'],
+            ['Not re-measuring after a stove change', 'switching to a different burner design or a new regulator changes real consumption — treat this calculator\'s output as a planning estimate to revisit, not a fixed number tied to any cylinder.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="related" className="mb-10">
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           Related calculators

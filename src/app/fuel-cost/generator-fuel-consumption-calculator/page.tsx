@@ -138,6 +138,32 @@ export default function GeneratorFuelPage() {
         <GeneratorFuelCalculator />
       </section>
 
+      <section aria-labelledby="how-calculated" className="mb-10">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          How This Is Calculated
+        </h2>
+        <p className="text-ash/80">
+          The math is straightforward multiplication — the accuracy comes
+          entirely from the consumption-rate figure you enter, not from any
+          modelling on our end:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Litres used', 'consumption rate (litres/hour) × hours run — your genset\'s own published rate, not a generic estimate derived from its kVA rating.'],
+            ['Total fuel cost', 'litres used × your local fuel price per litre.'],
+            ['Cost per hour', 'consumption rate × fuel price per litre — useful for quickly comparing a short vs. long outage without recalculating litres each time.'],
+            ['Cost per unit (kWh) of output', 'fuel price ÷ typical electrical output per litre (a planning figure, since actual output-per-litre varies by genset size, load and age) — this is what makes generator power directly comparable to your grid tariff.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="vs-grid" className="mb-10">
         <h2 id="vs-grid" className="font-display mb-2 text-2xl font-semibold">
           Cost per unit vs grid power
@@ -172,6 +198,58 @@ export default function GeneratorFuelPage() {
           below their rated load, can drop to <strong>70% or lower</strong> —
           which pushes the real ₹/unit cost higher still.
         </p>
+      </section>
+
+      <section aria-labelledby="what-changes" className="mb-10">
+        <h2 id="what-changes" className="font-display mb-4 text-2xl font-semibold">
+          What Actually Changes Your Generator&apos;s Real Consumption
+        </h2>
+        <p className="text-ash/80">
+          The spec-sheet L/hr figure is a starting point, not a guarantee —
+          four factors commonly push real fuel use above or below it:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Load percentage', 'a generator running near its rated capacity burns noticeably more fuel per hour than the same unit running lightly loaded, though not in exact proportion — some fuel is spent just keeping the engine idling regardless of electrical output.'],
+            ['Engine age and maintenance', 'wear and looser tolerances in an older, less-serviced engine reduce fuel efficiency, so a genset\'s real consumption can drift above its original spec-sheet figure over years of use.'],
+            ['Running well below rated capacity', 'a generator sized much larger than the load it\'s actually powering tends to run less efficiently at that light load than one closer to its rated output — oversizing has a real fuel-cost consequence, not just a higher upfront price.'],
+            ['Fuel quality and altitude', 'lower-quality diesel/petrol and higher-altitude operation (thinner air affecting combustion) can both reduce real efficiency versus the manufacturer\'s rated figure, though the effect size varies by engine design.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: use the load-specific consumption figure from your spec
+          sheet closest to how you actually run the generator, and revisit it
+          periodically as the unit ages rather than treating the original
+          rating as permanently accurate.
+        </p>
+      </section>
+
+      <section aria-labelledby="reduce-cost" className="mb-10">
+        <h2 id="reduce-cost" className="font-display mb-4 text-2xl font-semibold">
+          Ways to Reduce Generator Running Cost
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Right-size the load, don\'t oversize the generator', 'a genset running closer to its rated capacity is typically more fuel-efficient per unit of output than one running lightly loaded — match generator size to your actual essential load rather than buying more capacity than you need "just in case."'],
+            ['Keep essential vs. non-essential loads separate', 'wiring only critical appliances (lights, fridge, a few fans) to the generator circuit avoids burning fuel to power loads that could simply wait for grid power to return.'],
+            ['Service the engine on schedule', 'regular maintenance (oil changes, air filter cleaning, injector checks) keeps real consumption closer to the original rated figure instead of drifting upward with age and neglect.'],
+            ['Consider a hybrid solar-plus-generator setup for frequent outages', 'if outages are long or frequent enough that fuel cost adds up significantly, solar with battery backup can offset a meaningful share of generator hours — see our solar calculators to estimate whether that trade-off makes sense for your usage pattern.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

@@ -186,6 +186,85 @@ export default function VehicleFuelCostPage() {
         </div>
       </section>
 
+      <section aria-labelledby="how-calculated" className="mb-10">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          How This Is Calculated
+        </h2>
+        <p className="text-ash/80">
+          Three simple divisions and multiplications, all driven by the fuel
+          price and mileage you enter:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Cost per km', 'fuel price per litre ÷ mileage (km per litre) — the core figure everything else is built from.'],
+            ['Monthly fuel cost', 'your monthly distance driven ÷ mileage, then × fuel price — equivalently, cost per km × monthly km.'],
+            ['Annual fuel cost', 'monthly cost × 12 — useful for comparing against a full year of ownership costs like insurance and maintenance.'],
+            ['Monthly fuel litres', 'monthly km ÷ mileage — how many litres you\'re actually buying each month at your driving pattern.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="real-mileage" className="mb-10">
+        <h2 id="real-mileage" className="font-display mb-4 text-2xl font-semibold">
+          Why Your Real Mileage Runs Below the Certified Figure
+        </h2>
+        <p className="text-ash/80">
+          The ARAI-certified mileage on a vehicle&apos;s brochure is measured
+          under controlled test conditions — real driving rarely matches that
+          exactly:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['City stop-start traffic', 'frequent braking and re-accelerating uses more fuel per km than the steady-speed conditions a certified test cycle is run under.'],
+            ['AC use', 'running the air conditioner adds a continuous load on the engine, which is a meaningful part of why real-world mileage often comes in below the certified figure — more noticeable in city driving than on the highway.'],
+            ['Driving style', 'harder acceleration and higher cruising speeds both increase fuel consumption per km versus the smooth, moderate-speed driving a certified test assumes.'],
+            ['Vehicle load and tyre condition', 'carrying extra weight and under-inflated tyres both increase rolling resistance, which the engine compensates for by burning more fuel for the same distance.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: track your actual fuel fill-ups against odometer readings
+          over a few tanks and use that real figure in the calculator above —
+          it will almost always be more useful for budgeting than the
+          brochure number.
+        </p>
+      </section>
+
+      <section aria-labelledby="improve-mileage" className="mb-10">
+        <h2 id="improve-mileage" className="font-display mb-4 text-2xl font-semibold">
+          Practical Ways to Improve Real-World Mileage
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {[
+            ['Maintain correct tyre pressure', 'under-inflated tyres increase rolling resistance, forcing the engine to work harder — and burn more fuel — for the same distance.'],
+            ['Avoid hard acceleration and braking', 'smooth, gradual acceleration uses noticeably less fuel than repeatedly flooring the accelerator and braking hard, especially in city traffic.'],
+            ['Service the vehicle on schedule', 'a well-tuned engine, clean air filter and fresh oil all help the engine convert fuel to motion more efficiently than a neglected one.'],
+            ['Avoid unnecessary idling', 'a stationary engine burns fuel for zero distance — switching off at long signals or waits, where safe and practical, avoids paying for km you\'re not actually covering.'],
+            ['Remove unnecessary weight', 'carrying items you don\'t need adds load the engine has to move on every single km, compounding over a full tank.'],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-fuel" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="price-variation" className="mb-10">
         <h2 id="price-variation" className="font-display mb-2 text-2xl font-semibold">
           Why fuel prices vary by city
