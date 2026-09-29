@@ -15,7 +15,6 @@ export const metadata: Metadata = {
     languages: getAlternateLanguages(PATH),
   },
   openGraph: { url: `${SITE}/hi${PATH}`, type: 'website', locale: 'hi_IN' },
-  robots: { index: false },
 }
 
 interface NewsPost {

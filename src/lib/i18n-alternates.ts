@@ -207,6 +207,8 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
       '/fuel-cost/petrol-diesel-cost-per-km-calculator',
       '/gas',
       '/methodology',
+      '/news',
+      '/news/kerala-power-shortage-september-2026',
       '/privacy',
       '/solar',
       '/solar/battery-backup-calculator',
