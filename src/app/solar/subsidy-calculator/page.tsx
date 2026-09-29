@@ -152,6 +152,148 @@ export default function SolarSubsidyPage() {
 
       <HowToApplyPMSuryaGhar />
 
+      <section aria-labelledby="disbursal" className="mb-10 scroll-mt-20">
+        <h2 id="disbursal" className="font-display mb-2 text-2xl font-semibold">
+          How and When the Subsidy Actually Reaches You
+        </h2>
+        <p className="text-ash/80">
+          PM Surya Ghar pays out as a direct bank transfer (DBT) into your own
+          account — never as an upfront discount and never routed through your
+          installer. The transfer only happens after your net meter is
+          installed and your DISCOM has inspected and commissioned it, which
+          is why the timeline in the how-to-apply steps above shows disbursal
+          as the last stage, roughly 4-8 weeks after installation rather than
+          at the time you sign a quote.
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            [
+              'Not part of your installer quote',
+              'the system cost your installer quotes you is the full pre-subsidy price; the subsidy reduces what you actually pay only after it lands in your account, so budget for the full upfront cost.',
+            ],
+            [
+              'Tied to your net meter, not your panels',
+              "commissioning — the DISCOM formally switching on and certifying your net meter — is the trigger, not the day the panels go up on your roof.",
+            ],
+            [
+              'One transfer per connection',
+              'the subsidy is paid once per eligible electricity connection; you cannot claim it again on the same connection for a later system upgrade.',
+            ],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="rejected-reasons" className="mb-10 scroll-mt-20">
+        <h2 id="rejected-reasons" className="font-display mb-2 text-2xl font-semibold">
+          Why Applications Get Rejected or Delayed
+        </h2>
+        <p className="text-ash/80">
+          Most PM Surya Ghar delays trace back to a handful of avoidable
+          issues, not a genuine eligibility problem:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            [
+              'Document mismatch',
+              'the name, address or consumer number on your application doesn\'t match your electricity bill or bank account exactly.',
+            ],
+            [
+              'Non-empanelled vendor',
+              'installing through a contractor who isn\'t registered on the portal as an empanelled vendor for your DISCOM voids the subsidy claim entirely.',
+            ],
+            [
+              'Sanctioned load exceeded',
+              'your proposed system size is larger than your connection\'s sanctioned load allows, which requires a separate load-enhancement request first.',
+            ],
+            [
+              'Wrong connection type',
+              'commercial and industrial connections don\'t qualify — only residential domestic connections are eligible under this scheme.',
+            ],
+            [
+              'Prior subsidy on the same connection',
+              'a connection that has already claimed a rooftop solar subsidy before, under this scheme or an earlier state one, cannot claim it again.',
+            ],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-caution-amber" aria-hidden>!</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          The portal shows the specific rejection reason against your
+          application, and in most cases you can correct the issue — updating
+          a document, switching vendors, or applying for a load enhancement —
+          and resubmit rather than starting over.
+        </p>
+      </section>
+
+      <section aria-labelledby="not-eligible" className="mb-10 scroll-mt-20">
+        <h2 id="not-eligible" className="font-display mb-2 text-2xl font-semibold">
+          Who Doesn&apos;t Qualify
+        </h2>
+        <p className="text-ash/80">
+          Alongside the roof-ownership and consumption-connection conditions
+          listed above, a few specific situations rule out the subsidy even
+          when the applicant otherwise looks eligible:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            [
+              'Tenants without the owner\'s written consent',
+              'the subsidy is tied to the roof, so a renter needs the property owner to formally consent to the installation and the subsidy claim.',
+            ],
+            [
+              'Shared or multi-owner roofs',
+              'where a roof is jointly owned, DISCOMs typically require documented consent from all owners, not just the applicant.',
+            ],
+            [
+              'Non-DCR panels',
+              'systems using panels that aren\'t Made-in-India (DCR-certified) don\'t qualify, even if every other condition is met.',
+            ],
+            [
+              'Unregularised or under-sanctioned connections',
+              'a connection with an unresolved billing dispute or a sanctioned load that doesn\'t match actual usage needs to be regularised with the DISCOM first.',
+            ],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="state-topup" className="mb-10 scroll-mt-20">
+        <h2 id="state-topup" className="font-display mb-2 text-2xl font-semibold">
+          State Top-Up Subsidies
+        </h2>
+        <p className="text-ash/80">
+          The ₹30,000/kW-₹78,000 cap calculated above is the fixed central
+          subsidy and applies identically nationwide, regardless of which
+          state or DISCOM you&apos;re under. Some state governments layer an
+          additional incentive on top of it — the amount, eligibility and
+          application process for any such state top-up varies by state and
+          isn&apos;t modelled in this calculator, which shows only the central
+          figure. Check directly with your state renewable energy department
+          or your DISCOM&apos;s solar cell for whether a state-level scheme
+          currently applies to you, since these schemes change more often
+          than the central one and aren&apos;t always listed on the national
+          portal.
+        </p>
+      </section>
+
       <section aria-labelledby="faq" className="mb-10">
         <h2 id="faq" className="font-display mb-4 text-2xl font-semibold">
           PM Surya Ghar FAQ

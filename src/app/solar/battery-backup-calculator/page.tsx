@@ -222,6 +222,95 @@ export default function SolarBatteryBackupPage() {
         </div>
       </section>
 
+      <section aria-labelledby="inverter-type" className="mb-10 scroll-mt-20">
+        <h2 id="inverter-type" className="font-display mb-2 text-2xl font-semibold">
+          Grid-Tied, Hybrid or Off-Grid — Which Setup Actually Backs Up Your Loads
+        </h2>
+        <p className="text-ash/80">
+          Not every solar installation can run on battery power during an outage — the inverter
+          type decides that, not the battery you buy. Three setups are sold in India, each
+          answering a different question:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            [
+              'Grid-tied (no battery)',
+              'the cheapest, most common setup — panels feed the grid directly and any surplus is banked through net metering. It shuts down completely during a grid outage as a safety measure, regardless of how sunny it is at the time, so it offsets your bill but backs up nothing.',
+            ],
+            [
+              'Hybrid',
+              'adds a battery and an inverter that can automatically switch between grid, solar and stored power. This is the setup this calculator assumes — it both offsets your bill via net metering and keeps chosen circuits running through an outage.',
+            ],
+            [
+              'Off-grid',
+              'disconnects from the grid entirely and relies only on panels and batteries. It needs a larger battery bank and more panel capacity than a hybrid system to cover the same loads reliably, since there is no grid to fall back on during a long low-generation stretch.',
+            ],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>
+                ✓
+              </span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-ash/80">
+          If you want the grid-offset savings too, size the panels themselves with our{' '}
+          <Link href="/solar/panel-size-calculator" className="text-brass underline">
+            panel size calculator
+          </Link>{' '}
+          and check your export credit with the{' '}
+          <Link href="/solar/net-metering-calculator" className="text-brass underline">
+            net metering calculator
+          </Link>{' '}
+          — this page only sizes the battery bank that sits underneath whichever setup you choose.
+        </p>
+      </section>
+
+      <section aria-labelledby="mistakes" className="mb-10 scroll-mt-20">
+        <h2 id="mistakes" className="font-display mb-2 text-2xl font-semibold">
+          Common Battery Sizing Mistakes to Avoid
+        </h2>
+        <p className="text-ash/80">
+          Most battery backup shortfalls trace back to one of a handful of avoidable errors:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            [
+              'Confusing rated capacity with usable capacity',
+              'a 5 kWh lead-acid battery only reliably delivers about 2.5 kWh at its 50% depth of discharge — buying by the rated number alone leaves you short by roughly half.',
+            ],
+            [
+              'Sizing for an average day, not a monsoon run',
+              'one day of autonomy covers a single cloudy night, but a run of overcast or rainy days means panels never fully recharge the battery in between — add autonomy days as a buffer if your region sees multi-day low-sun stretches.',
+            ],
+            [
+              'Skipping round-trip efficiency losses',
+              'charging and discharging a battery both waste some energy as heat — this calculator applies a 90% efficiency factor, so ignoring it and sizing off raw load alone understates the battery you actually need.',
+            ],
+            [
+              'Ignoring inverter surge rating for motor-start loads',
+              'a fridge compressor, water pump or AC briefly draws several times its running wattage the instant it switches on — an inverter sized only for steady-state load can trip or shut down at that moment even with plenty of battery capacity left.',
+            ],
+            [
+              'Undercounting what "critical load" actually includes',
+              'router, phone chargers and a couple of lights add up faster than expected once you total the wattage — list every device you want covered before estimating your daily load, rather than guessing a round number.',
+            ],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>
+                ✗
+              </span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="related" className="mb-10">
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           Related calculators

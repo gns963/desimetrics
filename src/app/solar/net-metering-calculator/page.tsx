@@ -169,6 +169,54 @@ export default function NetMeteringPage() {
         </div>
       </section>
 
+      <section aria-labelledby="how-to-apply" className="mb-10">
+        <h2 id="how-to-apply" className="font-display mb-2 text-2xl font-semibold">
+          How to Apply for Net Metering
+        </h2>
+        <p className="mb-3 text-ash/80">
+          Your installer usually files the net-metering application on your
+          behalf as part of the installation package, but approval and meter
+          commissioning sit with your DISCOM. The process generally runs
+          through four stages:
+        </p>
+        <ul className="space-y-2 text-sm text-ash/80">
+          <li>
+            <strong>Application submission.</strong> Filed with your DISCOM
+            once the rooftop system is physically installed, stating your
+            sanctioned electrical load and the system&apos;s capacity.
+          </li>
+          <li>
+            <strong>Site inspection.</strong> A DISCOM engineer verifies the
+            installed system matches the application before clearing it for
+            connection.
+          </li>
+          <li>
+            <strong>Bidirectional meter installation.</strong> The DISCOM
+            replaces your existing meter with one that records import and
+            export separately, which is what makes netting possible.
+          </li>
+          <li>
+            <strong>Commissioning.</strong> Export credit only starts
+            accruing once the DISCOM formally commissions the net meter —
+            see the mistakes below for what delaying this step costs you.
+          </li>
+        </ul>
+        <p className="mt-3 text-ash/80">
+          Ask your installer up front who is responsible for filing the
+          application and tracking it through to commissioning — on a
+          system you&apos;re also running through our{' '}
+          <Link href="/solar/panel-size-calculator" className="text-brass underline">
+            panel size calculator
+          </Link>{' '}
+          or{' '}
+          <Link href="/solar/roi-calculator" className="text-brass underline">
+            ROI calculator
+          </Link>
+          , this is the step that turns a sized system into actual export
+          credit on your bill.
+        </p>
+      </section>
+
       <section aria-labelledby="state-policy" className="mb-10">
         <h2 id="state-policy" className="font-display mb-2 text-2xl font-semibold">
           Net-Metering Policy Varies by State — What to Check

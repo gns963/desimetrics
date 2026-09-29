@@ -47,6 +47,14 @@ const faqs = [
     q: 'My state isn\'t listed — what do I do?',
     a: 'All 36 Indian states and union territories are covered. If a specific one seems missing, use our general Solar ROI calculator and select your DISCOM directly.',
   },
+  {
+    q: 'Does this directory account for the sunlight my specific state gets?',
+    a: 'No — every state page uses the same ~4 units/kW/day generation assumption. What differs page to page is your DISCOM\'s actual tariff, since that\'s the reliably-published, verifiable number this tool can price against. Real generation varies somewhat with latitude, season and roof orientation, so treat the payback figure as a planning estimate.',
+  },
+  {
+    q: 'Can I compare two states directly?',
+    a: 'Open both state pages in separate tabs, or use the general Solar ROI calculator and switch the DISCOM dropdown between runs — either way, keep monthly usage and system size the same across both so the comparison isolates the tariff difference.',
+  },
 ]
 const faqLd = {
   '@context': 'https://schema.org',
@@ -89,7 +97,11 @@ export default function SolarBillCalculatorIndexPage() {
         </h2>
         <p className="text-ash/80">
           Pick your state below for a rooftop solar payback estimate priced
-          on your own DISCOM&apos;s real tariff, not a flat national rate:
+          on your own DISCOM&apos;s real tariff, not a flat national rate. Every
+          state and union territory here shares the same calculation engine, so the
+          only thing that changes from page to page is the tariff data feeding it — the
+          same real, published slab rates that power the site&apos;s state-by-state
+          electricity bill calculators for that DISCOM.
         </p>
         <ul className="mt-3 space-y-2">
           {[
@@ -118,6 +130,170 @@ export default function SolarBillCalculatorIndexPage() {
           </Link>
           .
         </p>
+      </section>
+
+      <section aria-labelledby="payback-by-state" className="mb-10">
+        <h2 id="payback-by-state" className="font-display mb-2 text-2xl font-semibold">
+          Why solar payback isn&apos;t the same in every state
+        </h2>
+        <p className="text-ash/80">
+          Payback speed comes down to one thing this directory prices correctly: how much your
+          saved units are actually worth on your own DISCOM&apos;s bill. A few consequences worth
+          knowing before you pick your state below:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            [
+              'Higher-tariff states see faster payback',
+              <>
+                a state whose top domestic slab sits well above the national average recovers a
+                given system&apos;s cost sooner than a state with cheap subsidised power, for the
+                identical system size and usage — see our{' '}
+                <Link href="/solar/bill-calculator/tneb" className="text-brass underline">
+                  Tamil Nadu (TNEB)
+                </Link>{' '}
+                and{' '}
+                <Link href="/solar/bill-calculator/msedcl" className="text-brass underline">
+                  Maharashtra (MSEDCL)
+                </Link>{' '}
+                pages for two states with meaningfully different slab structures.
+              </>,
+            ],
+            [
+              'Telescopic slabs matter more than the average rate',
+              'a DISCOM\'s headline "average tariff" understates what solar actually saves you, because solar offsets your last, most expensive units first — the ones at the top of the slab, not the cheap opening block.',
+            ],
+            [
+              'This directory doesn\'t model regional sunlight differences',
+              'every state page uses the same ~4 units/kW/day generation assumption. Real irradiance varies somewhat by latitude and season, but tariff structure — not sunlight — is the bigger, more reliably-priced driver of payback differences between states, which is why that\'s what this tool models.',
+            ],
+            [
+              'Connection type changes the comparison',
+              'these figures assume a residential connection. Commercial and industrial tariffs run higher in most states, which would shorten payback further for a commercial rooftop — not modelled on these pages, which focus on household solar.',
+            ],
+            [
+              'Usage level shifts the picture too, within the same state',
+              'a household already sitting in the top slab (typically the heaviest AC/geyser users) sees a bigger per-unit saving from solar than a low-consumption household in the entry slab of the same DISCOM — try the same state page at a couple of different monthly-unit figures to see this play out.',
+            ],
+          ].map(([t, d]) => (
+            <li key={t as string} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="subsidy-nationwide" className="mb-10">
+        <h2 id="subsidy-nationwide" className="font-display mb-2 text-2xl font-semibold">
+          The subsidy is national — the tariff isn&apos;t
+        </h2>
+        <p className="text-ash/80">
+          One part of this calculation doesn&apos;t vary by state at all, and one part varies a
+          lot. Knowing which is which helps you read any state page correctly:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            [
+              'PM Surya Ghar is a fixed central formula',
+              <>
+                ₹30,000/kW for the first 2 kW plus ₹18,000 for the 3rd kW, capped at ₹78,000 —
+                identical whether you&apos;re in Kerala or Punjab. Full eligibility rules and the
+                application steps are on our{' '}
+                <Link href="/solar/subsidy-calculator" className="text-brass underline">
+                  PM Surya Ghar subsidy calculator
+                </Link>
+                .
+              </>,
+            ],
+            [
+              'Some states add their own top-up subsidy on top',
+              'these state-level schemes aren\'t modelled on this directory\'s state pages — check your own state electricity board\'s site or installer for anything additional, since it would only improve on the net-cost figure shown here, never worsen it.',
+            ],
+            [
+              'Your DISCOM tariff is what actually differs page to page',
+              <>
+                that&apos;s the number driving the payback-period difference between any two state
+                pages here — see our{' '}
+                <Link
+                  href="/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide"
+                  className="text-brass underline"
+                >
+                  full PM Surya Ghar subsidy guide
+                </Link>{' '}
+                for the scheme background.
+              </>,
+            ],
+          ].map(([t, d]) => (
+            <li key={t as string} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="why-directory" className="mb-10">
+        <h2 id="why-directory" className="font-display mb-2 text-2xl font-semibold">
+          Directory vs. the general ROI calculator — which to use
+        </h2>
+        <p className="text-ash/80">
+          Both tools run the same underlying calculation. Pick whichever fits how you already know
+          your situation:
+        </p>
+        <ul className="mt-3 space-y-2">
+          {[
+            [
+              'Use this directory',
+              'when you just want to see your own state\'s numbers quickly — find your state below and it opens pre-loaded with your DISCOM\'s tariff.',
+            ],
+            [
+              'Use the general ROI calculator',
+              <>
+                when you want to try different DISCOMs side by side, or don&apos;t know your
+                DISCOM code offhand — the{' '}
+                <Link href="/solar/roi-calculator" className="text-brass underline">
+                  solar ROI calculator
+                </Link>{' '}
+                lets you pick from a dropdown and change your monthly usage and system size in
+                one place.
+              </>,
+            ],
+            [
+              'Either way, sizing comes first',
+              <>
+                if you&apos;re not sure what system size fits your roof and usage yet, start with
+                our{' '}
+                <Link href="/solar/panel-size-calculator" className="text-brass underline">
+                  panel size calculator
+                </Link>{' '}
+                before you compare payback numbers here.
+              </>,
+            ],
+            [
+              'Both feed the same net-metering math',
+              <>
+                once you know your export/offset split, our{' '}
+                <Link href="/solar/net-metering-calculator" className="text-brass underline">
+                  net metering calculator
+                </Link>{' '}
+                estimates what your DISCOM credits you for units you send back to the grid — worth
+                checking after you&apos;ve settled on a state and system size here.
+              </>,
+            ],
+          ].map(([t, d]) => (
+            <li key={t as string} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="states" className="mb-10">

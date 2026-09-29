@@ -73,6 +73,14 @@ const faqs = [
     q: 'Should I size my system for my whole house or just my AC load?',
     a: 'Size for your total household consumption, not just one appliance — but if AC is your single biggest load, make sure it\'s reflected in the "monthly units" figure you enter, since undersizing around it is a common mistake. See our AC running cost calculator to check that load specifically.',
   },
+  {
+    q: 'Do higher-efficiency panels mean I need a smaller system?',
+    a: 'No — the kW recommendation here is based on your target generation, not panel count, so it stays the same regardless of panel efficiency. What changes is the roof area: higher-efficiency panels reach the same kW in less space, which only matters if roof area is your actual constraint.',
+  },
+  {
+    q: 'Is it worth sizing for more than 100% offset?',
+    a: 'Only if your DISCOM\'s net-metering credit for exported units is close to what you pay for grid units — otherwise the extra panels cost more than the surplus is worth. Check your state\'s export credit on our net metering earnings calculator before sizing past 100%.',
+  },
 ]
 const faqLd = {
   '@context': 'https://schema.org',
@@ -185,6 +193,78 @@ export default function SolarPanelSizePage() {
             to confirm your roof&apos;s real capacity.
           </p>
         </div>
+      </section>
+
+      <section aria-labelledby="panel-efficiency" className="mb-10">
+        <h2 id="panel-efficiency" className="font-display mb-2 text-2xl font-semibold">
+          Panel Efficiency: How It Changes the Roof Area You Need
+        </h2>
+        <p className="mb-3 text-ash/80">
+          Panel efficiency is what separates a roof that needs the standard ~
+          {ROOF_SQFT_PER_KW} sq ft/kW this calculator plans around from one
+          needing noticeably more or less for the same system size:
+        </p>
+        <ul className="space-y-2">
+          {[
+            [
+              'Standard-efficiency panels',
+              'commonly cited in the 18–20% conversion-efficiency range, are the panels this calculator\'s roof-area figure assumes.',
+            ],
+            [
+              'Higher-efficiency panels',
+              'above roughly 21% (often monocrystalline PERC or TOPCon cells), pack more output into less roof — worth asking about if your roof space is genuinely the binding constraint, not just a preference. Confirm the exact figure on your installer\'s spec sheet, not marketing copy.',
+            ],
+            [
+              'The tradeoff is cost, not just space',
+              'higher-efficiency panels typically cost more per watt, so the honest comparison is roof space saved versus premium paid — see the net cost math on our solar ROI calculator before deciding it\'s worth it.',
+            ],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="sizing-mistakes" className="mb-10">
+        <h2 id="sizing-mistakes" className="font-display mb-2 text-2xl font-semibold">
+          Sizing Mistakes That Cost You Money Either Way
+        </h2>
+        <p className="mb-3 text-ash/80">
+          Two opposite mistakes account for most badly-sized rooftop systems —
+          sizing too small to matter, and sizing bigger than your export
+          credit is actually worth:
+        </p>
+        <ul className="space-y-2">
+          {[
+            [
+              'Ignoring near-term consumption growth',
+              'a new AC, EV charging, or an added room can push your real usage well past what you sized for within a year or two. Check your current load with the AC running cost and EV charging cost calculators before finalising the number you enter above.',
+            ],
+            [
+              'Sizing past 100% offset without checking export credit',
+              'in a state where net metering credits surplus units poorly, the extra panels for a 120–150% offset add cost without matching savings. Run the numbers on the net metering earnings calculator first.',
+            ],
+            [
+              'Trusting the flat roof-area figure over a real site check',
+              'this tool (and any online calculator) gives a planning number, not a quote — shading and orientation, covered above, can move the real requirement meaningfully.',
+            ],
+            [
+              'Skipping the installer site survey before committing',
+              'a physical sun-path and obstruction check is the only way to confirm how many panels your specific roof actually fits at the size you\'re planning around.',
+            ],
+          ].map(([t, d]) => (
+            <li key={t} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-solar" aria-hidden>✓</span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{t}</strong> — {d}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="ac-load" className="mb-10">
