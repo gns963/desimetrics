@@ -50,7 +50,7 @@ anywhere; it wasn't committed to the repo (was a scratch `/tmp/wc_*.py` file eac
 | Electricity — everything else | ⬜ Not started | — |
 | Water | ⬜ Not started | — |
 | Gas | ⬜ Not started | — |
-| Solar | ⬜ Not started | — |
+| Solar (roi-calculator was already done earlier; this pass covered the other 5) | ✅ Done — bill-calculator, subsidy-calculator, battery-backup-calculator, panel-size-calculator, net-metering-calculator all expanded to 800-1034w | `bf2bc71` |
 | AC | ⬜ Not started | — |
 
 **Process that worked well for the categories already done**: measure word count for every page in
