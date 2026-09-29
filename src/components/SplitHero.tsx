@@ -10,6 +10,7 @@ export type HubKey =
   | 'financial'
   | 'appliance'
   | 'fuel'
+  | 'news'
 
 /**
  * Literal class strings per hub — Tailwind's compiler only picks up classes
@@ -75,6 +76,13 @@ export const HUB_CLASSES: Record<
     badgeText: 'text-hub-fuel',
     dot: 'bg-hub-fuel',
     statText: 'text-hub-fuel',
+  },
+  news: {
+    badgeBorder: 'border-hub-news/30',
+    badgeBg: 'bg-hub-news/10',
+    badgeText: 'text-hub-news',
+    dot: 'bg-hub-news',
+    statText: 'text-hub-news',
   },
 }
 
