@@ -33,6 +33,13 @@ const posts: NewsPost[] = [
     date: '29 September 2026',
     live: true,
   },
+  {
+    title: 'Power Surge Damaged Your Appliances? What Tamil Nadu Consumers Can Do',
+    tag: 'Tamil Nadu · TNPDCL',
+    href: '/news/power-surge-damaged-appliances-tamil-nadu',
+    date: '29 September 2026',
+    live: false,
+  },
 ]
 
 const breadcrumb = breadcrumbLd([

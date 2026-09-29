@@ -33,6 +33,13 @@ const posts: NewsPost[] = [
     date: '29 सितंबर 2026',
     live: true,
   },
+  {
+    title: 'पावर सर्ज से आपके उपकरण खराब हुए? तमिलनाडु के उपभोक्ता क्या कर सकते हैं',
+    tag: 'तमिलनाडु · TNPDCL',
+    href: '/hi/news/power-surge-damaged-appliances-tamil-nadu',
+    date: '29 सितंबर 2026',
+    live: false,
+  },
 ]
 
 const breadcrumb = breadcrumbLd([
