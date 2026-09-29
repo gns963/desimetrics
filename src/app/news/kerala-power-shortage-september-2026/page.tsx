@@ -67,7 +67,7 @@ const faqs = [
   },
   {
     q: 'When will Kerala\'s power shortage end?',
-    a: 'KSEB has arranged 450 MW of steady supply from 15 October 2026 — 250 MW from Madhya Pradesh and 200 MW from Bihar — and expects supply to stabilise once that begins. Until then, the state is relying on shorter-term purchases to cover peak-hour demand.',
+    a: 'The Times of India reported that KSEB has arranged 450 MW of steady supply from 15 October 2026 — 250 MW from Madhya Pradesh and 200 MW from Bihar. We could not independently confirm this exact state-by-state split — other outlets describe Kerala\'s October supply build-up differently, without mentioning Bihar — though multiple sources agree supply is expected to ease from mid-October. Until then, the state is relying on shorter-term purchases to cover peak-hour demand.',
   },
   {
     q: 'What is Kerala doing to avoid power cuts until 15 October?',
@@ -377,18 +377,19 @@ export default function KeralaPowerShortagePage() {
             What&apos;s Being Done, and What to Watch Until 15 October?
           </h2>
           <p className={pCls}>
-            Two separate power-purchase arrangements are in motion, on different timelines —
-            worth keeping distinct rather than treating as one deal:
+            Kerala has been drawing on several short-term power-purchase arrangements at
+            once — reported deals with different states and the open power exchange, some
+            changing week to week. Two of the more specifically reported ones:
           </p>
           <ol className="mt-3 space-y-3">
             {[
               [
-                'The steadier fix — 450 MW from 15 October',
-                'KSEB has arranged 450 MW of supply beginning 15 October 2026 — 250 MW from Madhya Pradesh and 200 MW from Bihar. This is the arrangement KSEB is pointing to when it says supply should stabilise; until it begins, the state is managing on shorter-term purchases.',
+                'A reported steadier fix — 450 MW from 15 October',
+                'The Times of India reported that KSEB has arranged 450 MW of supply beginning 15 October 2026 — 250 MW from Madhya Pradesh and 200 MW from Bihar. We could not independently confirm this exact state-by-state split: other Kerala outlets describe the run-up to October differently — including power secured through the open power exchange and several separate contracts — without mentioning Bihar. The broader point, that supply is expected to ease from mid-October, is corroborated across sources; treat the specific 250/200 breakdown as reported by this one source, not independently verified.',
               ],
               [
                 'The shorter-term bridge — a 200 MW peak-hour purchase',
-                'Separately, KSEB has been purchasing power on shorter notice to cover peak-hour demand, including a reported 200 MW deal at ₹11 per unit for the 6 pm–midnight window, valid through 31 October 2026 and reported as pending KSERC approval. This bridges the gap until the steadier 15 October supply begins — it is not the same 450 MW arrangement.',
+                'Separately, KSEB has been purchasing power on shorter notice to cover peak-hour demand, including a reported 200 MW deal at ₹11 per unit for the 6 pm–midnight window, valid through 31 October 2026 and reported as pending KSERC approval. This is a distinct, separately reported arrangement from the 450 MW figure above — not the same deal.',
               ],
             ].map(([t, d]) => (
               <li key={t} className="flex gap-3">
@@ -497,7 +498,10 @@ export default function KeralaPowerShortagePage() {
           Kerala news outlet as of 28 September 2026. The October fuel surcharge rate is
           reported by a single source as of this writing; confirm the exact figure on your own
           bill or via KSEB&apos;s official fuel-surcharge notices before relying on it for
-          planning. See our{' '}
+          planning. The reported 15 October arrangement (250 MW from Madhya Pradesh, 200 MW
+          from Bihar) is also single-sourced and could not be independently corroborated — other
+          outlets describe Kerala&apos;s October supply build-up differently, without mentioning
+          Bihar; treat that specific breakdown as reported, not confirmed. See our{' '}
           <Link href="/methodology" className="text-brass underline">
             methodology
           </Link>{' '}
