@@ -48,7 +48,7 @@ anywhere; it wasn't committed to the repo (was a scratch `/tmp/wc_*.py` file eac
 | Fuel-cost (3 calculators, at `/fuel-cost`, not `/fuel`) | ✅ Done — all 3 expanded | `f956f28` |
 | Electricity — EV Charging Cost Calculator only | ✅ Done (this one page was flagged separately by the user, out of category order) | `0c9af54` |
 | Electricity — everything else | ⬜ Not started | — |
-| Water | ⬜ Not started | — |
+| Water (5 real-tariff board pages already 3200-4000w, untouched; 36 generic state pages share one component — see note below) | ✅ Done — 2 new shared sections added to WaterStatePage.tsx, all 36 states now 836-879w | `fcaae9c` |
 | Gas | ⬜ Not started | — |
 | Solar (roi-calculator was already done earlier; this pass covered the other 5) | ✅ Done — bill-calculator, subsidy-calculator, battery-backup-calculator, panel-size-calculator, net-metering-calculator all expanded to 800-1034w | `bf2bc71` |
 | AC | ⬜ Not started | — |
@@ -66,6 +66,19 @@ slipped through tsc before. **Also watch for a session-wide rate limit**: mid-se
 2026-09-28, 6 of 9 parallel appliance forks got cut off by "You've hit your session limit" — check
 `git diff --stat` per file afterward for incomplete edits (look for unused-variable lint warnings,
 half-finished JSX) rather than assuming all forks completed cleanly.
+
+**Water was architecturally different — a real gotcha for the next category with this shape (Gas
+may have the same issue, check before assuming the fork-per-page process applies).** Unlike every
+other category, most of Water's pages don't have their own `page.tsx` — 36 of the 41 live
+`/water/[slug]` routes render from ONE shared component (`WaterStatePage.tsx`) with byte-identical
+prose (only the state name substituted via `{state}` params in `water-state-page-texts.ts`). The
+naive "expand each short page" approach would have meant adding the same generic filler 36 times,
+making the pages MORE duplicate of each other — directly counter to why the word-count bar exists.
+Asked the user via `AskUserQuestion` rather than assuming; they chose "expand the shared template
+carefully" (add sections honestly framed as general education, not fabricated per-state claims)
+over the other two options (skip entirely, or do the bigger project of sourcing real per-state
+tariff data first). Fix was 2 file edits (the component + its texts data file), not 36 forks. The 5
+pages with real tariff data (`WaterBoardPage.tsx`) were already 3200-4000w and untouched.
 
 ### Phase 1 — calcwise.finance parity (D-35 through D-40)
 
