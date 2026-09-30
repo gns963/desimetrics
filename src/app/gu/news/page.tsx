@@ -7,14 +7,15 @@ const SITE = 'https://desimetrics.com'
 const PATH = '/news'
 
 export const metadata: Metadata = {
-  title: 'News — Timely Explainers on Indian Utility Bills | DesiMetrics',
+  title: 'ન્યૂઝ — ભારતીય યુટિલિટી બિલ પર સમયસર સમજૂતીઓ | DesiMetrics',
   description:
-    'What current electricity, water, gas and solar developments in India actually mean for your bill — dated, sourced, and tied back to our calculators.',
+    'ભારતમાં વીજળી, પાણી, ગેસ અને સોલર સંબંધિત વર્તમાન ઘટનાઓ તમારા બિલ પર ખરેખર શું અસર કરે છે — તારીખ સાથે, સ્રોત સાથે, અમારા કેલ્ક્યુલેટર સાથે જોડાયેલું.',
   alternates: {
-    canonical: `${SITE}${PATH}`,
+    canonical: `${SITE}/gu${PATH}`,
     languages: getAlternateLanguages(PATH),
   },
-  openGraph: { url: `${SITE}${PATH}`, type: 'website', locale: 'en_IN' },
+  openGraph: { url: `${SITE}/gu${PATH}`, type: 'website', locale: 'gu_IN' },
+  robots: { index: false },
 }
 
 interface NewsPost {
@@ -27,55 +28,41 @@ interface NewsPost {
 
 const posts: NewsPost[] = [
   {
-    title: "Kerala's Power Shortage: What It Means for Your KSEB Bill",
-    tag: 'Kerala · KSEB',
-    href: '/news/kerala-power-shortage-september-2026',
-    date: '29 September 2026',
-    live: true,
-  },
-  {
-    title: 'Power Surge Damaged Your Appliances? What Tamil Nadu Consumers Can Do',
-    tag: 'Tamil Nadu · TNPDCL',
-    href: '/news/power-surge-damaged-appliances-tamil-nadu',
-    date: '29 September 2026',
-    live: true,
-  },
-  {
-    title: 'Why Delayed Solar and Wind Projects End Up in Court — and What It Means for Gujarat Power Bills',
-    tag: 'Gujarat · GERC · GUVNL',
-    href: '/news/gerc-liquidated-damages-wind-solar-gujarat',
-    date: '30 September 2026',
+    title: 'મોડા બનેલા સોલર અને વિન્ડ પ્રોજેક્ટ કોર્ટ સુધી કેમ પહોંચે છે — અને ગુજરાતના વીજ બિલ માટે તેનો શું અર્થ છે',
+    tag: 'ગુજરાત · GERC · GUVNL',
+    href: '/gu/news/gerc-liquidated-damages-wind-solar-gujarat',
+    date: '30 સપ્ટેમ્બર 2026',
     live: false,
   },
 ]
 
 const breadcrumb = breadcrumbLd([
-  { name: 'Home', path: '' },
-  { name: 'News', path: PATH },
+  { name: 'હોમ', path: '' },
+  { name: 'ન્યૂઝ', path: PATH },
 ])
 const itemList = itemListLd(
   posts.filter((p) => p.live).map((p) => ({ name: p.title, path: p.href })),
 )
 
-export default function NewsIndexPage() {
+export default function NewsIndexPageGu() {
   return (
     <>
       <section className="relative overflow-hidden py-14 hero-gradient sm:py-16">
         <div className="hero-grid-overlay pointer-events-none absolute inset-0" aria-hidden />
         <div className="relative mx-auto max-w-3xl px-4">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-white/50">
-            <Link href="/" className="hover:text-brass">
-              Home
+            <Link href="/gu" className="hover:text-brass">
+              હોમ
             </Link>{' '}
-            / <span className="text-white/80">News</span>
+            / <span className="text-white/80">ન્યૂઝ</span>
           </nav>
           <h1 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            News
+            ન્યૂઝ
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-white/70">
-            When something changes in Indian electricity, water, gas or solar policy — a
-            shortage, a new tariff order, a subsidy update — we explain what actually happened
-            and what it changes on your bill, dated and sourced.
+            જ્યારે ભારતની વીજળી, પાણી, ગેસ કે સોલર નીતિમાં કંઈક બદલાય છે — કોઈ અછત, નવો
+            ટેરિફ ઓર્ડર, સબસિડી અપડેટ — અમે સમજાવીએ છીએ કે ખરેખર શું થયું અને તમારા બિલ
+            પર તેની શું અસર છે, તારીખ અને સ્રોત સાથે.
           </p>
         </div>
       </section>
@@ -97,7 +84,7 @@ export default function NewsIndexPage() {
               <span className="mt-4 flex items-center justify-between text-sm">
                 <span className="text-ash/50">{p.date}</span>
                 <span className="font-semibold text-hub-news">
-                  {p.live ? 'Read →' : 'Coming soon'}
+                  {p.live ? 'વાંચો →' : 'ટૂંક સમયમાં'}
                 </span>
               </span>
             </Link>

@@ -40,6 +40,13 @@ const posts: NewsPost[] = [
     date: '29 सितंबर 2026',
     live: true,
   },
+  {
+    title: 'देरी से बने सोलर और विंड प्रोजेक्ट कोर्ट तक क्यों पहुंचते हैं — और गुजरात के बिजली बिल के लिए इसका क्या मतलब है',
+    tag: 'गुजरात · GERC · GUVNL',
+    href: '/hi/news/gerc-liquidated-damages-wind-solar-gujarat',
+    date: '30 सितंबर 2026',
+    live: false,
+  },
 ]
 
 const breadcrumb = breadcrumbLd([
