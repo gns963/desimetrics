@@ -210,6 +210,7 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
       '/news',
       '/news/kerala-power-shortage-september-2026',
       '/news/power-surge-damaged-appliances-tamil-nadu',
+      '/news/gerc-liquidated-damages-wind-solar-gujarat',
       '/privacy',
       '/solar',
       '/solar/battery-backup-calculator',
@@ -275,7 +276,12 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
     prefixes: [],
   },
   gu: {
-    exact: new Set(['', '/electricity/gujarat-electricity-bill-calculator']),
+    exact: new Set([
+      '',
+      '/electricity/gujarat-electricity-bill-calculator',
+      '/news',
+      '/news/gerc-liquidated-damages-wind-solar-gujarat',
+    ]),
     prefixes: [],
   },
   ml: {

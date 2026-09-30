@@ -15,7 +15,6 @@ export const metadata: Metadata = {
     languages: getAlternateLanguages(PATH),
   },
   openGraph: { url: `${SITE}/gu${PATH}`, type: 'website', locale: 'gu_IN' },
-  robots: { index: false },
 }
 
 interface NewsPost {
@@ -32,7 +31,7 @@ const posts: NewsPost[] = [
     tag: 'ગુજરાત · GERC · GUVNL',
     href: '/gu/news/gerc-liquidated-damages-wind-solar-gujarat',
     date: '30 સપ્ટેમ્બર 2026',
-    live: false,
+    live: true,
   },
 ]
 

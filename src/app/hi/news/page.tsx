@@ -45,7 +45,7 @@ const posts: NewsPost[] = [
     tag: 'गुजरात · GERC · GUVNL',
     href: '/hi/news/gerc-liquidated-damages-wind-solar-gujarat',
     date: '30 सितंबर 2026',
-    live: false,
+    live: true,
   },
 ]
 

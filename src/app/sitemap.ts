@@ -96,6 +96,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/news', 0.7, 'weekly'),
     entry('/news/kerala-power-shortage-september-2026', 0.6, 'weekly'),
     entry('/news/power-surge-damaged-appliances-tamil-nadu', 0.6, 'weekly'),
+    entry('/news/gerc-liquidated-damages-wind-solar-gujarat', 0.6, 'weekly'),
     entry('/fuel-cost', 0.8),
     entry('/fuel-cost/petrol-diesel-cost-per-km-calculator', 0.9),
     entry('/fuel-cost/lpg-cylinder-usage-calculator', 0.9),
@@ -153,6 +154,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/hi/news', 0.6, 'weekly'),
     entry('/hi/news/kerala-power-shortage-september-2026', 0.5, 'weekly'),
     entry('/hi/news/power-surge-damaged-appliances-tamil-nadu', 0.5, 'weekly'),
+    entry('/hi/news/gerc-liquidated-damages-wind-solar-gujarat', 0.5, 'weekly'),
     entry('/hi/fuel-cost', 0.7),
     entry('/hi/fuel-cost/petrol-diesel-cost-per-km-calculator', 0.8),
     entry('/hi/fuel-cost/lpg-cylinder-usage-calculator', 0.8),
@@ -196,6 +198,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const electricityGu = allCalculatorSlugs
     .filter((slug) => getCalculatorPage(slug)?.translations?.gu)
     .map((slug) => entry(`/gu/electricity/${slug}`, 0.8))
+  // Gujarati's first content pages beyond the homepage + MGVCL calculator.
+  const guNews = [
+    entry('/gu/news', 0.6, 'weekly'),
+    entry('/gu/news/gerc-liquidated-damages-wind-solar-gujarat', 0.5, 'weekly'),
+  ]
   const electricityMl = allCalculatorSlugs
     .filter((slug) => getCalculatorPage(slug)?.translations?.ml)
     .map((slug) => entry(`/ml/electricity/${slug}`, 0.8))
@@ -271,6 +278,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...electricityKn,
     ...electricityBn,
     ...electricityGu,
+    ...guNews,
     ...electricityMl,
     ...unitPrice,
     ...unitPriceHi,
