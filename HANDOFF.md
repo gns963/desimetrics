@@ -175,11 +175,37 @@ converge on the exact fixed-sections list via `AskUserQuestion`). Work done in t
 
 ## Known issues — deferred, not blocking
 
-### `www.desimetrics.com` returns a broken redirect (non-urgent, user's call)
+### ✅ FIXED 2026-10-01 — `www.desimetrics.com` broken redirect
 
-`https://www.desimetrics.com/*` returns an HTTP 308 to `https://desimetrics.com:3000/*` (an
-internal app port, not publicly reachable) which then 403s. `https://desimetrics.com/*` (no `www`)
-works correctly. Full diagnosis trail (don't re-investigate from scratch):
+**This was a code bug in our own repo, not a Hostinger limitation. The entire diagnosis below is
+WRONG and is kept only as a record of how the wrong conclusion was reached.** `www` now correctly
+308s to `https://desimetrics.com/*` with path/query preserved (verified live).
+
+**Actual root cause**: `src/proxy.ts`. Next.js 16 renamed `middleware.ts` → **`proxy.ts`** (see
+`AGENTS.md`: "This is NOT the Next.js you know"), so the earlier `find`/`ls` for `middleware.ts`
+came back empty and the investigation wrongly concluded "no middleware exists" and escalated to
+Hostinger. The build output was saying `ƒ Proxy (Middleware)` the whole time. The `wwwRedirect()`
+helper did:
+
+```ts
+const target = new URL(request.nextUrl)   // on Hostinger: http://...:3000/...
+target.hostname = host.slice('www.'.length)
+```
+
+Hostinger fronts the Node app on `:3000`, so `request.nextUrl` carries that port — and **neither
+the `hostname` nor the `host` URL setter clears an existing port** (both verified in node; a
+"just use `.host` instead" fix would have failed the same way). The port therefore survived onto
+the redirect target, producing the unreachable `desimetrics.com:3000`. Scheme was also inherited
+as `http:` from behind the proxy. Fix: force `https:`, strip any port off the Host header, and set
+`target.port = ''` explicitly. Commit on `main`, 2026-10-01.
+
+**Lesson for future sessions**: before concluding "no middleware/redirect code exists", check
+`src/proxy.ts` and trust the build manifest (`ƒ Proxy (Middleware)`) over a filename search.
+
+<details>
+<summary>Superseded (incorrect) diagnosis trail — kept for the record only</summary>
+
+Full diagnosis trail (don't re-investigate from scratch):
 
 - **Not a code issue**: no `middleware.ts` exists, `next.config.ts` has no `redirects()`, every
   page's `canonical` metadata already correctly points to non-`www` `SITE = 'https://desimetrics.com'`,
@@ -220,6 +246,8 @@ works correctly. Full diagnosis trail (don't re-investigate from scratch):
   `desimetrics.com.cdn.hstgr.net` (changed during step 4 above) instead of its original
   `www.desimetrics.com.cdn.hstgr.net`. Functionally equivalent (both broken the same way) — fine to
   leave, or revert for cleanliness, doesn't matter until the real fix happens.
+
+</details>
 
 ## Not started — next up, paused pending user go-ahead
 
