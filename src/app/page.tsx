@@ -510,7 +510,7 @@ export default function Home() {
                 Every rupee you spend on power &amp; more
               </h2>
             </div>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               {hubs.map((h) => (
                 <div
                   key={h.title}
@@ -579,7 +579,7 @@ export default function Home() {
               DISCOM&apos;s own tariff file — not a national average.
             </p>
           </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-6 grid-cols-1 md:grid-cols-2">
             <div className="rounded-2xl border border-spark-teal/25 bg-spark-teal/5 p-6">
               <p className="text-xs font-semibold uppercase tracking-wide text-spark-teal">
                 Cheapest top-slab rates
@@ -678,7 +678,7 @@ export default function Home() {
         {/* -------------------------------------------------------- Solar lead-gen */}
         <section id="solar-leadgen" className="relative overflow-hidden hero-gradient">
           <div className="hero-grid-overlay pointer-events-none absolute inset-0" aria-hidden />
-          <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 lg:grid-cols-2">
+          <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 grid-cols-1 lg:grid-cols-2">
             <div className="text-white">
               <span className="text-xs font-semibold tracking-[0.2em] text-spark-teal uppercase">
                 Only on DesiMetrics
@@ -714,7 +714,7 @@ export default function Home() {
                 How we verify every tariff
               </h2>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-10 grid gap-6 grid-cols-1 md:grid-cols-3">
               {[
                 {
                   n: '1',
@@ -780,7 +780,7 @@ export default function Home() {
               View all →
             </Link>
           </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
+          <div className="mt-8 grid gap-5 grid-cols-1 md:grid-cols-3">
             {posts.map((p) => (
               <Link
                 key={p.title}

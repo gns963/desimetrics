@@ -13,7 +13,7 @@ export default function SolarAcTieIn() {
         system with that load in mind rather than just your average monthly
         units.
       </p>
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      <div className="mt-4 grid gap-4 grid-cols-1 sm:grid-cols-2">
         <Link
           href="/ac/bill-calculator"
           className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-ac/50 hover:shadow-sm"

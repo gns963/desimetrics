@@ -168,7 +168,7 @@ export default function GeneratorFuelPage() {
         <h2 id="vs-grid" className="font-display mb-2 text-2xl font-semibold">
           Cost per unit vs grid power
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="rounded-xl border border-caution-amber/25 bg-caution-amber/5 p-5">
             <p className="text-xs font-semibold tracking-wide text-ash/50 uppercase">
               Diesel generator, at ₹95/L
@@ -256,7 +256,7 @@ export default function GeneratorFuelPage() {
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           Related calculators
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <Link
             href="/appliances/inverter-sizing-calculator"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-appliance/50 hover:shadow-sm"

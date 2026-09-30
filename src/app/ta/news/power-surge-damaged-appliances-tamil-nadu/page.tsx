@@ -395,7 +395,7 @@ export default function PowerSurgeTamilNaduPageTa() {
           <h2 id="related" className={h2Cls}>
             தொடர்புடைய கருவிகள் மற்றும் வழிகாட்டிகள்
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <Link
               href="/ta/electricity/tneb-bill-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-news/50 hover:shadow-sm"

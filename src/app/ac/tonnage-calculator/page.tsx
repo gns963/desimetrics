@@ -239,7 +239,7 @@ export default function AcTonnagePage() {
           1.5 ton is India&apos;s most common domestic AC size. Under standard
           conditions it covers roughly {boundary1_5Ton}–{boundary2Ton - 1} sq ft.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="rounded-xl border border-hairline bg-paper p-5">
             <p className="text-xs font-semibold tracking-wide text-ash/50 uppercase">
               Coverage range (standard conditions)
@@ -261,7 +261,7 @@ export default function AcTonnagePage() {
             </p>
           </div>
         </div>
-        <div className="mt-4 grid gap-3 rounded-xl bg-mist p-5 sm:grid-cols-2">
+        <div className="mt-4 grid gap-3 rounded-xl bg-mist p-5 grid-cols-1 sm:grid-cols-2">
           <p className="text-sm font-semibold text-ink-navy sm:col-span-2">
             When to choose 1.5 ton over 1 ton
           </p>
@@ -290,7 +290,7 @@ export default function AcTonnagePage() {
           the best answer — two smaller units are a well-established
           alternative.
         </p>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           {[
             { title: 'Air distribution', body: 'Large or L-shaped rooms often have dead zones a single AC can’t reach evenly. Two units placed on opposite walls cool the whole space more consistently.' },
             { title: 'Redundancy', body: 'If your one large AC needs servicing, you lose all cooling. With two units, you keep partial cooling while one is repaired.' },
@@ -339,7 +339,7 @@ export default function AcTonnagePage() {
           <p className="font-display my-2 text-center text-2xl font-bold text-hub-ac">
             1 Ton = 12,000 BTU/hr
           </p>
-          <div className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+          <div className="mt-4 grid gap-4 text-sm grid-cols-1 sm:grid-cols-2">
             <div className="rounded-lg bg-mist p-3">
               <p className="font-semibold text-ink-navy">Ton → BTU</p>
               <p className="mt-1 text-ash/70">Multiply tonnage by 12,000</p>
@@ -361,7 +361,7 @@ export default function AcTonnagePage() {
         <h2 id="mistakes" className="font-display mb-4 text-2xl font-bold text-ink-navy">
           Undersized vs. oversized vs. correctly sized
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <div className="rounded-xl border border-caution-amber/25 bg-caution-amber/5 p-5">
             <p className="font-display font-bold text-caution-amber">Undersized AC</p>
             <p className="mt-1 text-sm text-ash/70">
@@ -391,7 +391,7 @@ export default function AcTonnagePage() {
         <h2 id="related" className="font-display mb-4 text-2xl font-bold text-ink-navy">
           Once you know your tonnage
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/ac/bill-calculator"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-ac/50 hover:shadow-sm"

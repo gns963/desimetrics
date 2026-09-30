@@ -196,7 +196,7 @@ export default function BlogIndexPage() {
       </section>
 
       <main className="mx-auto max-w-6xl px-4 py-12">
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-5 grid-cols-1 md:grid-cols-3">
           {posts.map((p) => (
             <Link
               key={p.title}

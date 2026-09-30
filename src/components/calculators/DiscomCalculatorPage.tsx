@@ -301,7 +301,7 @@ export default function DiscomCalculatorPage({
             </ol>
           </nav>
 
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <div className="grid gap-10 grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
             {/* Left: pitch + CTAs */}
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-brass/30 bg-brass/10 px-3 py-1 text-xs font-semibold text-brass">
@@ -429,7 +429,7 @@ export default function DiscomCalculatorPage({
           >
             {t.calculateYourBill}
           </h2>
-          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+          <div className="grid gap-6 grid-cols-1 lg:grid-cols-[1fr_320px]">
             <Calculator tariff={tariff} defaultUnits={config.exampleUnits} />
             <TariffSidebar tariff={tariff} />
           </div>
@@ -662,7 +662,7 @@ export default function DiscomCalculatorPage({
           >
             {t.twoWorkedExamples}
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <div className="rounded-xl border border-hairline bg-paper p-5">
               <p className="text-xs font-semibold tracking-wide text-ash/50 uppercase">
                 {t.lowerUsage}
@@ -732,7 +732,7 @@ export default function DiscomCalculatorPage({
             >
               {t.commonBillTraps(tariff.discomCode)}
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
               {content.billTraps.map((trap, i) => (
                 <div
                   key={i}
@@ -976,7 +976,7 @@ export default function DiscomCalculatorPage({
           >
             {t.energyTips.heading(tariff.state)}
           </h2>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
             {t.energyTips.items.map((item, i) => (
               <div
                 key={i}
@@ -1056,7 +1056,7 @@ export default function DiscomCalculatorPage({
                 </li>
               ))}
             </ol>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="mt-4 grid gap-3 grid-cols-1 sm:grid-cols-2">
               <a
                 href={content.howToPay.portalUrl}
                 target="_blank"
@@ -1166,7 +1166,7 @@ export default function DiscomCalculatorPage({
           >
             {t.relatedHeading}
           </h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {[
               ...neighbors.map((n) => ({
                 href: `${neighborLocalePrefix}/electricity/${n.slug}`,

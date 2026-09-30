@@ -114,7 +114,7 @@ export default function GasHubPage() {
         <h2 id="providers" className="font-display mb-4 text-2xl font-semibold">
           Browse by provider
         </h2>
-        <ul className="grid gap-3 sm:grid-cols-3">
+        <ul className="grid gap-3 grid-cols-1 sm:grid-cols-3">
           {GAS_COMPANIES.map((c) => (
             <li key={c.slug}>
               <Link

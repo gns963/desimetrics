@@ -63,7 +63,7 @@ export default function NetWorthCalculator() {
       <form className="grid gap-6" onSubmit={(e) => e.preventDefault()}>
         <div>
           <h3 className="mb-2 text-sm font-semibold text-ash">Assets</h3>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
             {ASSET_FIELDS.map((f) => (
               <div key={f.key}>
                 <label htmlFor={`nw-asset-${f.key}`} className="mb-1 block text-xs text-ash/70">
@@ -84,7 +84,7 @@ export default function NetWorthCalculator() {
 
         <div>
           <h3 className="mb-2 text-sm font-semibold text-ash">Liabilities</h3>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
             {LIABILITY_FIELDS.map((f) => (
               <div key={f.key}>
                 <label htmlFor={`nw-liability-${f.key}`} className="mb-1 block text-xs text-ash/70">
@@ -103,7 +103,7 @@ export default function NetWorthCalculator() {
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
           <div>
             <label htmlFor="nw-age" className="mb-1.5 block text-sm font-medium text-ash">
               Your age

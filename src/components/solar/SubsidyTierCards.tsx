@@ -29,7 +29,7 @@ export default function SubsidyTierCards({ discomCode }: { discomCode: string })
         The central subsidy amount is fixed by system size — here&apos;s what
         it looks like at common sizes.
       </p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {rows.map((r) => (
           <div
             key={r.kw}

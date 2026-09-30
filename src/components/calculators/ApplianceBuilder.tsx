@@ -124,7 +124,7 @@ export default function ApplianceBuilder({
         subtitle={texts.subtitle}
       />
 
-      <div className="mb-5 grid gap-4 sm:grid-cols-2">
+      <div className="mb-5 grid gap-4 grid-cols-1 sm:grid-cols-2">
         <div>
           <label htmlFor={`${selectId}-discom`} className="mb-1.5 block text-sm font-medium text-ash">
             {texts.discomLabel}

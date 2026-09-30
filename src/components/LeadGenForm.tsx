@@ -155,7 +155,7 @@ export default function LeadGenForm({
         {subheading}
       </p>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      <div className="mt-4 grid gap-4 grid-cols-1 sm:grid-cols-2">
         <div>
           <label htmlFor="lg-pincode" className={labelCls}>
             {texts.pincodeLabel}

@@ -49,7 +49,7 @@ export default function EvVsFuelComparison({
         real mileage for the rest — these vary too much by city and vehicle
         to assume.
       </p>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
         <SliderField id="ev-cmp-petrol-price" label="Petrol price" value={petrolPrice} onChange={setPetrolPrice} min={80} max={130} unit="₹/L" />
         <SliderField id="ev-cmp-petrol-mileage" label="Petrol mileage" value={petrolMileage} onChange={setPetrolMileage} min={8} max={30} unit="km/L" />
         <div />

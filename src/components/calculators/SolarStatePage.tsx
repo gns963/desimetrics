@@ -323,7 +323,7 @@ export default function SolarStatePage({
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           {hi ? 'जुड़े हुए कैलकुलेटर' : 'Related calculators'}
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <Link
             href={hi ? '/hi/solar/subsidy-calculator' : '/solar/subsidy-calculator'}
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-solar/50 hover:shadow-sm"

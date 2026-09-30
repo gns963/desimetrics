@@ -31,7 +31,7 @@ export default function SolarFinancingSection() {
         Interest rates and terms vary by lender and change over time — treat
         these as a starting point for comparison, not quoted rates.
       </p>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
         {OPTIONS.map((o) => (
           <div key={o.name} className="rounded-xl border border-hairline bg-paper p-5">
             <p className="font-display font-bold text-ink-navy">{o.name}</p>

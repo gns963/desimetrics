@@ -155,7 +155,7 @@ export default function NcbIdvCalculatorPage() {
           <h2 id="slabs" className="font-display mb-4 text-2xl font-semibold">
             IRDAI&apos;s standard NCB and IDV depreciation slabs
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <div className="overflow-x-auto rounded-xl border border-hairline">
               <table className="w-full text-left text-sm">
                 <thead className="border-b border-hairline bg-mist text-ink-navy">

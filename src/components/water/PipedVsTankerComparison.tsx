@@ -100,7 +100,7 @@ export default function PipedVsTankerComparison({ boardCode }: { boardCode: stri
         />
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+      <div className="mt-6 grid gap-3 grid-cols-1 sm:grid-cols-3">
         <div className="rounded-xl border border-hub-water/20 bg-hub-water/5 p-4">
           <p className="text-xs font-semibold tracking-wide text-hub-water uppercase">
             Piped ({tariff.boardCode})

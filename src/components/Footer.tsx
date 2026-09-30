@@ -60,7 +60,7 @@ export default function Footer() {
           We calculate it <span className="text-brass">precisely.</span>
         </p>
 
-        <div className="mt-10 grid gap-10 md:grid-cols-[1.1fr_1fr_1fr_1fr_1fr]">
+        <div className="mt-10 grid gap-10 grid-cols-1 md:grid-cols-[1.1fr_1fr_1fr_1fr_1fr]">
           <div>
             <p className="font-display text-xl font-extrabold text-brass">
               DesiMetrics

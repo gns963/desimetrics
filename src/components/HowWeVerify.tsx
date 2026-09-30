@@ -41,7 +41,7 @@ export default function HowWeVerify({
           {title}
         </h2>
       </div>
-      <div className="mt-8 grid gap-6 md:grid-cols-3">
+      <div className="mt-8 grid gap-6 grid-cols-1 md:grid-cols-3">
         {steps.map((s) => (
           <div key={s.n} className="relative rounded-2xl border border-hairline bg-paper p-6">
             <div className="flex items-center gap-3">

@@ -8,7 +8,7 @@ export default function SolarImpactSection({ annualGenerationKwh }: { annualGene
       <h2 id="impact" className="font-display mb-4 text-2xl font-semibold">
         Your Solar Impact
       </h2>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
         <div className="rounded-xl border border-hairline bg-paper p-5">
           <p className="text-sm text-ash/60">Estimated annual CO2 offset</p>
           <p className="font-display mt-1 text-3xl font-bold text-hub-solar">

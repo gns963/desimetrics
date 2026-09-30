@@ -154,7 +154,7 @@ export default function ElectricityBillGuidesIndexPage() {
           <h2 id="guides" className="font-display mb-4 text-2xl font-semibold">
             All states
           </h2>
-          <ul className="grid gap-3 sm:grid-cols-2">
+          <ul className="grid gap-3 grid-cols-1 sm:grid-cols-2">
             {directory.map((d) => (
               <li key={d.slug}>
                 {d.guideHref ? (

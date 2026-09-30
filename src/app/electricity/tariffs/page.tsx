@@ -119,7 +119,7 @@ export default function ElectricityTariffDirectoryHub() {
           <h2 id="directory" className="mb-4 font-display text-2xl font-semibold">
             State &amp; Union Territory Tariffs
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {directory.map((d) => (
               <div
                 key={d.slug}
@@ -346,7 +346,7 @@ export default function ElectricityTariffDirectoryHub() {
           <h2 id="related-tools" className="mb-4 font-display text-2xl font-semibold">
             Related Tools
           </h2>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
             <Link
               href="/electricity"
               className="rounded-xl border border-hairline bg-paper p-4 transition hover:border-brass/50 hover:shadow-sm"

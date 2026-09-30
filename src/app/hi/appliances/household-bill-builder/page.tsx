@@ -220,7 +220,7 @@ export default function ApplianceBuilderPageHi() {
             <p className="text-xs font-semibold tracking-wide text-hub-appliance uppercase">
               उदाहरण: {citationTariff.discomName} ({citationTariff.discomCode})
             </p>
-            <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-3">
+            <dl className="mt-3 grid gap-2 text-sm grid-cols-1 sm:grid-cols-3">
               <div>
                 <dt className="text-ash/50">स्रोत</dt>
                 <dd>
@@ -313,7 +313,7 @@ export default function ApplianceBuilderPageHi() {
           <h2 id="who" className="font-display mb-4 text-2xl font-semibold">
             यह कैलकुलेटर कौन इस्तेमाल कर सकता है
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {[
               { title: 'घर के मालिक और परिवार', body: 'पता लगाएं कौन सा एक उपकरण असल में आपका बिल बढ़ा रहा है, और कितना।' },
               { title: 'किराएदार और PG निवासी', body: 'शिफ्ट होने से पहले, आप असल में जो उपकरण इस्तेमाल करेंगे उनसे अपने संभावित बिजली हिस्से का अनुमान लगाएं।' },
@@ -515,7 +515,7 @@ export default function ApplianceBuilderPageHi() {
           <h2 id="tips" className="font-display mb-4 text-2xl font-semibold">
             अपना उपकरण बिजली खर्च कम करने के सुझाव
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {[
               {
                 title: 'BLDC फैन पर स्विच करें',
@@ -555,7 +555,7 @@ export default function ApplianceBuilderPageHi() {
           <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
             जुड़े हुए कैलकुलेटर
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <Link
               href="/hi/appliances/inverter-sizing-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-appliance/50 hover:shadow-sm"

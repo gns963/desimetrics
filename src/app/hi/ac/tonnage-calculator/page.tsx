@@ -262,7 +262,7 @@ export default function AcTonnagePageHi() {
           1.5 टन भारत का सबसे आम घरेलू AC साइज़ है। सामान्य परिस्थितियों में यह
           लगभग {boundary1_5Ton}–{boundary2Ton - 1} sq ft कवर करता है।
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="rounded-xl border border-hairline bg-paper p-5">
             <p className="text-xs font-semibold tracking-wide text-ash/50 uppercase">
               कवरेज रेंज (सामान्य परिस्थितियां)
@@ -284,7 +284,7 @@ export default function AcTonnagePageHi() {
             </p>
           </div>
         </div>
-        <div className="mt-4 grid gap-3 rounded-xl bg-mist p-5 sm:grid-cols-2">
+        <div className="mt-4 grid gap-3 rounded-xl bg-mist p-5 grid-cols-1 sm:grid-cols-2">
           <p className="text-sm font-semibold text-ink-navy sm:col-span-2">
             1 टन की बजाय 1.5 टन कब चुनें
           </p>
@@ -312,7 +312,7 @@ export default function AcTonnagePageHi() {
           या ओपन-प्लान कमरों के लिए, एक बड़ा AC हमेशा सबसे अच्छा जवाब नहीं होता —
           दो छोटे यूनिट एक जाना-पहचाना विकल्प हैं।
         </p>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           {[
             { title: 'हवा का वितरण', body: 'बड़े या L-आकार के कमरों में अक्सर डेड ज़ोन होते हैं जहां एक अकेला AC नहीं पहुंच पाता। विपरीत दीवारों पर लगे दो यूनिट पूरी जगह को ज़्यादा समान रूप से ठंडा करते हैं।' },
             { title: 'रिडंडेंसी', body: 'अगर आपके एक बड़े AC को सर्विसिंग की ज़रूरत पड़े, तो पूरी कूलिंग चली जाती है। दो यूनिट के साथ, एक की मरम्मत के दौरान भी आंशिक कूलिंग बनी रहती है।' },
@@ -361,7 +361,7 @@ export default function AcTonnagePageHi() {
           <p className="font-display my-2 text-center text-2xl font-bold text-hub-ac">
             1 टन = 12,000 BTU/hr
           </p>
-          <div className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+          <div className="mt-4 grid gap-4 text-sm grid-cols-1 sm:grid-cols-2">
             <div className="rounded-lg bg-mist p-3">
               <p className="font-semibold text-ink-navy">टन → BTU</p>
               <p className="mt-1 text-ash/70">टनेज को 12,000 से गुणा करें</p>
@@ -383,7 +383,7 @@ export default function AcTonnagePageHi() {
         <h2 id="mistakes" className="font-display mb-4 text-2xl font-bold text-ink-navy">
           अंडरसाइज़्ड बनाम ओवरसाइज़्ड बनाम सही साइज़
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <div className="rounded-xl border border-caution-amber/25 bg-caution-amber/5 p-5">
             <p className="font-display font-bold text-caution-amber">अंडरसाइज़्ड AC</p>
             <p className="mt-1 text-sm text-ash/70">
@@ -413,7 +413,7 @@ export default function AcTonnagePageHi() {
         <h2 id="related" className="font-display mb-4 text-2xl font-bold text-ink-navy">
           टनेज पता चलने के बाद
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/hi/ac/bill-calculator"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-ac/50 hover:shadow-sm"

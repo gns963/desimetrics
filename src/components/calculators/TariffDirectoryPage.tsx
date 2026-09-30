@@ -220,7 +220,7 @@ export default function TariffDirectoryPage({
           <h2 id="categories" className="mb-4 font-display text-2xl font-bold text-ink-navy">
             Tariff by Connection Category
           </h2>
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-5 grid-cols-1 sm:grid-cols-2">
             {categories.map((ct) => {
               const effectiveDuty = ct.electricityDutyPercent ?? tariff.electricityDutyPercent
               const effectiveFca = ct.fuelCostAdjustment ?? tariff.fuelCostAdjustment

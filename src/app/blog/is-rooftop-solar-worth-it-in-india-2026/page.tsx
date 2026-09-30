@@ -242,7 +242,7 @@ export default function SolarWorthItArticlePage() {
           <h2 id="pros-cons" className={h2Cls}>
             Pros and Cons of Rooftop Solar in India
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <div className="rounded-xl border border-spark-teal/25 bg-spark-teal/5 p-5">
               <p className="font-display font-bold text-spark-teal">Pros</p>
               <ul className="mt-2 space-y-1.5 text-sm">
@@ -350,7 +350,7 @@ export default function SolarWorthItArticlePage() {
           <h2 id="related" className={h2Cls}>
             Related tools
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <Link
               href="/solar/subsidy-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-solar/50 hover:shadow-sm"

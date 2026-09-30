@@ -156,7 +156,7 @@ export default function SplitHero({
           </ol>
         </nav>
 
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+        <div className="grid gap-10 grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div>
             <span
               className={`inline-flex items-center gap-1.5 rounded-full border ${c.badgeBorder} ${c.badgeBg} px-3 py-1 text-xs font-semibold ${c.badgeText}`}

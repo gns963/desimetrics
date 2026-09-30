@@ -114,7 +114,7 @@ export default function ElectricityHubPageHi() {
         <h2 id="more-tools" className="font-display mb-4 text-2xl font-semibold">
           और बिजली टूल्स
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           {EXTRA_TOOLS.map((t) => (
             <Link
               key={t.href}
@@ -140,7 +140,7 @@ export default function ElectricityHubPageHi() {
         <h2 id="live" className="font-display mb-4 text-2xl font-semibold">
           सभी राज्यों के बिल कैलकुलेटर
         </h2>
-        <ul className="grid gap-3 sm:grid-cols-2">
+        <ul className="grid gap-3 grid-cols-1 sm:grid-cols-2">
           {live.map((d) => (
             <li key={d.slug}>
               <Link

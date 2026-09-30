@@ -152,7 +152,7 @@ export default function VehicleFuelCostPage() {
           At the worked example&apos;s ₹{100}/litre and 18 km/litre — swap in
           your own numbers in the calculator above for your real figures.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="rounded-xl border border-hairline bg-paper p-5">
             <p className="mb-2 text-xs font-semibold tracking-wide text-ash/50 uppercase">
               ₹ buys how many litres
@@ -287,7 +287,7 @@ export default function VehicleFuelCostPage() {
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           Related calculators
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <Link
             href="/fuel-cost/generator-fuel-consumption-calculator"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-fuel/50 hover:shadow-sm"

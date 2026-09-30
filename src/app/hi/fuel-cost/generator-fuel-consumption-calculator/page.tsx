@@ -160,7 +160,7 @@ export default function GeneratorFuelPageHi() {
         <h2 id="vs-grid" className="font-display mb-2 text-2xl font-semibold">
           ग्रिड पावर के मुकाबले प्रति यूनिट खर्च
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="rounded-xl border border-caution-amber/25 bg-caution-amber/5 p-5">
             <p className="text-xs font-semibold tracking-wide text-ash/50 uppercase">
               डीज़ल जनरेटर, ₹95/L पर
@@ -196,7 +196,7 @@ export default function GeneratorFuelPageHi() {
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           जुड़े हुए कैलकुलेटर
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <Link
             href="/hi/appliances/inverter-sizing-calculator"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-appliance/50 hover:shadow-sm"

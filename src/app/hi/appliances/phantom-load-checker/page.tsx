@@ -146,7 +146,7 @@ export default function PhantomLoadPageHi() {
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           जुड़े हुए कैलकुलेटर
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <Link
             href="/hi/appliances/household-bill-builder"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-appliance/50 hover:shadow-sm"

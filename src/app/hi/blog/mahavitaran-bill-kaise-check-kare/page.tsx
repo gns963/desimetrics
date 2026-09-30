@@ -417,7 +417,7 @@ export default function MahavitaranBillGuidePageHi() {
           <h2 id="related" className={h2Cls}>
             जुड़ी हुई गाइड
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <Link
               href="/hi/blog/how-telescopic-electricity-slabs-work"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-electricity/50 hover:shadow-sm"

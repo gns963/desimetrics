@@ -146,7 +146,7 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
                 {texts.toolsH2}
               </h2>
             </div>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               {hubs.map((h) => (
                 <div key={h.key} className={`relative flex flex-col rounded-2xl border border-hairline bg-paper p-6 text-center transition hover:shadow-lg ${h.cardBorder}`}>
                   {h.badge && (
@@ -192,7 +192,7 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
             </h2>
             <p className="mx-auto mt-2 max-w-2xl text-ash/70">{texts.rateCompareSub}</p>
           </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-6 grid-cols-1 md:grid-cols-2">
             <div className="rounded-2xl border border-spark-teal/25 bg-spark-teal/5 p-6">
               <p className="text-xs font-semibold uppercase tracking-wide text-spark-teal">
                 {texts.cheapestLabel}
@@ -270,7 +270,7 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
         {/* -------------------------------------------------------- Solar lead-gen */}
         <section id="solar-leadgen" className="relative overflow-hidden hero-gradient">
           <div className="hero-grid-overlay pointer-events-none absolute inset-0" aria-hidden />
-          <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 lg:grid-cols-2">
+          <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 grid-cols-1 lg:grid-cols-2">
             <div className="text-white">
               <span className="text-xs font-semibold tracking-[0.2em] text-spark-teal uppercase">
                 {texts.solarEyebrow}
@@ -307,7 +307,7 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
                 {texts.verifyH2}
               </h2>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-10 grid gap-6 grid-cols-1 md:grid-cols-3">
               {texts.verifySteps.map((s, i) => (
                 <div key={i} className="relative rounded-2xl border border-hairline bg-paper p-6">
                   <div className="flex items-center gap-3">

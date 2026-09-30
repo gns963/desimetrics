@@ -102,7 +102,7 @@ export default function FinancialHubPageHi() {
       />
 
       <main className="mx-auto max-w-4xl px-4 py-8">
-      <section className="mb-10 grid gap-6 sm:grid-cols-2">
+      <section className="mb-10 grid gap-6 grid-cols-1 sm:grid-cols-2">
         {cards.map((c) => (
           <Link
             key={c.href}

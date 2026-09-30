@@ -191,7 +191,7 @@ export default function BhSeriesCalculatorPage() {
           <h2 id="eligibility-docs" className="font-display mb-4 text-2xl font-semibold">
             Documents needed, by applicant type
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <div className="rounded-xl border border-hairline bg-paper p-5">
               <p className="font-display mb-2 font-bold text-ink-navy">Private-sector employee</p>
               <ul className="space-y-1.5 text-sm text-ash/80">

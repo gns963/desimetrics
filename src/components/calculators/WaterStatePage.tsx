@@ -123,7 +123,7 @@ export default function WaterStatePage({
         <h2 id="charges-explained" className="font-display mb-4 text-2xl font-semibold">
           {t.chargesExplainedHeading}
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="rounded-xl border border-hairline bg-paper p-5">
             <p className="font-display font-bold text-ink-navy">{t.sewerageTitle}</p>
             <p className="mt-1 text-sm text-ash/70">
@@ -187,7 +187,7 @@ export default function WaterStatePage({
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           {t.relatedHeading}
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href={liveBoards[0] ? `/water/${liveBoards[0].slug}` : '/water/delhi'}
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-water/50 hover:shadow-sm"

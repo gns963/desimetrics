@@ -52,7 +52,7 @@ export default function EvVsFuelCostCalculator() {
       <CalculatorHeader icon="⛽" title="EV vs Petrol/Diesel/CNG Cost Calculator" subtitle="Compare running costs across all four fuel types, and find your EV break-even point" />
 
       <form className="grid gap-5" onSubmit={(e) => e.preventDefault()}>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           {(Object.keys(options) as OptionKey[]).map((key) => (
             <div key={key} className="rounded-lg border border-hairline p-3">
               <p className="mb-2 text-sm font-semibold text-ash">
@@ -99,7 +99,7 @@ export default function EvVsFuelCostCalculator() {
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div>
             <label htmlFor="fuel-ev-price" className="mb-1.5 block text-sm font-medium text-ash">
               EV on-road price (₹)

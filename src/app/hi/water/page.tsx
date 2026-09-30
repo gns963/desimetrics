@@ -140,7 +140,7 @@ export default function WaterHubPageHi() {
         <h2 id="states" className="font-display mb-4 text-2xl font-semibold">
           राज्य के हिसाब से देखें
         </h2>
-        <ul className="grid gap-3 sm:grid-cols-2">
+        <ul className="grid gap-3 grid-cols-1 sm:grid-cols-2">
           {states.map((s) => (
             <li key={s.slug}>
               <Link

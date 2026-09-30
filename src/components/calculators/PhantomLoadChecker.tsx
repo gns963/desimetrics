@@ -124,7 +124,7 @@ export default function PhantomLoadChecker({
         <legend className="mb-2 block text-sm font-medium text-ash">
           {texts.legend}
         </legend>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-2 grid-cols-1 sm:grid-cols-2">
           {texts.devices.map((d) => (
             <label
               key={d.id}

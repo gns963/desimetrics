@@ -300,7 +300,7 @@ export default function SolarBillCalculatorIndexPage() {
         <h2 id="states" className="font-display mb-4 text-2xl font-semibold">
           All states
         </h2>
-        <ul className="grid gap-3 sm:grid-cols-2">
+        <ul className="grid gap-3 grid-cols-1 sm:grid-cols-2">
           {rows.map((r) => (
             <li key={r.slug}>
               <Link

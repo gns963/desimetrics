@@ -390,7 +390,7 @@ export default function ReduceElectricityBillPage() {
           <h2 id="related" className={h2Cls}>
             Related guides and calculators
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {[
               ['/blog/ac-running-cost-india-guide', '❄️', 'AC running cost guide', 'Tonnage, hours and tariff — not just star rating.'],
               ['/blog/geyser-water-heater-running-cost-india', '🚿', 'Geyser running cost guide', 'Why tank size isn\'t the real cost driver.'],

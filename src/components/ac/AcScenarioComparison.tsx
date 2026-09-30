@@ -30,7 +30,7 @@ export default function AcScenarioComparison({
 
   return (
     <div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
         <div className="rounded-xl border border-hairline bg-paper p-5">
           <p className="text-xs font-semibold tracking-wide text-ash/50 uppercase">
             3-star, fixed-speed (non-inverter)

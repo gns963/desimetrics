@@ -172,7 +172,7 @@ export default function SolarHubPageHi() {
       />
 
       <main className="mx-auto max-w-4xl px-4 py-8">
-      <section id="tools" className="mb-10 grid scroll-mt-20 gap-6 sm:grid-cols-2">
+      <section id="tools" className="mb-10 grid scroll-mt-20 gap-6 grid-cols-1 sm:grid-cols-2">
         {CARDS.map((c) => (
           <Link
             key={c.href}

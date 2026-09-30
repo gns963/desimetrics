@@ -53,7 +53,7 @@ export default function PopularBillCalculations({ tariff }: { tariff: TariffFile
               applicable fuel surcharge, electricity duty, fixed charges, taxes and other billing
               rules.
             </p>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
               <div>
                 <p className="mb-2 text-xs font-semibold tracking-wide text-ash/50 uppercase">
                   Slab-wise Energy Charges

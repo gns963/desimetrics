@@ -45,7 +45,7 @@ export default function PopularWaterBillCalculations({ tariff }: { tariff: Water
               connection type, and other billing rules.
               {bill.notes.length > 0 && ` ${bill.notes.join(' ')}`}
             </p>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
               <div>
                 <p className="mb-2 text-xs font-semibold tracking-wide text-ash/50 uppercase">
                   Slab-wise Water Charges

@@ -478,7 +478,7 @@ export default function PmSuryaGharArticlePage() {
           <h2 id="related" className={h2Cls}>
             Related tools and guides
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <Link
               href="/solar/subsidy-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-solar/50 hover:shadow-sm"

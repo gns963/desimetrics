@@ -58,7 +58,7 @@ export default function CrossHubLinks({ current }: { current: string }) {
       <h2 id="explore-more" className="font-display mb-4 text-2xl font-semibold">
         Explore other calculators
       </h2>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
         {others.map((h) => (
           <Link
             key={h.slug}

@@ -714,7 +714,7 @@ export default function WaterBoardPage({
           <p className="mb-4 text-sm text-ash/60">
             {t.ecosystemBody}
           </p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <Link
               href="/appliances/water-tank-filling-time-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-appliance/50 hover:shadow-sm"
@@ -835,7 +835,7 @@ export default function WaterBoardPage({
           <h2 id="guides" className="font-display mb-4 text-2xl font-semibold">
             {t.guidesHeading}
           </h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <a
               href="#reference"
               className="rounded-xl border border-hairline bg-paper p-4 text-sm font-semibold text-ink-navy transition hover:border-hub-water/50 hover:shadow-sm"

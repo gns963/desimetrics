@@ -525,7 +525,7 @@ export default function GasCgdPage({
           <h2 id="worked-examples" className="font-display mb-4 text-2xl font-semibold">
             {hi ? 'दो उदाहरण गणनाएं' : 'Two worked examples'}
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             <div className="rounded-xl border border-hairline bg-paper p-5">
               <p className="text-xs font-semibold tracking-wide text-ash/50 uppercase">
                 {hi ? 'कम इस्तेमाल' : 'Lower usage'}
@@ -721,7 +721,7 @@ export default function GasCgdPage({
           <h2 id="ecosystem" className="font-display mb-4 text-2xl font-semibold">
             {hi ? 'आपका गैस ऊर्जा इकोसिस्टम' : 'Your gas energy ecosystem'}
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <Link
               href="/fuel-cost/lpg-cylinder-usage-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-fuel/50 hover:shadow-sm"
@@ -804,7 +804,7 @@ export default function GasCgdPage({
           <h2 id="guides" className="font-display mb-4 text-2xl font-semibold">
             {hi ? 'जुड़ी गाइड: अपना गैस बिल समझें' : 'Related guides: understand your gas bill'}
           </h2>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
             <a
               href="#scm"
               className="rounded-xl border border-hairline bg-paper p-4 text-sm font-semibold text-ink-navy transition hover:border-hub-gas/50 hover:shadow-sm"

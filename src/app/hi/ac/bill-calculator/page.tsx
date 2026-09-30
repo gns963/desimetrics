@@ -215,7 +215,7 @@ export default function AcBillCalculatorPageHi() {
           ज़्यादा स्टार रेटिंग कुछ ही सीज़न में अपनी कीमत वसूल कर देती है। कुछ सुझाव
           (सांकेतिक कीमत):
         </p>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           {AC_PRODUCTS.map((p) => (
             <AffiliateProductCard
               key={p.id}
@@ -342,7 +342,7 @@ export default function AcBillCalculatorPageHi() {
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           जुड़े हुए कैलकुलेटर
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/hi/ac/tonnage-calculator"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-ac/50 hover:shadow-sm"

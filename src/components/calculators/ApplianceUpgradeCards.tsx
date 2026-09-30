@@ -34,7 +34,7 @@ export default function ApplianceUpgradeCards({
   const acSavings = (units3 - units5) * rate
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
       <div className="rounded-xl border border-hairline bg-paper p-5">
         <span className="text-2xl" aria-hidden>
           💡

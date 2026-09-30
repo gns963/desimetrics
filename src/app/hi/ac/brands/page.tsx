@@ -91,7 +91,7 @@ export default function AcBrandsIndexPageHi() {
         <h2 id="brands" className="font-display mb-4 text-2xl font-semibold">
           अपना ब्रांड चुनें
         </h2>
-        <ul className="grid gap-3 sm:grid-cols-3">
+        <ul className="grid gap-3 grid-cols-1 sm:grid-cols-3">
           {AC_BRANDS.map((b) => (
             <li key={b.slug}>
               <Link

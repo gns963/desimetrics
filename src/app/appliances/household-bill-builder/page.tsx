@@ -215,7 +215,7 @@ export default function ApplianceBuilderPage() {
             <p className="text-xs font-semibold tracking-wide text-hub-appliance uppercase">
               Example: {citationTariff.discomName} ({citationTariff.discomCode})
             </p>
-            <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-3">
+            <dl className="mt-3 grid gap-2 text-sm grid-cols-1 sm:grid-cols-3">
               <div>
                 <dt className="text-ash/50">Source</dt>
                 <dd>
@@ -308,7 +308,7 @@ export default function ApplianceBuilderPage() {
           <h2 id="who" className="font-display mb-4 text-2xl font-semibold">
             Who can use this calculator
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {[
               { title: 'Homeowners & families', body: 'Spot which single appliance is really driving your bill up, and by how much.' },
               { title: 'Tenants & PG residents', body: 'Estimate your likely electricity share before moving in, from the appliances you\'ll actually use.' },
@@ -511,7 +511,7 @@ export default function ApplianceBuilderPage() {
           <h2 id="tips" className="font-display mb-4 text-2xl font-semibold">
             Tips to reduce your appliance electricity cost
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {[
               {
                 title: 'Switch to BLDC fans',
@@ -552,7 +552,7 @@ export default function ApplianceBuilderPage() {
           <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
             Related calculators
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <Link
               href="/appliances/inverter-sizing-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-appliance/50 hover:shadow-sm"

@@ -173,7 +173,7 @@ export default function VehicleFuelCostPageHi() {
           उदाहरण गणना के ₹100/लीटर और 18 km/लीटर पर — अपने असली आंकड़ों के
           लिए ऊपर कैलकुलेटर में अपने नंबर डालें।
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="rounded-xl border border-hairline bg-paper p-5">
             <p className="mb-2 text-xs font-semibold tracking-wide text-ash/50 uppercase">
               ₹ में कितने लीटर मिलते हैं
@@ -228,7 +228,7 @@ export default function VehicleFuelCostPageHi() {
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           जुड़े हुए कैलकुलेटर
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <Link
             href="/hi/fuel-cost/generator-fuel-consumption-calculator"
             className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-fuel/50 hover:shadow-sm"

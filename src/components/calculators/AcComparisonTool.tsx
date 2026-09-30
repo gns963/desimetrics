@@ -188,7 +188,7 @@ export default function AcComparisonTool({
           unit={texts.hoursUnit}
         />
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <AcSideConfig
             label={texts.optionALabel}
             tonnageLegend={texts.tonnageLegend}
