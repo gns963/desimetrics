@@ -24,8 +24,18 @@ const LOCALES = new Set(['hi', 'ta', 'te', 'mr', 'bn', 'kn', 'gu', 'ml'])
 function wwwRedirect(request: NextRequest): NextResponse | null {
   const host = request.headers.get('host') ?? ''
   if (!host.startsWith('www.')) return null
+
+  // Hostinger fronts the Node app on an internal port (:3000), so
+  // `request.nextUrl` carries that port and an `http:` protocol. Neither the
+  // `hostname` NOR the `host` URL setter clears an existing port — setting
+  // either alone produced the long-standing bug where www redirected to
+  // `https://desimetrics.com:3000`, which isn't publicly reachable and 403s.
+  // The port must be cleared explicitly, and the scheme forced to https
+  // (this branch only ever runs for a `www.` Host, never for localhost dev).
   const target = new URL(request.nextUrl)
-  target.hostname = host.slice('www.'.length)
+  target.protocol = 'https:'
+  target.hostname = host.slice('www.'.length).split(':')[0]
+  target.port = ''
   return NextResponse.redirect(target, 308)
 }
 
