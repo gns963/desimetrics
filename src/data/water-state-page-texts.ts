@@ -36,6 +36,15 @@ export interface WaterStatePageTexts {
   tankerNote: string
   leaksHeading: string
   leaksBody: string
+  howCalculatedHeading: string
+  howCalculatedIntro: string
+  howCalculatedSteps: { title: string; body: string }[]
+  howCalculatedTakeaway: (state: string) => string
+  howCalculatedGuideLinkLabel: string
+  reduceBillHeading: string
+  reduceBillIntro: string
+  reduceBillTips: { title: string; body: string }[]
+  reduceBillTakeaway: string
   relatedHeading: string
   relatedRealTariff: { label: string; sub: (name: string) => string; subFallback: string }
   relatedGas: { label: string; sub: string }
@@ -83,9 +92,9 @@ export const enWaterStatePageTexts: WaterStatePageTexts = {
   calculateHeading: (state) => `Calculate your ${state} water bill`,
   chargesExplainedHeading: 'Sewerage & fixed charges explained',
   sewerageTitle: 'Sewerage charge',
-  sewerageBody: "Many water boards add a wastewater treatment fee on top of the volumetric water charge, commonly billed as a percentage of it — check your last bill for the exact line item, and roll it into the rate or fixed charge you enter above so the total reflects your real bill.",
+  sewerageBody: "Many water boards add a wastewater treatment fee on top of the volumetric water charge, commonly billed as a percentage of it — check your last bill for the exact line item, and roll it into the rate or fixed charge you enter above so the total reflects your real bill. The percentage itself varies widely by board, so treat any figure you see quoted for a different city as a rough reference, not your own rate.",
   fixedTitle: 'Fixed / meter charge',
-  fixedBody: "A flat amount per billing period, often based on your connection's meter size, charged regardless of how much water you use — it covers the cost of maintaining your connection and meter.",
+  fixedBody: "A flat amount per billing period, often based on your connection's meter size, charged regardless of how much water you use — it covers the cost of maintaining your connection and meter. Larger meter sizes (common for bigger households or ground-floor connections shared across a building) typically carry a higher fixed charge than a standard domestic connection.",
   tankerHeading: 'Piped water vs tanker/jar delivery',
   tankerBody: "Piped municipal supply is almost always dramatically cheaper per litre than tanker or 20L jar delivery, when it's reliably available — check local rates for an exact comparison, but either way it typically works out to many times more per litre than metered piped water.",
   tankerLabel: 'Water tanker (5,000–10,000L)',
@@ -93,6 +102,61 @@ export const enWaterStatePageTexts: WaterStatePageTexts = {
   tankerNote: 'Rough, commonly-cited ranges — vary by city and season.',
   leaksHeading: 'Spotting a leak from your bill',
   leaksBody: "If your consumption jumps well above your usual monthly range with no change in household usage, a running cistern or a slow pipe leak is a common cause — both can waste hundreds of litres a month without being obviously visible. Compare this cycle's KL figure against your last few bills; a sustained, unexplained increase is worth a quick check of taps, cisterns and any exposed piping before it repeats.",
+  howCalculatedHeading: 'How Indian Water Bills Are Actually Calculated',
+  howCalculatedIntro: 'Rates and line-item names differ from board to board, but almost every Indian water bill follows the same underlying sequence:',
+  howCalculatedSteps: [
+    {
+      title: 'Meter reading',
+      body: 'your board reads (or you self-report) your water meter in kilolitres (KL) — this billing period\'s consumption is simply the current reading minus the previous one.',
+    },
+    {
+      title: 'Volumetric charge',
+      body: 'that KL figure gets priced either at one flat rate per KL, or on rising slabs the more you use — similar in spirit to how electricity DISCOMs price telescopic tariffs, though the exact structure varies by board.',
+    },
+    {
+      title: 'Sewerage / wastewater fee',
+      body: 'many boards add this on top of the volumetric charge, usually as a percentage of it, to cover treating the wastewater your household sends back into the system.',
+    },
+    {
+      title: 'Fixed / meter charge',
+      body: 'a flat amount added regardless of how much you used that period, generally set by your connection\'s meter size rather than your consumption.',
+    },
+    {
+      title: 'Total',
+      body: 'the sum of the volumetric charge, sewerage fee and fixed charge is what actually lands on your bill — which is exactly what this page\'s calculator adds up for you.',
+    },
+  ],
+  howCalculatedTakeaway: (state) => `Knowing this sequence is what lets you sanity-check any water bill by hand — including one from a board in ${state} that doesn't publish a clean, easy-to-find online tariff. The sewerage percentage and the fixed-charge amount are the two figures that vary most between boards, which is exactly why the calculator above asks for them separately instead of folding everything into one flat rate.`,
+  howCalculatedGuideLinkLabel: 'full city-by-city breakdown of how this calculation differs across Indian water boards',
+  reduceBillHeading: 'Ways to Actually Reduce Your Water Bill',
+  reduceBillIntro: 'Beyond fixing an active leak, a handful of small, one-time changes reliably lower a metered water bill over time:',
+  reduceBillTips: [
+    {
+      title: 'Low-flow aerators and showerheads',
+      body: 'cut the flow rate at the tap without meaningfully changing how a shower or tap feels to use day to day — often the single cheapest fix available, and a one-time purchase rather than a recurring cost.',
+    },
+    {
+      title: 'Reuse RO purifier reject water',
+      body: 'most RO purifiers discard roughly two to three litres of reject water for every litre they actually purify — redirecting that reject water to mopping or watering plants keeps a genuinely large volume from going straight down the drain unused.',
+    },
+    {
+      title: 'Run washing machines and dishwashers full',
+      body: 'a half-full load uses nearly the same water as a full one, so consolidating laundry or dishes into fewer, fuller loads cuts consumption per item washed without changing how often you actually wash.',
+    },
+    {
+      title: 'Harvest rooftop rainwater where feasible',
+      body: 'even a basic rooftop collection setup reduces how much metered or tanker-delivered water a household needs for non-drinking uses like gardening and washing, particularly useful where piped supply is unreliable.',
+    },
+    {
+      title: 'Read your own meter between bills',
+      body: 'comparing your own KL reading against your last bill periodically catches a billing error or a new leak early, before it compounds silently across a full billing cycle.',
+    },
+    {
+      title: 'Sweep outdoor spaces instead of hosing them down',
+      body: 'a driveway, courtyard or balcony cleaned with a broom uses essentially no water compared with rinsing it with a hose or bucket after bucket — a small habit change that adds up across a household that does it weekly.',
+    },
+  ],
+  reduceBillTakeaway: 'None of these require replumbing your home — they are changes to habits and fixtures that compound over a full billing cycle, not one-off savings.',
   relatedHeading: 'Related calculators',
   relatedRealTariff: {
     label: 'See a real-tariff example',
@@ -144,9 +208,9 @@ export const hiWaterStatePageTexts: WaterStatePageTexts = {
   calculateHeading: (state) => `अपना ${state} पानी बिल कैलकुलेट करें`,
   chargesExplainedHeading: 'सीवरेज और फिक्स्ड चार्ज समझाए गए',
   sewerageTitle: 'सीवरेज चार्ज',
-  sewerageBody: 'कई पानी बोर्ड वॉल्यूमेट्रिक पानी चार्ज के ऊपर एक वेस्टवाटर ट्रीटमेंट फीस जोड़ते हैं, जो आमतौर पर उसके प्रतिशत के रूप में बिल की जाती है — सटीक लाइन आइटम के लिए अपना पिछला बिल जांचें, और इसे ऊपर डाली गई दर या फिक्स्ड चार्ज में शामिल करें ताकि कुल आपके असली बिल को दर्शाए।',
+  sewerageBody: 'कई पानी बोर्ड वॉल्यूमेट्रिक पानी चार्ज के ऊपर एक वेस्टवाटर ट्रीटमेंट फीस जोड़ते हैं, जो आमतौर पर उसके प्रतिशत के रूप में बिल की जाती है — सटीक लाइन आइटम के लिए अपना पिछला बिल जांचें, और इसे ऊपर डाली गई दर या फिक्स्ड चार्ज में शामिल करें ताकि कुल आपके असली बिल को दर्शाए। यह प्रतिशत बोर्ड के हिसाब से काफी अलग होता है, इसलिए किसी दूसरे शहर के लिए बताए गए आंकड़े को अपनी दर न मानें, सिर्फ एक मोटा संदर्भ मानें।',
   fixedTitle: 'फिक्स्ड / मीटर चार्ज',
-  fixedBody: 'हर बिलिंग अवधि में एक फ्लैट राशि, अक्सर आपके कनेक्शन के मीटर साइज़ पर आधारित, चाहे आप कितना भी पानी इस्तेमाल करें लगाई जाती है — यह आपके कनेक्शन और मीटर के रखरखाव की लागत कवर करती है।',
+  fixedBody: 'हर बिलिंग अवधि में एक फ्लैट राशि, अक्सर आपके कनेक्शन के मीटर साइज़ पर आधारित, चाहे आप कितना भी पानी इस्तेमाल करें लगाई जाती है — यह आपके कनेक्शन और मीटर के रखरखाव की लागत कवर करती है। बड़े मीटर साइज़ (आमतौर पर बड़े घरों या किसी इमारत में साझा ग्राउंड-फ्लोर कनेक्शन के लिए) में सामान्य घरेलू कनेक्शन से ज़्यादा फिक्स्ड चार्ज लगता है।',
   tankerHeading: 'पाइप्ड पानी बनाम टैंकर/जार डिलीवरी',
   tankerBody: 'पाइप्ड नगरपालिका आपूर्ति, जब भरोसेमंद रूप से उपलब्ध हो, तो टैंकर या 20L जार डिलीवरी से प्रति लीटर लगभग हमेशा काफी सस्ती होती है — सटीक तुलना के लिए स्थानीय दरें जांचें, लेकिन किसी भी तरह यह आमतौर पर मीटर से मापे पाइप्ड पानी से प्रति लीटर कई गुना ज़्यादा पड़ता है।',
   tankerLabel: 'पानी टैंकर (5,000–10,000L)',
@@ -154,6 +218,61 @@ export const hiWaterStatePageTexts: WaterStatePageTexts = {
   tankerNote: 'मोटे तौर पर, आम तौर पर बताई गई सीमाएं — शहर और मौसम के हिसाब से बदलती हैं।',
   leaksHeading: 'अपने बिल से रिसाव का पता लगाना',
   leaksBody: 'अगर आपकी खपत बिना घर में इस्तेमाल में असली बदलाव के अपनी सामान्य मासिक सीमा से काफी ऊपर बढ़ जाए, तो एक चलती सिस्टर्न या धीमा पाइप रिसाव एक आम कारण है — दोनों बिना साफ दिखे महीने में सैकड़ों लीटर बर्बाद कर सकते हैं। इस साइकल के KL आंकड़े की तुलना अपने पिछले कुछ बिलों से करें; एक लगातार, अस्पष्ट बढ़ोतरी नल, सिस्टर्न और किसी भी खुली पाइपिंग की जल्दी जांच के लायक है, इससे पहले कि यह दोहराए।',
+  howCalculatedHeading: 'भारतीय पानी बिल असल में कैसे कैलकुलेट होते हैं',
+  howCalculatedIntro: 'दरें और लाइन-आइटम के नाम बोर्ड-दर-बोर्ड अलग होते हैं, लेकिन लगभग हर भारतीय पानी बिल एक जैसे क्रम का पालन करता है:',
+  howCalculatedSteps: [
+    {
+      title: 'मीटर रीडिंग',
+      body: 'आपका बोर्ड आपका पानी मीटर किलोलीटर (KL) में पढ़ता है (या आप खुद रिपोर्ट करते हैं) — इस बिलिंग अवधि की खपत बस मौजूदा रीडिंग में से पिछली रीडिंग घटाकर मिलती है।',
+    },
+    {
+      title: 'वॉल्यूमेट्रिक चार्ज',
+      body: 'उस KL आंकड़े की कीमत या तो एक फ्लैट प्रति-KL दर पर, या ज़्यादा इस्तेमाल पर बढ़ने वाले स्लैब पर तय होती है — कुछ हद तक बिजली डिस्कॉम के टेलिस्कोपिक टैरिफ जैसा, हालांकि सटीक संरचना बोर्ड के हिसाब से बदलती है।',
+    },
+    {
+      title: 'सीवरेज / वेस्टवाटर फीस',
+      body: 'कई बोर्ड इसे वॉल्यूमेट्रिक चार्ज के ऊपर जोड़ते हैं, आमतौर पर उसके प्रतिशत के रूप में, आपके घर से सिस्टम में वापस जाने वाले वेस्टवाटर को ट्रीट करने की लागत कवर करने के लिए।',
+    },
+    {
+      title: 'फिक्स्ड / मीटर चार्ज',
+      body: 'उस अवधि में आपने कितना भी इस्तेमाल किया हो, एक फ्लैट राशि जोड़ी जाती है, जो आमतौर पर आपकी खपत की बजाय आपके कनेक्शन के मीटर साइज़ पर तय होती है।',
+    },
+    {
+      title: 'कुल',
+      body: 'वॉल्यूमेट्रिक चार्ज, सीवरेज फीस और फिक्स्ड चार्ज का जोड़ ही असल में आपके बिल पर आता है — यही वह जोड़ है जो इस पेज का कैलकुलेटर आपके लिए करता है।',
+    },
+  ],
+  howCalculatedTakeaway: (state) => `यह क्रम जानना ही आपको किसी भी पानी बिल को हाथ से जांचने लायक बनाता है — यहां तक कि ${state} के किसी ऐसे बोर्ड के बिल को भी जो साफ, आसानी से मिलने वाला ऑनलाइन टैरिफ प्रकाशित नहीं करता। सीवरेज प्रतिशत और फिक्स्ड-चार्ज राशि वे दो आंकड़े हैं जो बोर्डों के बीच सबसे ज़्यादा बदलते हैं, इसीलिए ऊपर का कैलकुलेटर इन्हें अलग-अलग पूछता है, बजाय सब कुछ एक फ्लैट दर में समेटने के।`,
+  howCalculatedGuideLinkLabel: 'भारतीय पानी बोर्डों में यह कैलकुलेशन कैसे अलग होता है, इसका पूरा बोर्ड-दर-बोर्ड ब्यौरा',
+  reduceBillHeading: 'अपना पानी बिल असल में कम करने के तरीके',
+  reduceBillIntro: 'सक्रिय रिसाव ठीक करने के अलावा, कुछ छोटे, एक-बार के बदलाव समय के साथ मीटर वाले पानी बिल को भरोसेमंद तरीके से कम करते हैं:',
+  reduceBillTips: [
+    {
+      title: 'लो-फ्लो एरेटर और शावरहेड',
+      body: 'नल पर प्रवाह दर कम करते हैं बिना यह ज़्यादा बदले कि शावर या नल इस्तेमाल करने में रोज़ाना कैसा लगता है — अक्सर उपलब्ध सबसे सस्ता उपाय, और बार-बार का खर्च नहीं बल्कि एक-बार की खरीद।',
+    },
+    {
+      title: 'RO प्यूरीफायर का रिजेक्ट पानी दोबारा इस्तेमाल करें',
+      body: 'ज़्यादातर RO प्यूरीफायर हर एक लीटर शुद्ध किए गए पानी के लिए करीब दो से तीन लीटर रिजेक्ट पानी बहा देते हैं — उस रिजेक्ट पानी को पोछा लगाने या पौधों में डालने से इस्तेमाल किए बिना नाली में जाने से बचता है।',
+    },
+    {
+      title: 'वॉशिंग मशीन और डिशवॉशर पूरे भरकर चलाएं',
+      body: 'आधा भरा लोड लगभग उतना ही पानी इस्तेमाल करता है जितना पूरा भरा लोड, इसलिए कपड़े या बर्तन कम, पूरे भरे लोड में समेटने से हर आइटम धोने पर खपत कम होती है, बिना यह बदले कि आप कितनी बार धोते हैं।',
+    },
+    {
+      title: 'जहां मुमकिन हो, छत का बारिश का पानी जमा करें',
+      body: 'एक बुनियादी छत-संग्रह सेटअप भी बागवानी और धुलाई जैसे पीने-योग्य-नहीं इस्तेमाल के लिए घर को कितने मीटर या टैंकर पानी की ज़रूरत है, उसे कम करता है — खासकर जहां पाइप्ड आपूर्ति अविश्वसनीय हो।',
+    },
+    {
+      title: 'बिलों के बीच खुद अपना मीटर पढ़ें',
+      body: 'अपनी KL रीडिंग की समय-समय पर अपने पिछले बिल से तुलना करने से बिलिंग गलती या नया रिसाव जल्दी पकड़ में आता है, पूरे बिलिंग साइकल में चुपचाप बढ़ने से पहले।',
+    },
+    {
+      title: 'बाहरी जगहों को होज़ से धोने की बजाय झाड़ू लगाएं',
+      body: 'ड्राइववे, आंगन या बालकनी को झाड़ू से साफ करना, होज़ या बाल्टी-दर-बाल्टी पानी से धोने के मुकाबले लगभग शून्य पानी इस्तेमाल करता है — एक छोटी आदत जो हफ्ते-दर-हफ्ते करने वाले घर में जुड़ती जाती है।',
+    },
+  ],
+  reduceBillTakeaway: 'इनमें से किसी के लिए भी घर की पूरी प्लंबिंग बदलने की ज़रूरत नहीं — ये आदतों और फिक्स्चर में बदलाव हैं जो पूरे बिलिंग साइकल में जुड़ते हैं, एक-बार की बचत नहीं।',
   relatedHeading: 'संबंधित कैलकुलेटर',
   relatedRealTariff: {
     label: 'एक असली-टैरिफ उदाहरण देखें',

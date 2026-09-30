@@ -119,6 +119,33 @@ export default function WaterStatePage({
         <WaterBillCalculator />
       </section>
 
+      <section aria-labelledby="how-calculated" className="mb-10 scroll-mt-20">
+        <h2 id="how-calculated" className="font-display mb-4 text-2xl font-semibold">
+          {t.howCalculatedHeading}
+        </h2>
+        <p className="text-ash/80">{t.howCalculatedIntro}</p>
+        <ol className="mt-3 space-y-3">
+          {t.howCalculatedSteps.map((s, i) => (
+            <li key={s.title} className="flex gap-3">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-hub-water font-display text-xs font-bold text-white">
+                {i + 1}
+              </span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{s.title}</strong> — {s.body}
+              </span>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-3 font-semibold text-ink-navy">
+          {t.howCalculatedTakeaway(state)}
+        </p>
+        <p className="mt-3 text-ash/80">
+          <Link href="/blog/how-water-bills-calculated-india" className="text-brass underline">
+            {t.howCalculatedGuideLinkLabel}
+          </Link>
+        </p>
+      </section>
+
       <section aria-labelledby="charges-explained" className="mb-10 scroll-mt-20">
         <h2 id="charges-explained" className="font-display mb-4 text-2xl font-semibold">
           {t.chargesExplainedHeading}
@@ -181,6 +208,26 @@ export default function WaterStatePage({
         <p className="text-sm text-ash/80">
           {t.leaksBody}
         </p>
+      </section>
+
+      <section aria-labelledby="reduce-bill" className="mb-10 scroll-mt-20">
+        <h2 id="reduce-bill" className="font-display mb-4 text-2xl font-semibold">
+          {t.reduceBillHeading}
+        </h2>
+        <p className="text-ash/80">{t.reduceBillIntro}</p>
+        <ul className="mt-3 space-y-2">
+          {t.reduceBillTips.map((tip) => (
+            <li key={tip.title} className="flex items-start gap-2">
+              <span className="mt-0.5 text-hub-water" aria-hidden>
+                ✓
+              </span>
+              <span className="text-ash/80">
+                <strong className="text-ink-navy">{tip.title}</strong> — {tip.body}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">{t.reduceBillTakeaway}</p>
       </section>
 
       <section aria-labelledby="related" className="mb-10">
