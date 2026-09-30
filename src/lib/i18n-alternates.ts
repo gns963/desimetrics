@@ -209,6 +209,7 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
       '/methodology',
       '/news',
       '/news/kerala-power-shortage-september-2026',
+      '/news/power-surge-damaged-appliances-tamil-nadu',
       '/privacy',
       '/solar',
       '/solar/battery-backup-calculator',
@@ -245,7 +246,12 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
   // one exception that spans two states (Telangana + Andhra Pradesh),
   // so it lists both states' DISCOM paths.
   ta: {
-    exact: new Set(['', '/electricity/tneb-bill-calculator']),
+    exact: new Set([
+      '',
+      '/electricity/tneb-bill-calculator',
+      '/news',
+      '/news/power-surge-damaged-appliances-tamil-nadu',
+    ]),
     prefixes: [],
   },
   te: {

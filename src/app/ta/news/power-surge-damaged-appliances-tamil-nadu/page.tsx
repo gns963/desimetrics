@@ -20,7 +20,6 @@ export const metadata: Metadata = {
     languages: getAlternateLanguages(PATH),
   },
   openGraph: { url: `${SITE}/ta${PATH}`, type: 'article', locale: 'ta_IN' },
-  robots: { index: false },
 }
 
 const breadcrumb = breadcrumbLd([

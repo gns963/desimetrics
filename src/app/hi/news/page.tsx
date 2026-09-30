@@ -38,7 +38,7 @@ const posts: NewsPost[] = [
     tag: 'तमिलनाडु · TNPDCL',
     href: '/hi/news/power-surge-damaged-appliances-tamil-nadu',
     date: '29 सितंबर 2026',
-    live: false,
+    live: true,
   },
 ]
 

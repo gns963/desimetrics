@@ -95,6 +95,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/blog/ac-running-cost-india-guide', 0.6),
     entry('/news', 0.7, 'weekly'),
     entry('/news/kerala-power-shortage-september-2026', 0.6, 'weekly'),
+    entry('/news/power-surge-damaged-appliances-tamil-nadu', 0.6, 'weekly'),
     entry('/fuel-cost', 0.8),
     entry('/fuel-cost/petrol-diesel-cost-per-km-calculator', 0.9),
     entry('/fuel-cost/lpg-cylinder-usage-calculator', 0.9),
@@ -151,6 +152,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/hi/blog/ac-running-cost-india-guide', 0.5),
     entry('/hi/news', 0.6, 'weekly'),
     entry('/hi/news/kerala-power-shortage-september-2026', 0.5, 'weekly'),
+    entry('/hi/news/power-surge-damaged-appliances-tamil-nadu', 0.5, 'weekly'),
     entry('/hi/fuel-cost', 0.7),
     entry('/hi/fuel-cost/petrol-diesel-cost-per-km-calculator', 0.8),
     entry('/hi/fuel-cost/lpg-cylinder-usage-calculator', 0.8),
@@ -176,6 +178,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const electricityTa = allCalculatorSlugs
     .filter((slug) => getCalculatorPage(slug)?.translations?.ta)
     .map((slug) => entry(`/ta/electricity/${slug}`, 0.8))
+  // Tamil's first content pages beyond the homepage + TNEB calculator —
+  // fits STATE_LANGUAGE_POLICY since this news article is TN-specific.
+  const taNews = [
+    entry('/ta/news', 0.6, 'weekly'),
+    entry('/ta/news/power-surge-damaged-appliances-tamil-nadu', 0.5, 'weekly'),
+  ]
   const electricityTe = allCalculatorSlugs
     .filter((slug) => getCalculatorPage(slug)?.translations?.te)
     .map((slug) => entry(`/te/electricity/${slug}`, 0.8))
@@ -258,6 +266,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...electricityHi,
     ...electricityMr,
     ...electricityTa,
+    ...taNews,
     ...electricityTe,
     ...electricityKn,
     ...electricityBn,

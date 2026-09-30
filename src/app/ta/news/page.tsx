@@ -15,7 +15,6 @@ export const metadata: Metadata = {
     languages: getAlternateLanguages(PATH),
   },
   openGraph: { url: `${SITE}/ta${PATH}`, type: 'website', locale: 'ta_IN' },
-  robots: { index: false },
 }
 
 interface NewsPost {
@@ -32,7 +31,7 @@ const posts: NewsPost[] = [
     tag: 'தமிழ்நாடு · TNPDCL',
     href: '/ta/news/power-surge-damaged-appliances-tamil-nadu',
     date: '29 செப்டம்பர் 2026',
-    live: false,
+    live: true,
   },
 ]
 
