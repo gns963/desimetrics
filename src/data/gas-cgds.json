@@ -25,7 +25,7 @@
     },
     {
       "region": "Hyderabad / Vijayawada / Kakinada",
-      "cgds": [{ "slug": "bgl", "code": "BGL", "name": "Bhagyanagar Gas Limited", "hasTariffFile": false }]
+      "cgds": [{ "slug": "bgl", "code": "BGL", "name": "Bhagyanagar Gas Limited", "hasTariffFile": true }]
     },
     {
       "region": "Chandigarh / Kerala / parts of UP",
@@ -41,15 +41,15 @@
     },
     {
       "region": "Kanpur / parts of UP",
-      "cgds": [{ "slug": "cugl", "code": "CUGL", "name": "Central UP Gas Limited", "hasTariffFile": false }]
+      "cgds": [{ "slug": "cugl", "code": "CUGL", "name": "Central UP Gas Limited", "hasTariffFile": true }]
     },
     {
-      "region": "Ahmedabad / Sabarmati belt",
-      "cgds": [{ "slug": "green-gas", "code": "GGCL", "name": "Green Gas Limited", "hasTariffFile": false }]
+      "region": "Lucknow / Agra / Ayodhya (UP) — NOTE: this entry's slug ('green-gas') was previously mislabelled 'Ahmedabad / Sabarmati belt'; corrected 2026-10-01 after sourcing its tariff data surfaced the error. Green Gas Limited (GAIL+IOCL JV) is a Lucknow-headquartered UP operator with no Gujarat connection found.",
+      "cgds": [{ "slug": "green-gas", "code": "GRGL", "name": "Green Gas Limited", "hasTariffFile": true }]
     },
     {
       "region": "Haryana (select towns)",
-      "cgds": [{ "slug": "haryana-city-gas", "code": "HCGDL", "name": "Haryana City Gas Distribution Limited", "hasTariffFile": false }]
+      "cgds": [{ "slug": "haryana-city-gas", "code": "HCGDL", "name": "Haryana City Gas Distribution Limited", "hasTariffFile": true }]
     },
     {
       "region": "Various — Adani Total Gas footprint",

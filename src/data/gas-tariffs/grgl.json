@@ -1,0 +1,14 @@
+{
+  "cgdCode": "GRGL",
+  "cgdName": "Green Gas Limited",
+  "citiesServed": ["Lucknow", "Agra"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 56.50 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-01-26",
+  "sourceUrl": "https://gglonline.net/png-rate-2",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "PRIMARY — fetched directly from Green Gas Limited's own 'PNG Rate' page (gglonline.net, a joint venture of GAIL and IOCL), which states domestic rates effective 26.01.2026: Agra Rs 56.50/SCM, Lucknow Rs 56.50/SCM, Ayodhya & Sultanpur Rs 57.50/SCM, Unnao Rs 56.00/SCM. This file covers ONLY Agra and Lucknow (the two cities sharing the Rs 56.50 rate); Ayodhya/Sultanpur/Unnao are excluded since their rates differ. Note: gas-companies.ts/gas-cgds.json metadata associates the 'green-gas' slug with an 'Ahmedabad/Sabarmati belt' region — that label appears to be incorrect (a WebSearch check found no evidence connecting Green Gas Limited to Gujarat; its own site, registered address and press coverage all place it in Lucknow/UP). Not corrected in this pass since gas-cgds.json's region labels are informational text, not used by any routing logic — flagged here and in HANDOFF.md for a future cleanup pass. Billing cycle (bimonthly) ASSUMED from the near-universal pattern across every other CGD checked in this task, NOT independently confirmed for GRGL specifically — no FAQ/terms page with billing-cycle detail was found on gglonline.net in this pass. Fixed/meter charge not found; modelled as Rs 0, likely understating the real bill. cgdCode uses 'GRGL' rather than the more natural 'GGL' to avoid colliding with Gujarat Gas Limited's existing code in this registry — a purely internal naming choice, not an industry designation."
+}

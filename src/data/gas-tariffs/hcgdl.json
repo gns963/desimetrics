@@ -1,0 +1,14 @@
+{
+  "cgdCode": "HCGDL",
+  "cgdName": "Haryana City Gas Distribution Limited",
+  "citiesServed": ["Gurugram"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 51.50 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-05-16",
+  "sourceUrl": "https://haryanacitygas.com/services-charges",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "PRIMARY — fetched directly from HCG's own 'Services & Charges' page (haryanacitygas.com), which states Rs 51.50/SCM (including taxes; Rs 48.93 retail + Rs 2.57 levies/taxes) last revised 16 May 2026, confirmed to apply specifically to Gurugram by a follow-up search. HCG's own homepage states it actually operates THREE separate networks under different group entities — Gurugram (its largest, described as 'Haryana's largest CGD network'), Bhiwadi (Rajasthan, a DIFFERENT rate of roughly Rs 48.50/SCM per secondary sources, not independently verified in this pass) and Puducherry. This file covers ONLY Gurugram. The gas-cgds.json region label 'Haryana (select towns)' for this slug understates the real footprint (it spans 3 states) but was not corrected, since it's informational text only. Billing cycle (bimonthly) ASSUMED from the pattern across every other CGD checked in this task, NOT independently confirmed for HCG specifically. Fixed/meter charge: none found beyond the all-inclusive per-SCM rate quoted; modelled as Rs 0."
+}

@@ -1,0 +1,14 @@
+{
+  "cgdCode": "CUGL",
+  "cgdName": "Central UP Gas Limited",
+  "citiesServed": ["Kanpur", "Bareilly", "Unnao", "Jhansi"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 55.00 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-02-01",
+  "sourceUrl": "https://www.cugl.co.in/our-business/domestic-png/price",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "PRIMARY — fetched directly from CUGL's own 'Domestic PNG Price' page (cugl.co.in), which states Rs 55.00/SCM effective 1 February 2026, applying uniformly across all 4 of CUGL's service areas (Kanpur, Bareilly, Unnao, Jhansi) — unlike several other multi-city CGDs checked in this pass, CUGL confirms one rate company-wide rather than varying by city. Bimonthly billing cycle confirmed via CUGL's own FAQ page. Fixed charge modelled as Rs 0, NOT a flat recurring charge: CUGL's own FAQ describes a Rs 100 minimum-bimonthly-charge guarantee (applies only if consumption is nil or below Rs 100 worth of gas for the cycle), the same shortfall-only mechanism found at Torrent Gas and (likely) Mahanagar Gas — not a charge added to every bill, so not represented by this schema's flat fixedCharge field."
+}
