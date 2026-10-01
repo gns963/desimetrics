@@ -1,0 +1,14 @@
+{
+  "cgdCode": "ATGL",
+  "cgdName": "Adani Total Gas Limited",
+  "citiesServed": ["Ahmedabad"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 55.27 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-06-01",
+  "sourceUrl": "https://www.goodreturns.in/png-price-in-ahmedabad.html",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "SOURCED (secondary, single-source) — Goodreturns' daily PNG price tracker shows Rs 55.27/SCM for Ahmedabad as of 1 October 2026, unchanged since a Rs 6.25/SCM increase in June 2026 (from Rs 49.02). This figure is NOT independently cross-confirmed by a second contemporary outlet; a search for independent confirmation returned only the same tracker and older (2023/2025) figures. Adani Total Gas's own 2023 press release confirms the company bills DIFFERENT rates per geographical area (Vadodara, Ahmedabad, other Gujarat areas, Khurja, Faridabad & Palwal each had distinct 2023 rates) — this file covers ONLY the Ahmedabad City & Daskroi GA, not the company's other territories, which would need separate verification. Fixed/meter charge NOT found in any source checked; modelled as Rs 0, likely understating the real bill. Scope is deliberately narrow (Ahmedabad only) rather than implying one national ATGL rate."
+}

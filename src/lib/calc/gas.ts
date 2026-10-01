@@ -8,10 +8,13 @@
 
 import type { GasSlab, GasTariffFile } from '../../data/gas-tariffs/_schema'
 import { parseGasTariffFile } from '../../data/gas-tariffs/_schema'
+import atglJson from '../../data/gas-tariffs/atgl.json'
+import gailJson from '../../data/gas-tariffs/gail.json'
 import gglJson from '../../data/gas-tariffs/ggl.json'
 import iglJson from '../../data/gas-tariffs/igl.json'
 import mglJson from '../../data/gas-tariffs/mgl.json'
 import mnglJson from '../../data/gas-tariffs/mngl.json'
+import tglJson from '../../data/gas-tariffs/tgl.json'
 
 // ---------------------------------------------------------------------------
 // Result types
@@ -186,6 +189,9 @@ export const gasTariffRegistry: Record<string, GasTariffFile> = {
   MNGL: parseGasTariffFile(mnglJson),
   GGL: parseGasTariffFile(gglJson),
   MGL: parseGasTariffFile(mglJson),
+  ATGL: parseGasTariffFile(atglJson),
+  TGL: parseGasTariffFile(tglJson),
+  GAIL: parseGasTariffFile(gailJson),
 }
 
 export function getGasTariff(cgdCode: string): GasTariffFile {

@@ -1,0 +1,14 @@
+{
+  "cgdCode": "GAIL",
+  "cgdName": "GAIL Gas Limited",
+  "citiesServed": ["Bengaluru"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 53.00 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-06-01",
+  "sourceUrl": "https://www.goodreturns.in/png-price-in-bangalore.html",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "SOURCED (secondary, single-source) — Goodreturns' daily PNG price tracker shows Rs 53.00/SCM for Bangalore as of 1 October 2026, unchanged since a Rs 1/SCM increase in June 2026 (from Rs 52.00). This is internally consistent with independently reported news coverage (Indian Chemical News, PSU Watch, Deccan Herald) of a company-wide Rs 1/SCM cut effective 1 January 2026 that brought Bengaluru to Rs 52.00 — the tracker's subsequent June rise to Rs 53.00 is NOT independently cross-confirmed by a second contemporary outlet. GAIL Gas serves several other authorised areas (Dewas, Meerut, Sonipat, Taj Trapezium Zone, Raisen, Mirzapur, Dhanbad, Adityapur, Rourkela among them per 2023 coverage) likely at different rates — this file covers ONLY Bengaluru. Fixed/meter charge not found in any source checked within this pass; modelled as Rs 0, likely understating the real bill — GAIL's own press-release and FAQ pages (gailgas.com) returned no retrievable tariff-card content (JS-rendered, not captured by fetch)."
+}

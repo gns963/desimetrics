@@ -1,0 +1,14 @@
+{
+  "cgdCode": "TGL",
+  "cgdName": "Torrent Gas",
+  "citiesServed": ["Jaipur"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 49.50 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-01-01",
+  "sourceUrl": "https://www.torrentgas.com/frontend/web/index.php/site/info/jaipur_png_dom_connectionschemes",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "SOURCED (secondary, cross-confirmed) — Torrent Gas's own Jaipur domestic-connection info page states Rs 49.50/SCM effective 1 January 2026 (following a PNGRB pipeline-tariff-order-driven cut of up to Rs 2/SCM across Torrent's cities, reported by BusinessToday/Business Standard/The Week/BW Businessworld without per-city figures), independently matching a secondary competitor calculator's Rs 49.50/SCM figure for the same city. Torrent serves many other geographical areas (Barabanki, Basti, Morbi, Gorakhpur, Kota among them) at DIFFERENT rates per the same site search — this file covers ONLY Jaipur, not a company-wide rate. Fixed charge modelled as Rs 0, NOT a flat charge: Torrent's own official 'Tariff Card for Residential Customers' (As on 1 Dec 2025, fetched directly from torrentgas.com) confirms the real mechanism is a 'Minimum Charge for Non-Consumption (Bimonthly Rs 150/-)' — a shortfall-only minimum-consumption guarantee, not a charge applied to every bill — which this schema's flat fixedCharge field cannot represent. A secondary source's claim of a flat Rs 50/billing-period charge conflicts with this and is NOT used, since the primary source is clearer and more authoritative on this point."
+}

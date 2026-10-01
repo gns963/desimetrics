@@ -21,7 +21,7 @@
     },
     {
       "region": "Bengaluru / Meerut / Gwalior",
-      "cgds": [{ "slug": "gail", "code": "GAIL", "name": "GAIL Gas Limited", "hasTariffFile": false }]
+      "cgds": [{ "slug": "gail", "code": "GAIL", "name": "GAIL Gas Limited", "hasTariffFile": true }]
     },
     {
       "region": "Hyderabad / Vijayawada / Kakinada",
@@ -53,11 +53,11 @@
     },
     {
       "region": "Various — Adani Total Gas footprint",
-      "cgds": [{ "slug": "adani-gas", "code": "ATGL", "name": "Adani Total Gas Limited", "hasTariffFile": false }]
+      "cgds": [{ "slug": "adani-gas", "code": "ATGL", "name": "Adani Total Gas Limited", "hasTariffFile": true }]
     },
     {
       "region": "Various — Torrent Gas footprint",
-      "cgds": [{ "slug": "torrent-gas", "code": "TGL", "name": "Torrent Gas", "hasTariffFile": false }]
+      "cgds": [{ "slug": "torrent-gas", "code": "TGL", "name": "Torrent Gas", "hasTariffFile": true }]
     },
     {
       "region": "Various — Think Gas footprint",
