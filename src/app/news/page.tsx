@@ -47,6 +47,13 @@ const posts: NewsPost[] = [
     date: '30 September 2026',
     live: true,
   },
+  {
+    title: 'Will Unpaid Traffic Challans Be Added to Your Electricity Bill? What the Supreme Court Actually Said',
+    tag: 'National · Supreme Court',
+    href: '/news/supreme-court-traffic-challans-electricity-bills',
+    date: '1 October 2026',
+    live: false,
+  },
 ]
 
 const breadcrumb = breadcrumbLd([
