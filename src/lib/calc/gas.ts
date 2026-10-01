@@ -19,6 +19,9 @@ import iglJson from '../../data/gas-tariffs/igl.json'
 import mglJson from '../../data/gas-tariffs/mgl.json'
 import mnglJson from '../../data/gas-tariffs/mngl.json'
 import tglJson from '../../data/gas-tariffs/tgl.json'
+import thinkgasJson from '../../data/gas-tariffs/thinkgas.json'
+import tngclJson from '../../data/gas-tariffs/tngcl.json'
+import vglJson from '../../data/gas-tariffs/vgl.json'
 
 // ---------------------------------------------------------------------------
 // Result types
@@ -200,6 +203,9 @@ export const gasTariffRegistry: Record<string, GasTariffFile> = {
   CUGL: parseGasTariffFile(cuglJson),
   GRGL: parseGasTariffFile(grglJson),
   HCGDL: parseGasTariffFile(hcgdlJson),
+  VGL: parseGasTariffFile(vglJson),
+  TNGCL: parseGasTariffFile(tngclJson),
+  THINKGAS: parseGasTariffFile(thinkgasJson),
 }
 
 export function getGasTariff(cgdCode: string): GasTariffFile {

@@ -1,0 +1,14 @@
+{
+  "cgdCode": "THINKGAS",
+  "cgdName": "Think Gas",
+  "citiesServed": ["Nellore", "Tirupati"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 47.00 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-01-01",
+  "sourceUrl": "https://www.deccanchronicle.com/southern-states/andhra-pradesh/think-gas-cuts-domestic-png-prices-in-nellore-tirupatichittoor-kadapaanantapur-clusters-1926621",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "SOURCED (secondary, cross-confirmed) — Deccan Chronicle reports Rs 47/SCM across the Nellore, Tirupati-Chittoor and Kadapa-Anantapur clusters effective 1 January 2026 (a Rs 4/SCM voluntary reduction), independently matching Goodreturns' daily tracker showing the same Rs 47.00/SCM for both Nellore (as of 23 July 2026, unchanged since January) and Tirupati. This file covers ONLY Nellore and Tirupati (the Tirupati-Chittoor cluster); Kadapa-Anantapur is presumed to share the same rate per the press report but was not independently checked via the tracker. Think Gas serves other states (MP, Punjab, HP, UP, Bihar, Karnataka, Rajasthan, Tamil Nadu) at different, separately-revised rates not covered by this file. Billing cycle (bimonthly) ASSUMED from the pattern across every other CGD checked, NOT independently confirmed for Think Gas specifically. Fixed/meter charge not found in any source checked; modelled as Rs 0."
+}

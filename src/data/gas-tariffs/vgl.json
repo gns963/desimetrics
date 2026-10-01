@@ -1,0 +1,14 @@
+{
+  "cgdCode": "VGL",
+  "cgdName": "Vadodara Gas Limited",
+  "citiesServed": ["Vadodara"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 55.74 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-09-16",
+  "sourceUrl": "https://www.vgl.co.in/tariff/tariff-rate/",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "PRIMARY — fetched directly from Vadodara Gas Limited's own 'Tariff Rate' page (vgl.co.in), which states Rs 55.74/SCM w.e.f. 06:00 hrs, 16 September 2026. This figure is explicitly WITHOUT TAX per the source page itself — unlike most other files in this registry which don't separately flag a tax-exclusive basis, so this rate likely understates the real per-SCM cost once GST/VAT is added; not corrected since the applicable tax rate for VGL specifically was not independently verified in this pass. Consistent with an independently reported price trajectory (My Vadodara news account / Desh Gujarat): Rs 51.74 -> Rs 53.74 (June 2026) -> Rs 54.74 (August 2026) -> this Rs 55.74 (September 2026). Billing cycle (bimonthly) ASSUMED from the pattern across every other CGD checked, NOT independently confirmed for VGL specifically. Fixed/meter charge not found; modelled as Rs 0."
+}

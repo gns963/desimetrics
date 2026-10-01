@@ -33,11 +33,11 @@
     },
     {
       "region": "Tripura",
-      "cgds": [{ "slug": "thgcl", "code": "TNGCL", "name": "Tripura Natural Gas Company Limited", "hasTariffFile": false }]
+      "cgds": [{ "slug": "thgcl", "code": "TNGCL", "name": "Tripura Natural Gas Company Limited", "hasTariffFile": true }]
     },
     {
       "region": "Vadodara",
-      "cgds": [{ "slug": "vadodara-gas", "code": "VGL", "name": "Vadodara Gas Limited", "hasTariffFile": false }]
+      "cgds": [{ "slug": "vadodara-gas", "code": "VGL", "name": "Vadodara Gas Limited", "hasTariffFile": true }]
     },
     {
       "region": "Kanpur / parts of UP",
@@ -61,7 +61,7 @@
     },
     {
       "region": "Various — Think Gas footprint",
-      "cgds": [{ "slug": "think-gas", "code": "THINKGAS", "name": "Think Gas", "hasTariffFile": false }]
+      "cgds": [{ "slug": "think-gas", "code": "THINKGAS", "name": "Think Gas", "hasTariffFile": true }]
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "cgdCode": "TNGCL",
+  "cgdName": "Tripura Natural Gas Company Limited",
+  "citiesServed": ["Agartala", "West Tripura"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 45.87 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-05-27",
+  "sourceUrl": "https://tngclonline.com/Home/CNGPNGRateCard",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "PRIMARY — fetched directly from TNGCL's own 'CNG PNG Rate Card' page (tngclonline.com), which states Rs 45.87/SCM (inclusive of 4% VAT and a 25% TRD Cess) for West Tripura/Agartala domestic consumers, effective 27 May 2026. Independently corroborated by regional press (Northeast Today, Tripura Chronicle, Borok Times) reporting the same revision and preceding rates (Rs 42.30 -> Rs 44.41 -> this Rs 45.87, all in 2026). Billing cycle (bimonthly) ASSUMED from the pattern across every other CGD checked, NOT independently confirmed for TNGCL specifically. Fixed/meter charge not found on the rate card; modelled as Rs 0."
+}
