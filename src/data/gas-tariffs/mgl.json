@@ -1,0 +1,14 @@
+{
+  "cgdCode": "MGL",
+  "cgdName": "Mahanagar Gas Limited",
+  "citiesServed": ["Mumbai", "Thane", "Raigad"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 53.00 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-09-01",
+  "sourceUrl": "https://www.business-standard.com/economy/news/mahanagar-gas-hikes-cng-rates-by-2-per-kg-domestic-png-by-1-scm-126083101559_1.html",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "SOURCED (secondary) — the Rs 1/SCM hike effective 1 September 2026 for Mumbai/Thane/Raigad domestic PNG consumers is reported by Business Standard, India.com and Whalesbook; the resulting Rs 53/SCM rate is cross-confirmed by billcalc.in's pre-hike baseline of Rs 52/SCM (dated August 2026) plus this Rs 1 increase. Fixed/meter charge is deliberately modelled as Rs 0, NOT verified: one secondary calculator claims a flat Rs 50/billing-period charge, while MGL's own billing documentation (via Scribd-hosted customer guides) describes a minimum-consumption GUARANTEE instead (a Rs 100 bimonthly shortfall charge only if consumption falls below that threshold) — a structurally different mechanism this schema's flat fixedCharge field cannot represent. Estimates from this file run low for very low-consumption households as a result. MGL's own rate-card page (mahanagargas.com) returned HTTP 403/404 on both direct fetch and a cached retrieval attempt; pending a direct primary-source re-check."
+}

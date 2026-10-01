@@ -13,7 +13,7 @@
     },
     {
       "region": "Mumbai",
-      "cgds": [{ "slug": "mahanagar-gas", "code": "MGL", "name": "Mahanagar Gas Limited", "hasTariffFile": false }]
+      "cgds": [{ "slug": "mahanagar-gas", "code": "MGL", "name": "Mahanagar Gas Limited", "hasTariffFile": true }]
     },
     {
       "region": "Gujarat / parts of Punjab, Rajasthan, Haryana",
