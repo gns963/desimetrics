@@ -211,6 +211,7 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
       '/news/kerala-power-shortage-september-2026',
       '/news/power-surge-damaged-appliances-tamil-nadu',
       '/news/gerc-liquidated-damages-wind-solar-gujarat',
+      '/news/supreme-court-traffic-challans-electricity-bills',
       '/privacy',
       '/solar',
       '/solar/battery-backup-calculator',

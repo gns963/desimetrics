@@ -52,7 +52,7 @@ const posts: NewsPost[] = [
     tag: 'राष्ट्रीय · सुप्रीम कोर्ट',
     href: '/hi/news/supreme-court-traffic-challans-electricity-bills',
     date: '1 अक्टूबर 2026',
-    live: false,
+    live: true,
   },
 ]
 
