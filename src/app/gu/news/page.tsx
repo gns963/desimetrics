@@ -33,6 +33,13 @@ const posts: NewsPost[] = [
     date: '30 સપ્ટેમ્બર 2026',
     live: true,
   },
+  {
+    title: 'ગુજરાતમાં ઓપન એક્સેસ એડિશનલ સરચાર્જ ₹0.99/kWh નક્કી: વ્યવસાયો માટે તેનો શું અર્થ',
+    tag: 'ગુજરાત · GERC · ઓપન એક્સેસ',
+    href: '/gu/news/gerc-additional-surcharge-open-access-gujarat',
+    date: '1 ઓક્ટોબર 2026',
+    live: false,
+  },
 ]
 
 const breadcrumb = breadcrumbLd([

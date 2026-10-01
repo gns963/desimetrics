@@ -54,6 +54,13 @@ const posts: NewsPost[] = [
     date: '1 October 2026',
     live: true,
   },
+  {
+    title: 'Gujarat Sets Open Access Additional Surcharge at ₹0.99/kWh: What It Means for Businesses',
+    tag: 'Gujarat · GERC · Open Access',
+    href: '/news/gerc-additional-surcharge-open-access-gujarat',
+    date: '1 October 2026',
+    live: false,
+  },
 ]
 
 const breadcrumb = breadcrumbLd([

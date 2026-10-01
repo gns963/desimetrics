@@ -54,6 +54,13 @@ const posts: NewsPost[] = [
     date: '1 अक्टूबर 2026',
     live: true,
   },
+  {
+    title: 'गुजरात ओपन एक्सेस एडिशनल सरचार्ज ₹0.99/kWh तय: कारोबारियों के लिए इसका क्या मतलब है',
+    tag: 'गुजरात · GERC · ओपन एक्सेस',
+    href: '/hi/news/gerc-additional-surcharge-open-access-gujarat',
+    date: '1 अक्टूबर 2026',
+    live: false,
+  },
 ]
 
 const breadcrumb = breadcrumbLd([
