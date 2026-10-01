@@ -98,6 +98,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/news/power-surge-damaged-appliances-tamil-nadu', 0.6, 'weekly'),
     entry('/news/gerc-liquidated-damages-wind-solar-gujarat', 0.6, 'weekly'),
     entry('/news/supreme-court-traffic-challans-electricity-bills', 0.6, 'weekly'),
+    entry('/news/gerc-additional-surcharge-open-access-gujarat', 0.6, 'weekly'),
     entry('/fuel-cost', 0.8),
     entry('/fuel-cost/petrol-diesel-cost-per-km-calculator', 0.9),
     entry('/fuel-cost/lpg-cylinder-usage-calculator', 0.9),
@@ -157,6 +158,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/hi/news/power-surge-damaged-appliances-tamil-nadu', 0.5, 'weekly'),
     entry('/hi/news/gerc-liquidated-damages-wind-solar-gujarat', 0.5, 'weekly'),
     entry('/hi/news/supreme-court-traffic-challans-electricity-bills', 0.5, 'weekly'),
+    entry('/hi/news/gerc-additional-surcharge-open-access-gujarat', 0.5, 'weekly'),
     entry('/hi/fuel-cost', 0.7),
     entry('/hi/fuel-cost/petrol-diesel-cost-per-km-calculator', 0.8),
     entry('/hi/fuel-cost/lpg-cylinder-usage-calculator', 0.8),
@@ -204,6 +206,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const guNews = [
     entry('/gu/news', 0.6, 'weekly'),
     entry('/gu/news/gerc-liquidated-damages-wind-solar-gujarat', 0.5, 'weekly'),
+    entry('/gu/news/gerc-additional-surcharge-open-access-gujarat', 0.5, 'weekly'),
   ]
   const electricityMl = allCalculatorSlugs
     .filter((slug) => getCalculatorPage(slug)?.translations?.ml)

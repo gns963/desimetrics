@@ -38,7 +38,7 @@ const posts: NewsPost[] = [
     tag: 'ગુજરાત · GERC · ઓપન એક્સેસ',
     href: '/gu/news/gerc-additional-surcharge-open-access-gujarat',
     date: '1 ઓક્ટોબર 2026',
-    live: false,
+    live: true,
   },
 ]
 
