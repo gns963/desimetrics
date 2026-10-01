@@ -342,6 +342,209 @@ export default function GasCompanyPage({
         </p>
       </section>
 
+      <section aria-labelledby="bill-breakdown" className="mb-10 scroll-mt-20">
+        <h2 id="bill-breakdown" className="font-display mb-2 text-2xl font-semibold">
+          {hi ? 'आपके PNG बिल पर क्या-क्या होता है' : "What's on your PNG bill, line by line"}
+        </h2>
+        <ul className="mt-2 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-gas" aria-hidden>
+              ✓
+            </span>
+            <span>
+              {hi ? (
+                <>
+                  <strong className="text-ink-navy">वॉल्यूमेट्रिक चार्ज</strong> — आपकी
+                  असली खपत: SCM में इस्तेमाल × आपकी ₹/SCM दर। यह बिल का बड़ा, बदलता
+                  हिस्सा है, और ऊपर का कैलकुलेटर इसी की गणना करता है।
+                </>
+              ) : (
+                <>
+                  <strong className="text-ink-navy">Volumetric charge</strong> — your
+                  actual consumption: SCM used × your ₹/SCM rate. This is the large,
+                  variable part of the bill, and what the calculator above computes.
+                </>
+              )}
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-gas" aria-hidden>
+              ✓
+            </span>
+            <span>
+              {hi ? (
+                <>
+                  <strong className="text-ink-navy">फिक्स्ड / मीटर चार्ज</strong> — आपकी
+                  खपत चाहे जो भी हो, पाइपलाइन कनेक्शन, मीटर और बिलिंग इंफ्रास्ट्रक्चर
+                  बनाए रखने की CGD की लागत कवर करने के लिए लगाया जाता है — बिजली
+                  कनेक्शन के फिक्स्ड चार्ज जैसा।
+                </>
+              ) : (
+                <>
+                  <strong className="text-ink-navy">Fixed / meter charge</strong> —
+                  levied regardless of consumption, covering the CGD&apos;s cost of
+                  maintaining the pipeline connection, meter and billing
+                  infrastructure, much like an electricity connection&apos;s fixed
+                  charge.
+                </>
+              )}
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-gas" aria-hidden>
+              ✓
+            </span>
+            <span>
+              {hi ? (
+                <>
+                  <strong className="text-ink-navy">टैक्स और सेस</strong> — लागू होने पर,
+                  राज्य या स्थानीय टैक्स आपकी वॉल्यूमेट्रिक और फिक्स्ड दोनों राशियों के
+                  ऊपर जुड़ सकते हैं।
+                </>
+              ) : (
+                <>
+                  <strong className="text-ink-navy">Taxes and cess</strong> — where
+                  applicable, state or local taxes can apply on top of both the
+                  volumetric and fixed amounts.
+                </>
+              )}
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 text-sm text-ash/60">
+          {hi
+            ? `सटीक लाइन आइटम और उनके नाम ${companyName} के बिल फॉर्मैट पर निर्भर करते हैं — ऊपर दी गई संरचना सभी CGD पर आम तौर पर लागू होती है।`
+            : `The exact line items and their names depend on ${companyName}'s bill format — the structure above applies broadly across CGDs.`}
+        </p>
+      </section>
+
+      <section aria-labelledby="why-switch" className="mb-10 scroll-mt-20">
+        <h2 id="why-switch" className="font-display mb-2 text-2xl font-semibold">
+          {hi ? 'घर LPG से PNG पर क्यों स्विच करते हैं' : 'Why households switch from LPG to PNG'}
+        </h2>
+        <ul className="mt-2 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-gas" aria-hidden>
+              →
+            </span>
+            <span>
+              {hi
+                ? 'सिलेंडर बुक करने, डिलीवरी का इंतज़ार करने या स्टोर करने की ज़रूरत नहीं — गैस लगातार पाइपलाइन से आती है।'
+                : "No booking a cylinder, waiting for delivery, or storing one — gas arrives continuously through the pipeline."}
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-gas" aria-hidden>
+              →
+            </span>
+            <span>
+              {hi
+                ? 'खाना पकाते वक्त गैस खत्म होने का जोखिम नहीं रहता, क्योंकि कोई फिक्स्ड सिलेंडर साइज़ नहीं है जिसे ट्रैक करना पड़े।'
+                : 'No risk of running out mid-cook, since there is no fixed cylinder size to track.'}
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-gas" aria-hidden>
+              →
+            </span>
+            <span>
+              {hi
+                ? 'आप उतना ही चुकाते हैं जितना असल में इस्तेमाल करते हैं (मीटर्ड बिलिंग), एक सिलेंडर की फिक्स्ड कीमत के बजाय जो आपने कम इस्तेमाल की हो तो भी पूरी चुकानी पड़ती।'
+                : 'You pay for exactly what you use (metered billing), rather than a cylinder\'s fixed price regardless of how little of it you actually consumed.'}
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              {hi ? (
+                <>
+                  पर यह हर जगह उपलब्ध नहीं है — PNG सिर्फ उन इलाकों में मिलती है जहां{' '}
+                  {companyName} की पाइपलाइन पहुंच चुकी है, जबकि LPG सिलेंडर लगभग कहीं भी
+                  डिलीवर हो जाता है। अपने इलाके में कवरेज की पुष्टि करने के लिए{' '}
+                  {companyName} से संपर्क करें।
+                </>
+              ) : (
+                <>
+                  But it isn&apos;t available everywhere — PNG only reaches areas where{' '}
+                  {companyName}&apos;s pipeline network has been built out, while an LPG
+                  cylinder can be delivered almost anywhere. Confirm coverage in your
+                  area directly with {companyName}.
+                </>
+              )}
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="new-connection" className="mb-10 scroll-mt-20">
+        <h2 id="new-connection" className="font-display mb-2 text-2xl font-semibold">
+          {hi ? 'नया PNG कनेक्शन लेना' : 'Getting a new PNG connection'}
+        </h2>
+        <p className="text-ash/80">
+          {hi ? (
+            <>
+              अलग-अलग CGD के बीच विवरण भिन्न होते हैं, पर सामान्य प्रक्रिया आम तौर पर
+              एक जैसी रहती है: ऑनलाइन या अपने नज़दीकी {companyName} ऑफिस में आवेदन
+              करें, पहचान और पते का प्रमाण जमा करें, और एक रिफंडेबल सिक्योरिटी
+              डिपॉज़िट चुकाएं। इसके बाद CGD आपकी रसोई तक आंतरिक पाइपिंग का सर्वे और
+              इंस्टॉलेशन करती है। एक बार कनेक्ट होने के बाद, आपको सिलेंडर स्टोर करने
+              या रीफिल बुक करने की ज़रूरत नहीं रहती — गैस सीधे पाइपलाइन से लगातार आती
+              है।
+            </>
+          ) : (
+            <>
+              Details differ between CGDs, but the general process is broadly
+              similar: apply online or at your nearest {companyName} office,
+              submit identity and address proof, and pay a refundable security
+              deposit. The CGD then surveys and installs internal piping up to
+              your kitchen. Once connected, you don&apos;t need to store cylinders
+              or book refills — gas arrives continuously through the pipeline.
+            </>
+          )}
+        </p>
+        <p className="mt-3 text-sm text-ash/60">
+          {hi
+            ? `सटीक दस्तावेज़ों की सूची, डिपॉज़िट राशि और समय-सीमा ${companyName} से सीधे जांचें — ये CGD और शहर के हिसाब से अलग होते हैं और समय के साथ बदलते हैं।`
+            : `Check the exact document list, deposit amount and timeline directly with ${companyName} — these vary by CGD and city, and change over time.`}
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="gas-smell"
+        className="mb-10 scroll-mt-20 rounded-xl border border-caution-amber/25 bg-caution-amber/5 p-5"
+      >
+        <h2 id="gas-smell" className="font-display mb-2 text-xl font-bold text-ink-navy">
+          {hi ? 'अगर आपको गैस की गंध आए तो क्या करें' : 'If you smell gas'}
+        </h2>
+        <ol className="space-y-2 text-sm text-ash/80">
+          {(hi
+            ? [
+                'कोई भी बिजली का स्विच, लाइटर या खुली आंच इस्तेमाल न करें — एक छोटी सी चिंगारी भी काफी है।',
+                'अगर आसानी से पहुंच हो तो मेन गैस सप्लाई वॉल्व बंद करें।',
+                'दरवाज़े और खिड़कियां खोलकर जगह को हवादार बनाएं।',
+                'घर/परिसर से बाहर निकलें और बाहर से ही अपने CGD की इमरजेंसी हेल्पलाइन पर कॉल करें — यह नंबर आपके बिल या प्रोवाइडर के ऐप पर है।',
+                'खुद लीक ठीक करने की कोशिश न करें — हमेशा प्रशिक्षित तकनीशियन का इंतज़ार करें।',
+              ]
+            : [
+                "Don't operate any electrical switch, lighter or open flame — even a small spark is enough.",
+                'If it is easily accessible, turn off the main gas supply valve.',
+                'Ventilate the space by opening doors and windows.',
+                "Leave the home/premises and call your CGD's emergency helpline from outside — the number is on your bill or the provider's app.",
+                "Don't attempt to fix the leak yourself — always wait for a trained technician.",
+              ]
+          ).map((step, i) => (
+            <li key={i} className="flex gap-3">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-caution-amber font-display text-xs font-bold text-white">
+                {i + 1}
+              </span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       <section aria-labelledby="related" className="mb-10">
         <h2 id="related" className="font-display mb-4 text-2xl font-semibold">
           {hi ? 'जुड़े हुए कैलकुलेटर' : 'Related calculators'}
