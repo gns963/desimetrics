@@ -30,6 +30,27 @@ const REFERENCE_APPLIANCES = [
   ['Mixer/grinder', '300–750 W'],
 ]
 
+/** Same appliances, typical usage pattern, run through the real engine so the
+ *  "does usage pattern matter more than wattage" point is a computed fact. */
+const USAGE_SCENARIOS = [
+  { name: 'LED bulb', watts: 10, hours: 5 },
+  { name: 'Laptop', watts: 55, hours: 6 },
+  { name: 'Washing machine', watts: 500, hours: 0.5 },
+  { name: 'Water heater (geyser)', watts: 2000, hours: 0.5 },
+].map((a) => ({
+  ...a,
+  ...simpleApplianceCost({ discomCode: 'TNEB', wattage: a.watts, hoursPerDay: a.hours }),
+}))
+
+/** Standby/phantom draw: a device left plugged in at a small constant watts
+ *  figure, summed over a full month, at the same marginal rate. */
+const PHANTOM_WATTS = 5
+const phantomCost = simpleApplianceCost({
+  discomCode: 'TNEB',
+  wattage: PHANTOM_WATTS,
+  hoursPerDay: 24,
+})
+
 export const metadata: Metadata = {
   title: 'Appliance Electricity Cost Calculator 2026 — Any Appliance (India)',
   description:
@@ -135,6 +156,263 @@ export default function GenericApplianceCostPage() {
           Calculate your appliance&apos;s cost
         </h2>
         <GenericApplianceCostCalculator discoms={liveDiscoms} />
+      </section>
+
+      <section aria-labelledby="how-it-works" className="mb-10">
+        <h2 id="how-it-works" className="font-display mb-4 text-2xl font-semibold">
+          How the calculation works
+        </h2>
+        <p className="text-ash/80">
+          Three steps, all of which you can check with a phone calculator:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Units = watts × hours ÷ 1000</strong> —
+              one unit on your bill is one kilowatt sustained for one hour. A{' '}
+              {example.wattage}W appliance run {example.hoursPerDay} hours a day uses{' '}
+              {example.dailyUnits} units that day.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">A month is roughly 30 days</strong> — so
+              the monthly figure is the daily units scaled up: {example.monthlyUnits} units
+              a month for that same appliance.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Priced at your marginal rate</strong> —
+              not your average rate. Indian residential tariffs are telescopic, so
+              whatever you add on top of your existing usage lands on your highest slab.
+              That rate already includes the fuel cost adjustment and electricity duty.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: the whole calculation is two multiplications and a tariff lookup —
+          nothing here is a black box.
+        </p>
+      </section>
+
+      <section aria-labelledby="wattage-vs-hours" className="mb-10">
+        <h2 id="wattage-vs-hours" className="font-display mb-4 text-2xl font-semibold">
+          Wattage decides the rate, hours decide the bill
+        </h2>
+        <p className="text-ash/80">
+          A high-wattage appliance used briefly can cost less than a low-wattage one left
+          running all day. Units are watts <em>times</em> hours, so usage pattern matters
+          as much as the number printed on the appliance:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">Appliance</th>
+                <th className="px-4 py-2 text-right font-semibold">Wattage</th>
+                <th className="px-4 py-2 text-right font-semibold">Typical use</th>
+                <th className="px-4 py-2 text-right font-semibold">Units/month</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {USAGE_SCENARIOS.map((s) => (
+                <tr key={s.name}>
+                  <td className="px-4 py-2 font-medium">{s.name}</td>
+                  <td className="px-4 py-2 text-right tabular-nums text-ash/70">
+                    {s.watts}W
+                  </td>
+                  <td className="px-4 py-2 text-right tabular-nums text-ash/70">
+                    {s.hours}h/day
+                  </td>
+                  <td className="px-4 py-2 text-right font-display font-bold tabular-nums text-ink-navy">
+                    {s.monthlyUnits}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-ash/50">
+          All rows priced at TNEB&apos;s marginal rate for illustration — use the
+          calculator above with your own DISCOM.
+        </p>
+        <p className="mt-3 text-ash/80">
+          Notice the <strong>2000W water heater</strong> run half an hour a day uses more
+          than the <strong>10W bulb</strong> run five hours a day, but not by as much as
+          the wattage gap alone suggests — because the bulb&apos;s hours partly make up
+          for its lower draw. This is why a wattage figure alone, without hours, tells you
+          very little.
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: always multiply by hours before comparing two appliances — wattage
+          alone is not a cost ranking.
+        </p>
+      </section>
+
+      <section aria-labelledby="standby" className="mb-10">
+        <h2 id="standby" className="font-display mb-4 text-2xl font-semibold">
+          The cost of devices you never switch off
+        </h2>
+        <p className="text-ash/80">
+          Phones, set-top boxes, routers, chargers left plugged in, and appliances with a
+          standby light all draw a small current around the clock. A single device drawing
+          a steady {PHANTOM_WATTS}W, 24 hours a day, every day of the month, comes to{' '}
+          {phantomCost.monthlyUnits} units — and a typical home has several such devices
+          running simultaneously, not one.
+        </p>
+        <p className="mt-3 text-ash/80">
+          Unlike a washing machine or geyser, standby draw is invisible in daily life —
+          nobody notices a router that is always on, because it is supposed to always be
+          on. That is exactly why it is worth checking: it is the one category of load this
+          calculator can price but that you cannot time with a stopwatch, since the
+          &ldquo;hours per day&rdquo; is simply 24. Our{' '}
+          <Link href="/appliances/phantom-load-checker" className="text-brass underline">
+            phantom load checker
+          </Link>{' '}
+          is built specifically for tallying several such devices at once.
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: small wattage multiplied by 720 hours a month is not negligible —
+          check what is always plugged in, not just what you turn on.
+        </p>
+      </section>
+
+      <section aria-labelledby="mistakes" className="mb-10">
+        <h2 id="mistakes" className="font-display mb-4 text-2xl font-semibold">
+          Mistakes that throw the number off
+        </h2>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">Reading VA instead of W</strong> — some
+              labels print apparent power (volt-amps) rather than real power (watts). For
+              a purely resistive appliance (a heater, an iron) the two are close; for a
+              motor or electronics they can differ meaningfully.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">Using the rated maximum, not typical draw</strong>{' '}
+              — a kettle or iron cycles its heating element on and off once it reaches
+              temperature; its nameplate wattage is the peak, not the sustained average.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">Entering hours switched on rather than hours actually drawing power</strong>{' '}
+              — a washing machine running a 45-minute cycle is not drawing its full
+              wattage for the whole 45 minutes; a TV left on mute while you leave the room
+              still counts as on.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">Treating units as rupees</strong> — this
+              tool&apos;s output is kWh; the ₹ figure comes from multiplying by your
+              DISCOM&apos;s marginal rate, which the calculator does for you.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: a wrong wattage or wrong hours figure is the usual cause of a result
+          that looks off — not the formula.
+        </p>
+      </section>
+
+      <section aria-labelledby="when-dedicated" className="mb-10">
+        <h2 id="when-dedicated" className="font-display mb-4 text-2xl font-semibold">
+          When a dedicated calculator gives a better answer
+        </h2>
+        <p className="text-ash/80">
+          This tool treats every appliance as a constant wattage for however many hours
+          you enter, which is accurate for simple resistive loads but understates or
+          overstates a few categories with their own behaviour:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">Air conditioners</strong> cycle their
+              compressor on and off rather than running flat out — our{' '}
+              <Link href="/ac/bill-calculator" className="text-brass underline">
+                AC running cost calculator
+              </Link>{' '}
+              models that duty cycle from tonnage and star rating instead of a flat
+              wattage.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">Refrigerators</strong> run continuously
+              but cycle their compressor too, and the BEE label already states an annual
+              kWh figure measured in a lab — our{' '}
+              <Link href="/appliances/fridge-cost-calculator" className="text-brass underline">
+                fridge cost calculator
+              </Link>{' '}
+              uses that label figure directly rather than a wattage guess.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">Ceiling fans</strong> have their own
+              calculator with speed-setting presets, since running one at a lower speed
+              draws noticeably less than nameplate wattage — see our{' '}
+              <Link href="/appliances/ceiling-fan-cost-calculator" className="text-brass underline">
+                ceiling fan cost calculator
+              </Link>
+              .
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">EV charging</strong> is a much larger,
+              sustained load with its own charger-efficiency considerations — handled by
+              our{' '}
+              <Link href="/electricity/ev-charging-cost-calculator" className="text-brass underline">
+                EV charging cost calculator
+              </Link>
+              .
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: use this tool for everything without a dedicated calculator — irons,
+          mixers, washing machines, routers, chargers, lighting — and the specialised
+          tools where one exists.
+        </p>
       </section>
 
       <section aria-labelledby="reference" className="mb-10">

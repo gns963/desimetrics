@@ -19,6 +19,23 @@ const liveDiscoms = discomsJson.states.flatMap((s) =>
 
 const example = simpleApplianceCost({ discomCode: 'TNEB', wattage: 100, hoursPerDay: 4 })
 
+const USAGE_SCENARIOS = [
+  { name: 'LED बल्ब', watts: 10, hours: 5 },
+  { name: 'लैपटॉप', watts: 55, hours: 6 },
+  { name: 'वॉशिंग मशीन', watts: 500, hours: 0.5 },
+  { name: 'पानी गर्म करने वाला (गीज़र)', watts: 2000, hours: 0.5 },
+].map((a) => ({
+  ...a,
+  ...simpleApplianceCost({ discomCode: 'TNEB', wattage: a.watts, hoursPerDay: a.hours }),
+}))
+
+const PHANTOM_WATTS = 5
+const phantomCost = simpleApplianceCost({
+  discomCode: 'TNEB',
+  wattage: PHANTOM_WATTS,
+  hoursPerDay: 24,
+})
+
 const REFERENCE_APPLIANCES = [
   ['LED बल्ब', '5–15 W'],
   ['लैपटॉप', '40–65 W'],
@@ -153,6 +170,259 @@ export default function GenericApplianceCostPageHi() {
           अपने उपकरण का खर्च निकालें
         </h2>
         <GenericApplianceCostCalculator discoms={liveDiscoms} texts={genericApplianceTextsHi} />
+      </section>
+
+      <section aria-labelledby="how-it-works" className="mb-10">
+        <h2 id="how-it-works" className="font-display mb-4 text-2xl font-semibold">
+          गणना कैसे होती है
+        </h2>
+        <p className="text-ash/80">तीन चरण, जिन्हें आप फोन कैलकुलेटर से जांच सकते हैं:</p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">यूनिट = वॉट × घंटे ÷ 1000</strong> — बिल
+              पर एक यूनिट मतलब एक किलोवाट को एक घंटे तक चलाना। {example.wattage}W का
+              उपकरण {example.hoursPerDay} घंटे/दिन चलने पर उस दिन{' '}
+              {example.dailyUnits} यूनिट इस्तेमाल करता है।
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">महीना लगभग 30 दिन का</strong> — तो
+              मासिक आंकड़ा रोज़ के यूनिट को 30 से गुणा करके मिलता है: उसी उपकरण के लिए{' '}
+              {example.monthlyUnits} यूनिट/महीना।
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">आपकी मार्जिनल दर पर कीमत</strong> —
+              औसत दर पर नहीं। भारतीय घरेलू टैरिफ टेलिस्कोपिक हैं, इसलिए आपकी मौजूदा
+              खपत के ऊपर जो भी जुड़ता है वह आपके सबसे ऊंचे स्लैब पर बिल होता है — इस दर
+              में फ्यूल कॉस्ट एडजस्टमेंट और बिजली शुल्क पहले से शामिल हैं।
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          निष्कर्ष: पूरी गणना दो गुणा और एक टैरिफ लुकअप है — यहां कुछ भी छिपा हुआ नहीं है।
+        </p>
+      </section>
+
+      <section aria-labelledby="wattage-vs-hours" className="mb-10">
+        <h2 id="wattage-vs-hours" className="font-display mb-4 text-2xl font-semibold">
+          वॉटेज दर तय करती है, घंटे बिल तय करते हैं
+        </h2>
+        <p className="text-ash/80">
+          थोड़ी देर चलने वाला ज़्यादा वॉट का उपकरण, पूरे दिन चलने वाले कम वॉट के उपकरण
+          से सस्ता पड़ सकता है। यूनिट वॉट <em>गुणा</em> घंटे होते हैं, इसलिए इस्तेमाल
+          का तरीका उतना ही मायने रखता है जितना उपकरण पर छपा आंकड़ा:
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">उपकरण</th>
+                <th className="px-4 py-2 text-right font-semibold">वॉटेज</th>
+                <th className="px-4 py-2 text-right font-semibold">सामान्य इस्तेमाल</th>
+                <th className="px-4 py-2 text-right font-semibold">यूनिट/महीना</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {USAGE_SCENARIOS.map((s) => (
+                <tr key={s.name}>
+                  <td className="px-4 py-2 font-medium">{s.name}</td>
+                  <td className="px-4 py-2 text-right tabular-nums text-ash/70">
+                    {s.watts}W
+                  </td>
+                  <td className="px-4 py-2 text-right tabular-nums text-ash/70">
+                    {s.hours}घं/दिन
+                  </td>
+                  <td className="px-4 py-2 text-right font-display font-bold tabular-nums text-ink-navy">
+                    {s.monthlyUnits}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-ash/50">
+          सभी पंक्तियां उदाहरण के लिए TNEB की मार्जिनल दर पर — अपनी असल DISCOM के लिए
+          ऊपर का कैलकुलेटर इस्तेमाल करें।
+        </p>
+        <p className="mt-3 text-ash/80">
+          ध्यान दें कि आधे घंटे चलने वाला <strong>2000W गीज़र</strong>, पांच घंटे चलने
+          वाले <strong>10W बल्ब</strong> से ज़्यादा इस्तेमाल करता है, पर उतना ज़्यादा
+          नहीं जितना सिर्फ वॉटेज का अंतर बताता है — क्योंकि बल्ब के ज़्यादा घंटे उसकी
+          कम वॉटेज की कुछ हद तक भरपाई कर देते हैं। यही वजह है कि सिर्फ वॉटेज, बिना
+          घंटों के, बहुत कम बताता है।
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          निष्कर्ष: दो उपकरणों की तुलना से पहले हमेशा घंटों से गुणा करें — अकेली वॉटेज
+          कोई लागत रैंकिंग नहीं है।
+        </p>
+      </section>
+
+      <section aria-labelledby="standby" className="mb-10">
+        <h2 id="standby" className="font-display mb-4 text-2xl font-semibold">
+          जो उपकरण कभी बंद नहीं होते, उनकी कीमत
+        </h2>
+        <p className="text-ash/80">
+          फोन, सेट-टॉप बॉक्स, राउटर, लगे हुए चार्जर, और स्टैंडबाय लाइट वाले उपकरण —
+          ये सब चौबीसों घंटे थोड़ी करंट खींचते रहते हैं। एक उपकरण जो लगातार{' '}
+          {PHANTOM_WATTS}W खींचता है, दिन के 24 घंटे, महीने भर, वह{' '}
+          {phantomCost.monthlyUnits} यूनिट बनता है — और एक सामान्य घर में एक नहीं,
+          ऐसे कई उपकरण एक साथ चलते रहते हैं।
+        </p>
+        <p className="mt-3 text-ash/80">
+          वॉशिंग मशीन या गीज़र के उलट, स्टैंडबाय खपत रोज़मर्रा में दिखती नहीं — कोई भी
+          हमेशा ऑन रहने वाले राउटर पर ध्यान नहीं देता, क्योंकि उसे हमेशा ऑन ही रहना है।
+          इसीलिए इसे जांचना ज़रूरी है: यह इकलौती ऐसी खपत है जिसे यह कैलकुलेटर तो आंक
+          सकता है, पर जिसे आप स्टॉपवॉच से नहीं नाप सकते, क्योंकि &ldquo;घंटे/दिन&rdquo;
+          यहां सीधे 24 है। हमारा{' '}
+          <Link href="/hi/appliances/phantom-load-checker" className="text-brass underline">
+            फैंटम लोड चेकर
+          </Link>{' '}
+          खासतौर पर ऐसे कई उपकरणों को एक साथ जोड़ने के लिए बनाया गया है।
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          निष्कर्ष: छोटी वॉटेज को महीने के 720 घंटों से गुणा करना नगण्य नहीं होता —
+          देखें कि हमेशा क्या प्लग में लगा है, सिर्फ यह नहीं कि आप क्या ऑन करते हैं।
+        </p>
+      </section>
+
+      <section aria-labelledby="mistakes" className="mb-10">
+        <h2 id="mistakes" className="font-display mb-4 text-2xl font-semibold">
+          वे गलतियां जो आंकड़ा बिगाड़ देती हैं
+        </h2>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">W की बजाय VA पढ़ना</strong> — कुछ
+              लेबल वॉट की बजाय एपेरेंट पावर (वोल्ट-एम्पीयर) छापते हैं। हीटर या आयरन
+              जैसे शुद्ध रेसिस्टिव उपकरण में दोनों करीब होते हैं; मोटर या
+              इलेक्ट्रॉनिक्स में इनमें असली फर्क हो सकता है।
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">रेटेड अधिकतम को सामान्य खपत मानना</strong>{' '}
+              — केतली या आयरन तापमान पहुंचने के बाद अपना हीटिंग एलिमेंट बार-बार
+              ऑन-ऑफ करता है; नेमप्लेट वॉटेज उसका पीक है, लगातार औसत नहीं।
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">चालू रहने के घंटे बनाम असल पावर खींचने के घंटे</strong>{' '}
+              — 45 मिनट का वॉशिंग साइकल पूरे 45 मिनट अपनी पूरी वॉटेज नहीं खींचता; वहीं
+              म्यूट पर चलता टीवी भी &ldquo;ऑन&rdquo; गिना जाता है।
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">यूनिट को रुपये मान लेना</strong> — इस
+              टूल का आउटपुट kWh है; ₹ आंकड़ा आपकी DISCOM की मार्जिनल दर से गुणा करने
+              पर आता है, जो कैलकुलेटर खुद कर देता है।
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          निष्कर्ष: अजीब लगने वाला नतीजा आमतौर पर गलत वॉटेज या गलत घंटों की वजह से
+          होता है — फॉर्मूला की गलती से नहीं।
+        </p>
+      </section>
+
+      <section aria-labelledby="when-dedicated" className="mb-10">
+        <h2 id="when-dedicated" className="font-display mb-4 text-2xl font-semibold">
+          कब कोई डेडिकेटेड कैलकुलेटर बेहतर जवाब देता है
+        </h2>
+        <p className="text-ash/80">
+          यह टूल हर उपकरण को आपके डाले घंटों तक एक स्थिर वॉटेज मानकर चलता है, जो
+          साधारण रेसिस्टिव लोड के लिए सही है, पर कुछ श्रेणियों के अपने व्यवहार को
+          कम या ज़्यादा आंक सकता है:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">एयर कंडीशनर</strong> पूरी क्षमता पर
+              लगातार नहीं, बल्कि कंप्रेसर को ऑन-ऑफ करते हैं — हमारा{' '}
+              <Link href="/hi/ac/bill-calculator" className="text-brass underline">
+                AC रनिंग कॉस्ट कैलकुलेटर
+              </Link>{' '}
+              उस ड्यूटी साइकल को टनेज और स्टार रेटिंग से मॉडल करता है, न कि एक
+              स्थिर वॉटेज से।
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">रेफ्रिजरेटर</strong> लगातार चलते हैं
+              पर उनका कंप्रेसर भी ऑन-ऑफ होता है, और BEE लेबल पर पहले से एक सालाना
+              kWh आंकड़ा छपा होता है — हमारा{' '}
+              <Link href="/hi/appliances/fridge-cost-calculator" className="text-brass underline">
+                फ्रिज कॉस्ट कैलकुलेटर
+              </Link>{' '}
+              वॉटेज के अंदाज़े की बजाय सीधे वही लेबल आंकड़ा इस्तेमाल करता है।
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">सीलिंग फैन</strong> का अपना
+              कैलकुलेटर स्पीड-सेटिंग प्रीसेट के साथ है, क्योंकि कम स्पीड पर चलाने पर
+              नेमप्लेट वॉटेज से काफी कम खपत होती है — देखें हमारा{' '}
+              <Link href="/hi/appliances/ceiling-fan-cost-calculator" className="text-brass underline">
+                सीलिंग फैन कॉस्ट कैलकुलेटर
+              </Link>
+              ।
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-electricity" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">EV चार्जिंग</strong> कहीं बड़ा,
+              लगातार चलने वाला लोड है जिसमें चार्जर की दक्षता भी जुड़ी होती है —
+              इसे हमारा{' '}
+              <Link href="/hi/electricity/ev-charging-cost-calculator" className="text-brass underline">
+                EV चार्जिंग कॉस्ट कैलकुलेटर
+              </Link>{' '}
+              संभालता है।
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          निष्कर्ष: बिना डेडिकेटेड कैलकुलेटर वाली हर चीज़ के लिए यह टूल इस्तेमाल करें
+          — आयरन, मिक्सर, वॉशिंग मशीन, राउटर, चार्जर, लाइटिंग — और जहां स्पेशलाइज़्ड
+          टूल मौजूद है वहां उसे।
+        </p>
       </section>
 
       <section aria-labelledby="reference" className="mb-10">

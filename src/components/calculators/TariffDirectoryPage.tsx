@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import type { DiscomPageConfig } from '@/data/calculator-pages'
 import type { ConnectionCategory, ConnectionType, TariffFile } from '@/data/tariffs/_schema'
-import { cycleLabel, fixedChargeLabel, formatIsoDate } from '@/lib/format'
+import { calculateFullBill } from '@/lib/calc/electricity'
+import { cycleLabel, fixedChargeLabel, formatIsoDate, formatINR } from '@/lib/format'
 
 const SITE = 'https://desimetrics.com'
 
@@ -64,6 +65,33 @@ export default function TariffDirectoryPage({
     tariff.connectionTypes.find((c) => c.connectionType === 'residential') ??
     tariff.connectionTypes[0]
   const oneUnitRate = residential.slabs[0].ratePerUnit
+  const residentialFlat = isFlatRate(residential)
+  const residentialTopRate = residential.slabs[residential.slabs.length - 1].ratePerUnit
+
+  // Cross-category first-slab rate, for the DISCOMs that publish more than one
+  // category — a genuine per-DISCOM comparison, not filler, since which
+  // categories exist and how their first rate compares both vary by DISCOM.
+  const categoryFirstRates = categories.map((c) => ({
+    category: c.connectionType,
+    firstRate: c.slabs[0].ratePerUnit,
+    flat: isFlatRate(c),
+  }))
+  const residentialVsOthers = categoryFirstRates.filter((c) => c.category !== 'residential')
+
+  // Worked example at a representative consumption, computed from the same
+  // engine the bill calculator uses — never asserted from memory.
+  const WORKED_UNITS = 200
+  let workedBill: ReturnType<typeof calculateFullBill> | null = null
+  try {
+    workedBill = calculateFullBill({
+      discomCode: config.discomCode,
+      connectionType: 'residential',
+      unitsConsumed: WORKED_UNITS,
+      sanctionedLoad: 2,
+    })
+  } catch {
+    workedBill = null
+  }
 
   const breadcrumbLd = {
     '@context': 'https://schema.org',
@@ -369,6 +397,186 @@ export default function TariffDirectoryPage({
                 {tariff.discomCode} electricity bill calculator
               </Link>
               .
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-ash">
+              {residentialFlat ? 'A flat rate, not a slab structure' : 'Why the rate is not one number'}
+            </h3>
+            {residentialFlat ? (
+              <p className="mt-1">
+                Unlike most Indian DISCOMs, {tariff.discomCode} bills domestic consumers a
+                single flat rate of ₹{oneUnitRate.toFixed(2)}/unit regardless of how much
+                you consume, rather than a telescopic slab structure. There is no
+                incentive built into the tariff itself to reduce consumption — the per-unit
+                price is the same at 50 units and at 500.
+              </p>
+            ) : (
+              <p className="mt-1">
+                {tariff.discomCode}&apos;s domestic tariff is <strong>telescopic</strong>:
+                each unit you consume is billed at the rate of the slab it falls into, not
+                a single rate applied to your whole bill. Your rate rises from
+                ₹{oneUnitRate.toFixed(2)}/unit at the first slab to
+                ₹{residentialTopRate.toFixed(2)}/unit at the top — so your 50th unit and
+                your 400th unit genuinely cost different amounts, and a bigger household
+                does not just pay &ldquo;more of the same rate&rdquo;, it pays a higher
+                rate on the extra units.
+              </p>
+            )}
+          </div>
+
+          {residentialVsOthers.length > 0 && (
+            <div>
+              <h3 className="font-semibold text-ash">
+                How {tariff.discomCode}&apos;s categories compare
+              </h3>
+              <p className="mt-1">
+                The same unit of electricity is not priced the same for every connection
+                type. On {tariff.discomCode}, the first-slab domestic rate is
+                ₹{oneUnitRate.toFixed(2)}/unit, compared with:
+              </p>
+              <ul className="mt-1 list-disc space-y-1 pl-5">
+                {residentialVsOthers.map((c) => {
+                  const diff = c.firstRate - oneUnitRate
+                  const verb = diff > 0 ? 'higher' : diff < 0 ? 'lower' : 'the same as'
+                  return (
+                    <li key={c.category}>
+                      <strong>{CATEGORY_LABEL[c.category]}</strong> starts at
+                      ₹{c.firstRate.toFixed(2)}/unit
+                      {c.flat ? ' (flat, all units)' : ' at its first slab'} —{' '}
+                      {Math.abs(diff) < 0.005
+                        ? 'the same as the domestic rate'
+                        : `₹${Math.abs(diff).toFixed(2)} ${verb} than domestic`}
+                      .
+                    </li>
+                  )
+                })}
+              </ul>
+              <p className="mt-1 text-sm text-ash/60">
+                Commercial and industrial rates are usually higher because they are not
+                subject to the same cross-subsidy that keeps small domestic consumption
+                affordable; agricultural rates are frequently subsidised the other
+                direction. Each category&apos;s full slab table is above.
+              </p>
+            </div>
+          )}
+
+          {workedBill && (
+            <div>
+              <h3 className="font-semibold text-ash">
+                Worked example: a {WORKED_UNITS}-unit {cycleLabel(tariff.billingCycle)} bill
+              </h3>
+              <p className="mt-1">
+                For a domestic connection on {tariff.discomCode} consuming{' '}
+                {WORKED_UNITS} units in one {cycleLabel(tariff.billingCycle)} billing
+                period, with a 2 kW sanctioned load:
+              </p>
+              <ul className="mt-1 list-disc space-y-1 pl-5">
+                <li>
+                  Energy charge (slab-wise): {formatINR(workedBill.energyChargeGross)}
+                </li>
+                {workedBill.fuelCostAdjustment.amount > 0 && (
+                  <li>
+                    Fuel cost adjustment: {formatINR(workedBill.fuelCostAdjustment.amount)}
+                  </li>
+                )}
+                <li>
+                  Fixed charge ({workedBill.fixedCharge.detail}):{' '}
+                  {formatINR(workedBill.fixedCharge.amount)}
+                </li>
+                {workedBill.electricityDuty.amount > 0 && (
+                  <li>
+                    Electricity duty ({workedBill.electricityDuty.percent}%):{' '}
+                    {formatINR(workedBill.electricityDuty.amount)}
+                  </li>
+                )}
+                <li className="font-semibold text-ink-navy">
+                  Total: {formatINR(workedBill.total)}
+                </li>
+              </ul>
+              <p className="mt-1 text-sm text-ash/60">
+                That works out to {formatINR(workedBill.total / WORKED_UNITS)} per unit on
+                average — higher than the ₹{oneUnitRate.toFixed(2)} first-slab rate, because
+                the fixed charge and duty are spread across the bill. A different
+                sanctioned load changes the fixed-charge line above.
+              </p>
+            </div>
+          )}
+
+          {categories.length > 1 && (
+            <div>
+              <h3 className="font-semibold text-ash">Getting your connection category right</h3>
+              <p className="mt-1">
+                The category your connection is registered under — not how the premises
+                is actually used — is what the DISCOM bills against. A few situations
+                that catch people out:
+              </p>
+              <ul className="mt-1 list-disc space-y-1 pl-5">
+                <li>
+                  A shop, home office, or any space used for business is normally billed
+                  as <strong>{CATEGORY_LABEL.commercial}</strong>, not domestic, even if
+                  it shares a building with your residence.
+                </li>
+                {categories.some((c) => c.connectionType === 'agriculture') && (
+                  <li>
+                    The <strong>{CATEGORY_LABEL.agriculture}</strong> category applies to
+                    irrigation and farm-pump connections specifically, generally subject
+                    to its own eligibility and sanctioned-load rules rather than a
+                    household&apos;s domestic connection.
+                  </li>
+                )}
+                <li>
+                  Changing a connection&apos;s registered category, or its sanctioned
+                  load, is a request you make to {tariff.discomCode} directly — this page
+                  and our calculator both price whichever category and load you select,
+                  they do not change what is on file with the DISCOM.
+                </li>
+              </ul>
+            </div>
+          )}
+
+          <div>
+            <h3 className="font-semibold text-ash">How often these rates change</h3>
+            <p className="mt-1">
+              This tariff schedule took effect {formatIsoDate(tariff.effectiveFrom)} and we
+              last verified it on {formatIsoDate(tariff.lastVerified)}. Slab rates and
+              fixed charges typically move once a year or less, set by{' '}
+              {tariff.state}&apos;s electricity regulatory commission in a tariff order;
+              {tariff.fuelCostAdjustment > 0
+                ? ' the fuel cost adjustment shown above is usually revised more often than the slab rates themselves, since it passes through changing fuel costs.'
+                : ' where a fuel cost adjustment applies it is usually revised more often than the slab rates themselves.'}
+            </p>
+            <p className="mt-1">
+              Before relying on these figures for a large or binding decision, check{' '}
+              {tariff.discomCode}&apos;s own published schedule:
+            </p>
+            <p className="mt-1">
+              <a
+                href={tariff.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brass underline"
+              >
+                {tariff.discomCode}&apos;s tariff source →
+              </a>
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-ash">Average rate versus marginal rate</h3>
+            <p className="mt-1">
+              The average rate in the worked example above is what your whole bill costs
+              per unit. It is the wrong number for one decision: whether to run one more
+              appliance. Because the tariff is telescopic, any extra unit you add lands on
+              your <strong>top slab</strong>, not your average — see our{' '}
+              <Link
+                href={`/electricity/unit-price/${config.discomCode.toLowerCase()}`}
+                className="text-brass underline"
+              >
+                {tariff.discomCode} unit price page
+              </Link>{' '}
+              for that marginal figure and how it compares with the average.
             </p>
           </div>
         </section>
