@@ -27,6 +27,23 @@ const three = AC_PRODUCTS.find((p) => p.starRating === 3 && p.tonnage === 1.5)!
 const five = AC_PRODUCTS.find((p) => p.starRating === 5 && p.tonnage === 1.5)!
 const priceDiff = five.price - three.price
 
+/** Payback for the same 3→5 star upgrade across DISCOMs — the tariff, not the
+ *  hardware, is what differs. Computed live from the tariff files. */
+const STATE_PAYBACK = ['TNEB', 'WBSEDCL', 'UPPCL', 'KSEB', 'BESCOM', 'MSEDCL']
+  .map((code) => {
+    const stateRate = marginalRatePerUnit(code)
+    const annualSaving = Math.round(
+      (acDailyUnits(1.5, 3, 8) - acDailyUnits(1.5, 5, 8)) * 365 * stateRate,
+    )
+    return {
+      code,
+      rate: stateRate,
+      annualSaving,
+      paybackYears: annualSaving > 0 ? priceDiff / annualSaving : null,
+    }
+  })
+  .sort((a, b) => (a.paybackYears ?? Infinity) - (b.paybackYears ?? Infinity))
+
 // Payback by usage pattern — 1.5T, TNEB, computed live for a spread of daily
 // hours so the "does usage intensity matter" question has a real answer.
 const USAGE_SCENARIOS = [4, 6, 8, 10, 12].map((hours) => {
@@ -242,6 +259,179 @@ export default function StarComparisonPage() {
         <p className="mt-2 text-xs text-ash/50">
           A typical AC lasts 10-15 years, so any payback under 4-5 years
           leaves years of genuinely free savings afterward.
+        </p>
+      </section>
+
+      <section aria-labelledby="by-state" className="mb-10">
+        <h2 id="by-state" className="font-display mb-4 text-2xl font-semibold">
+          Where the upgrade pays back fastest
+        </h2>
+        <p className="text-ash/80">
+          The saving is units multiplied by your tariff, so the same upgrade pays back at
+          very different speeds depending on which DISCOM bills you. Running 8 hours a
+          day, the identical 1.5 ton upgrade breaks even in roughly{' '}
+          {STATE_PAYBACK[0].paybackYears?.toFixed(1)} years on {STATE_PAYBACK[0].code} but
+          takes about{' '}
+          {STATE_PAYBACK[STATE_PAYBACK.length - 1].paybackYears?.toFixed(1)} years on{' '}
+          {STATE_PAYBACK[STATE_PAYBACK.length - 1].code}.
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">DISCOM</th>
+                <th className="px-4 py-2 text-right font-semibold">₹/unit</th>
+                <th className="px-4 py-2 text-right font-semibold">Annual saving</th>
+                <th className="px-4 py-2 text-right font-semibold">Payback</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {STATE_PAYBACK.map((r) => (
+                <tr key={r.code}>
+                  <td className="px-4 py-2 font-medium">{r.code}</td>
+                  <td className="px-4 py-2 text-right tabular-nums text-ash/70">
+                    ₹{r.rate}
+                  </td>
+                  <td className="px-4 py-2 text-right tabular-nums text-spark-teal">
+                    {formatINR(r.annualSaving)}
+                  </td>
+                  <td className="px-4 py-2 text-right font-display font-bold tabular-nums text-hub-ac">
+                    {r.paybackYears ? `${r.paybackYears.toFixed(1)} yrs` : '—'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-ash/50">
+          1.5 ton, 8 hours a day, at the same {formatINR(priceDiff)} indicative price gap
+          as the models above, priced at each DISCOM&apos;s top residential slab including
+          fuel cost adjustment and duty. Substitute the real gap you are quoted — the
+          running-cost half of the calculation is what we can compute for you.
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: in a high-tariff state the upgrade can pay back in a fraction of the
+          AC&apos;s life; in a low-tariff one it is a much closer call.
+        </p>
+      </section>
+
+      <section aria-labelledby="misconceptions" className="mb-10">
+        <h2 id="misconceptions" className="font-display mb-4 text-2xl font-semibold">
+          What a 5-star rating does not give you
+        </h2>
+        <p className="text-ash/80">
+          The rating measures one thing — electricity used per unit of cooling delivered
+          across a season. Several things buyers expect from it are not part of it:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">Not more cooling</strong> — a 1.5 ton
+              5-star and a 1.5 ton 3-star have the same rated cooling capacity. The star
+              rating says how efficiently that capacity is produced, not how much there
+              is. Size the unit with our{' '}
+              <Link href="/ac/tonnage-calculator" className="text-brass underline">
+                tonnage calculator
+              </Link>{' '}
+              first, then choose the rating.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">Not necessarily faster cooling</strong> —
+              how quickly a room reaches temperature depends on capacity relative to the
+              room&apos;s heat load, not on the efficiency rating.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">Not a durability or noise rating</strong>{' '}
+              — build quality, noise level, warranty and service-network strength are
+              separate considerations that the BEE label does not speak to.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              ✕
+            </span>
+            <span>
+              <strong className="text-ink-navy">Not the same as &ldquo;inverter&rdquo;</strong>{' '}
+              — inverter describes the compressor, which modulates its speed instead of
+              switching fully on and off. Star rating describes measured efficiency. You
+              can find a 3-star inverter and a 5-star inverter, and the two labels answer
+              different questions.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: the rating is an efficiency number, not a quality grade — compare it
+          alongside capacity, not instead of it.
+        </p>
+      </section>
+
+      <section aria-labelledby="when-three" className="mb-10">
+        <h2 id="when-three" className="font-display mb-4 text-2xl font-semibold">
+          When a 3-star is the sensible choice
+        </h2>
+        <p className="text-ash/80">
+          The honest answer is that 5-star is not automatically right. The upgrade is
+          bought back through hours of use, so where the hours are not there, neither is
+          the case:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">Low or seasonal usage</strong> — a guest
+              room, or a few weeks of real summer. The payback table above stretches out
+              sharply as daily hours fall.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">A short horizon</strong> — if you expect
+              to move, or to leave the unit behind, a payback longer than your stay is not
+              a saving you will collect.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">A tight upfront budget</strong> — the
+              correct tonnage at 3-star beats an undersized 5-star. Getting the size right
+              matters more than the rating.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">A low-tariff DISCOM</strong> — as the
+              table shows, the same upgrade takes considerably longer to pay back where
+              the marginal rate is lower.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: run your own hours and tariff through the tool above rather than
+          taking a blanket recommendation either way.
         </p>
       </section>
 

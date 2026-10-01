@@ -38,6 +38,35 @@ const SCENARIOS = [
   },
 ]
 
+/** Same AC, different DISCOM — computed live so the table can never drift from
+ *  the tariff files. Each code must have `hasTariffFile` in discoms.json. */
+const CROSS_DISCOM = ['WBSEDCL', 'TNEB', 'UPPCL', 'KSEB', 'BESCOM', 'MSEDCL']
+  .map((code) => {
+    const three = calculateAcCost({
+      discomCode: code,
+      tonnage: 1.5,
+      starRating: 3,
+      dailyHours: 8,
+    })
+    const five = calculateAcCost({
+      discomCode: code,
+      tonnage: 1.5,
+      starRating: 5,
+      dailyHours: 8,
+    })
+    return {
+      code,
+      rate: three.effectiveRatePerUnit,
+      threeStar: three.annualCost,
+      fiveStar: five.annualCost,
+      saving: Math.round((three.annualCost - five.annualCost) * 100) / 100,
+    }
+  })
+  .sort((a, b) => a.threeStar - b.threeStar)
+
+const cheapestState = CROSS_DISCOM[0]
+const dearestState = CROSS_DISCOM[CROSS_DISCOM.length - 1]
+
 export const metadata: Metadata = {
   title: 'AC Comparison Tool 2026 — Compare Any Two Configurations (India)',
   description:
@@ -210,6 +239,236 @@ export default function AcComparisonPage() {
             )
           })}
         </div>
+      </section>
+
+      <section aria-labelledby="which-matters" className="mb-10">
+        <h2 id="which-matters" className="font-display mb-4 text-2xl font-semibold">
+          Star rating or tonnage — which moves the bill more?
+        </h2>
+        <p className="text-ash/80">
+          Star rating, for any given room. Tonnage sets how much cooling the unit can
+          deliver; the star rating sets how much electricity it burns delivering it.
+          Those are different jobs, and only one of them is yours to trade away.
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Tonnage is set by the room, not by budget</strong>{' '}
+              — floor area, sun exposure and whether you are on the top floor decide it.
+              Our{' '}
+              <Link href="/ac/tonnage-calculator" className="text-brass underline">
+                tonnage calculator
+              </Link>{' '}
+              works it out; undersizing to save money backfires, because an undersized
+              unit runs closer to continuously.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Star rating is the real lever</strong> —
+              BEE ratings map to an ISEER efficiency band, and a higher band means fewer
+              units for the same cooling. This is the comparison worth running.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Hours per day scale everything linearly</strong>{' '}
+              — doubling runtime doubles units. If your usage is seasonal, compare on the
+              hours you actually run in peak summer, not an annual average.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: size the AC for the room, then spend the comparison effort on the
+          star rating.
+        </p>
+      </section>
+
+      <section aria-labelledby="same-ac-different-state" className="mb-10">
+        <h2 id="same-ac-different-state" className="font-display mb-4 text-2xl font-semibold">
+          The same AC costs very different amounts by state
+        </h2>
+        <p className="text-ash/80">
+          Running cost is tariff times units, and tariffs are set per state. An identical
+          1.5 ton 3-star AC run 8 hours a day ranges from about{' '}
+          {formatINR(cheapestState.threeStar)} a year on {cheapestState.code} to{' '}
+          {formatINR(dearestState.threeStar)} on {dearestState.code} — a gap of{' '}
+          {formatINR(dearestState.threeStar - cheapestState.threeStar)} for the same
+          machine doing the same work.
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-hairline bg-mist text-ink-navy">
+              <tr>
+                <th className="px-4 py-2 font-semibold">DISCOM</th>
+                <th className="px-4 py-2 text-right font-semibold">Top-slab ₹/unit</th>
+                <th className="px-4 py-2 text-right font-semibold">3-star/year</th>
+                <th className="px-4 py-2 text-right font-semibold">5-star/year</th>
+                <th className="px-4 py-2 text-right font-semibold">Saving/year</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {CROSS_DISCOM.map((r) => (
+                <tr key={r.code}>
+                  <td className="px-4 py-2 font-medium">{r.code}</td>
+                  <td className="px-4 py-2 text-right tabular-nums text-ash/70">
+                    ₹{r.rate}
+                  </td>
+                  <td className="px-4 py-2 text-right tabular-nums">
+                    {formatINR(r.threeStar)}
+                  </td>
+                  <td className="px-4 py-2 text-right tabular-nums">
+                    {formatINR(r.fiveStar)}
+                  </td>
+                  <td className="px-4 py-2 text-right font-display font-bold tabular-nums text-ink-navy">
+                    {formatINR(r.saving)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-ash/50">
+          All rows: 1.5 ton, 8 hours a day, priced at each DISCOM&apos;s top residential
+          slab including fuel cost adjustment and electricity duty, computed from the
+          same tariff files the calculator uses.
+        </p>
+        <p className="mt-3 text-ash/80">
+          The practical consequence is that advice about whether a 5-star unit is
+          &ldquo;worth it&rdquo; cannot be national. The annual saving from upgrading a
+          1.5 ton unit from 3-star to 5-star is roughly{' '}
+          {formatINR(cheapestState.saving)} on {cheapestState.code} but about{' '}
+          {formatINR(dearestState.saving)} on {dearestState.code} — so the same price
+          premium pays back far faster in one state than the other.
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: always compare on your own DISCOM&apos;s tariff — a verdict from
+          another state does not transfer.
+        </p>
+      </section>
+
+      <section aria-labelledby="payback" className="mb-10">
+        <h2 id="payback" className="font-display mb-4 text-2xl font-semibold">
+          Working out whether the higher star rating pays back
+        </h2>
+        <p className="text-ash/80">
+          A higher-rated AC usually costs more upfront and less to run, so the question
+          is how long the running saving takes to cover the price gap. The arithmetic is
+          one division:
+        </p>
+        <div className="mt-4 rounded-xl border border-l-4 border-hairline border-l-brass bg-paper p-5">
+          <p className="font-display font-bold text-ink-navy">
+            Payback (years) = price premium ÷ annual running saving
+          </p>
+          <p className="mt-2 text-sm text-ash/80">
+            Take the annual saving from the comparison above, then divide the price
+            difference you are actually quoted by it. We deliberately do not pre-fill a
+            price premium: AC prices move with brand, model, capacity and the time of
+            year, and a stale figure would make the answer wrong rather than convenient.
+          </p>
+        </div>
+        <ul className="mt-4 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">Compare the two units you can actually buy</strong>{' '}
+              — quotes for the same tonnage from the same retailer on the same day, not
+              list prices from different sources.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">Weigh it against how long you will keep it</strong>{' '}
+              — a payback longer than the time you expect to own the AC, or to stay in
+              that home, is not a saving.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">Remember tariffs tend to rise</strong> —
+              the saving is computed at today&apos;s rate, so a payback estimate is
+              conservative rather than optimistic.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: bring your own quoted prices — the running-cost half of the answer is
+          what this tool is for.
+        </p>
+      </section>
+
+      <section aria-labelledby="limits" className="mb-10">
+        <h2 id="limits" className="font-display mb-4 text-2xl font-semibold">
+          What this comparison does not capture
+        </h2>
+        <p className="text-ash/80">
+          The model is deliberately simple, and being clear about its edges is more
+          useful than implying more precision than it has:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              <strong className="text-ink-navy">Inverter versus fixed-speed behaviour</strong>{' '}
+              — both sides are modelled with the same compressor duty factor. An inverter
+              unit modulates instead of cycling, which generally helps it in long
+              sessions, and that difference is not separated out here.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              <strong className="text-ink-navy">Room and installation quality</strong> —
+              insulation, window sealing, shading and outdoor-unit airflow change real
+              consumption, and none of them appear in a tonnage-and-star model.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              <strong className="text-ink-navy">Star ratings use indicative ISEER bands</strong>{' '}
+              — a specific model&apos;s declared ISEER can sit above or below the band for
+              its rating, and BEE revises the bands periodically.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              <strong className="text-ink-navy">Servicing and lifetime costs</strong> —
+              gas top-ups, coil cleaning and repairs are real running costs that sit
+              outside an electricity comparison.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: treat the output as a well-grounded estimate for ranking two options,
+          not a prediction of your exact bill.
+        </p>
       </section>
 
       <section aria-labelledby="related" className="mb-10">

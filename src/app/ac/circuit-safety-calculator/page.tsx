@@ -163,6 +163,204 @@ export default function AcCircuitSafetyPage() {
         </div>
       </section>
 
+      <section aria-labelledby="why-margin" className="mb-10">
+        <h2 id="why-margin" className="font-display mb-4 text-2xl font-semibold">
+          Why the circuit is sized above the AC&apos;s rated current
+        </h2>
+        <p className="text-ash/80">
+          Because an AC is both a surging load and a continuous one, and each of those
+          pushes the sizing the same direction:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Starting surge</strong> — a compressor
+              motor draws a brief inrush well above its running current each time it
+              starts. A breaker sized exactly at the running figure would be living at
+              its limit every cycle.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Continuous duty</strong> — unlike a
+              kettle or a mixer, an AC can run for hours. Cables and breakers warm up
+              under sustained load, and their safe capacity is lower than a short-burst
+              rating suggests.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Nameplate current is a rated figure</strong>{' '}
+              — it describes the design point, not the worst moment. Sizing to it exactly
+              leaves nothing for voltage dips, a dirty condenser or an ageing compressor,
+              all of which push current up.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: the headroom is not padding — it is what keeps a normal start from
+          looking like a fault.
+        </p>
+      </section>
+
+      <section aria-labelledby="oversizing" className="mb-10">
+        <h2 id="oversizing" className="font-display mb-4 text-2xl font-semibold">
+          The one mistake worth naming: fitting a bigger MCB to stop tripping
+        </h2>
+        <p className="text-ash/80">
+          If an AC circuit keeps tripping, replacing the MCB with a higher-rated one is
+          the most dangerous available response — and a common one.
+        </p>
+        <p className="mt-3 text-ash/80">
+          An MCB does not protect the appliance. It protects the <strong>cable</strong>{' '}
+          behind it, by disconnecting before the current running through that cable can
+          overheat it. Fit a larger MCB without changing the wire, and the cable can now
+          carry more current than it is rated for while the breaker sits there quite
+          happily — the protection has been removed, not improved. The wire is inside a
+          wall or conduit where you cannot see it heating.
+        </p>
+        <p className="mt-3 text-ash/80">
+          Repeated tripping is information. It usually means the circuit is undersized
+          for the load, shared with other appliances, or that something on it is faulty —
+          all of which are reasons to call a licensed electrician rather than to upsize
+          the breaker. That is also why the calculator above recommends an MCB{' '}
+          <em>and</em> a wire gauge together: the pair is the specification, and changing
+          one without the other is what causes the problem.
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: the MCB and the cable are sized as a pair — never raise one alone.
+        </p>
+      </section>
+
+      <section aria-labelledby="not-sized" className="mb-10">
+        <h2 id="not-sized" className="font-display mb-4 text-2xl font-semibold">
+          What this calculator does not size
+        </h2>
+        <p className="text-ash/80">
+          The output is a planning starting point from one input. A real installation
+          depends on several things this tool cannot know, which is why it is framed as
+          general guidance rather than a specification:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              <strong className="text-ink-navy">Run length and voltage drop</strong> — a
+              long cable run from the distribution board loses voltage along the way, and
+              may need a thicker conductor than the current alone implies.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              <strong className="text-ink-navy">Ambient temperature and conduit fill</strong>{' '}
+              — cables bundled together, or run through a hot roof space, carry less
+              current safely than the same cable in open air.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              <strong className="text-ink-navy">Earthing and leakage protection</strong> —
+              an MCB handles overcurrent, not earth leakage. Residual-current protection
+              and a sound earth are separate requirements and are not outputs of this
+              tool.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-caution-amber" aria-hidden>
+              !
+            </span>
+            <span>
+              <strong className="text-ink-navy">Local code and the rest of the board</strong>{' '}
+              — IS 732 and your local rules govern the final specification, and the
+              existing board&apos;s capacity, isolation and load balance all matter.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: use this to understand and sanity-check a quote, not to replace the
+          electrician who signs off the work.
+        </p>
+      </section>
+
+      <section aria-labelledby="dedicated-circuit" className="mb-10">
+        <h2 id="dedicated-circuit" className="font-display mb-4 text-2xl font-semibold">
+          Why an AC normally gets its own circuit
+        </h2>
+        <p className="text-ash/80">
+          Standard practice is to run an air conditioner on a dedicated circuit from the
+          distribution board rather than off a general socket ring, for three practical
+          reasons:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">The load is large and sustained</strong>,
+              so sharing a circuit means the AC plus anything else on it can together
+              exceed what the cable was sized for.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">Faults stay contained</strong> — a problem
+              on the AC circuit does not take out lighting or other rooms, and vice
+              versa.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              →
+            </span>
+            <span>
+              <strong className="text-ink-navy">It can be isolated for service</strong> —
+              technicians need to work on the unit with the supply off, without
+              shutting down half the house.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 text-ash/80">
+          Two symptoms are worth treating as a reason to get the circuit checked rather
+          than lived with: an MCB that trips when the AC starts, and a switch, socket or
+          plug that is warm to the touch after the AC has been running. Both point at a
+          circuit working harder than it should. Knowing your unit&apos;s current draw
+          helps here — our{' '}
+          <Link href="/ac/power-consumption-calculator" className="text-brass underline">
+            AC power consumption calculator
+          </Link>{' '}
+          works it out from the same nameplate figure, and the{' '}
+          <Link href="/ac/bill-calculator" className="text-brass underline">
+            running cost calculator
+          </Link>{' '}
+          shows what that load costs on your DISCOM&apos;s tariff.
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: a tripping breaker or a warm socket is a diagnostic signal, not an
+          inconvenience to work around.
+        </p>
+      </section>
+
       <section
         aria-labelledby="reference-table"
         className="mb-10 rounded-xl border border-caution-amber/25 bg-caution-amber/5 p-5"

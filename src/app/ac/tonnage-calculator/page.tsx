@@ -327,6 +327,129 @@ export default function AcTonnagePage() {
         </ol>
       </section>
 
+      <section aria-labelledby="beyond-area" className="mb-10 scroll-mt-20">
+        <h2 id="beyond-area" className="font-display mb-4 text-2xl font-bold text-ink-navy">
+          What the area formula leaves out
+        </h2>
+        <p className="text-ash/80">
+          The area-plus-sun-plus-floor method is a good first pass, and it is how most
+          sizing is done in practice. But cooling load is heat load, and floor area is
+          only a proxy for it. Check these before settling on a size:
+        </p>
+        <ul className="mt-3 space-y-2 text-ash/80">
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Ceiling height</strong> — the rule of
+              thumb assumes a conventional ceiling. A room with a much higher ceiling
+              holds proportionally more air to cool, so the same floor area needs more
+              capacity.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Glass area and orientation</strong> — a
+              large west-facing window admits far more afternoon heat than a small shaded
+              one. &ldquo;Strong sun&rdquo; in the calculator is where you account for
+              this; curtains, blinds and reflective film genuinely reduce the load.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">How many walls face outside</strong> — a
+              corner room with two exterior walls gains more heat than an interior room of
+              identical size surrounded by other conditioned rooms.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">People and equipment</strong> — occupants,
+              lighting and electronics all add heat. A bedroom for two and a living room
+              that regularly holds eight are different problems at the same floor area.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Open-plan and adjoining spaces</strong> —
+              if the room opens into a kitchen, stairwell or corridor, the AC is cooling
+              more volume than the room you measured, and kitchen heat makes it worse.
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="mt-0.5 text-hub-ac" aria-hidden>
+              ✓
+            </span>
+            <span>
+              <strong className="text-ink-navy">Humid versus dry climate</strong> — in
+              coastal humidity a large share of the work is removing moisture rather than
+              lowering temperature, which is also why a heavily oversized unit performs
+              badly there.
+            </span>
+          </li>
+        </ul>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: use the calculator&apos;s figure as your baseline, then adjust upward
+          for height, glass or crowding — and get a site assessment for anything unusual.
+        </p>
+      </section>
+
+      <section aria-labelledby="size-and-bill" className="mb-10 scroll-mt-20">
+        <h2 id="size-and-bill" className="font-display mb-4 text-2xl font-bold text-ink-navy">
+          How tonnage flows through to your bill
+        </h2>
+        <p className="text-ash/80">
+          Capacity and consumption move together: a larger unit draws more power while
+          the compressor runs. For the same star rating and the same hours, stepping up a
+          size raises consumption roughly in proportion to the capacity increase.
+        </p>
+        <p className="mt-3 text-ash/80">
+          That is the real cost of guessing high. But guessing low is not free either —
+          an undersized AC never satisfies the thermostat, so it runs closer to
+          continuously and can end up using more electricity than a correctly sized unit
+          that cycles off. The cheapest machine to run is the one that is the right size
+          and then switches off.
+        </p>
+        <p className="mt-3 text-ash/80">
+          Once you have a size, price it before buying. Our{' '}
+          <Link href="/ac/bill-calculator" className="text-brass underline">
+            AC running cost calculator
+          </Link>{' '}
+          applies your own DISCOM&apos;s tariff — and because an AC is incremental load,
+          its units are billed at your top slab rather than your average rate, which is
+          why the same unit costs noticeably more in{' '}
+          <Link href="/electricity/msedcl-bill-calculator" className="text-brass underline">
+            Maharashtra
+          </Link>{' '}
+          than in{' '}
+          <Link href="/electricity/tneb-bill-calculator" className="text-brass underline">
+            Tamil Nadu
+          </Link>
+          . If the running figure looks steep, the{' '}
+          <Link href="/ac/comparison-tool" className="text-brass underline">
+            comparison tool
+          </Link>{' '}
+          will show what a higher star rating at the same tonnage changes.
+        </p>
+        <p className="mt-3 font-semibold text-ink-navy">
+          Takeaway: pick the size from the room, then pick the star rating from the
+          running cost — in that order.
+        </p>
+      </section>
+
       {/* BTU conversion */}
       <section aria-labelledby="btu" className="mb-10 scroll-mt-20">
         <h2 id="btu" className="font-display mb-4 text-2xl font-bold text-ink-navy">
