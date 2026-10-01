@@ -47,11 +47,16 @@ anywhere; it wasn't committed to the repo (was a scratch `/tmp/wc_*.py` file eac
 | Appliances (10 calculators) | ✅ Done — 9 of 10 expanded (household-bill-builder was already ≥800w, untouched) | `159de87` |
 | Fuel-cost (3 calculators, at `/fuel-cost`, not `/fuel`) | ✅ Done — all 3 expanded | `f956f28` |
 | Electricity — EV Charging Cost Calculator only | ✅ Done (this one page was flagged separately by the user, out of category order) | `0c9af54` |
-| Electricity — everything else | ⬜ Not started | — |
+| Electricity — DISCOM bill calculators (37 pages) | ✅ Already done pre-session — these were never short (2500-2666w each); HANDOFF previously mislabelled this whole category "not started" when only 2 of its 5 route-shapes actually needed work | — |
+| Electricity — `/electricity/unit-price/[slug]` (38 routes, shared `UnitPricePage.tsx`, EN+HI) | ✅ Done — added effective-rate table (`calculateFullBill()` at 5 consumption levels), cross-category "3 answers" framing, provenance section. Caught 2 real bugs before commit: first draft called every `sourceUrl` link "official" regardless of host (3 files point at 3rd-party sites); then found 35/36 tariff files are self-labelled `SOURCED (secondary)` not a handful, and 1 (TNEB) is `UNVERIFIED` — a stronger claim the first regex missed entirely | `972c07b` |
+| Electricity — `/electricity/[slug]/tariffs` (37 routes, shared `TariffDirectoryPage.tsx`, EN only) | ✅ Done — flat-vs-telescopic framing (branched on `isFlatRate()`), real cross-category rate comparison, worked 200-unit bill via `calculateFullBill()`, connection-category guidance, rate-change cadence. Fixed a wrong link mid-edit: `config.slug` is the bill-calculator slug, the unit-price route keys on `config.discomCode.toLowerCase()` | `bcb89b3` |
+| Electricity — `/electricity/appliance-cost-calculator` (standalone, EN+HI as two separate files) | ✅ Done — formula walkthrough, wattage-vs-hours table, standby/phantom-load section, mistakes, "when a dedicated calculator is better" (AC/fridge/fan/EV, all link-verified to exist) | `bcb89b3` |
 | Water (5 real-tariff board pages already 3200-4000w, untouched; 36 generic state pages share one component — see note below) | ✅ Done — 2 new shared sections added to WaterStatePage.tsx, all 36 states now 836-879w | `fcaae9c` |
-| Gas | ⬜ Not started | — |
+| Gas — CGD pages with real tariff data (igl, mahanagar-gas, gujarat-gas) | ✅ Already fine pre-session (1400w+), untouched | — |
+| Gas — 18 generic company pages, shared `GasCompanyPage.tsx`, EN+HI | ✅ Done, Water-shaped (confirmed before starting — `gas-companies.ts` is name+slug only, same as Water's generic pages and AC brands) — added bill-line-item breakdown, LPG-vs-PNG switching tradeoffs, new-connection process, "if you smell gas" safety steps. First draft used `seal-red` for the warning box; caught that `seal-red` is this site's verification/myth-busting token and switched to `caution-amber`, matching the safety-box convention already used elsewhere on this same page and on the AC circuit-safety page | `99c7482` |
 | Solar (roi-calculator was already done earlier; this pass covered the other 5) | ✅ Done — bill-calculator, subsidy-calculator, battery-backup-calculator, panel-size-calculator, net-metering-calculator all expanded to 800-1034w | `bf2bc71` |
-| AC | ⬜ Not started | — |
+| AC — standalone pages (power-consumption, tonnage, circuit-safety, comparison-tool, 3-vs-5-star guide) | ✅ Done — every added figure computed live from `src/lib/calc/ac.ts`, not asserted. Found and documented a real cross-tool discrepancy: the power-consumption calculator and the running-cost calculator give different units/day for the same AC (no duty factor vs `LOAD_FACTOR` 0.7) — explained on-page instead of silently inconsistent | `9c1eb69` |
+| AC — `/ac/brands/[slug]` (21 routes, shared `AcBrandPage.tsx`) | ⬜ **Blocked on a user decision, not started.** `ac-brands.ts`'s own header states a deliberate policy: "No brand-specific efficiency claims are made" — star rating, not brand, drives efficiency under BEE. Expanding to 800w either repeats generic AC content 21 times (same problem Water was built to avoid) or requires brand performance claims the file's own policy forbids. This is the Water-shared-template question again, but the "expand carefully" answer doesn't obviously apply when there's no genuine per-brand fact to add. Ask the user before touching this one. |
 
 **Process that worked well for the categories already done**: measure word count for every page in
 the category first (identify which are actually short — don't assume), then dispatch one
@@ -67,18 +72,29 @@ slipped through tsc before. **Also watch for a session-wide rate limit**: mid-se
 `git diff --stat` per file afterward for incomplete edits (look for unused-variable lint warnings,
 half-finished JSX) rather than assuming all forks completed cleanly.
 
-**Water was architecturally different — a real gotcha for the next category with this shape (Gas
-may have the same issue, check before assuming the fork-per-page process applies).** Unlike every
-other category, most of Water's pages don't have their own `page.tsx` — 36 of the 41 live
-`/water/[slug]` routes render from ONE shared component (`WaterStatePage.tsx`) with byte-identical
-prose (only the state name substituted via `{state}` params in `water-state-page-texts.ts`). The
-naive "expand each short page" approach would have meant adding the same generic filler 36 times,
-making the pages MORE duplicate of each other — directly counter to why the word-count bar exists.
-Asked the user via `AskUserQuestion` rather than assuming; they chose "expand the shared template
-carefully" (add sections honestly framed as general education, not fabricated per-state claims)
-over the other two options (skip entirely, or do the bigger project of sourcing real per-state
-tariff data first). Fix was 2 file edits (the component + its texts data file), not 36 forks. The 5
-pages with real tariff data (`WaterBoardPage.tsx`) were already 3200-4000w and untouched.
+**Water was architecturally different — Gas and AC brands turned out to have the same shape.**
+Unlike a plain per-calculator category, most of Water's pages don't have their own `page.tsx` — 36
+of the 41 live `/water/[slug]` routes render from ONE shared component (`WaterStatePage.tsx`) with
+byte-identical prose (only the state name substituted via `{state}` params in
+`water-state-page-texts.ts`). The naive "expand each short page" approach would have meant adding
+the same generic filler 36 times, making the pages MORE duplicate of each other — directly counter
+to why the word-count bar exists. Asked the user via `AskUserQuestion` rather than assuming; they
+chose "expand the shared template carefully" (add sections honestly framed as general education,
+not fabricated per-state claims) over the other two options (skip entirely, or do the bigger
+project of sourcing real per-state tariff data first). Fix was 2 file edits (the component + its
+texts data file), not 36 forks. The 5 pages with real tariff data (`WaterBoardPage.tsx`) were
+already 3200-4000w and untouched.
+
+Gas's 18 generic company pages turned out to be the identical shape (`gas-companies.ts` is
+name+slug only, same as Water's generic state data) and got the same "expand the shared template"
+treatment without re-asking, since it was the same question already settled — see `99c7482`.
+
+AC brand pages (`/ac/brands/[slug]`, 21 routes, `AcBrandPage.tsx`) look like the same shape on the
+surface but are NOT a settled case: `ac-brands.ts`'s own header states a deliberate policy of no
+brand-specific efficiency claims, since star rating (not brand) drives efficiency under BEE. There
+is no genuine per-brand fact comparable to Water's real state names or Gas's real company identity
+to hang 800 words on without either repeating generic AC content 21 times or violating that
+no-claims policy. Flagged for the user rather than assumed — see the table above.
 
 ### Phase 1 — calcwise.finance parity (D-35 through D-40)
 
