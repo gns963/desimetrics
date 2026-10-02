@@ -49,6 +49,12 @@ const HUBS = [
     label: 'Financial',
     desc: 'GST, SIP, tax regime & gratuity',
   },
+  {
+    slug: 'tools',
+    emoji: '🔢',
+    label: 'Tools',
+    desc: 'Hex, binary & other number conversions',
+  },
 ] as const
 
 export default function CrossHubLinks({ current }: { current: string }) {

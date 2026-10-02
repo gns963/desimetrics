@@ -222,6 +222,8 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
       '/solar/roi-calculator',
       '/solar/subsidy-calculator',
       '/terms',
+      '/tools',
+      '/tools/hex-calculator',
       '/water',
       // Genuinely translated DISCOM detail pages (not chrome-only) — see
       // DiscomPageConfig.translations in calculator-pages.tsx. Add a new

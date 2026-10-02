@@ -336,6 +336,18 @@ const hubs: Hub[] = [
     ],
     explore: '/financial',
   },
+  {
+    emoji: '🔢',
+    title: 'Tools',
+    description: 'Hexadecimal, binary and other exact number conversions',
+    count: 1,
+    countLabel: 'calculator',
+    accent: 'text-hub-tools',
+    chipBg: 'bg-hub-tools/15 text-hub-tools',
+    cardBorder: 'hover:border-hub-tools/60',
+    tools: [{ label: 'Hex calculator', href: '/tools/hex-calculator' }],
+    explore: '/tools',
+  },
 ]
 
 const posts = [

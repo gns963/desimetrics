@@ -42,6 +42,7 @@ const CATEGORIES = [
   { emoji: '🔌', label: 'Appliances', href: '/appliances' },
   { emoji: '⛽', label: 'Fuel Cost', href: '/fuel-cost' },
   { emoji: '🧮', label: 'Finance', href: '/financial' },
+  { emoji: '🔢', label: 'Tools', href: '/tools' },
 ]
 
 const TRUST_STATS = [
