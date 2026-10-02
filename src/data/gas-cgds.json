@@ -24,6 +24,10 @@
       "cgds": [{ "slug": "gail", "code": "GAIL", "name": "GAIL Gas Limited", "hasTariffFile": true }]
     },
     {
+      "region": "Indore / Ujjain / Gwalior / Pithampur (Madhya Pradesh)",
+      "cgds": [{ "slug": "agl", "code": "AGL", "name": "Aavantika Gas Limited", "hasTariffFile": true }]
+    },
+    {
       "region": "Hyderabad / Vijayawada / Kakinada",
       "cgds": [{ "slug": "bgl", "code": "BGL", "name": "Bhagyanagar Gas Limited", "hasTariffFile": true }]
     },
@@ -58,6 +62,10 @@
     {
       "region": "Various — Torrent Gas footprint",
       "cgds": [{ "slug": "torrent-gas", "code": "TGL", "name": "Torrent Gas", "hasTariffFile": true }]
+    },
+    {
+      "region": "Moradabad (UP) — slug predates a 2026 acquisition; this GA now operates as Torrent Gas, not independently",
+      "cgds": [{ "slug": "siti-energy", "code": "TGLMBD", "name": "Torrent Gas (Moradabad, formerly Siti Energy)", "hasTariffFile": true }]
     },
     {
       "region": "Various — Think Gas footprint",

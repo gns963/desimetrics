@@ -54,6 +54,13 @@ export default function GasCgdPage({
   const hasMultiCgdComparison = REAL_TARIFF_CGD_CODES.length > 1
 
   const tocLabel = tariff.billingCycle === 'bimonthly' ? '~60 days' : '~30 days'
+  const isBimonthly = tariff.billingCycle === 'bimonthly'
+  // A realistic two-meals-a-day household figure for ONE billing cycle —
+  // half the bimonthly range for a monthly biller, not the same raw number.
+  const typicalCycleScm = isBimonthly ? 50 : 25
+  const typicalCycleRangeEn = isBimonthly ? '40-60 SCM per bi-monthly cycle' : '20-30 SCM per month'
+  const typicalCycleRangeHi = isBimonthly ? 'प्रति द्विमासिक साइकल लगभग 40-60 SCM' : 'प्रति महीना लगभग 20-30 SCM'
+  const typicalCycleBill = computeGasBill(tariff, { scmConsumed: typicalCycleScm })
 
   // Real rate spread across every CGD we've sourced — used in the "why most
   // calculators are wrong" section instead of an invented claim.
@@ -80,8 +87,12 @@ export default function GasCgdPage({
           a: 'एक Standard Cubic Metre (SCM) पाइप्ड नेचुरल गैस के लिए बिलिंग इकाई है, जो एक सामान्य घरेलू बर्नर पर औसत परिवार के लिए लगभग एक दिन के सामान्य खाना पकाने (दो वक्त का खाना) के बराबर है — एक उपयोगी मानसिक मापदंड, सटीक आंकड़ा नहीं क्योंकि असली इस्तेमाल घर के आकार और खाना पकाने की आदतों के हिसाब से बदलता है।',
         },
         {
-          q: `मेरा ${tariff.cgdCode} बिल मासिक की बजाय द्विमासिक क्यों है?`,
-          a: `${tariff.cgdCode} हर ${tocLabel === '~60 days' ? 'दो महीने' : 'महीने'} बिल करता है, इसलिए आपको दिखने वाला SCM आंकड़ा और कुल उस पूरी अवधि को कवर करते हैं — लंबी अवधि को ध्यान में रखे बिना इसे सीधे एक LPG सिलेंडर की कीमत से न मिलाएं। सही तुलना के लिए कैलकुलेटर द्वारा दिखाया गया मासिक-समतुल्य आंकड़ा इस्तेमाल करें।`,
+          q: isBimonthly
+            ? `मेरा ${tariff.cgdCode} बिल मासिक की बजाय द्विमासिक क्यों है?`
+            : `मेरा ${tariff.cgdCode} बिल कितनी बार आता है?`,
+          a: isBimonthly
+            ? `${tariff.cgdCode} हर दो महीने बिल करता है, इसलिए आपको दिखने वाला SCM आंकड़ा और कुल उस पूरी अवधि को कवर करते हैं — लंबी अवधि को ध्यान में रखे बिना इसे सीधे एक LPG सिलेंडर की कीमत से न मिलाएं। सही तुलना के लिए कैलकुलेटर द्वारा दिखाया गया मासिक-समतुल्य आंकड़ा इस्तेमाल करें।`
+            : `${tariff.cgdCode} हर महीने बिल करता है, इसलिए आपको दिखने वाला SCM आंकड़ा और कुल एक महीने को कवर करते हैं — अन्य CGD के द्विमासिक आंकड़ों से सीधे तुलना करते वक्त इसे ध्यान में रखें।`,
         },
         {
           q: 'क्या PNG, LPG सिलेंडर से सस्ता है?',
@@ -93,7 +104,7 @@ export default function GasCgdPage({
         },
         {
           q: 'एक सामान्य घर में गैस का बिल कितना आता है?',
-          a: `दिन में दो बार खाना पकाने वाले औसत घर के लिए, प्रति द्विमासिक साइकल लगभग 40-60 SCM की उम्मीद करें — ${tariff.cgdCode} की असली दर पर यह साइकल के लिए लगभग ${formatINR(computeGasBill(tariff, { scmConsumed: 50 }).total)} बैठता है (लगभग ${formatINR(computeGasBill(tariff, { scmConsumed: 50 }).monthlyEquivalent?.total ?? computeGasBill(tariff, { scmConsumed: 50 }).total)}/महीना)। आपका असली बिल घर के आकार और खाना पकाने की आदतों पर निर्भर करता है — अपने आंकड़ों के लिए ऊपर का कैलकुलेटर इस्तेमाल करें।`,
+          a: `दिन में दो बार खाना पकाने वाले औसत घर के लिए, ${typicalCycleRangeHi} की उम्मीद करें — ${tariff.cgdCode} की असली दर पर यह ${isBimonthly ? 'साइकल' : 'महीने'} के लिए लगभग ${formatINR(typicalCycleBill.total)} बैठता है${isBimonthly ? ` (लगभग ${formatINR(typicalCycleBill.monthlyEquivalent?.total ?? typicalCycleBill.total)}/महीना)` : ''}। आपका असली बिल घर के आकार और खाना पकाने की आदतों पर निर्भर करता है — अपने आंकड़ों के लिए ऊपर का कैलकुलेटर इस्तेमाल करें।`,
         },
         {
           q: 'PNG और LPG में क्या फर्क है?',
@@ -122,8 +133,12 @@ export default function GasCgdPage({
           a: 'A Standard Cubic Metre (SCM) is the billing unit for piped natural gas, roughly equivalent to one day of standard cooking (two meals) for an average family on a typical domestic burner — a useful mental benchmark, not an exact figure since actual usage varies by household size and cooking habits.',
         },
         {
-          q: `Why is my ${tariff.cgdCode} bill bi-monthly instead of monthly?`,
-          a: `${tariff.cgdCode} bills every ${tocLabel === '~60 days' ? 'two months' : 'month'}, so the SCM figure and total you see cover that whole period — don't compare it directly to a single LPG cylinder's cost without accounting for the longer period. Use the monthly-equivalent figure the calculator shows for a fair comparison.`,
+          q: isBimonthly
+            ? `Why is my ${tariff.cgdCode} bill bi-monthly instead of monthly?`
+            : `How often does my ${tariff.cgdCode} bill arrive?`,
+          a: isBimonthly
+            ? `${tariff.cgdCode} bills every two months, so the SCM figure and total you see cover that whole period — don't compare it directly to a single LPG cylinder's cost without accounting for the longer period. Use the monthly-equivalent figure the calculator shows for a fair comparison.`
+            : `${tariff.cgdCode} bills every month, so the SCM figure and total you see cover one month — keep that in mind when comparing against another CGD's bi-monthly figures.`,
         },
         {
           q: 'Is PNG cheaper than LPG cylinders?',
@@ -135,7 +150,7 @@ export default function GasCgdPage({
         },
         {
           q: 'Gas ka bill kitna aata hai ek normal ghar mein?',
-          a: `For an average household cooking two meals a day, expect somewhere around 40-60 SCM per bi-monthly cycle — on ${tariff.cgdCode}'s real rate that works out to roughly ${formatINR(computeGasBill(tariff, { scmConsumed: 50 }).total)} for the cycle (about ${formatINR(computeGasBill(tariff, { scmConsumed: 50 }).monthlyEquivalent?.total ?? computeGasBill(tariff, { scmConsumed: 50 }).total)}/month). Your actual bill depends on household size and cooking habits — use the calculator above for your own numbers.`,
+          a: `For an average household cooking two meals a day, expect somewhere around ${typicalCycleRangeEn} — on ${tariff.cgdCode}'s real rate that works out to roughly ${formatINR(typicalCycleBill.total)} for the ${isBimonthly ? 'cycle' : 'month'}${isBimonthly ? ` (about ${formatINR(typicalCycleBill.monthlyEquivalent?.total ?? typicalCycleBill.total)}/month)` : ''}. Your actual bill depends on household size and cooking habits — use the calculator above for your own numbers.`,
         },
         {
           q: 'PNG aur LPG mein kya farak hai?',

@@ -8,6 +8,7 @@
 
 import type { GasSlab, GasTariffFile } from '../../data/gas-tariffs/_schema'
 import { parseGasTariffFile } from '../../data/gas-tariffs/_schema'
+import aglJson from '../../data/gas-tariffs/agl.json'
 import atglJson from '../../data/gas-tariffs/atgl.json'
 import bglJson from '../../data/gas-tariffs/bgl.json'
 import gailJson from '../../data/gas-tariffs/gail.json'
@@ -18,6 +19,7 @@ import hcgdlJson from '../../data/gas-tariffs/hcgdl.json'
 import iglJson from '../../data/gas-tariffs/igl.json'
 import mglJson from '../../data/gas-tariffs/mgl.json'
 import mnglJson from '../../data/gas-tariffs/mngl.json'
+import sitiJson from '../../data/gas-tariffs/siti.json'
 import tglJson from '../../data/gas-tariffs/tgl.json'
 import thinkgasJson from '../../data/gas-tariffs/thinkgas.json'
 import tngclJson from '../../data/gas-tariffs/tngcl.json'
@@ -206,6 +208,8 @@ export const gasTariffRegistry: Record<string, GasTariffFile> = {
   VGL: parseGasTariffFile(vglJson),
   TNGCL: parseGasTariffFile(tngclJson),
   THINKGAS: parseGasTariffFile(thinkgasJson),
+  AGL: parseGasTariffFile(aglJson),
+  TGLMBD: parseGasTariffFile(sitiJson),
 }
 
 export function getGasTariff(cgdCode: string): GasTariffFile {

@@ -1,0 +1,14 @@
+{
+  "cgdCode": "TGLMBD",
+  "cgdName": "Torrent Gas (Moradabad, formerly Siti Energy)",
+  "citiesServed": ["Moradabad"],
+  "billingCycle": "bimonthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 48.50 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-01-01",
+  "sourceUrl": "https://www.torrentgas.com/frontend/web/index.php/site/info/moradabad_png_dom_connectionschemes",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "PRIMARY, with an identity correction — 'Siti Energy Limited' (promoted by Essel Group, PNGRB-authorised for Moradabad) was acquired and is now operated as Torrent Gas's Moradabad network; it no longer trades under the Siti Energy name. This file keeps the site's existing 'siti-energy' slug (so the page's URL doesn't break) but names the company accurately rather than implying an independent entity still exists. The Rs 48.50/SCM rate, inclusive of all taxes with 0% VAT for this GA, effective 1 January 2026 following the PNGRB Unified Tariff Order, is fetched from Torrent Gas's own Moradabad connection-schemes page. Given a SEPARATE Rs 49.50/SCM is confirmed for Torrent's Jaipur GA (see tgl.json), this file uses its own cgdCode (TGLMBD) rather than reusing TGL, since one tariff file can only represent one rate. Billing cycle (bimonthly) carried over from the confirmed Torrent Gas pattern (Jaipur), not independently re-verified for Moradabad specifically. Fixed/meter charge not found for this GA; modelled as Rs 0."
+}

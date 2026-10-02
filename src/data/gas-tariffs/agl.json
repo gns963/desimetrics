@@ -1,0 +1,14 @@
+{
+  "cgdCode": "AGL",
+  "cgdName": "Aavantika Gas Limited",
+  "citiesServed": ["Indore", "Ujjain", "Gwalior", "Pithampur"],
+  "billingCycle": "monthly",
+  "slabs": [
+    { "minSCM": 0, "maxSCM": null, "ratePerSCM": 53.00 }
+  ],
+  "fixedCharge": 0,
+  "effectiveFrom": "2026-05-02",
+  "sourceUrl": "https://www.aglonline.net/businesses/png-domestic/tariff-card/",
+  "lastVerified": "2026-10-01",
+  "verifiedBy": "PRIMARY — fetched directly from Aavantika Gas Limited's own tariff-card page (aglonline.net), which states Rs 46.49/SCM (before tax) effective 2 May 2026 across all consumption bands, plus 14% VAT. The Rs 53.00/SCM figure here is this schema's slab rate computed as the tax-INCLUSIVE total (46.49 x 1.14 = 52.9986, rounded to 53.00) for consistency with how most other files in this registry quote an all-in figure — shown transparently so the pre-tax basic rate can be recovered if needed. GENUINELY DIFFERENT from every other CGD checked in this task: AGL's own tariff card states billing is per 30 days (MONTHLY), not the bimonthly cycle assumed/confirmed for every other company in this batch — this was independently confirmed from the primary source, not assumed. Fixed/meter charge not found; modelled as Rs 0."
+}

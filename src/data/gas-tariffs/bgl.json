@@ -1,7 +1,7 @@
 {
   "cgdCode": "BGL",
   "cgdName": "Bhagyanagar Gas Limited",
-  "citiesServed": ["Hyderabad"],
+  "citiesServed": ["Hyderabad", "Kakinada", "East Godavari"],
   "billingCycle": "bimonthly",
   "slabs": [
     { "minSCM": 0, "maxSCM": null, "ratePerSCM": 56.00 }
@@ -10,5 +10,5 @@
   "effectiveFrom": "2026-07-19",
   "sourceUrl": "https://www.bglgas.com/price-tag/",
   "lastVerified": "2026-10-01",
-  "verifiedBy": "PRIMARY — fetched directly from BGL's own live 'Price Tag' page (bglgas.com), which states the domestic PNG rate as Rs 56.00/SCM effective 19.07.2026. Billing cycle (bimonthly) confirmed via BGL's own customer-services FAQ content (meter readings once every 2 months, alternating assessed/actual bills). Fixed/meter charge NOT found on the price-tag page or in BGL's own PNG-FAQs PDF (image-only content, no numeric detail); modelled as Rs 0, likely understating the real bill. An older (2024) secondary source quotes a different combined domestic rate of Rs 58.00 incl. tax for a 'Non Pipeline' sub-category, which is a different connection type and superseded by this file's 2026 primary figure — not used."
+  "verifiedBy": "PRIMARY — fetched directly from BGL's own live 'Price Tag' page (bglgas.com), which states the domestic PNG rate as Rs 56.00/SCM effective 19.07.2026. Billing cycle (bimonthly) confirmed via BGL's own customer-services FAQ content (meter readings once every 2 months, alternating assessed/actual bills). Fixed/meter charge NOT found on the price-tag page or in BGL's own PNG-FAQs PDF (image-only content, no numeric detail); modelled as Rs 0, likely understating the real bill. An older (2024) secondary source quotes a different combined domestic rate of Rs 58.00 incl. tax for a 'Non Pipeline' sub-category, which is a different connection type and superseded by this file's 2026 primary figure — not used. Kakinada/East Godavari added after a separate research pass on 'Godavari Gas' (a distinct company, GGPL, serving Rajamahendravaram/Eluru) found Goodreturns' live tracker showing the IDENTICAL Rs 56.00/SCM for East Godavari and Kakinada as of 2 October 2026 — matching this file's own primary BGL figure exactly, and consistent with gas-cgds.json's existing (and in this case correct) region label of 'Hyderabad/Vijayawada/Kakinada' for BGL. Godavari Gas (GGPL) itself is treated as a SEPARATE, unverified entity — see HANDOFF.md for why it was excluded rather than assumed to be the same company."
 }
