@@ -278,18 +278,44 @@ fuel-cost → [EV charging out of order] when this session paused). Re-run the w
 script per category first; don't assume every page needs work — in fuel-cost only 3/3 needed it,
 in financial only 8 of ~30 did.
 
-**Water/gas board tariff-data coverage** — verified via WebFetch on real competitor page listings
-(not marketing-copy claims), still not started as of this handoff:
-- **Water**: DesiMetrics has 5 boards live; competitors' real dedicated-page count is only 6
-  (BWSSB/Bangalore, Chennai, Delhi, Mumbai, Pune, Hyderabad) — missing BWSSB/Bangalore and genuine
-  Mumbai/Pune coverage. Small, tractable gap.
-- **Gas**: DesiMetrics already has **23 live CGD landing pages** (`src/data/gas-companies.ts`) —
-  parity with competitors on page count. The real gap: only 3 of those 23 (GGL/Gujarat, IGL/Delhi,
-  MNGL/Maharashtra) have verified pre-filled tariff data; the other ~20 are generic "enter your own
-  rate" calculators. Task is "add verified tariff data," not "build new pages."
+**Water/gas board tariff-data coverage** — gas half DONE 2026-10-02, water half not started:
+
+- **Gas — DONE.** All 21 `gas-companies.ts` slugs processed (18 needed work; 3 — GGL/IGL/MNGL —
+  already had data pre-session). 13 now have real, source-cited tariff data; 5 excluded with a
+  documented reason after a genuine attempt (never guessed):
+  - Added: MGL (Mumbai), ATGL (Adani Total Gas, Ahmedabad GA), TGL (Torrent Gas, Jaipur GA), GAIL
+    Gas (Bengaluru GA), BGL (Hyderabad + Kakinada/East Godavari), CUGL (Kanpur+3 others, one
+    company-wide rate), GRGL (Green Gas Limited, Lucknow+Agra — see region-correction note below),
+    HCGDL (Haryana City Gas, Gurugram GA), VGL (Vadodara Gas), TNGCL (Tripura), THINKGAS (Nellore/
+    Tirupati), AGL (Aavantika Gas, Indore — the one CGD that bills MONTHLY, not bimonthly), and
+    TGLMBD (the "siti-energy" slug — Siti Energy Limited was acquired and now operates as Torrent
+    Gas's Moradabad network under a different rate than Torrent's own Jaipur file).
+  - Excluded (documented in each slug's absence, not in a file): IndianOil-Adani Gas (only
+    Rs/MMBtu figures published, no calorific-value conversion factor to get a trustworthy SCM
+    rate), Godavari Gas/GGPL (only a stale April-2023 rate card found), Megha Gas (its own site's
+    rate-card page 404s; no current figure found anywhere), Sanvariya Gas (sanvariyagas.com's DNS
+    doesn't resolve at all), SGL/Sabarmati Gas (same MMBtu-only problem as IndianOil-Adani Gas).
+  - Two real `gas-cgds.json` metadata errors surfaced and corrected while sourcing data: "green-gas"
+    was labelled "Ahmedabad / Sabarmati belt" but Green Gas Limited is actually a Lucknow-HQ UP
+    operator with no Gujarat connection; "haryana-city-gas" was labelled "Haryana (select towns)"
+    but that operator actually runs three separate networks across Haryana, Rajasthan (Bhiwadi) and
+    Puducherry.
+  - One real component bug found and fixed: `GasCgdPage.tsx` had a hardcoded FAQ question assuming
+    every CGD bills bimonthly (`src/components/calculators/GasCgdPage.tsx`, the "why is my bill
+    bi-monthly" FAQ) — AGL's monthly billing surfaced it. Both EN/HI branches fixed to key off
+    `tariff.billingCycle`, not hardcoded.
+  - Process note for a future pass: don't trust a CGD's assumed billing cycle — AGL was genuinely
+    monthly, confirmed only by reading its primary tariff card directly. Verify per-company rather
+    than inheriting the pattern from siblings.
+  - Commits: `dc9cb4c`, `0b2c6e9`, `1148d3f`, `e9d94fd`, `d3c1d66`.
+
+- **Water — not started.** DesiMetrics has 5 boards live; competitors' real dedicated-page count is
+  only 6 (BWSSB/Bangalore, Chennai, Delhi, Mumbai, Pune, Hyderabad) — missing BWSSB/Bangalore and
+  genuine Mumbai/Pune coverage. Small, tractable gap — next up.
 
 Full detail in
-`~/.claude/projects/-Users-ganeshkolekar/memory/project_desimetrics_water_gas_coverage_todo.md`.
+`~/.claude/projects/-Users-ganeshkolekar/memory/project_desimetrics_water_gas_coverage_todo.md`
+(needs updating to reflect gas being done).
 
 Two bigger, explicitly-parked strategic bets (user said "hold off," don't start without checking
 in): an **AI Bill Explainer** (OCR + LLM) and a **Government Scheme Eligibility Checker**
