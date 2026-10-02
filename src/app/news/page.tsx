@@ -27,6 +27,13 @@ interface NewsPost {
 
 const posts: NewsPost[] = [
   {
+    title: "India's Power Shortage Hits a 3-Year High: Why It Happened and Will It Affect Your Bill?",
+    tag: 'National · Grid-India · CEA',
+    href: '/news/india-power-shortage-september-2026',
+    date: '2 October 2026',
+    live: true,
+  },
+  {
     title: "Kerala's Power Shortage: What It Means for Your KSEB Bill",
     tag: 'Kerala · KSEB',
     href: '/news/kerala-power-shortage-september-2026',

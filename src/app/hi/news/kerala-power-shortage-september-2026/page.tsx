@@ -249,6 +249,15 @@ export default function KeralaPowerShortagePageHi() {
             एक पहचानी गई गड़बड़ी से नहीं — इसीलिए किसी एक कारण के सुधरते ही यह खत्म नहीं
             होती।
           </p>
+          <p className="mt-3 text-ash/80">
+            केरल अकेला नहीं है — इसी कमजोर मानसून, मजबूत मांग और तंग कोयला स्टॉक ने सितंबर
+            2026 में भारत की राष्ट्रीय बिजली किल्लत को तीन साल के उच्चतम स्तर पर पहुंचा दिया।
+            इसी दबाव के पीछे के अखिल भारतीय आंकड़ों के लिए{' '}
+            <Link href="/hi/news/india-power-shortage-september-2026" className="text-brass underline">
+              राष्ट्रीय बिजली किल्लत पर हमारा लेख
+            </Link>{' '}
+            देखें।
+          </p>
         </section>
 
         <section aria-labelledby="numbers" className="mt-10 scroll-mt-20">
@@ -414,6 +423,20 @@ export default function KeralaPowerShortagePageHi() {
             जुड़े टूल और गाइड
           </h2>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+            <Link
+              href="/hi/news/india-power-shortage-september-2026"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-news/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📰
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                भारत की राष्ट्रीय बिजली किल्लत
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                केरल जिस दबाव को महसूस कर रहा है, उसके पीछे के अखिल भारतीय आंकड़े।
+              </p>
+            </Link>
             <Link
               href="/hi/electricity/kseb-bill-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-news/50 hover:shadow-sm"

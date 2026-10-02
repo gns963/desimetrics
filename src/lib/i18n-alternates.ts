@@ -208,6 +208,7 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
       '/gas',
       '/methodology',
       '/news',
+      '/news/india-power-shortage-september-2026',
       '/news/kerala-power-shortage-september-2026',
       '/news/power-surge-damaged-appliances-tamil-nadu',
       '/news/gerc-liquidated-damages-wind-solar-gujarat',

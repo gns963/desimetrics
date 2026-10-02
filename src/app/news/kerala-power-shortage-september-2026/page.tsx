@@ -252,6 +252,15 @@ export default function KeralaPowerShortagePage() {
             once, not one identifiable failure — which is also why it doesn&apos;t resolve the
             moment any single factor improves.
           </p>
+          <p className={`mt-3 ${pCls}`}>
+            Kerala isn&apos;t alone in this — the same weak monsoon, strong demand and tight
+            coal stocks pushed India&apos;s national power shortfall to a three-year high in
+            September 2026. See{' '}
+            <Link href="/news/india-power-shortage-september-2026" className="text-brass underline">
+              our explainer on the national power shortage
+            </Link>{' '}
+            for the all-India numbers behind this same squeeze.
+          </p>
         </section>
 
         <section aria-labelledby="numbers" className="mt-10 scroll-mt-20">
@@ -419,6 +428,20 @@ export default function KeralaPowerShortagePage() {
             Related tools and guides
           </h2>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+            <Link
+              href="/news/india-power-shortage-september-2026"
+              className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-news/50 hover:shadow-sm"
+            >
+              <span className="text-xl" aria-hidden>
+                📰
+              </span>
+              <p className="font-display mt-2 font-bold text-ink-navy">
+                India&apos;s National Power Shortage
+              </p>
+              <p className="mt-1 text-xs text-ash/60">
+                The all-India numbers behind the same squeeze Kerala is feeling.
+              </p>
+            </Link>
             <Link
               href="/electricity/kseb-bill-calculator"
               className="rounded-xl border border-hairline bg-paper p-5 transition hover:border-hub-news/50 hover:shadow-sm"
