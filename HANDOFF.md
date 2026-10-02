@@ -1,6 +1,6 @@
 # DesiMetrics — Financial Hub Parity + Content Quality: Handoff
 
-_Last updated: 2026-09-28. This file exists so work can be picked up cleanly by another
+_Last updated: 2026-10-02. This file exists so work can be picked up cleanly by another
 session/person. Update it as state changes; delete it once this thread is fully wrapped up and
 redundant with git history. Supersedes the previous version of this file, which covered the
 Tariff Directory feature — that work shipped (commit `076aa0f`) and is no longer active; see git
@@ -8,16 +8,22 @@ log if you need its history._
 
 ## Goal
 
-Two goals from the original thread, now joined by a third (per-category word-count pass) that's
-actively in progress:
+Four goals, three from the original thread (now fully done) plus a new, actively-started fourth:
 
 1. **Financial-hub feature parity** with calcwise.finance — DONE (see Phase 1-4 below).
-2. **Content quality across the whole site** — original pass DONE (Phase 2), but the user
+2. **Content quality across the whole site** — original pass DONE (Phase 2); the user then
    re-scoped the word-count bar mid-thread (see "Word-count definition" below) and asked for a
-   **category-by-category re-pass** against the new, stricter definition. This is the active work.
-3. **Infra**: a broken production deploy (Turbopack build failure on Hostinger) got fixed along the
-   way, and a separate, non-blocking `www` subdomain routing bug got diagnosed (not fixed — needs
-   Hostinger human support, user deferred it as non-urgent). Both documented below.
+   **category-by-category re-pass** against the new, stricter definition. **This re-pass is now
+   COMPLETE across every category** (Financial, Appliances, Fuel-cost, Electricity, Water, Gas,
+   Solar, AC) — see the table below. Nothing left to do here.
+3. **Infra**: a broken production deploy (Turbopack build failure on Hostinger) got fixed, a
+   `www` subdomain routing bug was diagnosed and later fixed (2026-10-01), and a GSC-reported
+   robots.txt crawl issue was investigated (2026-10-02) — one real bug fixed, one restart-pattern
+   mystery left open but monitored. All documented below under "Known issues."
+4. **New: Tools hub (9th vertical)** — a deliberately different, non-India-specific vertical for
+   generic number/conversion tools, started 2026-10-02. Hex Calculator shipped; user committed to
+   building out the full ~60-tool catalog in batches. Active, not yet continued past tool #1 — see
+   "Not started — next up" below.
 
 ## Word-count definition (the operative one — supersedes anything in Phase 1-4 below)
 
@@ -196,6 +202,32 @@ converge on the exact fixed-sections list via `AskUserQuestion`). Work done in t
 
 ## Known issues — deferred, not blocking
 
+### 🟡 MONITORING (not blocking) — GSC "Host had problems" / robots.txt, opened + partly fixed 2026-10-02
+
+Google Search Console (Settings → Crawl stats → Host status) flagged "robots.txt fetch: High fail
+rate last week" around 2026-09-28/29.
+
+- **Real cause, fixed (commit `1320a71`)**: `src/app/robots.ts` had Next.js's `host: SITE` config
+  option set, which emits a non-standard `Host:` directive — GSC's own robots.txt viewer flagged it
+  as "Rule ignored by Googlebot." Google has never supported this directive (Yandex-only, long
+  deprecated). Removed; harmless but pure noise — canonicalization is already correctly handled by
+  the www→apex redirect (`proxy.ts`) and per-page canonical tags.
+- **Investigated, inconclusive, user chose to drop for now**: Runtime logs on Hostinger (Business
+  Web Hosting, native Node.js app, confirmed persistent-process not serverless) show a recurring
+  **paired process restart** pattern — always exactly 2 "▲ Next.js" startup banners 2-6ms apart, in
+  clusters at irregular intervals. Hypothesis: 2-worker cluster mode correlating with the plan's
+  2 CPU cores — unconfirmed. Three rounds with Hostinger's in-panel AI support agent found memory
+  healthy (~566MB avg, nowhere near the 3072MB limit), CPU/IOPS showing a regular pattern consistent
+  with routine platform housekeeping (not a crash loop), and robots.txt itself clean — 458 requests
+  in 7 days, zero 429/4xx/5xx. **No customer-visible supervisor exit-code/crash-reason log exists
+  at this hosting tier** — confirmed explicitly by Hostinger's own agent; only a human support
+  engineer could see that layer. Bottom line: the restarts are real and unexplained, but no actual
+  request failure has been found anywhere. User's call: stop chasing this via chat-support, watch
+  GSC's Host status over the next 1-2 weeks instead of escalating further. If it recurs, next real
+  step (not yet tried) is a human Hostinger support ticket, not more AI-agent back-and-forth — see
+  `~/.claude/projects/-Users-ganeshkolekar/memory/project_desimetrics_gsc_robots_restart_investigation.md`
+  for the full diagnostic trail (don't re-derive it from scratch).
+
 ### ✅ FIXED 2026-10-01 — `www.desimetrics.com` broken redirect
 
 **This was a code bug in our own repo, not a Hostinger limitation. The entire diagnosis below is
@@ -272,11 +304,30 @@ Full diagnosis trail (don't re-investigate from scratch):
 
 ## Not started — next up, paused pending user go-ahead
 
-**Electricity/Water/Gas/Solar/AC word-count re-pass** — continue the category-by-category process
-described above, in whatever order the user wants next (they were doing financial → appliances →
-fuel-cost → [EV charging out of order] when this session paused). Re-run the word-count audit
-script per category first; don't assume every page needs work — in fuel-cost only 3/3 needed it,
-in financial only 8 of ~30 did.
+**Tools hub — Base & Number Converters batch (the live priority).** User was shown a competitor's
+hex-calculator page, approved adding a new, deliberately non-India-specific 9th vertical (`/tools`)
+reasoning that Financial already set precedent for a non-utility-bill niche on this site, then was
+shown that competitor's full "Related Hex Conversion Tools" catalog (~60 tools across 4 categories)
+and chose to commit to building toward the **full catalog**, across multiple sessions, in batches.
+
+- **Shipped (commit `3104b81`):** `/tools` hub index + `/tools/hex-calculator`, EN+HI genuinely
+  translated. New pure calc engine `src/lib/calc/hex.ts` (BigInt-based, exact for arbitrary size,
+  18 passing tests) — add/subtract/multiply/divide plus hex/decimal/binary/octal conversion. Hub
+  infra added sitewide: `tools` HubKey + `--color-hub-tools` token (`SplitHero.tsx`,
+  `globals.css`), added to `CrossHubLinks.tsx`, `Footer.tsx`'s category list, and the homepage's
+  hub-card array (`src/app/page.tsx`) — this infra is done and shared, don't rebuild it for future
+  tools in this hub.
+- **Gotcha hit and fixed:** TS target is ES2017 sitewide (not changed for this feature) — BigInt
+  literal syntax (`0n`) fails type-checking even though BigInt works fine at runtime on that
+  target. Had to rewrite every literal as `BigInt(n)` in `hex.ts` and its tests.
+- **Not yet started:** the actual next batch, **Base & Number Converters** (~24 tools: hex↔decimal/
+  binary/octal, base16/32/36/64 variants + reverses, base12-to-hex, signed-integer/negative-decimal
+  handling, little-endian hex↔decimal). Most are thin wrappers around `convertHex()`/`parseHex()`/
+  `toHex()` already in `src/lib/calc/hex.ts`; a few (base32/36/64, endianness, signed-integer
+  two's-complement) need small new pure functions, same engine-first + tests pattern as `hex.ts`
+  itself. Each new tool needs its own EN+HI page pair following the `/tools/hex-calculator`
+  template, plus `sitemap.ts` + `i18n-alternates.ts` registration (see those files for the existing
+  entries to copy the pattern from).
 
 **Water/gas board tariff-data coverage** — gas half DONE 2026-10-02, water half not started:
 
