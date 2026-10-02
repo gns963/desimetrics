@@ -17,6 +17,5 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: 'Bingbot', allow: '/' },
     ],
     sitemap: `${SITE}/sitemap.xml`,
-    host: SITE,
   }
 }
