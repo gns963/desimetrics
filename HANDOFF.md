@@ -1,6 +1,6 @@
 # DesiMetrics — Financial Hub Parity + Content Quality: Handoff
 
-_Last updated: 2026-10-02. This file exists so work can be picked up cleanly by another
+_Last updated: 2026-10-03. This file exists so work can be picked up cleanly by another
 session/person. Update it as state changes; delete it once this thread is fully wrapped up and
 redundant with git history. Supersedes the previous version of this file, which covered the
 Tariff Directory feature — that work shipped (commit `076aa0f`) and is no longer active; see git
@@ -24,6 +24,19 @@ Four goals, three from the original thread (now fully done) plus a new, actively
    generic number/conversion tools, started 2026-10-02. Hex Calculator shipped; user committed to
    building out the full ~60-tool catalog in batches. Active, not yet continued past tool #1 — see
    "Not started — next up" below.
+5. **News vertical — not new, but previously undocumented in this file.** `/news` is a genuine
+   10th site vertical (separate from Tools) for timely explainers tied to a current event, with
+   its own `NewsArticle`+`FAQPage` JSON-LD pattern, index page, and per-post segmented-bar visual
+   component (e.g. `SupplyBand`/`GenerationMixBand`, defined locally per post, not shared) — it
+   existed before this session (Kerala/KSEB, Tamil Nadu, 2× Gujarat GERC, Supreme Court posts) but
+   was never mentioned in HANDOFF.md, so an earlier research pass this session nearly missed that
+   a Kerala power-shortage post already existed because it's in `/news/`, not `/blog/`. **Don't
+   repeat that mistake** — check `src/app/news/*/page.tsx` before assuming a topic has no existing
+   coverage just because `/blog/` doesn't have it. On 2026-10-02/03, added a new national-scope
+   companion post, `/news/india-power-shortage-september-2026` (EN+HI, commit `02a0dd3`), covering
+   Reuters' Sept 2026 power-shortfall report; cross-linked both ways with the Kerala post. **Currently
+   `noindex` pending the user's own review** — flip `robots: { index: false, follow: true }` to
+   indexed on both the EN and HI page once they've read it.
 
 ## Word-count definition (the operative one — supersedes anything in Phase 1-4 below)
 
@@ -392,6 +405,15 @@ calculator/content work.
 - Blog posts: `src/app/blog/<slug>/page.tsx` — same JSON-LD pattern (Article/FAQPage/BreadcrumbList)
   plus shared `h2Cls`/`pCls`/`takeawayCls` className constants; registered in
   `src/app/blog/page.tsx`'s `posts` array and `src/app/sitemap.ts`.
+- **News posts** (a separate vertical from blog — see goal #5 above): `src/app/news/<slug>/page.tsx`
+  + `src/app/hi/news/<slug>/page.tsx`, `NewsArticle`+`FAQPage`+`BreadcrumbList` JSON-LD,
+  `PageHero hub="news"` with a `stats` chip row, and a locally-defined segmented-bar visual
+  component per post (copy-and-adapt, not shared — e.g. `SupplyBand`, `CostBand`,
+  `GenerationMixBand`). Registered in `src/app/news/page.tsx` + `src/app/hi/news/page.tsx`'s
+  `posts` arrays, `src/app/sitemap.ts`, and `src/lib/i18n-alternates.ts`. EN+HI mandatory; a
+  state-specific story also gets that state's regional language if `STATE_LANGUAGE_POLICY`
+  applies (Tamil Nadu → `/ta`, Gujarat → `/gu`) — a national story stays EN+HI only. New posts
+  go out `robots: { index: false, follow: true }` until the user reviews and flips it.
 - Hub listing + cross-linking: `src/app/financial/page.tsx` (card grid + hero stats) and
   `src/components/FinancialCrossSell.tsx` (the "other calculators" block on every financial-hub
   page) — **both must be updated whenever a calculator is added or removed**, or the count/links
