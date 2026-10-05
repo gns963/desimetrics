@@ -22,7 +22,7 @@ const posts = [
     title: 'आपका बिजली बिल कहां जाता है? ट्रांसमिशन और डिस्ट्रीब्यूशन की लागत समझिए',
     tag: 'बिजली',
     href: '/hi/blog/transmission-distribution-costs-electricity-bill-india',
-    live: false,
+    live: true,
   },
   {
     title: 'BESCOM बिजली बिल की पूरी गाइड',

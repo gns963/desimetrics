@@ -22,7 +22,7 @@ const posts = [
     title: 'Where Does Your Electricity Bill Go? Transmission and Distribution Costs Explained',
     tag: 'Electricity',
     href: '/blog/transmission-distribution-costs-electricity-bill-india',
-    live: false,
+    live: true,
   },
   {
     title: 'How Much Does a Rooftop Solar System Actually Cost in India? (2026 Pricing Guide)',

@@ -177,6 +177,7 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
       '/blog/new-vs-old-tax-regime-who-actually-saves',
       '/blog/smart-meters-in-india-guide',
       '/blog/fixed-charges-vs-fca-electricity-bill',
+      '/blog/transmission-distribution-costs-electricity-bill-india',
       '/blog/pm-surya-ghar-muft-bijli-yojana-subsidy-guide',
       '/blog/how-water-bills-calculated-india',
       '/blog/msedcl-complete-guide-electricity-bill',
