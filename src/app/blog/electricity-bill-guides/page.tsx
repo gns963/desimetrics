@@ -24,6 +24,7 @@ const GUIDES: Record<string, string> = {
   JVVNL: '/blog/jvvnl-complete-guide-electricity-bill',
   PSPCL: '/blog/pspcl-complete-guide-electricity-bill',
   TSSPDCL: '/blog/tsspdcl-complete-guide-electricity-bill',
+  UPCL: '/blog/upcl-electricity-bill-uttarakhand-guide',
 }
 
 const directory = CALCULATOR_PAGES.map((p) => {

@@ -3807,7 +3807,7 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     neighboringDiscoms: ['HPSEBL', 'UPPCL', 'JPDCL'],
     intro: "Estimate your Uttarakhand Power Corporation Ltd (UPCL, UERC) electricity bill for Uttarakhand. Uttarakhand tiers its fixed charge by load and gives rural/hill rebates. Enter your units below for an itemised, slab-by-slab estimate.",
     explainer: [
-      { title: "Load-tiered fixed charge and hill rebates", body: "Uttarakhand’s fixed charge is tiered by sanctioned load (₹75 up to 1 kW, ₹85 up to 4 kW, ₹100 above), and rural areas get a 5% and hill areas a 10% rebate on the bill." },
+      { title: "Load-tiered fixed charge and hill rebates", body: "Uttarakhand’s fixed charge is a per-kW monthly rate tiered by sanctioned load (₹75/kW up to 1 kW, ₹85/kW above 1 kW and up to 4 kW, ₹100/kW above 4 kW), and rural areas get a 5% and hill areas a 10% rebate on the bill." },
       { title: "How the Uttarakhand bill is calculated", body: "Uttarakhand domestic supply is billed monthly. Consumption is split across telescopic slabs from ₹3.65 to ₹7.8/unit, each band charged at its own rate. A fixed charge of a flat ₹85/month applies." },
     ],
     faqs: [
@@ -3819,7 +3819,7 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       { q: "What is UPCL, and how did it form?", a: "When the state of Uttarakhand was carved out of Uttar Pradesh under the UP Reorganisation Act, 2000, the erstwhile UP State Electricity Board's assets in the new state were transferred to Uttarakhand Power Corporation Ltd (UPCL), incorporated on 12 February 2001." },
     ],
     billTraps: [
-      { title: "The fixed charge depends on your sanctioned load tier", body: "UPCL charges ₹75/month up to 1 kW, ₹85/month up to 4 kW, and ₹100/month above that — not a single flat fee. A larger sanctioned load raises the fixed charge even if your usage stays the same." },
+      { title: "The fixed charge depends on your sanctioned load tier", body: "UPCL charges ₹75 per kW per month up to 1 kW, ₹85 per kW above 1 kW and up to 4 kW, and ₹100 per kW above that — not a single flat fee. This calculator applies the ₹85 per kW rate. A larger sanctioned load raises the fixed charge even if your usage stays the same." },
       { title: "Rural and hill rebates aren't applied automatically", body: "Rural connections get a 5% rebate and hill-area connections a 10% rebate on the bill, but this calculator does not apply these automatically — factor them in separately if you qualify." },
       { title: "Electricity duty isn't in this estimate", body: "A ₹0.15/unit electricity duty applies on top of the slab charges and is not modelled here, so your real UPCL bill will run slightly higher." },
     ],

@@ -19,6 +19,24 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'UPCL Bill Explained: Uttarakhand Electricity Tariff, Fixed Charges and How to Check Your Bill',
+    tag: 'Electricity',
+    href: '/blog/upcl-electricity-bill-uttarakhand-guide',
+    live: true,
+  },
+  {
+    title: 'MVCA Charges in Your Electricity Bill: What They Are and Why They Change',
+    tag: 'Explainer',
+    href: '/blog/mvca-charges-electricity-bill-west-bengal',
+    live: true,
+  },
+  {
+    title: 'LMV-1 Full Form in UPPCL: Every Tariff Category from LMV-1 to HV-4 Explained',
+    tag: 'Explainer',
+    href: '/blog/lmv-1-full-form-uppcl-tariff-categories',
+    live: true,
+  },
+  {
     title: 'Where Does Your Electricity Bill Go? Transmission and Distribution Costs Explained',
     tag: 'Electricity',
     href: '/blog/transmission-distribution-costs-electricity-bill-india',

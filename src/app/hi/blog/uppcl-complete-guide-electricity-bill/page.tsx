@@ -257,6 +257,13 @@ export default function UppclCompleteGuidePageHi() {
               </tbody>
             </table>
           </div>
+          <p className={`mt-4 ${pCls}`}>
+            हर कोड का मतलब, LMV-3 से LMV-11 और HV शेड्यूल समेत, जानने के लिए देखें{' '}
+            <Link href="/hi/blog/lmv-1-full-form-uppcl-tariff-categories" className="text-brass underline">
+              LMV-1 का फुल फॉर्म और UPPCL की हर टैरिफ कैटेगरी
+            </Link>
+            ।
+          </p>
           <p className={takeawayCls}>
             निष्कर्ष: यहां हर श्रेणी खास तौर पर शहरी शेड्यूल है — UPPCL इनमें से
             कई के लिए अलग ग्रामीण शेड्यूल चलाता है जिन्हें यह गाइड मॉडल नहीं

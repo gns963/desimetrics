@@ -19,6 +19,24 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'UPCL बिल समझिए: उत्तराखंड का बिजली टैरिफ, फिक्स्ड चार्ज और बिल कैसे देखें',
+    tag: 'बिजली',
+    href: '/hi/blog/upcl-electricity-bill-uttarakhand-guide',
+    live: true,
+  },
+  {
+    title: 'बिजली बिल में MVCA चार्ज: यह क्या है और क्यों बदलता है',
+    tag: 'एक्सप्लेनर',
+    href: '/hi/blog/mvca-charges-electricity-bill-west-bengal',
+    live: true,
+  },
+  {
+    title: 'UPPCL में LMV-1 का फुल फॉर्म: LMV-1 से HV-4 तक हर टैरिफ कैटेगरी समझिए',
+    tag: 'एक्सप्लेनर',
+    href: '/hi/blog/lmv-1-full-form-uppcl-tariff-categories',
+    live: true,
+  },
+  {
     title: 'आपका बिजली बिल कहां जाता है? ट्रांसमिशन और डिस्ट्रीब्यूशन की लागत समझिए',
     tag: 'बिजली',
     href: '/hi/blog/transmission-distribution-costs-electricity-bill-india',

@@ -434,6 +434,10 @@ export default function WbsedclCompleteGuidePageHi() {
             <Link href="/hi/blog/fixed-charges-vs-fca-electricity-bill" className="text-brass underline">
               फिक्स्ड चार्ज बनाम FCA समझाया गया
             </Link>
+            । यह कैसे तय और ट्रू-अप होता है, इसके लिए देखें{' '}
+            <Link href="/hi/blog/mvca-charges-electricity-bill-west-bengal" className="text-brass underline">
+              बिजली बिल में MVCA चार्ज
+            </Link>
             ।
           </p>
           <p className={`mt-3 ${pCls}`}>

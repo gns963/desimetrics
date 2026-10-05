@@ -29,14 +29,19 @@
         }
       ],
       "fixedCharge": {
-        "basis": "flat",
-        "flat": 85
-      }
+        "basis": "perLoad",
+        "perKW": 85
+      },
+      "sourceNote": "PRIMARY — UERC order on UPCL's True up for FY 2024-25, APR for FY 2025-26 and ARR for FY 2026-27, Annexure 1 'Rate Schedule Effective from 01.04.2026', RTS-1 Domestic, '1.2 Other Domestic Consumers': Rs 3.65/kWh up to 100 units/month, Rs 5.25 for 101-200, Rs 7.15 for 201-400, Rs 7.80 above 400. Fixed charge is per kW of sanctioned load per month and tiered by load: Rs 75/kW up to 1 kW, Rs 85/kW above 1 kW and up to 4 kW, Rs 100/kW above 4 kW. Only the middle tier (Rs 85/kW) is modelled, so this understates the fixed charge above 4 kW (by Rs 15/kW) and overstates it at exactly 1 kW or below (by Rs 10/kW). BPL/lifeline (Rs 18/connection + Rs 1.85/kWh, load up to 1 kW and up to 60 units/month) and RTS-1A snowbound (Rs 1.85/kWh) not modelled. Source: https://cdnbbsr.s3waas.gov.in/s303412aef4dcdee4f934f7bf599f89783/uploads/2026/04/20260407394034625.pdf (linked from https://upcl.uk.gov.in/electricity-tariff-orders/)."
     },
     {
       "connectionType": "commercial",
       "slabs": [
-        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 7.75 }
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 7.75
+        }
       ],
       "fixedCharge": {
         "basis": "perLoad",
@@ -47,7 +52,11 @@
     {
       "connectionType": "industrial",
       "slabs": [
-        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 5.75 }
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 5.75
+        }
       ],
       "fixedCharge": {
         "basis": "perLoad",
@@ -58,7 +67,11 @@
     {
       "connectionType": "agriculture",
       "slabs": [
-        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 2.7 }
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 2.7
+        }
       ],
       "fixedCharge": {
         "basis": "flat",
@@ -70,8 +83,8 @@
   "fuelCostAdjustment": 0,
   "electricityDutyPercent": 0,
   "subsidySchemes": [],
-  "effectiveFrom": "2025-04-01",
+  "effectiveFrom": "2026-04-01",
   "sourceUrl": "https://uerc.gov.in/",
-  "lastVerified": "2026-08-29",
-  "verifiedBy": "SOURCED (secondary) — Uttarakhand domestic tariff from secondary references; pending primary SERC order cross-check. A ₹0.15/unit electricity duty and the rural/hill rebates are not modelled here."
+  "lastVerified": "2026-10-05",
+  "verifiedBy": "PRIMARY for residential slabs and fixed-charge rate (UERC rate schedule effective 01.04.2026, RTS-1) — see the residential sourceNote. Electricity duty, green energy cess and the monthly FPPCA are NOT modelled; the load-tiered fixed charge is modelled at the Rs 85/kW middle tier only."
 }

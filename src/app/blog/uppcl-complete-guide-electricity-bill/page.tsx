@@ -257,6 +257,13 @@ export default function UppclCompleteGuidePage() {
               </tbody>
             </table>
           </div>
+          <p className={`mt-4 ${pCls}`}>
+            For what each code means, including LMV-3 to LMV-11 and the HV schedules, see{' '}
+            <Link href="/blog/lmv-1-full-form-uppcl-tariff-categories" className="text-brass underline">
+              LMV-1 full form and every UPPCL tariff category
+            </Link>
+            .
+          </p>
           <p className={takeawayCls}>
             Takeaway: every category here is the urban schedule specifically — UPPCL
             runs separate rural schedules for several of these that this guide

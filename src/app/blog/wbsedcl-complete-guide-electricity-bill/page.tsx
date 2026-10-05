@@ -427,6 +427,10 @@ export default function WbsedclCompleteGuidePage() {
             <Link href="/blog/fixed-charges-vs-fca-electricity-bill" className="text-brass underline">
               fixed charges vs FCA explained
             </Link>
+            , and for how it is set and trued up, see{' '}
+            <Link href="/blog/mvca-charges-electricity-bill-west-bengal" className="text-brass underline">
+              MVCA charges in your electricity bill
+            </Link>
             .
           </p>
           <p className={`mt-3 ${pCls}`}>
