@@ -411,6 +411,13 @@ export default function GercAdditionalSurchargePageHi() {
             </table>
           </div>
           <p className={`mt-3 ${pCls}`}>
+            ट्रांसमिशन और व्हीलिंग चार्ज आम घरेलू बिल तक कैसे पहुंचते हैं, इसके लिए हमारी गाइड{' '}
+            <Link href="/hi/blog/transmission-distribution-costs-electricity-bill-india" className="text-brass underline">
+              ट्रांसमिशन और डिस्ट्रीब्यूशन की लागत
+            </Link>{' '}
+            देखें।
+          </p>
+          <p className={`mt-3 ${pCls}`}>
             पात्रता भी अलग है। बिजली अधिनियम ओपन एक्सेस के लिए 1 MW अनुबंधित मांग या स्वीकृत लोड
             तय करता है; इलेक्ट्रिसिटी (प्रमोटिंग रिन्यूएबल एनर्जी थ्रू ग्रीन एनर्जी ओपन एक्सेस)
             रूल्स, 2022 ने ग्रीन एनर्जी ओपन एक्सेस के लिए इसे 100 kW कर दिया, और कैप्टिव

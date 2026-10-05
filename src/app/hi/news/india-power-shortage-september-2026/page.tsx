@@ -353,7 +353,12 @@ export default function IndiaPowerShortagePageHi() {
             <Link href="/blog/fixed-charges-vs-fca-electricity-bill" className="text-brass underline">
               फिक्स्ड चार्जेज बनाम फ्यूल-कॉस्ट एडजस्टमेंट
             </Link>{' '}
-            वाला लेख देखें। मान लेने के बजाय अपने राज्य का असल मासिक आदेश जांचें।
+            वाला लेख देखें। मान लेने के बजाय अपने राज्य का असल मासिक आदेश जांचें। बिल का
+            नेटवर्क वाला हिस्सा — ट्रांसमिशन चार्ज, व्हीलिंग चार्ज और लाइन लॉस — हमारी गाइड{' '}
+            <Link href="/hi/blog/transmission-distribution-costs-electricity-bill-india" className="text-brass underline">
+              ट्रांसमिशन और डिस्ट्रीब्यूशन की लागत
+            </Link>{' '}
+            में समझाया गया है।
           </p>
           <p className={takeawayCls}>
             निचोड़: इस किल्लत का बिल पर असर, अगर कोई है, तो वह एक नियमित मासिक एडजस्टमेंट से

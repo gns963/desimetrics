@@ -415,6 +415,14 @@ export default function GercAdditionalSurchargePage() {
             </table>
           </div>
           <p className={`mt-3 ${pCls}`}>
+            For how transmission and wheeling charges reach an ordinary household bill, see our
+            guide to{' '}
+            <Link href="/blog/transmission-distribution-costs-electricity-bill-india" className="text-brass underline">
+              transmission and distribution costs
+            </Link>
+            .
+          </p>
+          <p className={`mt-3 ${pCls}`}>
             Eligibility differs too. The Electricity Act sets open access at 1 MW of contracted
             demand or sanctioned load; the Electricity (Promoting Renewable Energy Through Green
             Energy Open Access) Rules, 2022 lowered it to 100 kW for green energy open access, with

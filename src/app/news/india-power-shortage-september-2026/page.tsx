@@ -360,7 +360,12 @@ export default function IndiaPowerShortagePage() {
               fixed charges vs. fuel-cost adjustment
             </Link>
             . Check your own state&apos;s monthly order for the actual figure rather than
-            assuming either way.
+            assuming either way. The network side of a bill — transmission charges, wheeling
+            charges and line losses — is covered in our guide to{' '}
+            <Link href="/blog/transmission-distribution-costs-electricity-bill-india" className="text-brass underline">
+              transmission and distribution costs
+            </Link>
+            .
           </p>
           <p className={takeawayCls}>
             Takeaway: the shortage&apos;s bill exposure, if any, runs through a routine monthly
