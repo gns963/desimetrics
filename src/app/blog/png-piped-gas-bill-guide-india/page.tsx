@@ -393,7 +393,12 @@ export default function PngPipedGasBillGuidePage() {
             <Link href="/electricity" className="text-brass underline">
               electricity bill calculators
             </Link>{' '}
-            work the same way — your own rate and consumption, not a national estimate.
+            work the same way — your own rate and consumption, not a national estimate. For
+            the upstream gas prices notified from 1 October 2026, see{' '}
+            <Link href="/news/gas-price-ceiling-9-89-apm-cap-october-2026" className="text-brass underline">
+              gas price ceiling raised to $9.89
+            </Link>
+            .
           </p>
           <p className={takeawayCls}>
             Takeaway: use your own CGD&apos;s current rate and your own consumption — this

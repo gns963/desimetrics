@@ -151,6 +151,14 @@ export default function GasHubPageHi() {
             </li>
           ))}
         </ul>
+        <p className="mt-4 text-sm text-ash/70">
+          थोक गैस की कीमतें इन रिटेल दरों से अलग तय होती हैं। अक्टूबर 2026 की अधिसूचना के लिए
+          देखें{' '}
+          <Link href="/hi/news/gas-price-ceiling-9-89-apm-cap-october-2026" className="text-brass underline">
+            गैस प्राइस सीलिंग बढ़कर $9.89 हुई
+          </Link>
+          ।
+        </p>
       </section>
 
       <section aria-labelledby="faq" className="mb-10">

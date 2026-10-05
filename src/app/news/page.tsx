@@ -27,6 +27,13 @@ interface NewsPost {
 
 const posts: NewsPost[] = [
   {
+    title: 'Gas Price Ceiling Raised to $9.89: Will CNG and PNG Get Costlier?',
+    tag: 'National · PPAC · Natural gas',
+    href: '/news/gas-price-ceiling-9-89-apm-cap-october-2026',
+    date: '5 October 2026',
+    live: true,
+  },
+  {
     title: "India's Power Shortage Hits a 3-Year High: Why It Happened and Will It Affect Your Bill?",
     tag: 'National · Grid-India · CEA',
     href: '/news/india-power-shortage-september-2026',

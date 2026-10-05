@@ -27,6 +27,13 @@ interface NewsPost {
 
 const posts: NewsPost[] = [
   {
+    title: 'गैस प्राइस सीलिंग बढ़कर $9.89 हुई: क्या CNG और PNG महंगी होंगी?',
+    tag: 'राष्ट्रीय · PPAC · प्राकृतिक गैस',
+    href: '/hi/news/gas-price-ceiling-9-89-apm-cap-october-2026',
+    date: '5 अक्टूबर 2026',
+    live: true,
+  },
+  {
     title: 'भारत की बिजली किल्लत 3 साल के उच्चतम स्तर पर: वजह क्या है, और क्या इसका असर आपके बिल पर पड़ेगा?',
     tag: 'राष्ट्रीय · Grid-India · CEA',
     href: '/hi/news/india-power-shortage-september-2026',

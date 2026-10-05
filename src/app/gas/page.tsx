@@ -131,6 +131,14 @@ export default function GasHubPage() {
             </li>
           ))}
         </ul>
+        <p className="mt-4 text-sm text-ash/70">
+          Wholesale gas prices are set separately from these retail rates. For the October
+          2026 notification, see{' '}
+          <Link href="/news/gas-price-ceiling-9-89-apm-cap-october-2026" className="text-brass underline">
+            gas price ceiling raised to $9.89
+          </Link>
+          .
+        </p>
       </section>
 
       <section aria-labelledby="faq" className="mb-10">
