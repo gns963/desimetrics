@@ -213,6 +213,7 @@ const TRANSLATED: Record<NonEnglishLocale, TranslatedRoutes> = {
       '/methodology',
       '/news',
       '/news/gas-price-ceiling-9-89-apm-cap-october-2026',
+      '/news/odisha-ev-policy-extended-december-2026',
       '/news/india-power-shortage-september-2026',
       '/news/kerala-power-shortage-september-2026',
       '/news/power-surge-damaged-appliances-tamil-nadu',
