@@ -27,6 +27,13 @@ interface NewsPost {
 
 const posts: NewsPost[] = [
   {
+    title: 'ओडिशा EV सब्सिडी 2026: रकम, आखिरी तारीख और बिजली बिल पर चार्जिंग का खर्च',
+    tag: 'ओडिशा · EV पॉलिसी · OERC',
+    href: '/hi/news/odisha-ev-policy-extended-december-2026',
+    date: '6 अक्टूबर 2026',
+    live: true,
+  },
+  {
     title: 'गैस प्राइस सीलिंग बढ़कर $9.89 हुई: क्या CNG और PNG महंगी होंगी?',
     tag: 'राष्ट्रीय · PPAC · प्राकृतिक गैस',
     href: '/hi/news/gas-price-ceiling-9-89-apm-cap-october-2026',

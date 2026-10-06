@@ -9,36 +9,49 @@
       "slabs": [
         {
           "minUnits": 0,
-          "maxUnits": 100,
-          "ratePerUnit": 3
+          "maxUnits": 50,
+          "ratePerUnit": 2.9
         },
         {
-          "minUnits": 101,
+          "minUnits": 51,
           "maxUnits": 200,
-          "ratePerUnit": 4.8
+          "ratePerUnit": 4.7
         },
         {
           "minUnits": 201,
           "maxUnits": 400,
-          "ratePerUnit": 5.8
+          "ratePerUnit": 5.7
         },
         {
           "minUnits": 401,
           "maxUnits": null,
-          "ratePerUnit": 6.2
+          "ratePerUnit": 6.1
         }
       ],
       "fixedCharge": {
-        "basis": "flat",
-        "flat": 25
-      }
+        "basis": "perLoad",
+        "perKW": 20
+      },
+      "sourceNote": "PRIMARY — OERC Retail Supply Tariff Notification for FY 2026-27 dated 24.03.2026 (Case Nos. 136-139/2025 for TPCODL; one common schedule for all four Odisha DISCOMs), effective 01.04.2026, Category 1.b 'Domestic — Others': 290 paise/kWh for consumption <=50 units/month, 470 for >50 and <=200, 570 for >200 and <=400, 610 above 400. Monthly Minimum Fixed Charge Rs 20 for the first kW or part thereof and Rs 20 for each additional kW or part thereof, modelled here as Rs 20/kW. Not modelled: Kutir Jyoti (<=30 units/month, fixed Rs 70/month), the 10 paise/unit rebate shown against the category, meter rent, and electricity duty (levied by the State over and above the tariff). Source: https://www.orierc.org/CuteSoft_Client/writereaddata/upload/DISCOMs_Tariff_Notification_FY_2026-27.PDF"
     },
     {
       "connectionType": "commercial",
       "slabs": [
-        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 5.9 },
-        { "minUnits": 101, "maxUnits": 300, "ratePerUnit": 7.0 },
-        { "minUnits": 301, "maxUnits": null, "ratePerUnit": 7.6 }
+        {
+          "minUnits": 0,
+          "maxUnits": 100,
+          "ratePerUnit": 5.9
+        },
+        {
+          "minUnits": 101,
+          "maxUnits": 300,
+          "ratePerUnit": 7.0
+        },
+        {
+          "minUnits": 301,
+          "maxUnits": null,
+          "ratePerUnit": 7.6
+        }
       ],
       "fixedCharge": {
         "basis": "perLoad",
@@ -49,7 +62,11 @@
     {
       "connectionType": "industrial",
       "slabs": [
-        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 6.2 }
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 6.2
+        }
       ],
       "fixedCharge": {
         "basis": "perLoad",
@@ -60,7 +77,11 @@
     {
       "connectionType": "agriculture",
       "slabs": [
-        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 1.5 }
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 1.5
+        }
       ],
       "fixedCharge": {
         "basis": "perLoad",
@@ -72,8 +93,8 @@
   "fuelCostAdjustment": 0,
   "electricityDutyPercent": 0,
   "subsidySchemes": [],
-  "effectiveFrom": "2025-04-01",
-  "sourceUrl": "https://www.oerc.gov.in/",
-  "lastVerified": "2026-08-29",
-  "verifiedBy": "SOURCED (secondary) — Odisha domestic tariff from secondary references; pending primary SERC order cross-check. A ₹0.06/unit electricity duty is not modelled here."
+  "effectiveFrom": "2026-04-01",
+  "sourceUrl": "https://www.orierc.org/CuteSoft_Client/writereaddata/upload/DISCOMs_Tariff_Notification_FY_2026-27.PDF",
+  "lastVerified": "2026-10-06",
+  "verifiedBy": "PRIMARY for residential slabs and fixed charge (OERC Retail Supply Tariff Notification FY 2026-27, effective 01.04.2026) — see the residential sourceNote. Electricity duty is NOT modelled; the ₹0.06/unit figure quoted elsewhere on this site is from a secondary reference and unverified."
 }

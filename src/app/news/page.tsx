@@ -27,6 +27,13 @@ interface NewsPost {
 
 const posts: NewsPost[] = [
   {
+    title: 'Odisha EV Subsidy 2026: Amounts, Deadline and What Charging Costs on Your Electricity Bill',
+    tag: 'Odisha · EV Policy · OERC',
+    href: '/news/odisha-ev-policy-extended-december-2026',
+    date: '6 October 2026',
+    live: true,
+  },
+  {
     title: 'Gas Price Ceiling Raised to $9.89: Will CNG and PNG Get Costlier?',
     tag: 'National · PPAC · Natural gas',
     href: '/news/gas-price-ceiling-9-89-apm-cap-october-2026',
