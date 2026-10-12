@@ -222,3 +222,98 @@ export const MEGA_MENU: HubMenu[] = [
     ],
   },
 ]
+
+/**
+ * Header menu used while electricity is the only live section (see
+ * src/lib/paused.ts): one hub would leave the bar almost empty, so the
+ * electricity pages are spread across several menus instead. Hubs with no
+ * columns render as a plain link.
+ */
+export const ELECTRICITY_MENU: HubMenu[] = [
+  {
+    key: 'states',
+    label: 'State Calculators',
+    href: '/electricity',
+    emoji: '⚡',
+    columns: [
+      {
+        heading: 'South & West',
+        links: [
+          { label: 'TNEB Calculator', href: '/electricity/tneb-bill-calculator', sub: 'Tamil Nadu' },
+          { label: 'BESCOM Calculator', href: '/electricity/bescom-bill-calculator', sub: 'Karnataka' },
+          { label: 'KSEB Calculator', href: '/electricity/kseb-bill-calculator', sub: 'Kerala' },
+          { label: 'MSEDCL Calculator', href: '/electricity/msedcl-bill-calculator', sub: 'Maharashtra' },
+          { label: 'Gujarat Calculator', href: '/electricity/gujarat-electricity-bill-calculator', sub: 'Gujarat' },
+          { label: 'Telangana Calculator', href: '/electricity/telangana-electricity-bill-calculator', sub: 'Telangana' },
+        ],
+      },
+      {
+        heading: 'North & East',
+        links: [
+          { label: 'UPPCL Calculator', href: '/electricity/uppcl-bill-calculator', sub: 'Uttar Pradesh' },
+          { label: 'WBSEDCL Calculator', href: '/electricity/wbsedcl-bill-calculator', sub: 'West Bengal' },
+          { label: 'Delhi Calculator', href: '/electricity/delhi-electricity-bill-calculator', sub: 'Delhi' },
+          { label: 'Punjab Calculator', href: '/electricity/punjab-electricity-bill-calculator', sub: 'Punjab' },
+          { label: 'Rajasthan Calculator', href: '/electricity/rajasthan-electricity-bill-calculator', sub: 'Rajasthan' },
+          { label: 'Bihar Calculator', href: '/electricity/bihar-electricity-bill-calculator', sub: 'Bihar' },
+        ],
+        viewAllHref: '/electricity',
+        viewAllLabel: 'All states & UTs',
+      },
+    ],
+  },
+  {
+    key: 'tariffs',
+    label: 'Tariffs & Tools',
+    href: '/electricity/tariffs',
+    emoji: '📍',
+    columns: [
+      {
+        heading: 'Tariffs',
+        links: [
+          { label: 'Tariff Directory', href: '/electricity/tariffs', sub: 'Slab rates by state', icon: '📑' },
+          { label: 'Unit Price Directory', href: '/electricity/unit-price', sub: 'Real ₹/unit by state', icon: '📍' },
+        ],
+      },
+      {
+        heading: 'Calculators',
+        links: [
+          { label: 'Appliance Cost Calculator', href: '/electricity/appliance-cost-calculator', sub: 'Any appliance, any wattage', icon: '🔋' },
+          { label: 'EV Charging Cost', href: '/electricity/ev-charging-cost-calculator', sub: 'Priced on your DISCOM', icon: '🔌' },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'guides',
+    label: 'Bill Guides',
+    href: '/blog',
+    emoji: '📘',
+    columns: [
+      {
+        heading: 'By DISCOM',
+        links: [
+          { label: 'MSEDCL bill guide', href: '/blog/msedcl-complete-guide-electricity-bill', sub: 'Maharashtra' },
+          { label: 'UPPCL bill guide', href: '/blog/uppcl-complete-guide-electricity-bill', sub: 'Uttar Pradesh' },
+          { label: 'KSEB bill guide', href: '/blog/kseb-complete-guide-electricity-bill', sub: 'Kerala' },
+          { label: 'BESCOM bill guide', href: '/blog/bescom-complete-guide-electricity-bill', sub: 'Karnataka' },
+          { label: 'WBSEDCL bill guide', href: '/blog/wbsedcl-complete-guide-electricity-bill', sub: 'West Bengal' },
+        ],
+      },
+      {
+        heading: 'Understand your bill',
+        links: [
+          { label: 'How telescopic slabs work', href: '/blog/how-telescopic-electricity-slabs-work' },
+          { label: 'Fixed charges vs FCA', href: '/blog/fixed-charges-vs-fca-electricity-bill' },
+          { label: 'How to reduce your bill', href: '/blog/how-to-reduce-electricity-bill-india' },
+          { label: 'Smart meters in India', href: '/blog/smart-meters-in-india-guide' },
+          { label: 'Net metering explained', href: '/blog/net-metering-explained-india' },
+        ],
+        viewAllHref: '/blog',
+        viewAllLabel: 'All guides',
+      },
+    ],
+  },
+  { key: 'news', label: 'News', href: '/news', emoji: '📰', columns: [] },
+  { key: 'about', label: 'About', href: '/about', emoji: 'ℹ️', columns: [] },
+]

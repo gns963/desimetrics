@@ -4,10 +4,12 @@ import Link from '@/components/SiteLink'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
-import { MEGA_MENU } from '@/data/megamenu'
+import { ELECTRICITY_MENU, MEGA_MENU } from '@/data/megamenu'
 import { isPausedPath } from '@/lib/paused'
 
-const MENU = MEGA_MENU.filter((hub) => !isPausedPath(hub.href))
+const LIVE_HUBS = MEGA_MENU.filter((hub) => !isPausedPath(hub.href))
+// With a single live hub, show its pages across several menus instead.
+const MENU = LIVE_HUBS.length > 1 ? LIVE_HUBS : ELECTRICITY_MENU
 
 export default function Header() {
   const pathname = usePathname()
@@ -90,6 +92,19 @@ export default function Header() {
         <div ref={navRef} className="hidden items-center gap-1 lg:flex">
           {MENU.map((hub) => {
             const isOpen = openHub === hub.key
+            if (hub.columns.length === 0) {
+              return (
+                <Link
+                  key={hub.key}
+                  href={hub.href}
+                  className={`rounded-lg px-2.5 py-2 text-sm font-medium transition ${
+                    transparent ? 'text-white/80 hover:text-spark-teal' : 'text-ash hover:text-brass'
+                  }`}
+                >
+                  {hub.label}
+                </Link>
+              )
+            }
             return (
               <div
                 key={hub.key}
@@ -218,6 +233,19 @@ export default function Header() {
         <div className="max-h-[calc(100vh-57px)] overflow-y-auto border-t border-hairline bg-paper px-4 py-3 lg:hidden">
           {MENU.map((hub) => {
             const isExpanded = mobileExpanded === hub.key
+            if (hub.columns.length === 0) {
+              return (
+                <Link
+                  key={hub.key}
+                  href={hub.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex w-full items-center gap-2 border-b border-hairline py-3 text-sm font-semibold text-ink-navy last:border-b-0"
+                >
+                  <span aria-hidden>{hub.emoji}</span>
+                  {hub.label}
+                </Link>
+              )
+            }
             return (
               <div key={hub.key} className="border-b border-hairline last:border-b-0">
                 <button
