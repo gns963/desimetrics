@@ -78,9 +78,7 @@ export default function MethodologyPage() {
         All bills are computed by one framework-agnostic engine using telescopic
         slab logic: each slab is charged only for the units that fall inside it,
         then fuel cost adjustment, fixed charge, electricity duty and any subsidy
-        are applied. The engine is covered by automated unit tests, and the same
-        engine powers the solar and AC calculators so the electricity maths is
-        consistent everywhere.
+        are applied. The engine is covered by automated unit tests.
       </p>
 
       <h2 className="font-display text-xl font-semibold text-ash">

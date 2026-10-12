@@ -54,7 +54,7 @@ export default function ContactPageHi() {
         साझेदारी
       </h2>
       <p>
-        सोलर इंस्टॉलर, उपकरण ब्रांड और मीडिया पूछताछ:{' '}
+        पार्टनरशिप और मीडिया पूछताछ:{' '}
         <a href="mailto:hello@desimetrics.com" className="text-brass underline">
           hello@desimetrics.com
         </a>

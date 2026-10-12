@@ -8,9 +8,9 @@ const SITE = 'https://desimetrics.com'
 const PATH = '/blog'
 
 export const metadata: Metadata = {
-  title: 'ब्लॉग — बिजली, सोलर और फाइनेंस पर एक्सप्लेनर | DesiMetrics',
+  title: 'ब्लॉग — भारतीय बिजली बिल पर एक्सप्लेनर | DesiMetrics',
   description:
-    'भारतीय बिजली बिलिंग, रूफटॉप सोलर और पर्सनल फाइनेंस पर सरल भाषा में एक्सप्लेनर — हमारे कैलकुलेटर के पीछे की टीम से।',
+    'भारतीय बिजली बिलिंग और टैरिफ पर सरल भाषा में एक्सप्लेनर — हमारे कैलकुलेटर के पीछे की टीम से।',
   alternates: {
     canonical: `${SITE}/hi${PATH}`,
     languages: getAlternateLanguages('/blog'),
@@ -172,7 +172,7 @@ export default function BlogIndexPageHi() {
             ब्लॉग से
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-white/70">
-            भारतीय बिजली बिलिंग, रूफटॉप सोलर और पर्सनल फाइनेंस पर सरल भाषा
+            भारतीय बिजली बिलिंग और टैरिफ पर सरल भाषा
             में एक्सप्लेनर — वही असली टैरिफ और फॉर्मूला जो हमारे कैलकुलेटर
             चलाते हैं, उन्हीं पर आधारित।
           </p>

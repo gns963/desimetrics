@@ -49,7 +49,7 @@ export default function ContactPage() {
         Partnerships
       </h2>
       <p>
-        Solar installers, appliance brands and media enquiries:{' '}
+        Partnership and media enquiries:{' '}
         <a href="mailto:hello@desimetrics.com" className="text-brass underline">
           hello@desimetrics.com
         </a>

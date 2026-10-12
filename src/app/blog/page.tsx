@@ -8,9 +8,9 @@ const SITE = 'https://desimetrics.com'
 const PATH = '/blog'
 
 export const metadata: Metadata = {
-  title: 'Blog — Explainers on Electricity, Solar & Finance | DesiMetrics',
+  title: 'Blog — Explainers on Indian Electricity Bills | DesiMetrics',
   description:
-    'Plain-English explainers on Indian electricity billing, rooftop solar and personal finance — from the team behind our calculators.',
+    'Plain-English explainers on Indian electricity billing and tariffs — from the team behind our calculators.',
   alternates: {
     canonical: `${SITE}${PATH}`,
     languages: getAlternateLanguages('/blog'),

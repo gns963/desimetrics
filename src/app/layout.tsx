@@ -16,9 +16,9 @@ const GA_MEASUREMENT_ID = 'G-SLBJQBF0SX'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://desimetrics.com'),
-  title: 'DesiMetrics — Free Indian Utility & Bill Calculators',
+  title: 'DesiMetrics — Free Indian Electricity Bill Calculators',
   description:
-    'Free, accurate calculators for Indian electricity bills, rooftop solar, AC running cost and personal finance — built on real DISCOM tariffs.',
+    'Free, accurate electricity bill calculators for every Indian state and DISCOM — built on real DISCOM tariffs.',
   verification: {
     google: 'rCdt_dPCPqF1v-gfj0ypSOBnjTvoxDu7k8OmzebVnYg',
   },

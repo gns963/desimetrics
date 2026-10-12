@@ -1,4 +1,5 @@
 import Link from '@/components/SiteLink'
+import { allCalculatorSlugs } from '@/data/calculator-pages'
 import { isPausedPath } from '@/lib/paused'
 
 const BOTTOM_GROUPS: { heading: string; links: { label: string; href: string }[] }[] = [
@@ -48,7 +49,7 @@ const CATEGORIES = [
 
 const TRUST_STATS = [
   ['36', 'States & UTs'],
-  ['200+', 'Calculators'],
+  [`${allCalculatorSlugs.length}`, 'Calculators'],
   ['100%', 'Free, no login'],
   ['SERC', 'Source-verified'],
 ]
@@ -68,8 +69,8 @@ export default function Footer() {
               DesiMetrics
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-gazette-cream/60">
-              Free calculators for Indian electricity bills, rooftop solar, AC
-              running cost and everyday finance — every tariff
+              Free electricity bill calculators for every Indian state and
+              DISCOM — every tariff
               schema-validated against the source SERC order, not
               approximated from a national average.
             </p>

@@ -12,6 +12,7 @@ import { calculateSolarRoi } from '@/lib/calc/solar'
 import { formatINR, formatIsoDate } from '@/lib/format'
 import { homeHreflangAlternates } from '@/lib/homeShared'
 import { itemListLd } from '@/lib/seo'
+import { allCalculatorSlugs } from '@/data/calculator-pages'
 import { isPausedPath } from '@/lib/paused'
 
 const SITE = 'https://desimetrics.com'
@@ -79,7 +80,7 @@ const verified = formatIsoDate(tariff.lastVerified)
 
 const heroStats: [string, string][] = [
   [`${stateCount + utCount}`, 'States & UTs'],
-  ['200+', 'Calculators'],
+  [`${allCalculatorSlugs.length}`, 'Calculators'],
   ['100%', 'Free, no login'],
   ['SERC', 'Source-verified'],
 ]
@@ -185,8 +186,12 @@ const priciestRates = rateComparisons.slice(-4).reverse()
 
 const tickerFacts = [
   `TNEB 200 units/month ≈ ${formatINR(tnebExample.total)}`,
-  `5-star vs 3-star AC (1.5T, 6 hrs/day) saves ~${formatINR(acAnnualSavings)}/year`,
-  `3 kW rooftop solar pays back in ~${solarExample.paybackYears ?? '—'} years in Tamil Nadu`,
+  ...(isPausedPath('/ac')
+    ? []
+    : [`5-star vs 3-star AC (1.5T, 6 hrs/day) saves ~${formatINR(acAnnualSavings)}/year`]),
+  ...(isPausedPath('/solar')
+    ? []
+    : [`3 kW rooftop solar pays back in ~${solarExample.paybackYears ?? '—'} years in Tamil Nadu`]),
   `Cheapest top slab: ${cheapestRates[0]?.state} at ₹${cheapestRates[0]?.topRate.toFixed(2)}/unit`,
   `${stateCount + utCount} states & UTs covered, one calculator engine`,
 ]
@@ -410,8 +415,8 @@ const faqLd = {
 const hubsItemList = itemListLd(hubs.map((h) => ({ name: `${h.title} Calculators`, path: h.explore })))
 
 export const metadata: Metadata = {
-  title: 'Free Indian Utility Calculators — Electricity, Water, Gas, Solar, AC & Finance',
-  description: `Free, accurate calculators for Indian electricity, water and gas bills, rooftop solar, AC running cost, home appliances, fuel cost and personal finance. Real DISCOM tariffs for all ${stateCount} states + ${utCount} UTs, verified against SERC orders.`,
+  title: 'Free Indian Electricity Bill Calculators — Every State & DISCOM',
+  description: `Free, accurate electricity bill calculators for India, worked out slab by slab. Real DISCOM tariffs for all ${stateCount} states + ${utCount} UTs, verified against SERC orders.`,
   alternates: {
     canonical: `${SITE}/`,
     languages: homeHreflangAlternates(),
@@ -435,11 +440,11 @@ export default function Home() {
               Free Indian Utility Calculators
             </h1>
             <p className="mt-2 font-display text-xl font-extrabold text-brass sm:text-3xl">
-              Electricity, Water, Gas, Solar, AC &amp; Finance — done precisely.
+              Electricity bills — done precisely.
             </p>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-white/70 sm:text-base">
-              Slab-by-slab bill calculators, payback tools and everyday finance
-              maths for every Indian household — built on real DISCOM tariffs.
+              Slab-by-slab electricity bill calculators
+              for every Indian household — built on real DISCOM tariffs.
               No login, nothing stored.
             </p>
             <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
@@ -521,7 +526,7 @@ export default function Home() {
                 id="tools-h"
                 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-ink-navy"
               >
-                Every rupee you spend on power &amp; more
+                Every rupee you spend on power
               </h2>
             </div>
             <div className="mt-10 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">

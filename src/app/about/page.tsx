@@ -3,11 +3,12 @@ import Link from '@/components/SiteLink'
 import LegalPageShell from '@/components/LegalPageShell'
 import { tariffRegistry } from '@/lib/calc/electricity'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
+import { isPausedPath } from '@/lib/paused'
 
 export const metadata: Metadata = {
-  title: 'About DesiMetrics — Indian Utility & Finance Calculators',
+  title: 'About DesiMetrics — Indian Electricity Bill Calculators',
   description:
-    'DesiMetrics builds accurate, source-cited calculators for Indian electricity bills, rooftop solar, AC running cost and personal finance. Learn who we are and how we work.',
+    'DesiMetrics builds accurate, source-cited calculators for Indian electricity bills. Learn who we are and how we work.',
   alternates: {
     canonical: 'https://desimetrics.com/about',
     languages: getAlternateLanguages('/about'),
@@ -47,34 +48,46 @@ export default function AboutPage() {
           fixed charges, fuel cost adjustment, electricity duty and
           subsidies, each sourced to its own SERC tariff order.
         </li>
-        <li>
-          <strong>Rooftop solar</strong> — ROI/payback, panel sizing, battery
-          backup, net metering earnings and the PM Surya Ghar subsidy, priced
-          against your real DISCOM tariff.
-        </li>
-        <li>
-          <strong>Air conditioners</strong> — running cost, room sizing, power
-          consumption, circuit safety guidance, brand-specific calculators and
-          3-star vs 5-star savings.
-        </li>
-        <li>
-          <strong>Home appliances</strong> — ceiling fan and fridge running
-          cost, inverter/UPS sizing and backup time, room cooling time and
-          water tank fill time.
-        </li>
-        <li>
-          <strong>Fuel costs</strong> — petrol/diesel per km, LPG cylinder
-          usage and generator running cost.
-        </li>
-        <li>
-          <strong>Water and gas bills</strong> — honest calculators that use
-          your own consumption and rate, since municipal and city-gas tariffs
-          aren&apos;t centrally published in a way we can verify.
-        </li>
-        <li>
-          <strong>Personal finance</strong> — GST, SIP, the new vs old tax regime
-          for the current financial year, and gratuity.
-        </li>
+        {!isPausedPath('/solar') && (
+          <li>
+            <strong>Rooftop solar</strong> — ROI/payback, panel sizing, battery
+            backup, net metering earnings and the PM Surya Ghar subsidy, priced
+            against your real DISCOM tariff.
+          </li>
+        )}
+        {!isPausedPath('/ac') && (
+          <li>
+            <strong>Air conditioners</strong> — running cost, room sizing, power
+            consumption, circuit safety guidance, brand-specific calculators and
+            3-star vs 5-star savings.
+          </li>
+        )}
+        {!isPausedPath('/appliances') && (
+          <li>
+            <strong>Home appliances</strong> — ceiling fan and fridge running
+            cost, inverter/UPS sizing and backup time, room cooling time and
+            water tank fill time.
+          </li>
+        )}
+        {!isPausedPath('/fuel-cost') && (
+          <li>
+            <strong>Fuel costs</strong> — petrol/diesel per km, LPG cylinder
+            usage and generator running cost.
+          </li>
+        )}
+        {!isPausedPath('/water') && (
+          <li>
+            <strong>Water and gas bills</strong> — honest calculators that use
+            your own consumption and rate, since municipal and city-gas tariffs
+            aren&apos;t centrally published in a way we can verify.
+          </li>
+        )}
+        {!isPausedPath('/financial') && (
+          <li>
+            <strong>Personal finance</strong> — GST, SIP, the new vs old tax regime
+            for the current financial year, and gratuity.
+          </li>
+        )}
       </ul>
 
       <h2 className="font-display text-xl font-semibold text-ash">

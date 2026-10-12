@@ -1,33 +1,15 @@
 # DesiMetrics
 
-> DesiMetrics provides free, source-cited calculators for Indian households: electricity bills (real DISCOM tariffs), rooftop solar ROI and the PM Surya Ghar subsidy, air-conditioner running cost and sizing, and personal finance (GST, SIP, income tax, gratuity). Every electricity tariff cites the State Electricity Regulatory Commission (SERC) order it comes from and shows a last-verified date.
+> DesiMetrics provides free, source-cited electricity bill calculators for Indian households, built on real DISCOM tariffs. Every electricity tariff cites the State Electricity Regulatory Commission (SERC) order it comes from and shows a last-verified date.
 
 ## Electricity bill calculators
 Real telescopic-slab tariffs, fuel cost adjustment, fixed charge, electricity duty and subsidies, with a monthly-equivalent figure for bi-monthly/quarterly DISCOMs.
-- [TNEB / TANGEDCO — Tamil Nadu](https://desimetrics.com/electricity/tneb-bill-calculator)
+- [TNEB / TNPDCL — Tamil Nadu](https://desimetrics.com/electricity/tneb-bill-calculator)
 - [MSEDCL / Mahavitaran — Maharashtra](https://desimetrics.com/electricity/msedcl-bill-calculator)
 - [UPPCL — Uttar Pradesh](https://desimetrics.com/electricity/uppcl-bill-calculator)
 - [BESCOM — Karnataka](https://desimetrics.com/electricity/bescom-bill-calculator)
 - [KSEB — Kerala](https://desimetrics.com/electricity/kseb-bill-calculator)
 - [WBSEDCL — West Bengal](https://desimetrics.com/electricity/wbsedcl-bill-calculator)
-
-## Solar
-- [Solar hub](https://desimetrics.com/solar)
-- [Solar ROI & payback calculator](https://desimetrics.com/solar/roi-calculator)
-- [PM Surya Ghar subsidy calculator](https://desimetrics.com/solar/subsidy-calculator)
-
-## Air conditioner
-- [AC hub](https://desimetrics.com/ac)
-- [AC running cost calculator](https://desimetrics.com/ac/bill-calculator)
-- [AC tonnage calculator](https://desimetrics.com/ac/tonnage-calculator)
-- [3 star vs 5 star savings guide](https://desimetrics.com/ac/comparisons/3-star-vs-5-star-savings-guide)
-
-## Financial
-- [Financial hub](https://desimetrics.com/financial)
-- [GST calculator](https://desimetrics.com/financial/gst-calculator)
-- [SIP calculator](https://desimetrics.com/financial/sip-calculator)
-- [New vs old tax regime calculator (FY 2026-27)](https://desimetrics.com/financial/new-vs-old-tax-regime-calculator)
-- [Gratuity calculator](https://desimetrics.com/financial/gratuity-calculator)
 
 ## Trust & methodology
 - [How we source and verify data](https://desimetrics.com/methodology)

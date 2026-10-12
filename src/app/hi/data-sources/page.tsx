@@ -3,6 +3,7 @@ import LegalPageShell from '@/components/LegalPageShell'
 import { tariffRegistry } from '@/lib/calc/electricity'
 import { formatIsoDate } from '@/lib/format'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
+import { isPausedPath } from '@/lib/paused'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/data-sources'
@@ -10,7 +11,7 @@ const PATH = '/data-sources'
 export const metadata: Metadata = {
   title: 'डेटा स्रोत — हर कैलकुलेटर के पीछे के आधिकारिक टैरिफ ऑर्डर',
   description:
-    'DesiMetrics जिस हर DISCOM को कवर करता है उसके पीछे का आधिकारिक SERC टैरिफ ऑर्डर और आखिरी-सत्यापित तारीख, साथ ही सोलर सब्सिडी और इनकम-टैक्स डेटा का स्रोत।',
+    'DesiMetrics जिस हर DISCOM को कवर करता है उसके पीछे का आधिकारिक SERC टैरिफ ऑर्डर और आखिरी-सत्यापित तारीख।',
   alternates: {
     canonical: `${SITE}/hi${PATH}`,
     languages: getAlternateLanguages('/data-sources'),
@@ -73,29 +74,34 @@ export default function DataSourcesPageHi() {
         पेज पर दिखता है।
       </p>
 
-      <h2 className="font-display text-xl font-semibold text-ash">
-        अन्य डेटा
-      </h2>
-      <ul className="list-disc space-y-1 pl-5">
-        <li>
-          <strong>रूफटॉप सोलर सब्सिडी</strong> — PM सूर्य घर: मुफ्त बिजली
-          योजना, भारत सरकार (पहले 2 kW के लिए ₹30,000/kW, तीसरे के लिए
-          ₹18,000, ₹78,000 तक सीमित)।
-        </li>
-        <li>
-          <strong>इनकम टैक्स स्लैब</strong> — FY 2026-27 (AY 2027-28) के
-          लिए फाइनेंस एक्ट दरें, जिसमें ₹75,000/₹50,000 स्टैंडर्ड डिडक्शन
-          और सेक्शन 87A रिबेट शामिल हैं।
-        </li>
-        <li>
-          <strong>AC एफिशिएंसी</strong> — ब्यूरो ऑफ एनर्जी एफिशिएंसी
-          (BEE) ISEER स्टार-रेटिंग बैंड।
-        </li>
-        <li>
-          <strong>ग्रेच्युटी</strong> — पेमेंट ऑफ ग्रेच्युटी एक्ट, 1972
-          (15/26 फॉर्मूला, ₹20,00,000 सीमा)।
-        </li>
-      </ul>
+      {/* Sources for the sections that are offline for now (src/lib/paused.ts). */}
+      {!isPausedPath('/financial') && (
+        <>
+        <h2 className="font-display text-xl font-semibold text-ash">
+          अन्य डेटा
+        </h2>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>
+            <strong>रूफटॉप सोलर सब्सिडी</strong> — PM सूर्य घर: मुफ्त बिजली
+            योजना, भारत सरकार (पहले 2 kW के लिए ₹30,000/kW, तीसरे के लिए
+            ₹18,000, ₹78,000 तक सीमित)।
+          </li>
+          <li>
+            <strong>इनकम टैक्स स्लैब</strong> — FY 2026-27 (AY 2027-28) के
+            लिए फाइनेंस एक्ट दरें, जिसमें ₹75,000/₹50,000 स्टैंडर्ड डिडक्शन
+            और सेक्शन 87A रिबेट शामिल हैं।
+          </li>
+          <li>
+            <strong>AC एफिशिएंसी</strong> — ब्यूरो ऑफ एनर्जी एफिशिएंसी
+            (BEE) ISEER स्टार-रेटिंग बैंड।
+          </li>
+          <li>
+            <strong>ग्रेच्युटी</strong> — पेमेंट ऑफ ग्रेच्युटी एक्ट, 1972
+            (15/26 फॉर्मूला, ₹20,00,000 सीमा)।
+          </li>
+        </ul>
+        </>
+      )}
     </LegalPageShell>
   )
 }

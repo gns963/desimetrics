@@ -13,6 +13,7 @@ import {
   verifiedDate,
   type HomeTexts,
 } from '@/lib/homeShared'
+import { allCalculatorSlugs } from '@/data/calculator-pages'
 import { isPausedPath } from '@/lib/paused'
 import { itemListLd } from '@/lib/seo'
 
@@ -23,7 +24,10 @@ import { itemListLd } from '@/lib/seo'
 export default function HomePageView({ texts }: { texts: HomeTexts }) {
   const stateAvailability = buildStateAvailability(texts.locale)
   const quickEstimateDiscoms = buildQuickEstimateDiscoms()
-  const tickerFacts = texts.tickerFacts(tickerData)
+  // Facts 2 and 3 in every locale are the AC and solar ones.
+  const tickerFacts = texts
+    .tickerFacts(tickerData)
+    .filter((_, i) => !(i === 1 && isPausedPath('/ac')) && !(i === 2 && isPausedPath('/solar')))
 
   const hubs = HUB_STRUCTURE.map((structure, i) => {
     const t = texts.hubTexts[i]
@@ -51,7 +55,7 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
 
   const heroStatValues: [string, string][] = [
     [`${tickerData.totalStateCount}`, texts.heroStatLabels[0]],
-    ['200+', texts.heroStatLabels[1]],
+    [`${allCalculatorSlugs.length}`, texts.heroStatLabels[1]],
     ['100%', texts.heroStatLabels[2]],
     ['SERC', texts.heroStatLabels[3]],
   ]

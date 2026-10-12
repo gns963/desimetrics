@@ -10,7 +10,7 @@ const PATH = '/news'
 export const metadata: Metadata = {
   title: 'News — Timely Explainers on Indian Utility Bills | DesiMetrics',
   description:
-    'What current electricity, water, gas and solar developments in India actually mean for your bill — dated, sourced, and tied back to our calculators.',
+    'What current electricity developments in India actually mean for your bill — dated, sourced, and tied back to our calculators.',
   alternates: {
     canonical: `${SITE}${PATH}`,
     languages: getAlternateLanguages(PATH),
@@ -110,7 +110,7 @@ export default function NewsIndexPage() {
             News
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-white/70">
-            When something changes in Indian electricity, water, gas or solar policy — a
+            When something changes in Indian electricity policy — a
             shortage, a new tariff order, a subsidy update — we explain what actually happened
             and what it changes on your bill, dated and sourced.
           </p>
