@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import discomsJson from '@/data/discoms.json'
 import PageHero from '@/components/PageHero'
 import { getAcBrand } from '@/data/ac-brands'

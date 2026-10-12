@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import WaterBillCalculator from '@/components/calculators/WaterBillCalculator'
 import { DropletIcon } from '@/components/HubMotifIcon'
 import SplitHero from '@/components/SplitHero'

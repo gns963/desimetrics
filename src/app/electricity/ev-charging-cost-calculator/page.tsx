@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import EvChargingCostCalculator from '@/components/calculators/EvChargingCostCalculator'
 import EvVsFuelComparison from '@/components/calculators/EvVsFuelComparison'
 import PageHero from '@/components/PageHero'

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import type { CSSProperties } from 'react'
 import LeadGenForm from '@/components/LeadGenForm'
 import QuickBillEstimate from '@/components/QuickBillEstimate'
@@ -12,6 +12,7 @@ import { calculateSolarRoi } from '@/lib/calc/solar'
 import { formatINR, formatIsoDate } from '@/lib/format'
 import { homeHreflangAlternates } from '@/lib/homeShared'
 import { itemListLd } from '@/lib/seo'
+import { isPausedPath } from '@/lib/paused'
 
 const SITE = 'https://desimetrics.com'
 
@@ -205,7 +206,7 @@ interface Hub {
   explore: string
 }
 
-const hubs: Hub[] = [
+const allHubs: Hub[] = [
   {
     emoji: '⚡',
     title: 'Electricity',
@@ -349,6 +350,7 @@ const hubs: Hub[] = [
     explore: '/tools',
   },
 ]
+const hubs = allHubs.filter((h) => !isPausedPath(h.explore))
 
 const posts = [
   {
@@ -366,7 +368,7 @@ const posts = [
     tag: 'Finance',
     href: '/blog/new-vs-old-tax-regime-who-actually-saves',
   },
-]
+].filter((p) => !isPausedPath(p.href))
 
 const faqs: { q: string; a: string }[] = [
   {
@@ -688,6 +690,7 @@ export default function Home() {
         </section>
 
         {/* -------------------------------------------------------- Solar lead-gen */}
+        {!isPausedPath('/solar') && (
         <section id="solar-leadgen" className="relative overflow-hidden hero-gradient">
           <div className="hero-grid-overlay pointer-events-none absolute inset-0" aria-hidden />
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 grid-cols-1 lg:grid-cols-2">
@@ -714,6 +717,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+        )}
 
         {/* -------------------------------------------------------- How we verify */}
         <section className="bg-gazette-cream">

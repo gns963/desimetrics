@@ -179,6 +179,20 @@ export const SubsidySchemeSchema = z.object({
   discountType: DiscountType,
   discountValue: NonNegative,
   eligibility: z.string().min(1),
+  /**
+   * Consumption cap for the whole scheme: when set, the scheme applies only
+   * if TOTAL consumption for the billing period is at or below this many
+   * units, and is skipped entirely above it. Distinct from `maxUnits`, which
+   * bounds the unit range the discount is valued over. Models rules like
+   * Tamil Nadu's second 100 free units, given only to households using up to
+   * 500 units in the bi-monthly cycle.
+   */
+  appliesUpToTotalUnits: NonNegative.optional(),
+  /**
+   * Date the scheme took effect, when it is newer than the rest of the
+   * tariff. Lets the UI show a "before vs after" bill for the change.
+   */
+  introducedOn: IsoDate.optional(),
 })
 export type SubsidyScheme = z.infer<typeof SubsidySchemeSchema>
 
@@ -202,6 +216,11 @@ export const TariffFileSchema = z.object({
   sourceUrl: z.url(),
   lastVerified: IsoDate,
   verifiedBy: z.string().min(1),
+  /**
+   * Set when the DISCOM rounds the net bill to a whole rupee (e.g. TNPDCL's
+   * own bill calculator). The engine then rounds `total` the same way.
+   */
+  roundTotalToRupee: z.boolean().optional(),
 })
 
 export type TariffFile = z.infer<typeof TariffFileSchema>

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
+import { isPausedPath } from '@/lib/paused'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/blog'
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: { url: `${SITE}/hi${PATH}`, type: 'website', locale: 'hi_IN' },
 }
 
-const posts = [
+const allPosts = [
   {
     title: 'UPCL बिल समझिए: उत्तराखंड का बिजली टैरिफ, फिक्स्ड चार्ज और बिल कैसे देखें',
     tag: 'बिजली',
@@ -145,6 +146,7 @@ const posts = [
     live: true,
   },
 ]
+const posts = allPosts.filter((p) => !isPausedPath(p.href))
 
 const breadcrumb = breadcrumbLd([
   { name: 'होम', path: '' },

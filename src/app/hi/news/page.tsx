@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
+import { isPausedPath } from '@/lib/paused'
 
 const SITE = 'https://desimetrics.com'
 const PATH = '/news'
@@ -25,7 +26,7 @@ interface NewsPost {
   live: boolean
 }
 
-const posts: NewsPost[] = [
+const allPosts: NewsPost[] = [
   {
     title: 'ओडिशा EV सब्सिडी 2026: रकम, आखिरी तारीख और बिजली बिल पर चार्जिंग का खर्च',
     tag: 'ओडिशा · EV पॉलिसी · OERC',
@@ -83,6 +84,7 @@ const posts: NewsPost[] = [
     live: true,
   },
 ]
+const posts = allPosts.filter((p) => !isPausedPath(p.href))
 
 const breadcrumb = breadcrumbLd([
   { name: 'होम', path: '' },

@@ -1,28 +1,62 @@
 {
   "discomCode": "TNEB",
-  "discomName": "Tamil Nadu Generation and Distribution Corporation (TANGEDCO)",
+  "discomName": "Tamil Nadu Power Distribution Corporation Ltd (TNPDCL, formerly TANGEDCO)",
   "state": "Tamil Nadu",
   "billingCycle": "bimonthly",
   "connectionTypes": [
     {
       "connectionType": "residential",
       "slabs": [
-        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 2.25 },
-        { "minUnits": 101, "maxUnits": 200, "ratePerUnit": 3.5 },
-        { "minUnits": 201, "maxUnits": 500, "ratePerUnit": 4.8 },
-        { "minUnits": 501, "maxUnits": null, "ratePerUnit": 6.4 }
+        {
+          "minUnits": 0,
+          "maxUnits": 400,
+          "ratePerUnit": 4.7
+        },
+        {
+          "minUnits": 401,
+          "maxUnits": 500,
+          "ratePerUnit": 6.3
+        },
+        {
+          "minUnits": 501,
+          "maxUnits": 600,
+          "ratePerUnit": 8.4
+        },
+        {
+          "minUnits": 601,
+          "maxUnits": 800,
+          "ratePerUnit": 9.45
+        },
+        {
+          "minUnits": 801,
+          "maxUnits": 1000,
+          "ratePerUnit": 10.5
+        },
+        {
+          "minUnits": 1001,
+          "maxUnits": null,
+          "ratePerUnit": 11.55
+        }
       ],
       "fixedCharge": {
-        "basis": "perPhase",
-        "singlePhase": 100,
-        "threePhase": 200
-      }
+        "basis": "flat",
+        "flat": 0
+      },
+      "sourceNote": "PRIMARY — derived from TNPDCL's own bill calculator (https://www.tnebnet.org/awp/tariffMaster, tariff code LA1A, bi-monthly), queried on 2026-10-10 at 100, 200, 201, 300, 400, 401, 500, 501, 600, 601, 800, 801, 1000, 1001 and 1200 units; every result is reproduced by this file. Rates here are what the consumer pays after the Government tariff subsidy: Rs 4.70/unit up to 400 units, 6.30 for 401-500, 8.40 for 501-600, 9.45 for 601-800, 10.50 for 801-1000, 11.55 above 1000. The calculator's 'Total Current Charges' line shows the pre-subsidy tariff as 4.95 / 6.65 / 8.80 / 9.95 / 11.05 / 12.15. Free units: 100 for every domestic consumer, plus a further 100 (units 101-200) only when the bi-monthly total is 500 units or less, from 10 May 2026. No fixed charge, fuel surcharge or electricity tax appears on the domestic result. The net amount is rounded to a whole rupee. Not modelled: the 'Monthly' billing-cycle option (for bills covering fewer than 35 days), which uses halved bands."
     },
     {
       "connectionType": "commercial",
       "slabs": [
-        { "minUnits": 0, "maxUnits": 100, "ratePerUnit": 6.65 },
-        { "minUnits": 101, "maxUnits": null, "ratePerUnit": 10.45 }
+        {
+          "minUnits": 0,
+          "maxUnits": 100,
+          "ratePerUnit": 6.65
+        },
+        {
+          "minUnits": 101,
+          "maxUnits": null,
+          "ratePerUnit": 10.45
+        }
       ],
       "fixedCharge": {
         "basis": "perLoad",
@@ -34,7 +68,11 @@
     {
       "connectionType": "industrial",
       "slabs": [
-        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 8.25 }
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 8.25
+        }
       ],
       "fixedCharge": {
         "basis": "perLoad",
@@ -46,7 +84,11 @@
     {
       "connectionType": "agriculture",
       "slabs": [
-        { "minUnits": 0, "maxUnits": null, "ratePerUnit": 0 }
+        {
+          "minUnits": 0,
+          "maxUnits": null,
+          "ratePerUnit": 0
+        }
       ],
       "fixedCharge": {
         "basis": "flat",
@@ -55,20 +97,31 @@
       "sourceNote": "SOURCED (secondary) — TANGEDCO LT-IV Agricultural category, per tneb.billcalculator.in/tneb-tariff-rates/ and tnebbillcalculator.com/tneb-tariff-details/: fully subsidised/free supply for agricultural (pump-set) connections, exempt from electricity tax. Pending primary TNERC order cross-check."
     }
   ],
-  "fuelCostAdjustment": 0.35,
+  "fuelCostAdjustment": 0,
   "electricityDutyPercent": 0,
   "subsidySchemes": [
     {
-      "schemeName": "100 Units Free Domestic Subsidy (LT-IA)",
+      "schemeName": "100 free units (all domestic consumers)",
       "minUnits": 0,
       "maxUnits": 100,
       "discountType": "free",
       "discountValue": 100,
-      "eligibility": "eligible/BPL domestic"
+      "eligibility": "all domestic"
+    },
+    {
+      "schemeName": "Second 100 free units (bi-monthly use up to 500 units)",
+      "minUnits": 100,
+      "maxUnits": 200,
+      "discountType": "free",
+      "discountValue": 100,
+      "eligibility": "all domestic",
+      "appliesUpToTotalUnits": 500,
+      "introducedOn": "2026-05-10"
     }
   ],
-  "effectiveFrom": "2026-04-01",
-  "sourceUrl": "https://www.tnerc.gov.in/Orders/orders.html",
-  "lastVerified": "2026-08-29",
-  "verifiedBy": "UNVERIFIED — figures supplied by user; pending cross-check against the TNERC LT tariff order"
+  "effectiveFrom": "2026-05-10",
+  "sourceUrl": "https://www.tnebnet.org/awp/tariffMaster",
+  "lastVerified": "2026-10-10",
+  "verifiedBy": "Domestic rates checked against TNPDCL's own bill calculator on 10 October 2026 at 15 consumption levels (100 to 1,200 units); every result matched to the rupee. Commercial, industrial and agriculture rates are from secondary sources and are approximate.",
+  "roundTotalToRupee": true
 }

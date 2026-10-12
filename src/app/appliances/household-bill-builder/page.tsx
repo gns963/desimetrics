@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import ApplianceBuilder from '@/components/calculators/ApplianceBuilder'
 import PageHero from '@/components/PageHero'
 import { ALL_APPLIANCES, APPLIANCE_CATEGORIES } from '@/data/appliances'

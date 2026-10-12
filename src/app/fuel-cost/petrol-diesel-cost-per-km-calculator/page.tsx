@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import VehicleFuelCostCalculator from '@/components/calculators/VehicleFuelCostCalculator'
 import { FuelGaugeIcon } from '@/components/HubMotifIcon'
 import PageHero from '@/components/PageHero'

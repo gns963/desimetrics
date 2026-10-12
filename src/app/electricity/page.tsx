@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import CrossHubLinks from '@/components/CrossHubLinks'
 import PageHero from '@/components/PageHero'
 import { CALCULATOR_PAGES } from '@/data/calculator-pages'

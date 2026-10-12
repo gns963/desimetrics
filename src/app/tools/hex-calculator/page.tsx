@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import HexCalculator from '@/components/calculators/HexCalculator'
 import PageHero from '@/components/PageHero'
 import { calculateHexOperation, convertHex } from '@/lib/calc/hex'

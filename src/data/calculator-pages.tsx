@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 
 /**
  * Per-DISCOM page content. The page template (DiscomCalculatorPage) is shared;
@@ -89,25 +89,28 @@ export interface DiscomPageTranslation {
 
 export const CALCULATOR_PAGES: DiscomPageConfig[] = [
   // -------------------------------------------------------------- TNEB
+  // Every figure in this entry is from TNPDCL's own bill calculator
+  // (tnebnet.org/awp/tariffMaster), queried on 10 October 2026 — see the
+  // residential sourceNote in tneb.json. Keep the three locales in step.
   {
     slug: 'tneb-bill-calculator',
     discomCode: 'TNEB',
-    h1: 'TNEB Electricity Bill Calculator 2026 — Estimate Your Tamil Nadu (TANGEDCO) Bill',
+    h1: 'TNEB Bill Calculator 2026 — Tamil Nadu Electricity Bill with 200 Free Units',
     breadcrumbLabel: 'TNEB Bill Calculator',
-    metaTitle:
-      'TNEB Bill Calculator 2026 — TANGEDCO Electricity Bill (Tamil Nadu)',
+    metaTitle: 'TNEB Bill Calculator 2026 — New Tariff, 200 Free Units',
     metaDescription:
-      'Calculate your TNEB (TANGEDCO) electricity bill for Tamil Nadu. Bi-monthly telescopic slabs, 100 free units subsidy, fuel cost adjustment and fixed charges — with a monthly-equivalent figure.',
-    exampleUnits: 250,
-    exampleEligible: true,
+      'Calculate your TNEB (TNPDCL) electricity bill on the tariff billed from 10 May 2026: 200 free units up to 500 units bi-monthly, slab rates from ₹4.70, old vs new comparison and the 500-unit cliff.',
+    exampleUnits: 300,
+    exampleEligible: false,
     neighboringDiscoms: ['KSEB', 'BESCOM', 'APSPDCL'],
     intro: (
       <>
-        Estimate your TANGEDCO electricity bill for Tamil Nadu. TNEB bills
-        domestic consumers <strong>bi-monthly</strong> (once every two months)
-        using telescopic slabs, with the first 100 units free for eligible
-        consumers. Enter your units below for an itemised estimate plus a
-        monthly-equivalent figure.
+        This TNEB bill calculator works out a Tamil Nadu domestic bill on the
+        tariff TNPDCL bills today. TNEB bills homes{' '}
+        <strong>bi-monthly</strong>: the first 200 units are free when the
+        two-month total is 500 units or less, and only the first 100 are free
+        above that. Enter your units or meter readings for a slab-by-slab bill,
+        an old-versus-new comparison and a monthly equivalent.
       </>
     ),
     explainer: [
@@ -115,29 +118,33 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
         title: 'Bi-monthly cycle',
         body: (
           <>
-            TANGEDCO reads domestic meters once every two months, so a TNEB bill
-            covers roughly 60 days. All slab limits and the free-unit allowance
-            apply to that two-month total — the single biggest source of
-            confusion when comparing to a monthly bill.
+            TNPDCL reads domestic meters once every two months, so a TNEB bill
+            covers roughly 60 days. Every slab limit and the free-unit
+            allowance apply to that two-month total, which is the main source
+            of confusion when comparing with a monthly bill.
           </>
         ),
       },
       {
-        title: 'Free-unit subsidy',
+        title: 'Free units: 200 or 100',
         body: (
           <>
-            Eligible domestic consumers receive the first 100 units of each cycle
-            free, deducted at the lowest slab rate (₹2.25/unit).
+            Every domestic consumer gets the first 100 units of a cycle free.
+            From 10 May 2026, units 101–200 are free as well, but only when the
+            bi-monthly total is 500 units or less. Above 500 units, only the
+            first 100 are free.
           </>
         ),
       },
       {
-        title: 'Fuel cost adjustment (FCA)',
+        title: 'Slab rates after the free units',
         body: (
           <>
-            A ₹0.35/unit surcharge reflects TANGEDCO&apos;s power-purchase costs,
-            added on top of the slab energy charge along with a phase-based fixed
-            charge.
+            Paid units are billed slab by slab: ₹4.70 up to 400 units, ₹6.30
+            for 401–500, ₹8.40 for 501–600, ₹9.45 for 601–800, ₹10.50 for
+            801–1,000 and ₹11.55 above 1,000. TNPDCL&apos;s own calculator
+            shows no fixed charge or electricity tax on a domestic bill, and
+            rounds the result to a whole rupee.
           </>
         ),
       },
@@ -145,31 +152,35 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     faqs: [
       {
         q: 'How is my TNEB electricity bill calculated?',
-        a: 'TANGEDCO bills residential (LT-IA) consumers bi-monthly. Your bill is the sum of telescopic slab-wise energy charges, plus a ₹0.35/unit fuel cost adjustment (FCA) and a phase-based fixed charge, minus the 100-unit free subsidy if you qualify.',
+        a: 'TNPDCL bills domestic consumers (tariff LA1A) bi-monthly. Free units come off first — 200 if the two-month total is 500 units or less, 100 if it is more — and the remaining units are billed slab by slab from ₹4.70 per unit. The result is rounded to a whole rupee. For 300 units the bill is ₹470.',
       },
       {
-        q: "What is TNEB's current tariff for domestic (LT-IA) connections?",
-        a: 'Telescopic slabs of ₹2.25/unit (0–100), ₹3.50/unit (101–200), ₹4.80/unit (201–500) and ₹6.40/unit (501+), plus a fixed charge of ₹100 single-phase or ₹200 three-phase per bi-monthly cycle.',
+        q: "What is TNEB's current tariff for domestic connections?",
+        a: 'For a bi-monthly total up to 500 units: units 1–200 are free, 201–400 cost ₹4.70 and 401–500 cost ₹6.30. For a total above 500 units: units 1–100 are free, 101–400 cost ₹4.70, 401–500 ₹6.30, 501–600 ₹8.40, 601–800 ₹9.45, 801–1,000 ₹10.50, and units above 1,000 cost ₹11.55.',
       },
       {
-        q: 'Why is my TNEB bill bi-monthly instead of monthly?',
-        a: 'TANGEDCO reads domestic meters once every two months, so a bill covers roughly 60 days rather than 30. To compare against a "monthly" figure, divide the bi-monthly total by two — this calculator does that automatically as the monthly-equivalent.',
+        q: 'What changed between the old and new TNEB tariff?',
+        a: 'The slab rates are the same. The change, from 10 May 2026, is the free allowance: 200 units, up from 100, for homes using up to 500 units in the cycle. A 300-unit bill fell from ₹940 to ₹470 and a 500-unit bill from ₹2,040 to ₹1,570. Bills above 500 units did not change.',
       },
       {
-        q: 'Do I get free electricity units from TNEB?',
-        a: 'Eligible domestic consumers get the first 100 units of each bi-monthly cycle free, valued at the ₹2.25 lowest-slab rate — a flat ₹225 reduction, not a percentage discount. It applies regardless of how many total units you use in the cycle.',
+        q: 'What happens to my TNEB bill above 500 units?',
+        a: 'Crossing 500 units removes the second 100 free units for the whole bill. A 500-unit bill is ₹1,570 and a 501-unit bill is ₹2,048, so one extra unit costs ₹478.',
       },
       {
-        q: 'What is Fuel Cost Adjustment (FCA) and why is it on my bill?',
-        a: 'FCA is a per-unit surcharge, currently ₹0.35/unit, that reflects TANGEDCO’s changing power-purchase cost. It is separate from and added on top of the slab energy charge.',
+        q: 'Is the TNEB bill monthly or bi-monthly?',
+        a: 'The TNEB domestic bill is bi-monthly: it covers about 60 days, and the slabs and free units apply to that two-month total. This calculator also shows a monthly equivalent. TNPDCL’s own calculator has a separate Monthly option for a billing cycle of fewer than 35 days.',
       },
       {
-        q: 'How can I reduce my TNEB electricity bill?',
-        a: 'Confirm your 100-unit subsidy eligibility is correctly marked on your account, and keep usage below your next slab threshold where practical — the jump from ₹3.50 to ₹4.80/unit at 200 units is the most common one people cross unintentionally in summer.',
+        q: 'Is there a fixed charge on a TNEB domestic bill?',
+        a: 'TNPDCL’s own bill calculator shows no fixed charge, fuel surcharge or electricity tax on a domestic bill. Commercial connections pay a fixed cost of ₹110 per kW per month and 5% electricity tax.',
       },
       {
-        q: 'Is solar worth it for a typical TNEB household?',
-        a: 'Often yes — TNEB’s top domestic slab (₹6.40/unit) is high enough that a rooftop system can offset your most expensive units first. Use our solar ROI calculator, pre-filled for Tamil Nadu tariffs, to see your payback period.',
+        q: 'How do I calculate TNEB units from my meter reading?',
+        a: 'Subtract the previous reading from the current reading; the difference is the units consumed in the cycle. Switch this calculator to "Meter reading" and enter both readings to get the units and the bill together.',
+      },
+      {
+        q: 'How is a TNEB commercial bill calculated?',
+        a: 'A commercial bill (tariff LM51) is charged at one rate for all units, not slab by slab: about ₹6.45 per unit when the bi-monthly total is up to 100 units and about ₹10.15 above that, plus ₹110 per kW per month, peak charges and 5% electricity tax, per TNPDCL’s calculator. The commercial option here is an approximation and runs low; use TNPDCL’s calculator for an exact commercial figure.',
       },
       {
         q: "What's the difference between TNEB, TANGEDCO and TNPDCL?",
@@ -177,47 +188,45 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
       },
       {
         q: 'How do I check or pay my TNEB bill online?',
-        a: 'Pay via the official TANGEDCO/TNEB portal at tnebnet.org, or through the TANGEDCO website’s "Pay Online" → "Quick Pay" option. For outages, billing issues or meter problems, call the 24×7 helpline 1912.',
+        a: 'Pay via the official TNPDCL portal at tnebnet.org, using the "Quick Pay" option with your service connection number. For outages, billing issues or meter problems, call the 24×7 helpline 1912.',
       },
       {
-        q: 'How often are TNEB tariff rates updated, and how do you keep this calculator accurate?',
-        a: 'TNERC reviews domestic tariffs periodically, with CPI-linked adjustments typically each July. We record the source order URL and a last-verified date on every tariff file — visible at the bottom of this page — and update the data whenever a new order is issued.',
+        q: 'How accurate is this TNEB bill calculator?',
+        a: 'We checked the domestic results against TNPDCL’s own bill calculator on 10 October 2026 at 15 consumption levels from 100 to 1,200 units, and every result matched to the rupee. The verification date is shown on this page and is updated whenever the tariff changes.',
       },
     ],
     billTraps: [
       {
-        title: 'The 100-unit "all or nothing" myth',
+        title: 'The 500-unit cliff',
         body: (
           <>
-            Some people assume that using more than 100 units forfeits the
-            free-unit subsidy entirely. It doesn&apos;t — the first 100 units
-            are deducted at the ₹2.25 rate regardless of your total
-            consumption for the cycle, so a 300-unit bill still gets the same
-            ₹225 reduction as a 100-unit bill.
+            The second 100 free units are given only when the bi-monthly total
+            is 500 units or less. At 501 units they are withdrawn for the whole
+            bill, so the total jumps from ₹1,570 to ₹2,048. A household near
+            500 units gains the most from watching the meter in the last week
+            of a cycle.
           </>
         ),
       },
       {
-        title: 'Phase mismatch on the fixed charge',
+        title: '“200 free units” does not apply to everyone',
         body: (
           <>
-            TNEB&apos;s fixed charge depends on your connection phase, not your
-            sanctioned load: ₹100 for single-phase, ₹200 for three-phase, per
-            bi-monthly cycle. If your household has a three-phase connection
-            (common for homes with higher-capacity ACs or motors), your fixed
-            charge is double what a single-phase neighbour pays.
+            A bill above 500 units still gets the first 100 units free, as
+            before 10 May 2026, but not the second 100. A 600-unit bill is
+            ₹2,880 under both the old and the new rules.
           </>
         ),
       },
       {
-        title: 'The summer slab jump',
+        title: 'Rate tables that show ₹4.95',
         body: (
           <>
-            Running an AC through summer often pushes consumption from the
-            ₹3.50/unit band into the ₹4.80/unit band. Only the units above 200
-            are charged at the higher rate — it&apos;s not retroactive — but
-            the marginal jump surprises people comparing a summer bill to a
-            winter one.
+            Some tables list ₹4.95 as the first paid rate. That is the tariff
+            before the Government subsidy, which TNPDCL&apos;s calculator shows
+            as &ldquo;Total Current Charges&rdquo;. The amount a domestic
+            consumer pays works out to ₹4.70 for that slab, and ₹6.30, ₹8.40,
+            ₹9.45, ₹10.50 and ₹11.55 for the slabs above it.
           </>
         ),
       },
@@ -270,38 +279,38 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
     },
     howToPay: {
       portalUrl: 'https://www.tnebnet.org/awp/login?locale=en',
-      portalLabel: 'tnebnet.org (official TANGEDCO payment portal)',
+      portalLabel: 'tnebnet.org (official TNPDCL payment portal)',
       helpline: '1912 (24×7) · 044-28521109',
       steps: [
-        'Visit the official TANGEDCO/TNEB website and select "Pay Online" under Online Payment Services',
+        'Visit the official TNPDCL website and select "Pay Online" under Online Payment Services',
         'Choose "Quick Pay" and enter your Consumer/Service Connection number',
         'Verify the displayed bill amount and pay via UPI, card or net banking',
         'Save the payment receipt/reference number for your records',
       ],
     },
     thresholdCallout: {
-      title: 'The 100-unit subsidy line',
-      leftLabel: '0–100 units',
-      leftValue: 'Free',
-      rightLabel: '101+ units',
-      rightValue: 'Metered from ₹2.25',
-      note: 'Eligible domestic consumers get the first 100 units of every bi-monthly cycle free. Units beyond 100 are billed telescopically starting at the same ₹2.25 rate — crossing 100 units does not cancel the subsidy already applied to the first 100.',
+      title: 'The 500-unit line',
+      leftLabel: '500 units',
+      leftValue: '₹1,570',
+      rightLabel: '501 units',
+      rightValue: '₹2,048',
+      note: 'Up to 500 units in a bi-monthly cycle, the first 200 units are free. At 501 units only the first 100 are free, so one extra unit raises the bill by ₹478. Both figures are from TNPDCL’s own bill calculator.',
     },
     translations: {
       hi: {
-        h1: 'TNEB बिजली बिल कैलकुलेटर 2026 — अपने तमिलनाडु (TANGEDCO) बिल का अनुमान लगाएं',
+        h1: 'TNEB बिल कैलकुलेटर 2026 — 200 मुफ़्त यूनिट के साथ तमिलनाडु का बिजली बिल',
         breadcrumbLabel: 'TNEB बिल कैलकुलेटर',
-        metaTitle: 'TNEB बिल कैलकुलेटर 2026 — TANGEDCO बिजली बिल (तमिलनाडु)',
+        metaTitle: 'TNEB बिल कैलकुलेटर 2026 — नई टैरिफ, 200 मुफ़्त यूनिट',
         metaDescription:
-          'तमिलनाडु के लिए अपना TNEB (TANGEDCO) बिजली बिल कैलकुलेट करें। द्वि-मासिक टेलिस्कोपिक स्लैब, 100 मुफ़्त यूनिट सब्सिडी, फ्यूल कॉस्ट एडजस्टमेंट और फिक्स्ड चार्ज — मासिक-समतुल्य आंकड़े के साथ।',
+          '10 मई 2026 से लागू टैरिफ पर अपना TNEB (TNPDCL) बिजली बिल निकालें: दो महीने में 500 यूनिट तक 200 यूनिट मुफ़्त, ₹4.70 से शुरू स्लैब दरें, पुराने और नए बिल की तुलना और 500 यूनिट की सीमा।',
         intro: (
           <>
-            तमिलनाडु के लिए अपना TANGEDCO बिजली बिल अनुमानित करें। TNEB
-            घरेलू उपभोक्ताओं को <strong>द्वि-मासिक</strong> (हर दो महीने
-            में एक बार) टेलिस्कोपिक स्लैब का इस्तेमाल करके बिल करता है,
-            पात्र उपभोक्ताओं के लिए पहली 100 यूनिट मुफ़्त। नीचे अपनी
-            यूनिट्स डालें और एक आइटमाइज़्ड अनुमान के साथ मासिक-समतुल्य
-            आंकड़ा पाएं।
+            यह TNEB बिल कैलकुलेटर तमिलनाडु का घरेलू बिल उसी टैरिफ पर निकालता है
+            जिस पर TNPDCL आज बिल बनाता है। TNEB घरों को{' '}
+            <strong>द्वि-मासिक</strong> बिल करता है: दो महीने का कुल 500 यूनिट
+            या उससे कम हो तो पहली 200 यूनिट मुफ़्त हैं, और उससे ऊपर सिर्फ पहली
+            100 यूनिट। स्लैब-वार बिल, पुराने और नए बिल की तुलना और मासिक-समतुल्य
+            आंकड़े के लिए अपनी यूनिट या मीटर रीडिंग डालें।
           </>
         ),
         explainer: [
@@ -309,31 +318,33 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
             title: 'द्वि-मासिक साइकल',
             body: (
               <>
-                TANGEDCO घरेलू मीटर हर दो महीने में एक बार पढ़ता है,
-                इसलिए एक TNEB बिल लगभग 60 दिन कवर करता है। सभी स्लैब
-                सीमाएं और मुफ़्त-यूनिट भत्ता उस दो-महीने के कुल पर लागू
-                होते हैं — मासिक बिल से तुलना करते समय भ्रम की सबसे बड़ी
-                वजह यही है।
+                TNPDCL घरेलू मीटर हर दो महीने में एक बार पढ़ता है, इसलिए एक
+                TNEB बिल लगभग 60 दिन कवर करता है। हर स्लैब सीमा और मुफ़्त
+                यूनिट उसी दो महीने के कुल पर लागू होती हैं — मासिक बिल से
+                तुलना करते समय भ्रम की सबसे बड़ी वजह यही है।
               </>
             ),
           },
           {
-            title: 'मुफ़्त-यूनिट सब्सिडी',
+            title: 'मुफ़्त यूनिट: 200 या 100',
             body: (
               <>
-                पात्र घरेलू उपभोक्ताओं को हर साइकल की पहली 100 यूनिट
-                मुफ़्त मिलती हैं, सबसे कम स्लैब दर (₹2.25/यूनिट) पर
-                घटाई गई।
+                हर घरेलू उपभोक्ता को साइकल की पहली 100 यूनिट मुफ़्त मिलती
+                हैं। 10 मई 2026 से 101–200 यूनिट भी मुफ़्त हैं, लेकिन तभी जब
+                दो महीने का कुल 500 यूनिट या उससे कम हो। 500 यूनिट से ऊपर
+                सिर्फ पहली 100 यूनिट मुफ़्त हैं।
               </>
             ),
           },
           {
-            title: 'फ्यूल कॉस्ट एडजस्टमेंट (FCA)',
+            title: 'मुफ़्त यूनिट के बाद स्लैब दरें',
             body: (
               <>
-                एक ₹0.35/यूनिट सरचार्ज TANGEDCO की बिजली-खरीद लागत
-                दिखाता है, जो स्लैब एनर्जी चार्ज के ऊपर एक फेज-आधारित
-                फिक्स्ड चार्ज के साथ जोड़ा जाता है।
+                बाकी यूनिट स्लैब-दर-स्लैब बिल होती हैं: 400 यूनिट तक ₹4.70,
+                401–500 पर ₹6.30, 501–600 पर ₹8.40, 601–800 पर ₹9.45,
+                801–1,000 पर ₹10.50 और 1,000 से ऊपर ₹11.55। TNPDCL का अपना
+                कैलकुलेटर घरेलू बिल पर कोई फिक्स्ड चार्ज या बिजली टैक्स नहीं
+                दिखाता, और नतीजे को पूरे रुपये में राउंड करता है।
               </>
             ),
           },
@@ -341,31 +352,35 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
         faqs: [
           {
             q: 'मेरा TNEB बिजली बिल कैसे कैलकुलेट होता है?',
-            a: 'TANGEDCO रेजिडेंशियल (LT-IA) उपभोक्ताओं को द्वि-मासिक बिल करता है। आपका बिल टेलिस्कोपिक स्लैब-वार एनर्जी चार्ज का योग है, साथ ही ₹0.35/यूनिट फ्यूल कॉस्ट एडजस्टमेंट (FCA) और एक फेज-आधारित फिक्स्ड चार्ज, अगर आप पात्र हैं तो 100-यूनिट मुफ़्त सब्सिडी घटाकर।',
+            a: 'TNPDCL घरेलू उपभोक्ताओं (टैरिफ LA1A) को द्वि-मासिक बिल करता है। पहले मुफ़्त यूनिट घटती हैं — दो महीने का कुल 500 यूनिट या कम हो तो 200, ज़्यादा हो तो 100 — और बाकी यूनिट ₹4.70 प्रति यूनिट से शुरू होकर स्लैब-दर-स्लैब बिल होती हैं। नतीजा पूरे रुपये में राउंड होता है। 300 यूनिट का बिल ₹470 है।',
           },
           {
-            q: 'घरेलू (LT-IA) कनेक्शन के लिए TNEB की मौजूदा टैरिफ क्या है?',
-            a: '₹2.25/यूनिट (0–100), ₹3.50/यूनिट (101–200), ₹4.80/यूनिट (201–500) और ₹6.40/यूनिट (501+) के टेलिस्कोपिक स्लैब, साथ ही प्रति द्वि-मासिक साइकल ₹100 सिंगल-फेज या ₹200 थ्री-फेज का फिक्स्ड चार्ज।',
+            q: 'घरेलू कनेक्शन के लिए TNEB की मौजूदा टैरिफ क्या है?',
+            a: 'दो महीने का कुल 500 यूनिट तक हो तो: 1–200 यूनिट मुफ़्त, 201–400 पर ₹4.70 और 401–500 पर ₹6.30। कुल 500 यूनिट से ऊपर हो तो: 1–100 यूनिट मुफ़्त, 101–400 पर ₹4.70, 401–500 पर ₹6.30, 501–600 पर ₹8.40, 601–800 पर ₹9.45, 801–1,000 पर ₹10.50, और 1,000 से ऊपर की यूनिट पर ₹11.55।',
           },
           {
-            q: 'मेरा TNEB बिल मासिक की बजाय द्वि-मासिक क्यों है?',
-            a: 'TANGEDCO घरेलू मीटर हर दो महीने में एक बार पढ़ता है, इसलिए एक बिल लगभग 30 की बजाय 60 दिन कवर करता है। "मासिक" आंकड़े से तुलना के लिए, द्वि-मासिक कुल को दो से भाग दें — यह कैलकुलेटर यह अपने आप मासिक-समतुल्य के रूप में करता है।',
+            q: 'पुरानी और नई TNEB टैरिफ में क्या बदला?',
+            a: 'स्लैब दरें वही हैं। 10 मई 2026 से बदलाव मुफ़्त यूनिट में है: जो घर साइकल में 500 यूनिट तक इस्तेमाल करते हैं उनके लिए 100 की जगह 200 यूनिट मुफ़्त। 300 यूनिट का बिल ₹940 से घटकर ₹470 हुआ और 500 यूनिट का बिल ₹2,040 से ₹1,570। 500 यूनिट से ऊपर के बिल नहीं बदले।',
           },
           {
-            q: 'क्या मुझे TNEB से मुफ़्त बिजली यूनिट मिलती हैं?',
-            a: 'पात्र घरेलू उपभोक्ताओं को हर द्वि-मासिक साइकल की पहली 100 यूनिट मुफ़्त मिलती हैं, ₹2.25 सबसे कम-स्लैब दर पर मूल्यांकित — एक फ्लैट ₹225 की कमी, प्रतिशत छूट नहीं। यह लागू होता है चाहे आप साइकल में कुल कितनी भी यूनिट इस्तेमाल करें।',
+            q: '500 यूनिट से ऊपर मेरे TNEB बिल का क्या होता है?',
+            a: '500 यूनिट पार करते ही पूरे बिल के लिए दूसरी 100 मुफ़्त यूनिट हट जाती हैं। 500 यूनिट का बिल ₹1,570 है और 501 यूनिट का ₹2,048, यानी एक अतिरिक्त यूनिट ₹478 की पड़ती है।',
           },
           {
-            q: 'फ्यूल कॉस्ट एडजस्टमेंट (FCA) क्या है और यह मेरे बिल पर क्यों है?',
-            a: 'FCA एक प्रति-यूनिट सरचार्ज है, फिलहाल ₹0.35/यूनिट, जो TANGEDCO की बदलती बिजली-खरीद लागत दिखाता है। यह स्लैब एनर्जी चार्ज से अलग और उसके ऊपर जोड़ा जाता है।',
+            q: 'TNEB बिल मासिक है या द्वि-मासिक?',
+            a: 'TNEB का घरेलू बिल द्वि-मासिक है: यह लगभग 60 दिन कवर करता है, और स्लैब तथा मुफ़्त यूनिट उसी दो महीने के कुल पर लागू होती हैं। यह कैलकुलेटर मासिक-समतुल्य आंकड़ा भी दिखाता है। TNPDCL के अपने कैलकुलेटर में 35 दिन से कम के बिलिंग साइकल के लिए अलग Monthly विकल्प है।',
           },
           {
-            q: 'मैं अपना TNEB बिजली बिल कैसे कम कर सकता हूं?',
-            a: 'पुष्टि करें कि आपकी 100-यूनिट सब्सिडी पात्रता आपके खाते में सही ढंग से दर्ज है, और जहां व्यावहारिक हो अपना इस्तेमाल अगली स्लैब सीमा से नीचे रखें — 200 यूनिट पर ₹3.50 से ₹4.80/यूनिट की छलांग सबसे आम है जिसे लोग गर्मियों में अनजाने में पार करते हैं।',
+            q: 'क्या TNEB के घरेलू बिल पर फिक्स्ड चार्ज लगता है?',
+            a: 'TNPDCL का अपना बिल कैलकुलेटर घरेलू बिल पर कोई फिक्स्ड चार्ज, फ्यूल सरचार्ज या बिजली टैक्स नहीं दिखाता। कमर्शियल कनेक्शन ₹110 प्रति kW प्रति माह का फिक्स्ड कॉस्ट और 5% बिजली टैक्स चुकाते हैं।',
           },
           {
-            q: 'क्या एक सामान्य TNEB घर के लिए सोलर लगाना फायदेमंद है?',
-            a: 'अक्सर हां — TNEB की टॉप घरेलू स्लैब (₹6.40/यूनिट) इतनी ऊंची है कि एक रूफटॉप सिस्टम आपकी सबसे महंगी यूनिट्स को पहले ऑफसेट कर सकता है। तमिलनाडु टैरिफ के लिए पहले से भरे हमारे सोलर ROI कैलकुलेटर से अपना पेबैक समय देखें।',
+            q: 'मीटर रीडिंग से TNEB की यूनिट कैसे निकालूं?',
+            a: 'मौजूदा रीडिंग में से पिछली रीडिंग घटाएं; जो अंतर आए वही साइकल में खपत हुई यूनिट हैं। इस कैलकुलेटर को "Meter reading" पर करें और दोनों रीडिंग डालें, तो यूनिट और बिल साथ में मिल जाएंगे।',
+          },
+          {
+            q: 'TNEB का कमर्शियल बिल कैसे कैलकुलेट होता है?',
+            a: 'कमर्शियल बिल (टैरिफ LM51) सभी यूनिट पर एक ही दर से बनता है, स्लैब-दर-स्लैब नहीं: TNPDCL के कैलकुलेटर के अनुसार दो महीने का कुल 100 यूनिट तक हो तो लगभग ₹6.45 प्रति यूनिट और उससे ऊपर लगभग ₹10.15, साथ में ₹110 प्रति kW प्रति माह, पीक चार्ज और 5% बिजली टैक्स। यहां का कमर्शियल विकल्प एक अनुमान है और कम आंकता है; सटीक कमर्शियल आंकड़े के लिए TNPDCL का कैलकुलेटर इस्तेमाल करें।',
           },
           {
             q: "TNEB, TANGEDCO और TNPDCL में क्या फर्क है?",
@@ -373,50 +388,58 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
           },
           {
             q: 'मैं अपना TNEB बिल ऑनलाइन कैसे चेक या भुगतान करूं?',
-            a: 'आधिकारिक TANGEDCO/TNEB पोर्टल tnebnet.org के ज़रिए भुगतान करें, या TANGEDCO वेबसाइट के "Pay Online" → "Quick Pay" विकल्प से। आउटेज, बिलिंग समस्याओं या मीटर समस्याओं के लिए, 24×7 हेल्पलाइन 1912 पर कॉल करें।',
+            a: 'आधिकारिक TNPDCL पोर्टल tnebnet.org पर "Quick Pay" विकल्प से अपना सर्विस कनेक्शन नंबर डालकर भुगतान करें। आउटेज, बिलिंग समस्याओं या मीटर समस्याओं के लिए 24×7 हेल्पलाइन 1912 पर कॉल करें।',
           },
           {
-            q: 'TNEB टैरिफ दरें कितनी बार अपडेट होती हैं, और आप इस कैलकुलेटर को कैसे सटीक रखते हैं?',
-            a: 'TNERC समय-समय पर घरेलू टैरिफ की समीक्षा करता है, आम तौर पर हर जुलाई में CPI-लिंक्ड समायोजन के साथ। हम हर टैरिफ फाइल पर स्रोत ऑर्डर URL और एक आखिरी-सत्यापित तारीख दर्ज करते हैं — इस पेज के नीचे दिखाई देती है — और जब भी नया ऑर्डर जारी होता है डेटा अपडेट करते हैं।',
+            q: 'यह TNEB बिल कैलकुलेटर कितना सटीक है?',
+            a: 'हमने 10 अक्टूबर 2026 को घरेलू नतीजों को TNPDCL के अपने बिल कैलकुलेटर से 100 से 1,200 यूनिट के बीच 15 खपत स्तरों पर मिलाया, और हर नतीजा रुपये तक मेल खाया। सत्यापन की तारीख इस पेज पर दिखती है और टैरिफ बदलने पर अपडेट होती है।',
           },
         ],
         billTraps: [
           {
-            title: '100-यूनिट "सब कुछ या कुछ नहीं" वाली गलतफहमी',
+            title: '500 यूनिट की सीमा',
             body: (
               <>
-                कुछ लोग मान लेते हैं कि 100 यूनिट से ज़्यादा इस्तेमाल
-                करने से मुफ़्त-यूनिट सब्सिडी पूरी तरह खत्म हो जाती है।
-                ऐसा नहीं है — पहली 100 यूनिट ₹2.25 दर पर घटाई जाती हैं
-                चाहे साइकल के लिए आपका कुल इस्तेमाल कुछ भी हो, इसलिए
-                300-यूनिट का बिल भी 100-यूनिट के बिल जितनी ही ₹225 की
-                कमी पाता है।
+                दूसरी 100 मुफ़्त यूनिट तभी मिलती हैं जब दो महीने का कुल 500
+                यूनिट या उससे कम हो। 501 यूनिट पर ये पूरे बिल के लिए हट जाती
+                हैं, इसलिए कुल ₹1,570 से बढ़कर ₹2,048 हो जाता है। जो घर 500
+                यूनिट के पास है, उसे साइकल के आखिरी हफ्ते में मीटर देखने से
+                सबसे ज़्यादा फ़ायदा होता है।
               </>
             ),
           },
           {
-            title: 'फिक्स्ड चार्ज पर फेज़ बेमेल',
+            title: '“200 मुफ़्त यूनिट” सब पर लागू नहीं',
             body: (
               <>
-                TNEB का फिक्स्ड चार्ज आपके कनेक्शन फेज़ पर निर्भर करता
-                है, आपके स्वीकृत लोड पर नहीं: प्रति द्वि-मासिक साइकल
-                सिंगल-फेज़ के लिए ₹100, थ्री-फेज़ के लिए ₹200। अगर आपके
-                घर में थ्री-फेज़ कनेक्शन है (ज़्यादा क्षमता वाले AC या
-                मोटर वाले घरों में आम), तो आपका फिक्स्ड चार्ज
-                सिंगल-फेज़ पड़ोसी से दोगुना है।
+                500 यूनिट से ऊपर के बिल को पहले की तरह पहली 100 यूनिट मुफ़्त
+                मिलती हैं, लेकिन दूसरी 100 नहीं। 600 यूनिट का बिल पुराने और
+                नए दोनों नियमों में ₹2,880 है।
               </>
             ),
           },
           {
-            title: 'गर्मियों की स्लैब छलांग',
+            title: '₹4.95 दिखाने वाली दर तालिकाएं',
             body: (
               <>
-                गर्मियों में AC चलाने से अक्सर इस्तेमाल ₹3.50/यूनिट
-                बैंड से ₹4.80/यूनिट बैंड में चला जाता है। सिर्फ 200 से
-                ऊपर की यूनिट्स ऊंची दर पर चार्ज होती हैं — यह
-                पूर्वव्यापी नहीं है — लेकिन मार्जिनल छलांग गर्मी के
-                बिल की सर्दी के बिल से तुलना करने वालों को हैरान करती
-                है।
+                कुछ तालिकाएं पहली दर ₹4.95 बताती हैं। वह सरकारी सब्सिडी से
+                पहले की टैरिफ है, जिसे TNPDCL का कैलकुलेटर &ldquo;Total
+                Current Charges&rdquo; के रूप में दिखाता है। घरेलू उपभोक्ता
+                उस स्लैब पर असल में ₹4.70 चुकाता है, और ऊपर के स्लैब पर
+                ₹6.30, ₹8.40, ₹9.45, ₹10.50 और ₹11.55।
+              </>
+            ),
+          },
+          {
+            title: 'रीडिंग की तारीख का खिसकना',
+            body: (
+              <>
+                बिलिंग द्वि-मासिक होने से आपकी मीटर रीडिंग की तारीख हर साइकल
+                में कुछ दिन आगे-पीछे हो सकती है। &ldquo;इस जनवरी का
+                बिल&rdquo; और &ldquo;पिछली जनवरी का बिल&rdquo; हमेशा 60 दिन
+                बनाम 60 दिन की साफ तुलना नहीं होते — इस्तेमाल बदलने का
+                नतीजा निकालने से पहले दोनों बिलों की असल रीडिंग तारीखें
+                देखें।
               </>
             ),
           },
@@ -459,39 +482,41 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
           ),
         },
         howToPay: {
-          portalLabel: 'tnebnet.org (आधिकारिक TANGEDCO भुगतान पोर्टल)',
+          portalLabel: 'tnebnet.org (आधिकारिक TNPDCL भुगतान पोर्टल)',
           helpline: '1912 (24×7) · 044-28521109',
           steps: [
-            'आधिकारिक TANGEDCO/TNEB वेबसाइट पर जाएं और ऑनलाइन पेमेंट सर्विसेज़ के तहत "Pay Online" चुनें',
+            'आधिकारिक TNPDCL वेबसाइट पर जाएं और ऑनलाइन पेमेंट सर्विसेज़ के तहत "Pay Online" चुनें',
             '"Quick Pay" चुनें और अपना कंज़्यूमर/सर्विस कनेक्शन नंबर डालें',
             'दिखाई गई बिल राशि की पुष्टि करें और UPI, कार्ड या नेट बैंकिंग से भुगतान करें',
             'अपने रिकॉर्ड के लिए भुगतान रसीद/रेफरेंस नंबर सेव करें',
           ],
         },
         thresholdCallout: {
-          title: '100-यूनिट सब्सिडी रेखा',
-          leftLabel: '0–100 यूनिट',
-          leftValue: 'मुफ़्त',
-          rightLabel: '101+ यूनिट',
-          rightValue: '₹2.25 से मीटर्ड',
-          note: 'पात्र घरेलू उपभोक्ताओं को हर द्वि-मासिक साइकल की पहली 100 यूनिट मुफ़्त मिलती हैं। 100 से ऊपर की यूनिट्स उसी ₹2.25 दर से शुरू होकर टेलिस्कोपिक रूप से बिल होती हैं — 100 यूनिट पार करने से पहली 100 पर पहले से लागू सब्सिडी रद्द नहीं होती।',
+          title: '500 यूनिट की रेखा',
+          leftLabel: '500 यूनिट',
+          leftValue: '₹1,570',
+          rightLabel: '501 यूनिट',
+          rightValue: '₹2,048',
+          note: 'द्वि-मासिक साइकल में 500 यूनिट तक पहली 200 यूनिट मुफ़्त हैं। 501 यूनिट पर सिर्फ पहली 100 मुफ़्त रहती हैं, इसलिए एक अतिरिक्त यूनिट बिल को ₹478 बढ़ा देती है। दोनों आंकड़े TNPDCL के अपने बिल कैलकुलेटर से हैं।',
         },
       },
       ta: {
-        h1: 'TNEB மின்சார பில் கால்குலேட்டர் 2026 — உங்கள் தமிழ்நாடு (TANGEDCO) பில்லை மதிப்பிடுங்கள்',
+        h1: 'TNEB பில் கால்குலேட்டர் 2026 — 200 இலவச யூனிட்களுடன் தமிழ்நாடு மின்சார பில்',
         breadcrumbLabel: 'TNEB பில் கால்குலேட்டர்',
-        metaTitle: 'TNEB பில் கால்குலேட்டர் 2026 — TANGEDCO மின்சார பில் (தமிழ்நாடு)',
+        metaTitle: 'TNEB பில் கால்குலேட்டர் 2026 — புதிய கட்டணம், 200 இலவச யூனிட்கள்',
         metaDescription:
-          'தமிழ்நாட்டிற்கான உங்கள் TNEB (TANGEDCO) மின்சார பில்லைக் கணக்கிடுங்கள். இரண்டு மாத டெலஸ்கோபிக் ஸ்லாப்கள், 100 இலவச யூனிட் மானியம், எரிபொருள் செலவு சரிசெய்தல் மற்றும் நிலையான கட்டணங்கள் — மாதாந்திர-சமமான எண்ணுடன்.',
+          '10 மே 2026 முதல் நடைமுறையில் உள்ள கட்டணத்தில் உங்கள் TNEB (TNPDCL) மின்சார பில்லைக் கணக்கிடுங்கள்: இரண்டு மாதத்தில் 500 யூனிட் வரை 200 யூனிட்கள் இலவசம், ₹4.70 முதல் ஸ்லாப் விகிதங்கள், பழைய மற்றும் புதிய பில் ஒப்பீடு, 500 யூனிட் வரம்பு.',
         intro: (
           <>
-            தமிழ்நாட்டிற்கான உங்கள் TANGEDCO மின்சார பில்லை
-            மதிப்பிடுங்கள். TNEB வீட்டுப் பயனர்களுக்கு{' '}
-            <strong>இரண்டு மாதத்திற்கு ஒருமுறை</strong> டெலஸ்கோபிக்
-            ஸ்லாப்களைப் பயன்படுத்தி பில் செய்கிறது, தகுதியுள்ள
-            பயனர்களுக்கு முதல் 100 யூனிட்கள் இலவசம். கீழே உங்கள்
-            யூனிட்களை உள்ளிட்டு ஒரு விரிவான மதிப்பீட்டையும்
-            மாதாந்திர-சமமான எண்ணையும் பெறுங்கள்.
+            இந்த TNEB பில் கால்குலேட்டர், TNPDCL இன்று பில் செய்யும் அதே
+            கட்டணத்தில் தமிழ்நாட்டின் வீட்டு மின்சார பில்லைக் கணக்கிடுகிறது.
+            TNEB வீடுகளுக்கு{' '}
+            <strong>இரண்டு மாதத்திற்கு ஒருமுறை</strong> பில் செய்கிறது:
+            இரண்டு மாத மொத்தம் 500 யூனிட் அல்லது அதற்குக் குறைவாக இருந்தால்
+            முதல் 200 யூனிட்கள் இலவசம்; அதற்கு மேல் இருந்தால் முதல் 100
+            யூனிட்கள் மட்டுமே இலவசம். ஸ்லாப்-வாரியான பில், பழைய மற்றும் புதிய
+            பில் ஒப்பீடு, மாதாந்திர-சமமான எண் ஆகியவற்றைப் பெற உங்கள்
+            யூனிட்களை அல்லது மீட்டர் ரீடிங்குகளை உள்ளிடுங்கள்.
           </>
         ),
         explainer: [
@@ -499,34 +524,36 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
             title: 'இரண்டு மாத சுழற்சி',
             body: (
               <>
-                TANGEDCO வீட்டு மீட்டர்களை இரண்டு மாதங்களுக்கு
-                ஒருமுறை படிக்கிறது, எனவே ஒரு TNEB பில் சுமார் 60
-                நாட்களை உள்ளடக்கும். அனைத்து ஸ்லாப் வரம்புகளும்
-                இலவச-யூனிட் அனுமதியும் அந்த இரண்டு மாத மொத்தத்திற்குப்
-                பொருந்தும் — மாதாந்திர பில்லுடன் ஒப்பிடும்போது இது
-                தான் மிகப்பெரிய குழப்பத்தின் மூலம்.
+                TNPDCL வீட்டு மீட்டர்களை இரண்டு மாதங்களுக்கு ஒருமுறை
+                படிக்கிறது, எனவே ஒரு TNEB பில் சுமார் 60 நாட்களை உள்ளடக்கும்.
+                ஒவ்வொரு ஸ்லாப் வரம்பும் இலவச யூனிட்களும் அந்த இரண்டு மாத
+                மொத்தத்திற்குப் பொருந்தும் — மாதாந்திர பில்லுடன்
+                ஒப்பிடும்போது ஏற்படும் குழப்பத்தின் முக்கிய காரணம் இதுதான்.
               </>
             ),
           },
           {
-            title: 'இலவச-யூனிட் மானியம்',
+            title: 'இலவச யூனிட்கள்: 200 அல்லது 100',
             body: (
               <>
-                தகுதியுள்ள வீட்டுப் பயனர்கள் ஒவ்வொரு சுழற்சியின்
-                முதல் 100 யூனிட்களையும் இலவசமாகப் பெறுகிறார்கள்,
-                மிகக் குறைந்த ஸ்லாப் விகிதத்தில் (₹2.25/யூனிட்)
-                கழிக்கப்படுகிறது.
+                ஒவ்வொரு வீட்டுப் பயனருக்கும் சுழற்சியின் முதல் 100 யூனிட்கள்
+                இலவசம். 10 மே 2026 முதல் 101–200 யூனிட்களும் இலவசம், ஆனால்
+                இரண்டு மாத மொத்தம் 500 யூனிட் அல்லது அதற்குக் குறைவாக
+                இருந்தால் மட்டுமே. 500 யூனிட்டுக்கு மேல் முதல் 100 யூனிட்கள்
+                மட்டுமே இலவசம்.
               </>
             ),
           },
           {
-            title: 'எரிபொருள் செலவு சரிசெய்தல் (FCA)',
+            title: 'இலவச யூனிட்களுக்குப் பிறகு ஸ்லாப் விகிதங்கள்',
             body: (
               <>
-                ஒரு ₹0.35/யூனிட் கூடுதல் கட்டணம் TANGEDCO-வின் மின்
-                வாங்கும் செலவை பிரதிபலிக்கிறது, இது ஸ்லாப் எரிசக்தி
-                கட்டணத்தின் மேல், ஒரு கட்ட-அடிப்படையிலான நிலையான
-                கட்டணத்துடன் சேர்க்கப்படுகிறது.
+                மீதமுள்ள யூனிட்கள் ஸ்லாப்-வாரியாக பில் செய்யப்படும்: 400
+                யூனிட் வரை ₹4.70, 401–500-க்கு ₹6.30, 501–600-க்கு ₹8.40,
+                601–800-க்கு ₹9.45, 801–1,000-க்கு ₹10.50, 1,000-க்கு மேல்
+                ₹11.55. TNPDCL-இன் சொந்த கால்குலேட்டர் வீட்டு பில்லில் நிலையான
+                கட்டணமோ மின்சார வரியோ காட்டவில்லை; முடிவை முழு ரூபாயாக
+                முழுமையாக்குகிறது.
               </>
             ),
           },
@@ -534,31 +561,35 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
         faqs: [
           {
             q: 'எனது TNEB மின்சார பில் எப்படி கணக்கிடப்படுகிறது?',
-            a: 'TANGEDCO குடியிருப்பு (LT-IA) பயனர்களை இரண்டு மாதத்திற்கு ஒருமுறை பில் செய்கிறது. உங்கள் பில் என்பது டெலஸ்கோபிக் ஸ்லாப்-வாரியான எரிசக்தி கட்டணங்களின் கூட்டுத்தொகை, மேலும் ₹0.35/யூனிட் எரிபொருள் செலவு சரிசெய்தல் (FCA) மற்றும் ஒரு கட்ட-அடிப்படையிலான நிலையான கட்டணம், நீங்கள் தகுதியுடையவராக இருந்தால் 100-யூனிட் இலவச மானியத்தைக் கழித்து.',
+            a: 'TNPDCL வீட்டுப் பயனர்களுக்கு (கட்டணம் LA1A) இரண்டு மாதத்திற்கு ஒருமுறை பில் செய்கிறது. முதலில் இலவச யூனிட்கள் கழிக்கப்படும் — இரண்டு மாத மொத்தம் 500 யூனிட் அல்லது குறைவாக இருந்தால் 200, அதிகமாக இருந்தால் 100 — மீதமுள்ள யூனிட்கள் ஒரு யூனிட்டுக்கு ₹4.70 முதல் ஸ்லாப்-வாரியாக பில் செய்யப்படும். முடிவு முழு ரூபாயாக முழுமையாக்கப்படும். 300 யூனிட்களுக்கான பில் ₹470.',
           },
           {
-            q: 'வீட்டுப் பயன்பாட்டு (LT-IA) இணைப்புகளுக்கான TNEB-யின் தற்போதைய கட்டணம் என்ன?',
-            a: '₹2.25/யூனிட் (0–100), ₹3.50/யூனிட் (101–200), ₹4.80/யூனிட் (201–500) மற்றும் ₹6.40/யூனிட் (501+) டெலஸ்கோபிக் ஸ்லாப்கள், மேலும் ஒரு இரண்டு-மாத சுழற்சிக்கு ₹100 சிங்கிள்-கட்டம் அல்லது ₹200 த்ரீ-கட்டம் நிலையான கட்டணம்.',
+            q: 'வீட்டு இணைப்புகளுக்கான TNEB-யின் தற்போதைய கட்டணம் என்ன?',
+            a: 'இரண்டு மாத மொத்தம் 500 யூனிட் வரை இருந்தால்: 1–200 யூனிட்கள் இலவசம், 201–400-க்கு ₹4.70, 401–500-க்கு ₹6.30. மொத்தம் 500 யூனிட்டுக்கு மேல் இருந்தால்: 1–100 யூனிட்கள் இலவசம், 101–400-க்கு ₹4.70, 401–500-க்கு ₹6.30, 501–600-க்கு ₹8.40, 601–800-க்கு ₹9.45, 801–1,000-க்கு ₹10.50, 1,000-க்கு மேல் உள்ள யூனிட்களுக்கு ₹11.55.',
           },
           {
-            q: 'எனது TNEB பில் மாதாந்திரமாக இல்லாமல் ஏன் இரண்டு மாதத்திற்கு ஒருமுறை உள்ளது?',
-            a: 'TANGEDCO வீட்டு மீட்டர்களை இரண்டு மாதங்களுக்கு ஒருமுறை படிக்கிறது, எனவே ஒரு பில் 30 நாட்களுக்குப் பதிலாக சுமார் 60 நாட்களை உள்ளடக்கும். ஒரு "மாதாந்திர" எண்ணுடன் ஒப்பிட, இரண்டு-மாத மொத்தத்தை இரண்டால் வகுக்கவும் — இந்த கால்குலேட்டர் அதை மாதாந்திர-சமமானதாக தானாகவே செய்கிறது.',
+            q: 'பழைய மற்றும் புதிய TNEB கட்டணத்தில் என்ன மாறியது?',
+            a: 'ஸ்லாப் விகிதங்கள் மாறவில்லை. 10 மே 2026 முதல் மாறியது இலவச யூனிட்கள்: சுழற்சியில் 500 யூனிட் வரை பயன்படுத்தும் வீடுகளுக்கு 100-க்குப் பதிலாக 200 யூனிட்கள் இலவசம். 300 யூனிட் பில் ₹940-இலிருந்து ₹470 ஆகவும், 500 யூனிட் பில் ₹2,040-இலிருந்து ₹1,570 ஆகவும் குறைந்தது. 500 யூனிட்டுக்கு மேல் உள்ள பில்கள் மாறவில்லை.',
           },
           {
-            q: 'TNEB-யிடமிருந்து எனக்கு இலவச மின்சார யூனிட்கள் கிடைக்குமா?',
-            a: 'தகுதியுள்ள வீட்டுப் பயனர்கள் ஒவ்வொரு இரண்டு-மாத சுழற்சியின் முதல் 100 யூனிட்களையும் இலவசமாகப் பெறுகிறார்கள், ₹2.25 மிகக் குறைந்த-ஸ்லாப் விகிதத்தில் மதிப்பிடப்படுகிறது — ஒரு நிலையான ₹225 குறைப்பு, சதவீத தள்ளுபடி அல்ல. சுழற்சியில் நீங்கள் மொத்தம் எத்தனை யூனிட்கள் பயன்படுத்தினாலும் இது பொருந்தும்.',
+            q: '500 யூனிட்டுக்கு மேல் எனது TNEB பில்லுக்கு என்ன ஆகும்?',
+            a: '500 யூனிட்டைத் தாண்டியவுடன் முழு பில்லுக்கும் இரண்டாவது 100 இலவச யூனிட்கள் நீக்கப்படும். 500 யூனிட் பில் ₹1,570; 501 யூனிட் பில் ₹2,048. அதாவது ஒரு கூடுதல் யூனிட்டுக்கு ₹478 அதிகம்.',
           },
           {
-            q: 'எரிபொருள் செலவு சரிசெய்தல் (FCA) என்றால் என்ன, அது ஏன் எனது பில்லில் உள்ளது?',
-            a: 'FCA என்பது ஒரு யூனிட்-வாரியான கூடுதல் கட்டணம், தற்போது ₹0.35/யூனிட், இது TANGEDCO-வின் மாறிவரும் மின் வாங்கும் செலவைப் பிரதிபலிக்கிறது. இது ஸ்லாப் எரிசக்தி கட்டணத்திலிருந்து தனியாக அதன் மேல் சேர்க்கப்படுகிறது.',
+            q: 'TNEB பில் மாதாந்திரமா, இரண்டு மாதத்திற்கு ஒருமுறையா?',
+            a: 'TNEB வீட்டு பில் இரண்டு மாதத்திற்கு ஒருமுறை வரும்: இது சுமார் 60 நாட்களை உள்ளடக்கும்; ஸ்லாப்களும் இலவச யூனிட்களும் அந்த இரண்டு மாத மொத்தத்திற்குப் பொருந்தும். இந்த கால்குலேட்டர் மாதாந்திர-சமமான எண்ணையும் காட்டுகிறது. 35 நாட்களுக்கும் குறைவான பில்லிங் சுழற்சிக்கு TNPDCL-இன் சொந்த கால்குலேட்டரில் தனி Monthly விருப்பம் உள்ளது.',
           },
           {
-            q: 'நான் எனது TNEB மின்சார பில்லை எப்படி குறைக்கலாம்?',
-            a: 'உங்கள் 100-யூனிட் மானிய தகுதி உங்கள் கணக்கில் சரியாக குறிக்கப்பட்டுள்ளதா என்பதை உறுதிப்படுத்தவும், மேலும் நடைமுறையில் இருக்கும் இடத்தில் உங்கள் பயன்பாட்டை அடுத்த ஸ்லாப் வரம்புக்குக் கீழே வையுங்கள் — 200 யூனிட்டில் ₹3.50 இலிருந்து ₹4.80/யூனிட்டுக்கு தாவுவது கோடையில் மக்கள் அறியாமல் கடக்கும் மிகவும் பொதுவான ஒன்று.',
+            q: 'TNEB வீட்டு பில்லில் நிலையான கட்டணம் உண்டா?',
+            a: 'TNPDCL-இன் சொந்த பில் கால்குலேட்டர் வீட்டு பில்லில் நிலையான கட்டணம், எரிபொருள் கூடுதல் கட்டணம் அல்லது மின்சார வரி எதையும் காட்டவில்லை. வணிக இணைப்புகள் ஒரு kW-க்கு மாதம் ₹110 நிலையான கட்டணமும் 5% மின்சார வரியும் செலுத்துகின்றன.',
           },
           {
-            q: 'ஒரு பொதுவான TNEB வீட்டிற்கு சோலார் மதிப்புள்ளதா?',
-            a: 'பெரும்பாலும் ஆம் — TNEB-யின் அதிகபட்ச வீட்டு ஸ்லாப் (₹6.40/யூனிட்) போதுமான அளவு அதிகமாக உள்ளது, ஒரு கூரை அமைப்பு உங்கள் அதிக விலையுள்ள யூனிட்களை முதலில் ஈடுசெய்ய முடியும். தமிழ்நாடு கட்டணங்களுக்காக முன்பே நிரப்பப்பட்ட எங்கள் சோலார் ROI கால்குலேட்டரைப் பயன்படுத்தி உங்கள் பேபேக் காலத்தைப் பாருங்கள்.',
+            q: 'மீட்டர் ரீடிங்கிலிருந்து TNEB யூனிட்களை எப்படி கணக்கிடுவது?',
+            a: 'தற்போதைய ரீடிங்கிலிருந்து முந்தைய ரீடிங்கைக் கழிக்கவும்; வரும் வித்தியாசமே சுழற்சியில் பயன்படுத்திய யூனிட்கள். இந்த கால்குலேட்டரை "Meter reading" என மாற்றி இரண்டு ரீடிங்குகளையும் உள்ளிட்டால் யூனிட்களும் பில்லும் சேர்ந்து கிடைக்கும்.',
+          },
+          {
+            q: 'TNEB வணிக பில் எப்படி கணக்கிடப்படுகிறது?',
+            a: 'வணிக பில் (கட்டணம் LM51) அனைத்து யூனிட்களுக்கும் ஒரே விகிதத்தில் கணக்கிடப்படும், ஸ்லாப்-வாரியாக அல்ல: TNPDCL கால்குலேட்டரின்படி இரண்டு மாத மொத்தம் 100 யூனிட் வரை இருந்தால் ஒரு யூனிட்டுக்கு சுமார் ₹6.45, அதற்கு மேல் சுமார் ₹10.15; கூடுதலாக ஒரு kW-க்கு மாதம் ₹110, பீக் கட்டணங்கள், 5% மின்சார வரி. இங்குள்ள வணிக விருப்பம் ஒரு தோராய மதிப்பீடு; அது குறைவாகக் காட்டும். துல்லியமான வணிக எண்ணுக்கு TNPDCL கால்குலேட்டரைப் பயன்படுத்துங்கள்.',
           },
           {
             q: 'TNEB, TANGEDCO மற்றும் TNPDCL இடையே என்ன வித்தியாசம்?',
@@ -566,53 +597,59 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
           },
           {
             q: 'நான் எனது TNEB பில்லை ஆன்லைனில் எப்படி சரிபார்த்து செலுத்துவது?',
-            a: 'அதிகாரப்பூர்வ TANGEDCO/TNEB போர்டல் tnebnet.org மூலம் செலுத்துங்கள், அல்லது TANGEDCO வலைத்தளத்தின் "Pay Online" → "Quick Pay" விருப்பத்தின் மூலம். மின்தடை, பில்லிங் சிக்கல்கள் அல்லது மீட்டர் சிக்கல்களுக்கு, 24×7 ஹெல்ப்லைன் 1912-ஐ அழைக்கவும்.',
+            a: 'அதிகாரப்பூர்வ TNPDCL போர்டல் tnebnet.org-இல் "Quick Pay" விருப்பத்தில் உங்கள் சர்வீஸ் கனெக்ஷன் எண்ணை உள்ளிட்டு செலுத்துங்கள். மின்தடை, பில்லிங் சிக்கல்கள் அல்லது மீட்டர் சிக்கல்களுக்கு 24×7 ஹெல்ப்லைன் 1912-ஐ அழைக்கவும்.',
           },
           {
-            q: 'TNEB கட்டண விகிதங்கள் எவ்வளவு அடிக்கடி புதுப்பிக்கப்படுகின்றன, மேலும் இந்த கால்குலேட்டரை எப்படி துல்லியமாக வைத்திருக்கிறீர்கள்?',
-            a: 'TNERC பொதுவாக ஒவ்வொரு ஜூலையிலும் CPI-இணைந்த சரிசெய்தல்களுடன் வீட்டு கட்டணங்களை அவ்வப்போது மறுஆய்வு செய்கிறது. ஒவ்வொரு கட்டண கோப்பிலும் மூல ஆணை URL மற்றும் கடைசியாக சரிபார்க்கப்பட்ட தேதியை நாங்கள் பதிவு செய்கிறோம் — இந்தப் பக்கத்தின் கீழே காணப்படும் — மேலும் புதிய ஆணை வெளியிடப்படும் போதெல்லாம் தரவைப் புதுப்பிக்கிறோம்.',
+            q: 'இந்த TNEB பில் கால்குலேட்டர் எவ்வளவு துல்லியமானது?',
+            a: '10 அக்டோபர் 2026 அன்று, வீட்டு பில் முடிவுகளை TNPDCL-இன் சொந்த பில் கால்குலேட்டருடன் 100 முதல் 1,200 யூனிட் வரை 15 பயன்பாட்டு நிலைகளில் ஒப்பிட்டோம்; ஒவ்வொரு முடிவும் ரூபாய் வரை பொருந்தியது. சரிபார்த்த தேதி இந்தப் பக்கத்தில் காட்டப்படுகிறது; கட்டணம் மாறும்போது அது புதுப்பிக்கப்படும்.',
           },
         ],
         billTraps: [
           {
-            title: '100-யூனிட் "எல்லாம் அல்லது ஒன்றுமில்லை" தவறான எண்ணம்',
+            title: '500 யூனிட் வரம்பு',
             body: (
               <>
-                100 யூனிட்களுக்கு மேல் பயன்படுத்துவது இலவச-யூனிட்
-                மானியத்தை முழுவதுமாக இழக்கச் செய்யும் என்று சிலர்
-                நினைக்கிறார்கள். அது தவறு — சுழற்சிக்கான உங்கள் மொத்த
-                பயன்பாடு எதுவாக இருந்தாலும் முதல் 100 யூனிட்கள் ₹2.25
-                விகிதத்தில் கழிக்கப்படும், எனவே 300-யூனிட் பில் கூட
-                100-யூனிட் பில்லைப் போலவே அதே ₹225 குறைப்பைப் பெறும்.
+                இரண்டு மாத மொத்தம் 500 யூனிட் அல்லது அதற்குக் குறைவாக
+                இருந்தால் மட்டுமே இரண்டாவது 100 இலவச யூனிட்கள் கிடைக்கும்.
+                501 யூனிட்டில் அவை முழு பில்லுக்கும் நீக்கப்படும்; அதனால்
+                மொத்தம் ₹1,570-இலிருந்து ₹2,048 ஆக உயரும். 500 யூனிட்டுக்கு
+                அருகில் உள்ள வீடு, சுழற்சியின் கடைசி வாரத்தில் மீட்டரைக்
+                கவனிப்பதால் அதிகப் பயன் பெறும்.
               </>
             ),
           },
           {
-            title: 'நிலையான கட்டணத்தில் கட்ட முரண்பாடு',
+            title: '“200 இலவச யூனிட்கள்” அனைவருக்கும் பொருந்தாது',
             body: (
               <>
-                TNEB-யின் நிலையான கட்டணம் உங்கள் அங்கீகரிக்கப்பட்ட
-                லோடைச் சார்ந்தது அல்ல, உங்கள் இணைப்பு கட்டத்தைச்
-                சார்ந்தது: ஒரு இரண்டு-மாத சுழற்சிக்கு
-                சிங்கிள்-கட்டத்திற்கு ₹100, த்ரீ-கட்டத்திற்கு ₹200.
-                உங்கள் வீட்டில் த்ரீ-கட்ட இணைப்பு இருந்தால் (அதிக
-                திறன் கொண்ட AC அல்லது மோட்டார்கள் உள்ள வீடுகளில்
-                பொதுவானது), உங்கள் நிலையான கட்டணம் சிங்கிள்-கட்ட
-                அண்டை வீட்டாரை விட இரட்டிப்பு.
+                500 யூனிட்டுக்கு மேல் உள்ள பில்லுக்கு முன்பு போலவே முதல் 100
+                யூனிட்கள் இலவசம்; இரண்டாவது 100 கிடையாது. 600 யூனிட் பில்
+                பழைய மற்றும் புதிய விதிகள் இரண்டிலும் ₹2,880.
               </>
             ),
           },
           {
-            title: 'கோடைகால ஸ்லாப் தாவல்',
+            title: '₹4.95 எனக் காட்டும் விகித அட்டவணைகள்',
             body: (
               <>
-                கோடையில் AC இயக்குவது பெரும்பாலும் பயன்பாட்டை
-                ₹3.50/யூனிட் பட்டையிலிருந்து ₹4.80/யூனிட் பட்டைக்கு
-                தள்ளும். 200-க்கு மேல் உள்ள யூனிட்கள் மட்டுமே அதிக
-                விகிதத்தில் வசூலிக்கப்படும் — இது பின்னோக்கி
-                பொருந்தாது — ஆனால் கோடைகால பில்லை குளிர்கால
-                பில்லுடன் ஒப்பிடுபவர்களுக்கு இந்த குறை தாவல்
-                ஆச்சரியமளிக்கிறது.
+                சில அட்டவணைகள் முதல் விகிதத்தை ₹4.95 எனக் காட்டுகின்றன. அது
+                அரசு மானியத்திற்கு முந்தைய கட்டணம்; TNPDCL கால்குலேட்டர் அதை
+                &ldquo;Total Current Charges&rdquo; எனக் காட்டுகிறது. வீட்டுப்
+                பயனர் அந்த ஸ்லாப்புக்கு உண்மையில் செலுத்துவது ₹4.70; மேலுள்ள
+                ஸ்லாப்களுக்கு ₹6.30, ₹8.40, ₹9.45, ₹10.50, ₹11.55.
+              </>
+            ),
+          },
+          {
+            title: 'ரீடிங் தேதி மாற்றம்',
+            body: (
+              <>
+                பில்லிங் இரண்டு மாதத்திற்கு ஒருமுறை என்பதால், உங்கள் மீட்டர்
+                ரீடிங் தேதி ஒவ்வொரு சுழற்சியிலும் சில நாட்கள் முன்பின்
+                ஆகலாம். &ldquo;இந்த ஜனவரி பில்&rdquo; மற்றும் &ldquo;கடந்த
+                ஜனவரி பில்&rdquo; எப்போதும் 60 நாள் – 60 நாள் ஒப்பீடாக
+                இருக்காது — பயன்பாடு மாறியது என முடிவு செய்வதற்கு முன் இரண்டு
+                பில்களிலும் உள்ள உண்மையான ரீடிங் தேதிகளைப் பாருங்கள்.
               </>
             ),
           },
@@ -655,22 +692,22 @@ export const CALCULATOR_PAGES: DiscomPageConfig[] = [
           ),
         },
         howToPay: {
-          portalLabel: 'tnebnet.org (அதிகாரப்பூர்வ TANGEDCO பணம் செலுத்தும் போர்டல்)',
+          portalLabel: 'tnebnet.org (அதிகாரப்பூர்வ TNPDCL பணம் செலுத்தும் போர்டல்)',
           helpline: '1912 (24×7) · 044-28521109',
           steps: [
-            'அதிகாரப்பூர்வ TANGEDCO/TNEB வலைத்தளத்திற்குச் சென்று, Online Payment Services-ன் கீழ் "Pay Online" ஐத் தேர்ந்தெடுக்கவும்',
+            'அதிகாரப்பூர்வ TNPDCL வலைத்தளத்திற்குச் சென்று, Online Payment Services-ன் கீழ் "Pay Online" ஐத் தேர்ந்தெடுக்கவும்',
             '"Quick Pay" ஐத் தேர்ந்தெடுத்து உங்கள் Consumer/Service Connection எண்ணை உள்ளிடவும்',
             'காட்டப்படும் பில் தொகையை சரிபார்த்து UPI, கார்டு அல்லது நெட் பேங்கிங் மூலம் செலுத்தவும்',
             'உங்கள் பதிவுகளுக்காக பணம் செலுத்திய ரசீது/குறிப்பு எண்ணைச் சேமிக்கவும்',
           ],
         },
         thresholdCallout: {
-          title: '100-யூனிட் மானிய கோடு',
-          leftLabel: '0–100 யூனிட்கள்',
-          leftValue: 'இலவசம்',
-          rightLabel: '101+ யூனிட்கள்',
-          rightValue: '₹2.25 முதல் மீட்டர் செய்யப்படும்',
-          note: 'தகுதியுள்ள வீட்டுப் பயனர்கள் ஒவ்வொரு இரண்டு-மாத சுழற்சியின் முதல் 100 யூனிட்களையும் இலவசமாகப் பெறுகிறார்கள். 100-க்கு மேல் உள்ள யூனிட்கள் அதே ₹2.25 விகிதத்தில் தொடங்கி டெலஸ்கோபிக் முறையில் பில் செய்யப்படும் — 100 யூனிட்களைத் தாண்டுவது முதல் 100-க்கு ஏற்கனவே பொருந்திய மானியத்தை ரத்து செய்யாது.',
+          title: '500 யூனிட் கோடு',
+          leftLabel: '500 யூனிட்கள்',
+          leftValue: '₹1,570',
+          rightLabel: '501 யூனிட்கள்',
+          rightValue: '₹2,048',
+          note: 'இரண்டு மாத சுழற்சியில் 500 யூனிட் வரை முதல் 200 யூனிட்கள் இலவசம். 501 யூனிட்டில் முதல் 100 மட்டுமே இலவசம்; அதனால் ஒரு கூடுதல் யூனிட் பில்லை ₹478 உயர்த்தும். இரண்டு எண்களும் TNPDCL-இன் சொந்த பில் கால்குலேட்டரிலிருந்து எடுக்கப்பட்டவை.',
         },
       },
     },

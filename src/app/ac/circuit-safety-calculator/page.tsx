@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import AcCircuitSafetyCalculator from '@/components/calculators/AcCircuitSafetyCalculator'
 import AcCircuitSafetyTable from '@/components/ac/AcCircuitSafetyTable'
 import PageHero from '@/components/PageHero'

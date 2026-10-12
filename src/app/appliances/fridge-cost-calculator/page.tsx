@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import FridgeCostCalculator from '@/components/calculators/FridgeCostCalculator'
 import PageHero from '@/components/PageHero'
 import discomsJson from '@/data/discoms.json'

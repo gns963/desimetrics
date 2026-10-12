@@ -246,6 +246,12 @@ export function applySubsidy(
 
   for (const scheme of subsidySchemes) {
     if (!schemeApplies(scheme, eligibility)) continue
+    if (
+      scheme.appliesUpToTotalUnits !== undefined &&
+      unitsConsumed > scheme.appliesUpToTotalUnits
+    ) {
+      continue
+    }
 
     let amount = 0
     switch (scheme.discountType) {
@@ -379,8 +385,9 @@ export function computeBill(
   const dutyAmount = (subsidy.adjustedCharge * effectiveDutyPercent) / 100
   const meterRent = ct.meterRent ?? 0
 
-  const total =
+  const rawTotal =
     subsidy.adjustedCharge + fcaAmount + fixed.amount + dutyAmount + meterRent
+  const total = tariff.roundTotalToRupee ? Math.round(rawTotal) : rawTotal
 
   // How many months each billing cycle spans — drives the monthly-equivalent.
   const PERIOD_MONTHS: Record<TariffFile['billingCycle'], number> = {
@@ -455,6 +462,34 @@ export function computeBill(
     currency: 'INR',
     notes,
   }
+}
+
+// ---------------------------------------------------------------------------
+// 4b. Before/after a newly introduced subsidy scheme
+// ---------------------------------------------------------------------------
+
+/**
+ * The same tariff with every scheme that carries an `introducedOn` date
+ * removed — i.e. the tariff as it stood before the newest scheme. Returns
+ * `null` when no scheme is dated, so callers can skip the comparison.
+ */
+export function tariffBeforeNewSchemes(tariff: TariffFile): TariffFile | null {
+  if (!tariff.subsidySchemes.some((s) => s.introducedOn)) return null
+  return {
+    ...tariff,
+    subsidySchemes: tariff.subsidySchemes.filter((s) => !s.introducedOn),
+  }
+}
+
+/**
+ * The consumption cap at which a capped scheme stops applying — the point
+ * where one more unit raises the whole bill. `null` if the tariff has none.
+ */
+export function subsidyCliffUnits(tariff: TariffFile): number | null {
+  const caps = tariff.subsidySchemes
+    .map((s) => s.appliesUpToTotalUnits)
+    .filter((c): c is number => c !== undefined)
+  return caps.length ? Math.min(...caps) : null
 }
 
 // ---------------------------------------------------------------------------

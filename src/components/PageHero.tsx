@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import type { ReactNode } from 'react'
 import { HUB_CLASSES, TONE_TEXT, type HubKey, type StatChip } from './SplitHero'
 

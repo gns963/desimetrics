@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import SolarPanelSizeCalculator from '@/components/calculators/SolarPanelSizeCalculator'
 import PageHero from '@/components/PageHero'
 import { ROOF_SQFT_PER_KW, recommendSystemSize } from '@/lib/calc/solar'

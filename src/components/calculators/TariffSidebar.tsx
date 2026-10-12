@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import type { ConnectionCategory, FixedCharge, TariffFile } from '@/data/tariffs/_schema'
 import { cycleLabel, formatIsoDate } from '@/lib/format'
 
@@ -9,7 +9,7 @@ function fixedChargeLabel(fc: FixedCharge): string {
     case 'perLoad':
       return `₹${fc.perKW}/kW`
     case 'flat':
-      return `₹${fc.flat}`
+      return fc.flat === 0 ? 'None' : `₹${fc.flat}`
   }
 }
 

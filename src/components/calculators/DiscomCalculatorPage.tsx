@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import ApplianceUpgradeCards from '@/components/calculators/ApplianceUpgradeCards'
 import BillComponentAudit from '@/components/calculators/BillComponentAudit'
 import Calculator from '@/components/calculators/ElectricityCalculator'
@@ -8,6 +8,7 @@ import PopularBillCalculations from '@/components/calculators/PopularBillCalcula
 import TariffSidebar from '@/components/calculators/TariffSidebar'
 import WorkedExampleTotal from '@/components/calculators/WorkedExampleTotal'
 import SolarCrossSell from '@/components/SolarCrossSell'
+import { isPausedPath } from '@/lib/paused'
 import TableOfContents from '@/components/TableOfContents'
 import ThresholdCallout from '@/components/ThresholdCallout'
 import { CALCULATOR_PAGES, type DiscomPageConfig } from '@/data/calculator-pages'
@@ -87,6 +88,8 @@ export default function DiscomCalculatorPage({
   const path = `/electricity/${config.slug}`
   const localePath = locale !== 'en' ? `/${locale}${path}` : path
   const localeBase = locale !== 'en' ? `${SITE}/${locale}` : SITE
+  // Only English and Hindi have an electricity hub; other locales link to the English one.
+  const hubHref = locale === 'hi' ? '/hi/electricity' : '/electricity'
   const availableLanguages = getLocaleSwitcherOptions(path)
     .filter((o) => o.isTranslated)
     .map((o) => o.label)
@@ -94,9 +97,25 @@ export default function DiscomCalculatorPage({
 
   const topRate = residential.slabs[residential.slabs.length - 1].ratePerUnit
   const fcaIncluded = tariff.fuelCostAdjustment > 0
-  const freeUnitsScheme = tariff.subsidySchemes.find(
+  const freeSchemes = tariff.subsidySchemes.filter(
     (s) => s.discountType === 'free',
   )
+  const freeUnitsScheme = freeSchemes[0]
+  // Free units every consumer gets vs. the most anyone gets (TNEB: 100 always,
+  // 200 only up to 500 units) — shown as a range when the two differ.
+  const freeUnitsMax = freeSchemes.reduce((n, s) => n + s.discountValue, 0)
+  const freeUnitsMin = freeSchemes
+    .filter((s) => s.appliesUpToTotalUnits === undefined)
+    .reduce((n, s) => n + s.discountValue, 0)
+  const freeUnitsStat =
+    freeUnitsMin > 0 && freeUnitsMin < freeUnitsMax
+      ? `${freeUnitsMin}–${freeUnitsMax}u`
+      : `${freeUnitsMax}u`
+  const noFixedCharge =
+    residential.fixedCharge.basis === 'flat' && residential.fixedCharge.flat === 0
+  const residentialFixedLabel = noFixedCharge
+    ? t.statNone
+    : fixedChargeLabel(residential.fixedCharge)
 
   // Two server-rendered worked examples: a low-usage case and a higher-usage
   // case that crosses into a higher slab — both extractable without JS.
@@ -175,7 +194,7 @@ export default function DiscomCalculatorPage({
     { id: 'bill-audit', label: t.toc.billAudit },
     { id: 'whats-included', label: t.toc.whatsIncluded },
     { id: 'meter-reading', label: t.toc.meterReading },
-    { id: 'solar', label: t.toc.solar },
+    ...(isPausedPath('/solar') ? [] : [{ id: 'solar', label: t.toc.solar }]),
     { id: 'appliance-upgrades', label: t.toc.applianceUpgrades },
     ...(neighbors.length
       ? [{ id: 'comparison', label: t.toc.comparison(tariff.discomCode) }]
@@ -218,7 +237,7 @@ export default function DiscomCalculatorPage({
         '@type': 'ListItem',
         position: 2,
         name: t.breadcrumbElectricity,
-        item: `${localeBase}/electricity`,
+        item: `${SITE}${hubHref}`,
       },
       {
         // content.breadcrumbLabel resolves to a genuine translation where
@@ -288,7 +307,7 @@ export default function DiscomCalculatorPage({
               <li aria-hidden>/</li>
               <li>
                 <Link
-                  href={locale !== 'en' ? `/${locale}/electricity` : '/electricity'}
+                  href={hubHref}
                   className="hover:text-brass"
                 >
                   {t.breadcrumbElectricity}
@@ -383,7 +402,7 @@ export default function DiscomCalculatorPage({
                   ['📅', cycleLabel(tariff.billingCycle, locale), t.statBilling, 'hub-ac'],
                   ['⛽', fcaIncluded ? `₹${tariff.fuelCostAdjustment}` : t.statNone, t.statFcaPerUnit, 'caution-amber'],
                   freeUnitsScheme
-                    ? ['🎁', `${freeUnitsScheme.discountValue}u`, t.statFreeSubsidy, 'spark-teal']
+                    ? ['🎁', freeUnitsStat, t.statFreeSubsidy, 'spark-teal']
                     : ['✓', formatIsoDate(tariff.lastVerified), t.statVerified, 'seal-red'],
                 ].map(([icon, big, small, tone]) => (
                   <div
@@ -467,8 +486,10 @@ export default function DiscomCalculatorPage({
             )}
             {example.fuelCostAdjustment.amount > 0 && (
               <> + {formatINR(example.fuelCostAdjustment.amount)} {t.fcaLabel}</>
-            )}{' '}
-            + {formatINR(example.fixedCharge.amount)} {t.fixedChargeLabel}
+            )}
+            {example.fixedCharge.amount > 0 && (
+              <> + {formatINR(example.fixedCharge.amount)} {t.fixedChargeLabel}</>
+            )}
             {example.electricityDuty.amount > 0 && (
               <> + {formatINR(example.electricityDuty.amount)} {t.dutyLabel}</>
             )}
@@ -612,7 +633,7 @@ export default function DiscomCalculatorPage({
                 <tr>
                   <td className="px-4 py-2">{t.fixedChargeLabel}</td>
                   <td className="px-4 py-2 text-right tabular-nums">
-                    {fixedChargeLabel(residential.fixedCharge)}
+                    {residentialFixedLabel}
                   </td>
                 </tr>
                 {tariff.fuelCostAdjustment > 0 && (
@@ -674,8 +695,9 @@ export default function DiscomCalculatorPage({
                 {config.exampleUnits} {t.unitsLabel} · {formatINR(example.energyChargeGross)}{' '}
                 {t.energyLabel}
                 {example.subsidy.subsidyAmount > 0 &&
-                  ` − ${formatINR(example.subsidy.subsidyAmount)} ${t.subsidyLabel}`}{' '}
-                + {formatINR(example.fixedCharge.amount)} {t.fixedLabel}
+                  ` − ${formatINR(example.subsidy.subsidyAmount)} ${t.subsidyLabel}`}
+                {example.fixedCharge.amount > 0 &&
+                  ` + ${formatINR(example.fixedCharge.amount)} ${t.fixedLabel}`}
                 {example.fuelCostAdjustment.amount > 0 &&
                   ` + ${formatINR(example.fuelCostAdjustment.amount)} ${t.fcaLabel}`}
               </p>
@@ -691,8 +713,9 @@ export default function DiscomCalculatorPage({
                 {secondExampleUnits} {t.unitsLabel} · {formatINR(example2.energyChargeGross)}{' '}
                 {t.energyLabel}
                 {example2.subsidy.subsidyAmount > 0 &&
-                  ` − ${formatINR(example2.subsidy.subsidyAmount)} ${t.subsidyLabel}`}{' '}
-                + {formatINR(example2.fixedCharge.amount)} {t.fixedLabel}
+                  ` − ${formatINR(example2.subsidy.subsidyAmount)} ${t.subsidyLabel}`}
+                {example2.fixedCharge.amount > 0 &&
+                  ` + ${formatINR(example2.fixedCharge.amount)} ${t.fixedLabel}`}
                 {example2.fuelCostAdjustment.amount > 0 &&
                   ` + ${formatINR(example2.fuelCostAdjustment.amount)} ${t.fcaLabel}`}
                 {example2.electricityDuty.amount > 0 &&
@@ -833,7 +856,7 @@ export default function DiscomCalculatorPage({
                     {t.fixedChargeRow.desc}
                   </td>
                   <td className="px-4 py-2 text-right tabular-nums">
-                    {fixedChargeLabel(residential.fixedCharge)}
+                    {residentialFixedLabel}
                   </td>
                 </tr>
                 {tariff.electricityDutyPercent > 0 && (
@@ -847,17 +870,17 @@ export default function DiscomCalculatorPage({
                     </td>
                   </tr>
                 )}
-                {freeUnitsScheme && (
-                  <tr>
+                {freeSchemes.map((scheme) => (
+                  <tr key={scheme.schemeName}>
                     <td className="px-4 py-2 font-medium">{t.subsidyRow.label}</td>
                     <td className="px-4 py-2 text-ash/70">
-                      {freeUnitsScheme.schemeName}
+                      {scheme.schemeName}
                     </td>
                     <td className="px-4 py-2 text-right tabular-nums">
-                      {t.freeUnits(freeUnitsScheme.discountValue)}
+                      {t.freeUnits(scheme.discountValue)}
                     </td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           </div>

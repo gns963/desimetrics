@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import GasBillCalculator, { type GasBillCalculatorTexts } from '@/components/calculators/GasBillCalculator'
 import PngVsLpgSelfRateComparison from '@/components/calculators/PngVsLpgSelfRateComparison'
 import { FlameIcon } from '@/components/HubMotifIcon'

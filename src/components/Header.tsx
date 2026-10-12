@@ -1,10 +1,13 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { MEGA_MENU } from '@/data/megamenu'
+import { isPausedPath } from '@/lib/paused'
+
+const MENU = MEGA_MENU.filter((hub) => !isPausedPath(hub.href))
 
 export default function Header() {
   const pathname = usePathname()
@@ -85,7 +88,7 @@ export default function Header() {
 
         {/* Desktop mega menu */}
         <div ref={navRef} className="hidden items-center gap-1 lg:flex">
-          {MEGA_MENU.map((hub) => {
+          {MENU.map((hub) => {
             const isOpen = openHub === hub.key
             return (
               <div
@@ -213,7 +216,7 @@ export default function Header() {
       {/* Mobile accordion menu */}
       {mobileOpen && (
         <div className="max-h-[calc(100vh-57px)] overflow-y-auto border-t border-hairline bg-paper px-4 py-3 lg:hidden">
-          {MEGA_MENU.map((hub) => {
+          {MENU.map((hub) => {
             const isExpanded = mobileExpanded === hub.key
             return (
               <div key={hub.key} className="border-b border-hairline last:border-b-0">

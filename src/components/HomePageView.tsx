@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import type { CSSProperties } from 'react'
 import LeadGenForm from '@/components/LeadGenForm'
 import QuickBillEstimate from '@/components/QuickBillEstimate'
@@ -13,6 +13,7 @@ import {
   verifiedDate,
   type HomeTexts,
 } from '@/lib/homeShared'
+import { isPausedPath } from '@/lib/paused'
 import { itemListLd } from '@/lib/seo'
 
 /** Renders any locale's homepage from its HomeTexts — the JSX/layout is
@@ -35,7 +36,7 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
       exploreSuffix: t.exploreSuffix,
       tools: t.toolLabels.map((label, j) => ({ label, href: structure.toolHrefs[j] })),
     }
-  })
+  }).filter((h) => !isPausedPath(h.explore))
 
   const faqLd = {
     '@context': 'https://schema.org',
@@ -268,6 +269,7 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
         </section>
 
         {/* -------------------------------------------------------- Solar lead-gen */}
+        {!isPausedPath('/solar') && (
         <section id="solar-leadgen" className="relative overflow-hidden hero-gradient">
           <div className="hero-grid-overlay pointer-events-none absolute inset-0" aria-hidden />
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 grid-cols-1 lg:grid-cols-2">
@@ -295,6 +297,7 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
             </div>
           </div>
         </section>
+        )}
 
         {/* -------------------------------------------------------- How we verify */}
         <section className="bg-gazette-cream">

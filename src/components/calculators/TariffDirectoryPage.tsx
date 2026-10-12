@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import type { DiscomPageConfig } from '@/data/calculator-pages'
 import type { ConnectionCategory, ConnectionType, TariffFile } from '@/data/tariffs/_schema'
 import { calculateFullBill } from '@/lib/calc/electricity'

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import { calculateSolarRoi, estimateSystemCost, pmSuryaGharSubsidy, ROOF_SQFT_PER_KW } from '@/lib/calc/solar'
 import { formatINR } from '@/lib/format'
 

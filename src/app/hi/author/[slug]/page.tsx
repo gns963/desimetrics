@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import { notFound } from 'next/navigation'
 import { allAuthorSlugs, getAuthor } from '@/data/authors'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'

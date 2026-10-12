@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import InverterBackupCalculator from '@/components/calculators/InverterBackupCalculator'
 import PageHero from '@/components/PageHero'
 import { estimateBackupTime } from '@/lib/calc/inverter'

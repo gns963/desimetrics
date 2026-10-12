@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import LeadGenForm from '@/components/LeadGenForm'
 import SplitHero from '@/components/SplitHero'
 import SolarRoiCalculator from '@/components/calculators/SolarRoiCalculator'

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import WaterBoardBillCalculator from '@/components/calculators/WaterBoardBillCalculator'
 import WorkedExampleTotal from '@/components/calculators/WorkedExampleTotal'
 import HowWeVerify from '@/components/HowWeVerify'

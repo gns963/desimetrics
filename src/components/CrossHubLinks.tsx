@@ -1,4 +1,5 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
+import { isPausedPath } from '@/lib/paused'
 
 const HUBS = [
   {
@@ -58,7 +59,10 @@ const HUBS = [
 ] as const
 
 export default function CrossHubLinks({ current }: { current: string }) {
-  const others = HUBS.filter((h) => h.slug !== current)
+  const others = HUBS.filter(
+    (h) => h.slug !== current && !isPausedPath(`/${h.slug}`),
+  )
+  if (others.length === 0) return null
   return (
     <section aria-labelledby="explore-more" className="mb-10">
       <h2 id="explore-more" className="font-display mb-4 text-2xl font-semibold">

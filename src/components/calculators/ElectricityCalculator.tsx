@@ -5,8 +5,12 @@ import type {
   ConnectionCategory,
   TariffFile,
 } from '@/data/tariffs/_schema'
-import { computeBill } from '@/lib/calc/electricity'
-import { cycleLabel, formatINR } from '@/lib/format'
+import {
+  computeBill,
+  subsidyCliffUnits,
+  tariffBeforeNewSchemes,
+} from '@/lib/calc/electricity'
+import { cycleLabel, formatINR, formatIsoDate } from '@/lib/format'
 import {
   CalculatorCard,
   CalculatorCta,
@@ -51,7 +55,11 @@ export default function ElectricityCalculator({
     (c) => c.connectionType === connectionType,
   )
   const needsLoad = selected?.fixedCharge.basis === 'perLoad'
-  const subsidyScheme = tariff.subsidySchemes[0]
+  // Schemes open to every domestic consumer apply automatically; only a
+  // scheme with a narrower eligibility needs the opt-in checkbox.
+  const subsidyScheme = tariff.subsidySchemes.find(
+    (s) => !s.eligibility.toLowerCase().includes('all'),
+  )
   const cycleWord = tariff.billingCycle
   const isMultiMonth = cycleWord !== 'monthly'
 
@@ -86,6 +94,49 @@ export default function ElectricityCalculator({
     tariff,
     connectionType,
     effectiveUnitsStr,
+    phase,
+    load,
+    eligible,
+    needsLoad,
+    subsidyScheme,
+  ])
+
+  // Extra context for residential bills, both driven by the tariff data:
+  // the consumption cap where a free-unit scheme stops, and the bill under
+  // the tariff as it stood before the newest scheme.
+  const insights = useMemo(() => {
+    if (!bill || connectionType !== 'residential') return null
+    const billFor = (t: TariffFile, units: number) =>
+      computeBill(t, {
+        connectionType,
+        unitsConsumed: units,
+        phase,
+        sanctionedLoad: needsLoad ? load : undefined,
+        eligibility: eligible ? subsidyScheme?.eligibility : undefined,
+      })
+    const cap = subsidyCliffUnits(tariff)
+    const cliff =
+      cap === null
+        ? null
+        : {
+            cap,
+            atCap: billFor(tariff, cap).total,
+            justOver: billFor(tariff, cap + 1).total,
+          }
+    const before = tariffBeforeNewSchemes(tariff)
+    const newest = tariff.subsidySchemes.find((s) => s.introducedOn)
+    const change =
+      before && newest?.introducedOn
+        ? {
+            since: newest.introducedOn,
+            oldTotal: billFor(before, bill.unitsConsumed).total,
+          }
+        : null
+    return { cliff, change }
+  }, [
+    bill,
+    tariff,
+    connectionType,
     phase,
     load,
     eligible,
@@ -331,29 +382,38 @@ export default function ElectricityCalculator({
                 </tr>
                 {bill.subsidy.subsidyAmount > 0 && (
                   <tr className="text-spark-teal">
-                    <td className="py-1.5">Subsidy applied</td>
+                    <td className="py-1.5">
+                      {bill.subsidy.appliedSchemes.length > 0
+                        ? bill.subsidy.appliedSchemes.join(' + ')
+                        : 'Subsidy applied'}
+                    </td>
                     <td className="py-1.5 text-right tabular-nums">
                       −{formatINR(bill.subsidy.subsidyAmount)}
                     </td>
                   </tr>
                 )}
-                <tr>
-                  <td className="py-1.5 text-ash/70">
-                    Fuel cost adjustment (₹{bill.fuelCostAdjustment.ratePerUnit}
-                    /unit)
-                  </td>
-                  <td className="py-1.5 text-right tabular-nums">
-                    {formatINR(bill.fuelCostAdjustment.amount)}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-1.5 text-ash/70">
-                    Fixed charge ({bill.fixedCharge.detail})
-                  </td>
-                  <td className="py-1.5 text-right tabular-nums">
-                    {formatINR(bill.fixedCharge.amount)}
-                  </td>
-                </tr>
+                {bill.fuelCostAdjustment.ratePerUnit !== 0 && (
+                  <tr>
+                    <td className="py-1.5 text-ash/70">
+                      Fuel cost adjustment (₹
+                      {bill.fuelCostAdjustment.ratePerUnit}
+                      /unit)
+                    </td>
+                    <td className="py-1.5 text-right tabular-nums">
+                      {formatINR(bill.fuelCostAdjustment.amount)}
+                    </td>
+                  </tr>
+                )}
+                {bill.fixedCharge.amount > 0 && (
+                  <tr>
+                    <td className="py-1.5 text-ash/70">
+                      Fixed charge ({bill.fixedCharge.detail})
+                    </td>
+                    <td className="py-1.5 text-right tabular-nums">
+                      {formatINR(bill.fixedCharge.amount)}
+                    </td>
+                  </tr>
+                )}
                 {bill.electricityDuty.amount > 0 && (
                   <tr>
                     <td className="py-1.5 text-ash/70">
@@ -382,6 +442,37 @@ export default function ElectricityCalculator({
                 </tr>
               </tbody>
             </table>
+
+            {insights?.cliff && bill.unitsConsumed <= insights.cliff.cap && (
+              <p className="rounded-lg border border-caution-amber/30 bg-caution-amber/5 px-3 py-2 text-sm text-ash">
+                {bill.unitsConsumed === insights.cliff.cap
+                  ? `You are exactly at ${insights.cliff.cap} units.`
+                  : `You are ${insights.cliff.cap - bill.unitsConsumed} units below ${insights.cliff.cap}.`}{' '}
+                At {insights.cliff.cap + 1} units the bill becomes{' '}
+                <strong>{formatINR(insights.cliff.justOver)}</strong>, which is{' '}
+                {formatINR(insights.cliff.justOver - insights.cliff.atCap)} more
+                than the {formatINR(insights.cliff.atCap)} charged at{' '}
+                {insights.cliff.cap} units, because fewer units are free above
+                that level.
+              </p>
+            )}
+            {insights?.cliff && bill.unitsConsumed > insights.cliff.cap && (
+              <p className="rounded-lg border border-caution-amber/30 bg-caution-amber/5 px-3 py-2 text-sm text-ash">
+                You are above {insights.cliff.cap} units, so fewer units are
+                free. At exactly {insights.cliff.cap} units this bill would be{' '}
+                <strong>{formatINR(insights.cliff.atCap)}</strong>.
+              </p>
+            )}
+            {insights?.change && (
+              <p className="rounded-lg bg-paper px-3 py-2 text-sm text-ash/80">
+                Old vs new: before {formatIsoDate(insights.change.since)} the
+                same {bill.unitsConsumed} units cost{' '}
+                <strong>{formatINR(insights.change.oldTotal)}</strong>.{' '}
+                {insights.change.oldTotal > bill.total
+                  ? `You pay ${formatINR(insights.change.oldTotal - bill.total)} less now.`
+                  : 'Your bill is unchanged, because the extra free units stop above the cap.'}
+              </p>
+            )}
           </div>
         )}
       </div>

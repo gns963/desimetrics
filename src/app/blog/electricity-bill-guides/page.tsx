@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import PageHero from '@/components/PageHero'
 import { CALCULATOR_PAGES } from '@/data/calculator-pages'
 import discomsJson from '@/data/discoms.json'

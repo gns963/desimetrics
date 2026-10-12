@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import type { ReactNode } from 'react'
 import { breadcrumbLd } from '@/lib/seo'
 

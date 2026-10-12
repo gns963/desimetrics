@@ -7,9 +7,12 @@ import {
   computeBill,
   findMaxUnitsForBudget,
   getTariff,
+  subsidyCliffUnits,
+  tariffBeforeNewSchemes,
 } from './electricity'
 
-// TANGEDCO residential slabs (from tneb.json) reused across primitive tests.
+// A four-band telescopic fixture reused across the primitive slab/subsidy tests.
+// Not TNPDCL's live tariff — that is pinned to official results further down.
 const TNEB_SLABS = [
   { minUnits: 0, maxUnits: 100, ratePerUnit: 2.25 },
   { minUnits: 101, maxUnits: 200, ratePerUnit: 3.5 },
@@ -84,46 +87,76 @@ describe('applySubsidy', () => {
 })
 
 describe('calculateFullBill — TNEB residential (bi-monthly)', () => {
-  it('250-unit bill with 100 free units', () => {
+  // Every expected total below is the "Net Amount" returned by TNPDCL's own
+  // bill calculator (tnebnet.org/awp/tariffMaster, tariff LA1A, bi-monthly)
+  // on 2026-10-10 — not a figure derived from this engine.
+  const OFFICIAL: [units: number, netAmount: number][] = [
+    [100, 0],
+    [200, 0],
+    [201, 5],
+    [300, 470],
+    [400, 940],
+    [401, 946],
+    [500, 1570],
+    [501, 2048],
+    [600, 2880],
+    [601, 2889],
+    [800, 4770],
+    [801, 4781],
+    [1000, 6870],
+    [1001, 6882],
+    [1200, 9180],
+  ]
+
+  it.each(OFFICIAL)('%i units bills at the official ₹%i', (units, expected) => {
     const bill = calculateFullBill({
       discomCode: 'TNEB',
       connectionType: 'residential',
-      unitsConsumed: 250,
-      phase: 'single',
-      eligibility: 'eligible/BPL domestic',
+      unitsConsumed: units,
     })
-
-    expect(bill.energyChargeGross).toBe(815)
-    expect(bill.subsidy.subsidyAmount).toBe(225)
-    expect(bill.energyChargeNet).toBe(590)
-    expect(bill.fuelCostAdjustment.amount).toBe(87.5) // 0.35 × 250
-    expect(bill.fixedCharge.amount).toBe(100) // single-phase
+    expect(bill.total).toBe(expected)
+    expect(bill.fixedCharge.amount).toBe(0)
+    expect(bill.fuelCostAdjustment.amount).toBe(0)
     expect(bill.electricityDuty.amount).toBe(0)
-    expect(bill.total).toBe(777.5) // 590 + 87.5 + 100
-
-    // Bi-monthly clarity: monthly-equivalent must be exposed.
-    expect(bill.monthlyEquivalent).toEqual({ total: 388.75, units: 125 })
-    expect(bill.notes.join(' ')).toMatch(/bi-monthly/i)
   })
 
-  it('500-unit edge case sits exactly on the subsidy/slab boundary', () => {
-    const bill = calculateFullBill({
+  it('gives 200 free units up to 500 units and only 100 above', () => {
+    const at500 = calculateFullBill({
       discomCode: 'TNEB',
       connectionType: 'residential',
       unitsConsumed: 500,
-      phase: 'single',
-      eligibility: 'eligible/BPL domestic',
     })
+    const at501 = calculateFullBill({
+      discomCode: 'TNEB',
+      connectionType: 'residential',
+      unitsConsumed: 501,
+    })
+    // 200 units × ₹4.70 waived at 500; only the first 100 at 501.
+    expect(at500.subsidy.subsidyAmount).toBe(940)
+    expect(at500.subsidy.appliedSchemes).toHaveLength(2)
+    expect(at501.subsidy.subsidyAmount).toBe(470)
+    expect(at501.subsidy.appliedSchemes).toHaveLength(1)
+    // One extra unit costs ₹478 more — the cliff the page warns about.
+    expect(at501.total - at500.total).toBe(478)
+    expect(subsidyCliffUnits(getTariff('TNEB'))).toBe(500)
+  })
 
-    // 500 is the inclusive top of the 201–500 slab: the 501+ slab stays empty.
-    expect(bill.slab.lines[2].unitsInSlab).toBe(300)
-    expect(bill.slab.lines[3].unitsInSlab).toBe(0)
-    // 225 + 350 + 1440 = 2015 gross; free-100 subsidy = 225
-    expect(bill.energyChargeGross).toBe(2015)
-    expect(bill.subsidy.subsidyAmount).toBe(225)
-    expect(bill.energyChargeNet).toBe(1790)
-    expect(bill.total).toBe(2065) // 1790 + 175 (FCA) + 100 (fixed)
-    expect(bill.monthlyEquivalent).toEqual({ total: 1032.5, units: 250 })
+  it('exposes the monthly equivalent and the pre-May-2026 bill', () => {
+    const tariff = getTariff('TNEB')
+    const bill = computeBill(tariff, {
+      connectionType: 'residential',
+      unitsConsumed: 300,
+    })
+    expect(bill.monthlyEquivalent).toEqual({ total: 235, units: 150 })
+    expect(bill.notes.join(' ')).toMatch(/bi-monthly/i)
+
+    // Before 10 May 2026 only the first 100 units were free: 200 × ₹4.70.
+    const before = tariffBeforeNewSchemes(tariff)
+    expect(before).not.toBeNull()
+    expect(
+      computeBill(before!, { connectionType: 'residential', unitsConsumed: 300 })
+        .total,
+    ).toBe(940)
   })
 })
 
@@ -187,8 +220,9 @@ describe('findMaxUnitsForBudget', () => {
       phase: 'single',
       eligibility: 'eligible/BPL domestic',
     })
-    // 250 units is the known TNEB worked example at exactly ₹777.50.
-    expect(maxUnits).toBe(250)
+    // 200 free units + 165 units × ₹4.70 = ₹775.50, billed as ₹776; one more
+    // unit (₹780) would exceed the budget.
+    expect(maxUnits).toBe(365)
     expect(bill.total).toBeLessThanOrEqual(777.5)
   })
 
@@ -207,11 +241,13 @@ describe('findMaxUnitsForBudget', () => {
     expect(oneMore.total).toBeGreaterThan(777.5)
   })
 
-  it('returns 0 units for a budget below the fixed charge', () => {
-    const { maxUnits } = findMaxUnitsForBudget(tneb, 5, {
+  it('a tiny budget still covers the free units', () => {
+    const { maxUnits, bill } = findMaxUnitsForBudget(tneb, 5, {
       connectionType: 'residential',
       phase: 'single',
     })
-    expect(maxUnits).toBe(0)
+    // The first 200 units are free; the 201st costs ₹4.70, billed as ₹5.
+    expect(maxUnits).toBe(201)
+    expect(bill.total).toBe(5)
   })
 })

@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { getLocaleSwitcherOptions, parseLocaleFromPathname } from '@/lib/i18n-alternates'

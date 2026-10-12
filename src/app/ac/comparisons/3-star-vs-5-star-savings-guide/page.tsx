@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import AffiliateProductCard from '@/components/AffiliateProductCard'
 import PageHero from '@/components/PageHero'
 import StarComparisonTool from '@/components/calculators/StarComparisonTool'

@@ -11,6 +11,7 @@ import { allGasCompanySlugs } from '@/data/gas-companies'
 import waterBoardsJson from '@/data/water-boards.json'
 import { getTariff } from '@/lib/calc/electricity'
 import { slugify } from '@/lib/format'
+import { isPausedPath } from '@/lib/paused'
 
 const SITE = 'https://desimetrics.com'
 const LAST_UPDATED = '2026-09-08'
@@ -316,5 +317,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...authorsHi,
     ...legal,
     ...legalHi,
-  ]
+  ].filter((e) => !isPausedPath(e.url.slice(SITE.length) || '/'))
 }

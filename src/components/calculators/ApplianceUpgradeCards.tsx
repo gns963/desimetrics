@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import appliancesJson from '@/data/appliances.json'
 import { acDailyUnits, marginalRatePerUnit } from '@/lib/calc/ac'
 import { formatINR } from '@/lib/format'

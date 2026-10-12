@@ -1,4 +1,5 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
+import { isPausedPath } from '@/lib/paused'
 
 const BOTTOM_GROUPS: { heading: string; links: { label: string; href: string }[] }[] = [
   {
@@ -90,7 +91,7 @@ export default function Footer() {
               Categories
             </p>
             <ul className="mt-4 space-y-2.5 text-sm">
-              {CATEGORIES.map((c) => (
+              {CATEGORIES.filter((c) => !isPausedPath(c.href)).map((c) => (
                 <li key={c.href}>
                   <Link
                     href={c.href}

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import GeneratorFuelCalculator from '@/components/calculators/GeneratorFuelCalculator'
 import PageHero from '@/components/PageHero'
 import { marginalRatePerUnit } from '@/lib/calc/ac'

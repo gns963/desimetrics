@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import { useMemo, useState } from 'react'
 import { computeBill, getTariff } from '@/lib/calc/electricity'
 import { formatINR } from '@/lib/format'

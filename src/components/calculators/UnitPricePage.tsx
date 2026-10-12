@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import PageHero from '@/components/PageHero'
 import type { DiscomPageConfig } from '@/data/calculator-pages'
 import { calculateFullBill, getTariff } from '@/lib/calc/electricity'
@@ -111,7 +111,7 @@ export default function UnitPricePage({
         breadcrumb={[
           { label: hi ? 'बिजली' : 'Electricity', href: hi ? '/hi/electricity' : '/electricity' },
           { label: hi ? '1 यूनिट की कीमत' : '1 Unit Price', href: hi ? '/hi/electricity/unit-price' : '/electricity/unit-price' },
-          { label: tariff.state, href: hi ? `/hi/electricity/unit-price/${config.slug}` : `/electricity/unit-price/${config.slug}` },
+          { label: tariff.state, href: hi ? `/hi/electricity/unit-price/${config.discomCode.toLowerCase()}` : `/electricity/unit-price/${config.discomCode.toLowerCase()}` },
         ]}
         badgeLabel={
           <>

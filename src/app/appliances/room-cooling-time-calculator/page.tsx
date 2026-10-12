@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import RoomCoolingTimeCalculator from '@/components/calculators/RoomCoolingTimeCalculator'
 import PageHero from '@/components/PageHero'
 import { estimateCoolingTime } from '@/lib/calc/cooling'

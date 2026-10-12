@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import PageHero from '@/components/PageHero'
 import { AC_BRANDS } from '@/data/ac-brands'
 import { breadcrumbLd, itemListLd } from '@/lib/seo'

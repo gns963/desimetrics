@@ -45,14 +45,14 @@ export default function BillComponentAudit({ bill }: { bill: BillBreakdown }) {
     })
   }
 
-  items.push({
+  if (bill.fuelCostAdjustment.ratePerUnit > 0) items.push({
     title: 'Fuel cost adjustment (FCA)',
     amount: bill.fuelCostAdjustment.amount,
     tag: 'discom-set',
     body: `A ₹${bill.fuelCostAdjustment.ratePerUnit}/unit pass-through surcharge that tracks the DISCOM's power-purchase cost. It applies equally to every consumer on this tariff and isn't something you can reduce by changing usage.`,
   })
 
-  items.push({
+  if (bill.fixedCharge.amount > 0) items.push({
     title: 'Fixed charge',
     amount: bill.fixedCharge.amount,
     tag: 'fixed',

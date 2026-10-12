@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import InverterSizingCalculator, {
   type InverterSizingCalculatorTexts,
 } from '@/components/calculators/InverterSizingCalculator'

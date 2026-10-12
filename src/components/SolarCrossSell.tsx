@@ -1,4 +1,5 @@
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
+import { isPausedPath } from '@/lib/paused'
 
 /** Cross-sell block placed on electricity calculator pages. */
 export default function SolarCrossSell({
@@ -12,6 +13,7 @@ export default function SolarCrossSell({
   const href = discomCode
     ? `/solar/roi-calculator?discom=${discomCode}`
     : '/solar/roi-calculator'
+  if (isPausedPath(href)) return null
 
   return (
     <section

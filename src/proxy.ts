@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { isPausedPath } from '@/lib/paused'
 
 /**
  * Locale folders are plain nested App Router segments (not a `[locale]`
@@ -48,6 +49,14 @@ export function proxy(request: NextRequest) {
 
   const headers = new Headers(request.headers)
   headers.set('x-locale', locale)
+
+  // Sections that are offline for now (src/lib/paused.ts) answer 404 through
+  // the normal not-found page: rewrite to a path no route matches.
+  if (isPausedPath(request.nextUrl.pathname)) {
+    return NextResponse.rewrite(new URL('/_offline', request.url), {
+      request: { headers },
+    })
+  }
   return NextResponse.next({ request: { headers } })
 }
 

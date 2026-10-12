@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import { useMemo, useState } from 'react'
 import { Drum } from '@/components/DigitDrum'
 import { computeBill, getTariff } from '@/lib/calc/electricity'

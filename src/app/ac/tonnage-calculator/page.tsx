@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/components/SiteLink'
 import AcTonnageCalculator from '@/components/calculators/AcTonnageCalculator'
 import PageHero from '@/components/PageHero'
 import { recommendTonnage } from '@/lib/calc/ac'
