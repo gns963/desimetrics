@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from '@/components/SiteLink'
 import PageHero from '@/components/PageHero'
+import { isPausedPath } from '@/lib/paused'
 import { breadcrumbLd } from '@/lib/seo'
 import { getAlternateLanguages } from '@/lib/i18n-alternates'
 
@@ -353,6 +354,8 @@ export default function NetMeteringExplainedPage() {
           </p>
         </section>
 
+        {/* Every card here points into the solar section, which is offline for now. */}
+        {!isPausedPath('/solar') && (
         <section aria-labelledby="related" className="mt-10 scroll-mt-20">
           <h2 id="related" className={h2Cls}>
             Related tools and guides
@@ -426,6 +429,7 @@ export default function NetMeteringExplainedPage() {
             </Link>
           </div>
         </section>
+        )}
 
         <section aria-labelledby="faq" className="mt-10 scroll-mt-20">
           <h2 id="faq" className={h2Cls}>

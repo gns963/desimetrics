@@ -50,7 +50,7 @@ export default function QuickBillEstimate({
   labels?: QuickBillEstimateLabels
 }) {
   const [discomCode, setDiscomCode] = useState(discoms[0]?.code ?? '')
-  const [units, setUnits] = useState(200)
+  const [units, setUnits] = useState(300)
 
   const selected = discoms.find((d) => d.code === discomCode) ?? discoms[0]
 

@@ -75,7 +75,8 @@ export const stateCount = states.filter((s) => s.type === 'state').length
 export const utCount = states.filter((s) => s.type === 'ut').length
 export const verifiedDate = formatIsoDate(tariff.lastVerified)
 
-const tnebExample = computeBill(tariff, { connectionType: 'residential', unitsConsumed: 200, phase: 'single' })
+// TNEB bills bi-monthly, so "200 units/month" is a 400-unit cycle, shown as its monthly equivalent.
+const tnebExample = computeBill(tariff, { connectionType: 'residential', unitsConsumed: 400, phase: 'single' })
 const acExample3 = calculateAcCost({ discomCode: 'TNEB', tonnage: 1.5, starRating: 3, dailyHours: 6 })
 const acExample5 = calculateAcCost({ discomCode: 'TNEB', tonnage: 1.5, starRating: 5, dailyHours: 6 })
 const acAnnualSavings = acExample3.annualCost - acExample5.annualCost
@@ -105,7 +106,7 @@ export interface TickerData {
 }
 
 export const tickerData: TickerData = {
-  tnebTotal: formatINR(tnebExample.total),
+  tnebTotal: formatINR(tnebExample.monthlyEquivalent?.total ?? tnebExample.total),
   acAnnualSavings: formatINR(acAnnualSavings),
   solarPaybackYears: solarExample.paybackYears ?? '—',
   cheapestState: cheapestRates[0]?.state ?? '',

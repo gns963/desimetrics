@@ -145,9 +145,10 @@ const quickEstimateDiscoms = Object.entries(CALCULATOR_ROUTES)
 // Real, computed facts for the ticker and comparison section — no invented
 // testimonials or fabricated numbers. Every figure below comes straight out
 // of the same calculation engines the calculator pages use.
+// TNEB bills bi-monthly, so "200 units/month" is a 400-unit cycle, shown as its monthly equivalent.
 const tnebExample = computeBill(tariff, {
   connectionType: 'residential',
-  unitsConsumed: 200,
+  unitsConsumed: 400,
   phase: 'single',
 })
 const acExample3 = calculateAcCost({
@@ -185,7 +186,7 @@ const cheapestRates = rateComparisons.slice(0, 4)
 const priciestRates = rateComparisons.slice(-4).reverse()
 
 const tickerFacts = [
-  `TNEB 200 units/month ≈ ${formatINR(tnebExample.total)}`,
+  `TNEB 200 units/month ≈ ${formatINR(tnebExample.monthlyEquivalent?.total ?? tnebExample.total)}`,
   ...(isPausedPath('/ac')
     ? []
     : [`5-star vs 3-star AC (1.5T, 6 hrs/day) saves ~${formatINR(acAnnualSavings)}/year`]),
@@ -438,6 +439,16 @@ const posts = [
     href: '/blog/how-telescopic-electricity-slabs-work',
   },
   {
+    title: 'How to actually reduce your electricity bill in India',
+    tag: 'Guide',
+    href: '/blog/how-to-reduce-electricity-bill-india',
+  },
+  {
+    title: 'Fixed charge vs FCA vs energy charge: why your bill changes',
+    tag: 'Explainer',
+    href: '/blog/fixed-charges-vs-fca-electricity-bill',
+  },
+  {
     title: 'Is rooftop solar worth it in India in 2026?',
     tag: 'Solar',
     href: '/blog/is-rooftop-solar-worth-it-in-india-2026',
@@ -447,7 +458,9 @@ const posts = [
     tag: 'Finance',
     href: '/blog/new-vs-old-tax-regime-who-actually-saves',
   },
-].filter((p) => !isPausedPath(p.href))
+]
+  .filter((p) => !isPausedPath(p.href))
+  .slice(0, 3)
 
 const faqs: { q: string; a: string }[] = [
   {
