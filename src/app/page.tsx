@@ -209,6 +209,8 @@ interface Hub {
   badge?: string
   tools: { label: string; href: string }[]
   explore: string
+  /** Link text under the card; defaults to "Explore {title} hub". */
+  exploreLabel?: string
 }
 
 const allHubs: Hub[] = [
@@ -355,7 +357,79 @@ const allHubs: Hub[] = [
     explore: '/tools',
   },
 ]
-const hubs = allHubs.filter((h) => !isPausedPath(h.explore))
+const liveHubs = allHubs.filter((h) => !isPausedPath(h.explore))
+
+// While electricity is the only live section (src/lib/paused.ts), one hub
+// card would sit alone in a four-column grid, so the electricity pages are
+// shown as four cards instead.
+const ELECTRICITY_STYLE = {
+  accent: 'text-hub-electricity',
+  chipBg: 'bg-hub-electricity/15 text-hub-electricity',
+  cardBorder: 'hover:border-hub-electricity/60',
+}
+const electricityCards: Hub[] = [
+  {
+    ...ELECTRICITY_STYLE,
+    emoji: '⚡',
+    title: 'State calculators',
+    description: 'Slab-by-slab bills for every DISCOM in India',
+    count: stateCount + utCount,
+    countLabel: 'calculators',
+    badge: `${stateCount + utCount} states & UTs`,
+    tools: [
+      { label: 'Tamil Nadu (TNEB)', href: '/electricity/tneb-bill-calculator' },
+      { label: 'Maharashtra (MSEDCL)', href: '/electricity/msedcl-bill-calculator' },
+      { label: 'Uttar Pradesh (UPPCL)', href: '/electricity/uppcl-bill-calculator' },
+    ],
+    explore: '/electricity',
+    exploreLabel: 'All state calculators',
+  },
+  {
+    ...ELECTRICITY_STYLE,
+    emoji: '📑',
+    title: 'Tariffs & unit price',
+    description: 'The slab rates and the real cost of one unit, state by state',
+    count: 0,
+    countLabel: 'Rates by state',
+    tools: [
+      { label: 'Tariff directory', href: '/electricity/tariffs' },
+      { label: 'Unit price directory', href: '/electricity/unit-price' },
+      { label: 'Tamil Nadu unit price', href: '/electricity/unit-price/tneb' },
+    ],
+    explore: '/electricity/tariffs',
+    exploreLabel: 'Open tariff directory',
+  },
+  {
+    ...ELECTRICITY_STYLE,
+    emoji: '🔌',
+    title: 'Appliances & EV',
+    description: 'What one appliance or an EV charge adds to your bill',
+    count: 2,
+    countLabel: 'calculators',
+    tools: [
+      { label: 'Appliance cost calculator', href: '/electricity/appliance-cost-calculator' },
+      { label: 'EV charging cost', href: '/electricity/ev-charging-cost-calculator' },
+    ],
+    explore: '/electricity/appliance-cost-calculator',
+    exploreLabel: 'Open appliance calculator',
+  },
+  {
+    ...ELECTRICITY_STYLE,
+    emoji: '📘',
+    title: 'Bill guides',
+    description: 'How slabs, fixed charges and surcharges end up on your bill',
+    count: 0,
+    countLabel: 'Explainers',
+    tools: [
+      { label: 'How telescopic slabs work', href: '/blog/how-telescopic-electricity-slabs-work' },
+      { label: 'Fixed charges vs FCA', href: '/blog/fixed-charges-vs-fca-electricity-bill' },
+      { label: 'How to reduce your bill', href: '/blog/how-to-reduce-electricity-bill-india' },
+    ],
+    explore: '/blog',
+    exploreLabel: 'All guides',
+  },
+]
+const hubs = liveHubs.length > 1 ? liveHubs : electricityCards
 
 const posts = [
   {
@@ -412,7 +486,9 @@ const faqLd = {
   })),
 }
 
-const hubsItemList = itemListLd(hubs.map((h) => ({ name: `${h.title} Calculators`, path: h.explore })))
+const hubsItemList = itemListLd(
+  hubs.map((h) => ({ name: h.exploreLabel ? h.title : `${h.title} Calculators`, path: h.explore })),
+)
 
 export const metadata: Metadata = {
   title: 'Free Indian Electricity Bill Calculators — Every State & DISCOM',
@@ -573,7 +649,7 @@ export default function Home() {
                     href={h.explore}
                     className={`mt-4 text-sm font-semibold ${h.accent}`}
                   >
-                    Explore {h.title} hub →
+                    {h.exploreLabel ?? `Explore ${h.title} hub`} →
                   </Link>
                 </div>
               ))}

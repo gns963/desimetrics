@@ -151,7 +151,13 @@ export default function HomePageView({ texts }: { texts: HomeTexts }) {
                 {texts.toolsH2}
               </h2>
             </div>
-            <div className="mt-10 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            <div
+              className={
+                hubs.length === 1
+                  ? 'mx-auto mt-10 grid max-w-sm grid-cols-1'
+                  : 'mt-10 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+              }
+            >
               {hubs.map((h) => (
                 <div key={h.key} className={`relative flex flex-col rounded-2xl border border-hairline bg-paper p-6 text-center transition hover:shadow-lg ${h.cardBorder}`}>
                   {h.badge && (
